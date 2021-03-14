@@ -1,0 +1,988 @@
+diff -urN procps-3.2.6/Makefile procps-3.2.6-STEP/Makefile
+--- procps-3.2.6/Makefile	2005-10-30 19:27:04.000000000 +1300
++++ procps-3.2.6-STEP/Makefile	2006-04-25 04:32:33.151247248 +1200
+@@ -30,18 +30,18 @@
+ install  := install -D --owner 0 --group 0
+ 
+ # Lame x86-64 /lib64 and /usr/lib64 abomination:
+-lib64    := lib$(shell [ -d /lib64 ] && echo 64)
++# lib64    := lib$(shell [ -d /lib64 ] && echo 64)
+ 
+-usr/bin                  := $(DESTDIR)/usr/bin/
++usr/bin                  := $(DESTDIR)/bin/
+ bin                      := $(DESTDIR)/bin/
+-sbin                     := $(DESTDIR)/sbin/
+-usr/proc/bin             := $(DESTDIR)/usr/bin/
++sbin                     := $(DESTDIR)/bin/
++usr/proc/bin             := $(DESTDIR)/bin/
+ man1                     := $(DESTDIR)/usr/share/man/man1/
+ man5                     := $(DESTDIR)/usr/share/man/man5/
+ man8                     := $(DESTDIR)/usr/share/man/man8/
+-lib                      := $(DESTDIR)/$(lib64)/
+-usr/lib                  := $(DESTDIR)/usr/$(lib64)/
+-usr/include              := $(DESTDIR)/usr/include/
++lib                      := $(DESTDIR)/lib/
++usr/lib                  := $(DESTDIR)/lib/
++usr/include              := $(DESTDIR)/include/
+ 
+ #SKIP     := $(bin)kill $(man1)kill.1
+ 
+@@ -82,7 +82,7 @@
+ 
+ # Preprocessor flags.
+ PKG_CPPFLAGS := -D_GNU_SOURCE -I proc
+-CPPFLAGS     := -I/usr/include/ncurses
++CPPFLAGS     := -I/System/Library/Libraries/Ncurses-5.4/include -L/System/Library/Libraries/Ncurses-5.4/lib
+ ALL_CPPFLAGS := $(PKG_CPPFLAGS) $(CPPFLAGS)
+ 
+ # Left out -Wconversion due to noise in glibc headers.
+@@ -102,7 +102,7 @@
+   -Wstrict-prototypes -Wmissing-prototypes
+ # Note that some stuff below is conditional on CFLAGS containing
+ # an option that starts with "-g". (-g, -g2, -g3, -ggdb, etc.)
+-CFLAGS       := -O2 -s
++CFLAGS       := -O2 -s -L/System/Library/Libraries/Ncurses-5.4/lib
+ ALL_CFLAGS   := $(PKG_CFLAGS) $(CFLAGS)
+ 
+ PKG_LDFLAGS  := -Wl,-warn-common
+@@ -119,7 +119,7 @@
+ # Unlike the kernel one, this check_gcc goes all the way to
+ # producing an executable. There might be a -m64 that works
+ # until you go looking for a 64-bit curses library.
+-check_gcc = $(shell if $(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) dummy.c $(ALL_LDFLAGS) $(1) -o /dev/null $(CURSES) > /dev/null 2>&1; then echo "$(1)"; else echo "$(2)"; fi ;)
++check_gcc = $(shell if $(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) dummy.c $(ALL_LDFLAGS) $(1) -o /System/Devices/null $(CURSES) > /System/Devices/null 2>&1; then echo "$(1)"; else echo "$(2)"; fi ;)
+ 
+ # Be 64-bit if at all possible. In a cross-compiling situation, one may
+ # do "make m64=-m32 lib64=lib" to produce 32-bit executables. DO NOT
+diff -urN procps-3.2.6/minimal.c procps-3.2.6-STEP/minimal.c
+--- procps-3.2.6/minimal.c	2005-10-30 12:45:17.000000000 +1300
++++ procps-3.2.6-STEP/minimal.c	2006-04-25 00:10:29.054673272 +1200
+@@ -311,12 +311,12 @@
+ #ifdef __sun__
+ /* return 1 if it works, or 0 for failure */
+ static int stat2proc(int pid) {
+-    struct psinfo p;  //   /proc/*/psinfo, struct psinfo, psinfo_t
++    struct psinfo p;  //   /System/Processes/*/psinfo, struct psinfo, psinfo_t
+     char buf[32];
+     int num;
+     int fd;
+     int tty_maj, tty_min;
+-    snprintf(buf, sizeof buf, "/proc/%d/psinfo", pid);
++    snprintf(buf, sizeof buf, "/System/Processes/%d/psinfo", pid);
+     if ( (fd = open(buf, O_RDONLY, 0) ) == -1 ) return 0;
+     num = read(fd, &p, sizeof p);
+     close(fd);
+@@ -378,7 +378,7 @@
+     int fd;
+     char* tmp;
+     int tty_maj, tty_min;
+-    snprintf(buf, 32, "/proc/%d/status", pid);
++    snprintf(buf, 32, "/System/Processes/%d/status", pid);
+     if ( (fd = open(buf, O_RDONLY, 0) ) == -1 ) return 0;
+     num = read(fd, buf, sizeof buf - 1);
+     close(fd);
+@@ -457,7 +457,7 @@
+     int fd;
+     char* tmp;
+     struct stat sb; /* stat() used to get EUID */
+-    snprintf(buf, 32, "/proc/%d/stat", pid);
++    snprintf(buf, 32, "/System/Processes/%d/stat", pid);
+     if ( (fd = open(buf, O_RDONLY, 0) ) == -1 ) return 0;
+     num = read(fd, buf, sizeof buf - 1);
+     fstat(fd, &sb);
+@@ -650,7 +650,7 @@
+     int found_a_proc;
+     found_a_proc = 0;
+     ouruid = getuid();
+-    dir = opendir("/proc");
++    dir = opendir("/System/Processes");
+     while(( ent = readdir(dir) )){
+       if(*ent->d_name<'0' || *ent->d_name>'9') continue;
+       if(!stat2proc(atoi(ent->d_name))) continue;
+diff -urN procps-3.2.6/pmap.c procps-3.2.6-STEP/pmap.c
+--- procps-3.2.6/pmap.c	2005-01-11 14:41:30.000000000 +1300
++++ procps-3.2.6-STEP/pmap.c	2006-04-24 23:54:41.647701024 +1200
+@@ -52,7 +52,7 @@
+   int shmid;
+   char mapbuf[256];
+ 
+-  if(!freopen("/proc/self/maps", "r", stdin)) return;
++  if(!freopen("/System/Processes/self/maps", "r", stdin)) return;
+ 
+   // create
+   shmid = shmget(IPC_PRIVATE, 42, IPC_CREAT | 0666);
+@@ -131,7 +131,7 @@
+   // uses the tty width to determine this.
+   int maxcmd = 0xfffff;
+ 
+-  sprintf(buf,"/proc/%u/maps",p->tgid);
++  sprintf(buf,"/System/Processes/%u/maps",p->tgid);
+   if(!freopen(buf, "r", stdin)) return 1;
+ 
+   escape_command(cmdbuf, p, sizeof cmdbuf, &maxcmd, ESC_ARGS|ESC_BRACKETS);
+@@ -294,7 +294,7 @@
+       char *walk = *argv;
+       char *endp;
+       unsigned long pid;
+-      if(!strncmp("/proc/",walk,6)){
++      if(!strncmp("/System/Processes/",walk,6)){
+         walk += 6;
+         // user allowed to do: pmap /proc/*
+         if(*walk<'0' || *walk>'9') continue;
+diff -urN procps-3.2.6/proc/devname.c procps-3.2.6-STEP/proc/devname.c
+--- procps-3.2.6/proc/devname.c	2005-01-27 16:44:53.000000000 +1300
++++ procps-3.2.6-STEP/proc/devname.c	2006-04-11 21:18:18.414281616 +1200
+@@ -53,19 +53,19 @@
+ 
+ static tty_map_node *tty_map = NULL;
+ 
+-/* Load /proc/tty/drivers for device name mapping use. */
++/* Load /System/Processes/tty/drivers for device name mapping use. */
+ static void load_drivers(void){
+   char buf[10000];
+   char *p;
+   int fd;
+   int bytes;
+-  fd = open("/proc/tty/drivers",O_RDONLY);
++  fd = open("/System/Processes/tty/drivers",O_RDONLY);
+   if(fd == -1) goto fail;
+   bytes = read(fd, buf, sizeof(buf) - 1);
+   if(bytes == -1) goto fail;
+   buf[bytes] = '\0';
+   p = buf;
+-  while(( p = strstr(p, " /dev/") )){
++  while(( p = strstr(p, " /System/Devices/") )){
+     tty_map_node *tmn;
+     int len;
+     char *end;
+@@ -76,7 +76,7 @@
+     tmn = calloc(1, sizeof(tty_map_node));
+     tmn->next = tty_map;
+     tty_map = tmn;
+-    /* if we have a devfs type name such as /dev/tts/%d then strip the %d but
++    /* if we have a devfs type name such as /System/Devices/tts/%d then strip the %d but
+        keep a flag. */
+     if(len >= 3 && !strncmp(end - 2, "%d", 2)){
+       len -= 2;
+@@ -106,7 +106,7 @@
+   if(!tty_map) tty_map = (tty_map_node *)-1;
+ }
+ 
+-/* Try to guess the device name from /proc/tty/drivers info. */
++/* Try to guess the device name from /System/Processes/tty/drivers info. */
+ static int driver_name(char *restrict const buf, unsigned maj, unsigned min){
+   struct stat sbuf;
+   tty_map_node *tmn;
+@@ -118,10 +118,10 @@
+     if(tmn->major_number == maj && tmn->minor_first <= min && tmn->minor_last >= min) break;
+     tmn = tmn->next;
+   }
+-  sprintf(buf, "/dev/%s%d", tmn->name, min);  /* like "/dev/ttyZZ255" */
++  sprintf(buf, "/System/Devices/%s%d", tmn->name, min);  /* like "/System/Devices/ttyZZ255" */
+   if(stat(buf, &sbuf) < 0){
+     if(tmn->devfs_type) return 0;
+-    sprintf(buf, "/dev/%s", tmn->name);  /* like "/dev/ttyZZ255" */
++    sprintf(buf, "/System/Devices/%s", tmn->name);  /* like "/System/Devices/ttyZZ255" */
+     if(stat(buf, &sbuf) < 0) return 0;
+   }
+   if(min != MINOR_OF(sbuf.st_rdev)) return 0;
+@@ -144,7 +144,7 @@
+ "MM0",  "MM1",
+ };
+ 
+-/* Try to guess the device name (useful until /proc/PID/tty is added) */
++/* Try to guess the device name (useful until /System/Processes/PID/tty is added) */
+ static int guess_name(char *restrict const buf, unsigned maj, unsigned min){
+   struct stat sbuf;
+   int t0, t1;
+@@ -153,55 +153,55 @@
+   switch(maj){
+   case   4:
+     if(min<64){
+-      sprintf(buf, "/dev/tty%d", min);
++      sprintf(buf, "/System/Devices/tty%d", min);
+       break;
+     }
+     if(min<128){  /* to 255 on newer systems */
+-      sprintf(buf, "/dev/ttyS%d", min-64);
++      sprintf(buf, "/System/Devices/ttyS%d", min-64);
+       break;
+     }
+     tmpmin = min & 0x3f;  /* FALL THROUGH */
+-  case   3:      /* /dev/[pt]ty[p-za-o][0-9a-z] is 936 */
++  case   3:      /* /System/Devices/[pt]ty[p-za-o][0-9a-z] is 936 */
+     if(tmpmin > 255) return 0;   // should never happen; array index protection
+     t0 = "pqrstuvwxyzabcde"[tmpmin>>4];
+     t1 = "0123456789abcdef"[tmpmin&0x0f];
+-    sprintf(buf, "/dev/tty%c%c", t0, t1);
++    sprintf(buf, "/System/Devices/tty%c%c", t0, t1);
+     break;
+-  case  11:  sprintf(buf, "/dev/ttyB%d",  min); break;
+-  case  17:  sprintf(buf, "/dev/ttyH%d",  min); break;
+-  case  19:  sprintf(buf, "/dev/ttyC%d",  min); break;
+-  case  22:  sprintf(buf, "/dev/ttyD%d",  min); break; /* devices.txt */
+-  case  23:  sprintf(buf, "/dev/ttyD%d",  min); break; /* driver code */
+-  case  24:  sprintf(buf, "/dev/ttyE%d",  min); break;
+-  case  32:  sprintf(buf, "/dev/ttyX%d",  min); break;
+-  case  43:  sprintf(buf, "/dev/ttyI%d",  min); break;
+-  case  46:  sprintf(buf, "/dev/ttyR%d",  min); break;
+-  case  48:  sprintf(buf, "/dev/ttyL%d",  min); break;
+-  case  57:  sprintf(buf, "/dev/ttyP%d",  min); break;
+-  case  71:  sprintf(buf, "/dev/ttyF%d",  min); break;
+-  case  75:  sprintf(buf, "/dev/ttyW%d",  min); break;
+-  case  78:  sprintf(buf, "/dev/ttyM%d",  min); break; /* conflict */
+-  case 105:  sprintf(buf, "/dev/ttyV%d",  min); break;
+-  case 112:  sprintf(buf, "/dev/ttyM%d",  min); break; /* conflict */
+-  /* 136 ... 143 are /dev/pts/0, /dev/pts/1, /dev/pts/2 ... */
+-  case 136 ... 143:  sprintf(buf, "/dev/pts/%d",  min+(maj-136)*256); break;
+-  case 148:  sprintf(buf, "/dev/ttyT%d",  min); break;
+-  case 154:  sprintf(buf, "/dev/ttySR%d", min); break;
+-  case 156:  sprintf(buf, "/dev/ttySR%d", min+256); break;
+-  case 164:  sprintf(buf, "/dev/ttyCH%d",  min); break;
+-  case 166:  sprintf(buf, "/dev/ttyACM%d", min); break; /* bummer, 9-char */
+-  case 172:  sprintf(buf, "/dev/ttyMX%d",  min); break;
+-  case 174:  sprintf(buf, "/dev/ttySI%d",  min); break;
+-  case 188:  sprintf(buf, "/dev/ttyUSB%d", min); break; /* bummer, 9-char */
++  case  11:  sprintf(buf, "/System/Devices/ttyB%d",  min); break;
++  case  17:  sprintf(buf, "/System/Devices/ttyH%d",  min); break;
++  case  19:  sprintf(buf, "/System/Devices/ttyC%d",  min); break;
++  case  22:  sprintf(buf, "/System/Devices/ttyD%d",  min); break; /* devices.txt */
++  case  23:  sprintf(buf, "/System/Devices/ttyD%d",  min); break; /* driver code */
++  case  24:  sprintf(buf, "/System/Devices/ttyE%d",  min); break;
++  case  32:  sprintf(buf, "/System/Devices/ttyX%d",  min); break;
++  case  43:  sprintf(buf, "/System/Devices/ttyI%d",  min); break;
++  case  46:  sprintf(buf, "/System/Devices/ttyR%d",  min); break;
++  case  48:  sprintf(buf, "/System/Devices/ttyL%d",  min); break;
++  case  57:  sprintf(buf, "/System/Devices/ttyP%d",  min); break;
++  case  71:  sprintf(buf, "/System/Devices/ttyF%d",  min); break;
++  case  75:  sprintf(buf, "/System/Devices/ttyW%d",  min); break;
++  case  78:  sprintf(buf, "/System/Devices/ttyM%d",  min); break; /* conflict */
++  case 105:  sprintf(buf, "/System/Devices/ttyV%d",  min); break;
++  case 112:  sprintf(buf, "/System/Devices/ttyM%d",  min); break; /* conflict */
++  /* 136 ... 143 are /System/Devices/pts/0, /System/Devices/pts/1, /System/Devices/pts/2 ... */
++  case 136 ... 143:  sprintf(buf, "/System/Devices/pts/%d",  min+(maj-136)*256); break;
++  case 148:  sprintf(buf, "/System/Devices/ttyT%d",  min); break;
++  case 154:  sprintf(buf, "/System/Devices/ttySR%d", min); break;
++  case 156:  sprintf(buf, "/System/Devices/ttySR%d", min+256); break;
++  case 164:  sprintf(buf, "/System/Devices/ttyCH%d",  min); break;
++  case 166:  sprintf(buf, "/System/Devices/ttyACM%d", min); break; /* bummer, 9-char */
++  case 172:  sprintf(buf, "/System/Devices/ttyMX%d",  min); break;
++  case 174:  sprintf(buf, "/System/Devices/ttySI%d",  min); break;
++  case 188:  sprintf(buf, "/System/Devices/ttyUSB%d", min); break; /* bummer, 9-char */
+   case 204:
+     if(min >= sizeof low_density_names / sizeof low_density_names[0]) return 0;
+-    sprintf(buf, "/dev/tty%s",  low_density_names[min]);
++    sprintf(buf, "/System/Devices/tty%s",  low_density_names[min]);
+     break;
+-  case 208:  sprintf(buf, "/dev/ttyU%d",  min); break;
+-  case 216:  sprintf(buf, "/dev/ttyUB%d",  min); break;
+-  case 224:  sprintf(buf, "/dev/ttyY%d",  min); break;
+-  case 227:  sprintf(buf, "/dev/3270/tty%d", min); break; /* bummer, HUGE */
+-  case 229:  sprintf(buf, "/dev/iseries/vtty%d",  min); break; /* bummer, HUGE */
++  case 208:  sprintf(buf, "/System/Devices/ttyU%d",  min); break;
++  case 216:  sprintf(buf, "/System/Devices/ttyUB%d",  min); break;
++  case 224:  sprintf(buf, "/System/Devices/ttyY%d",  min); break;
++  case 227:  sprintf(buf, "/System/Devices/3270/tty%d", min); break; /* bummer, HUGE */
++  case 229:  sprintf(buf, "/System/Devices/iseries/vtty%d",  min); break; /* bummer, HUGE */
+   default: return 0;
+   }
+   if(stat(buf, &sbuf) < 0) return 0;
+@@ -211,14 +211,14 @@
+ }
+ 
+ /* Linux 2.2 can give us filenames that might be correct.
+- * Useful names could be in /proc/PID/fd/2 (stderr, seldom redirected)
+- * and in /proc/PID/fd/255 (used by bash to remember the tty).
++ * Useful names could be in /System/Processes/PID/fd/2 (stderr, seldom redirected)
++ * and in /System/Processes/PID/fd/255 (used by bash to remember the tty).
+  */
+ static int link_name(char *restrict const buf, unsigned maj, unsigned min, int pid, const char *restrict name){
+   struct stat sbuf;
+   char path[32];
+   int count;
+-  sprintf(path, "/proc/%d/%s", pid, name);  /* often permission denied */
++  sprintf(path, "/System/Processes/%d/%s", pid, name);  /* often permission denied */
+   count = readlink(path,buf,TTY_NAME_SIZE-1);
+   if(count == -1) return 0;
+   buf[count] = '\0';
+@@ -248,7 +248,7 @@
+   strcpy(ret, "?");
+   return 1;
+ abbrev:
+-  if((flags&ABBREV_DEV) && !strncmp(tmp,"/dev/",5) && tmp[5]) tmp += 5;
++  if((flags&ABBREV_DEV) && !strncmp(tmp,"/System/Devices/",5) && tmp[5]) tmp += 5;
+   if((flags&ABBREV_TTY) && !strncmp(tmp,"tty",  3) && tmp[3]) tmp += 3;
+   if((flags&ABBREV_PTS) && !strncmp(tmp,"pts/", 4) && tmp[4]) tmp += 4;
+   /* gotta check before we chop or we may chop someone else's memory */
+@@ -274,11 +274,11 @@
+   struct stat sbuf;
+   static char buf[32];
+   if(name[0]=='/' && stat(name, &sbuf) >= 0) return sbuf.st_rdev;
+-  snprintf(buf,32,"/dev/%s",name);
++  snprintf(buf,32,"/System/Devices/%s",name);
+   if(stat(buf, &sbuf) >= 0) return sbuf.st_rdev;
+-  snprintf(buf,32,"/dev/tty%s",name);
++  snprintf(buf,32,"/System/Devices/tty%s",name);
+   if(stat(buf, &sbuf) >= 0) return sbuf.st_rdev;
+-  snprintf(buf,32,"/dev/pts/%s",name);
++  snprintf(buf,32,"/System/Devices/pts/%s",name);
+   if(stat(buf, &sbuf) >= 0) return sbuf.st_rdev;
+   return -1;
+ }
+diff -urN procps-3.2.6/proc/readproc.c procps-3.2.6-STEP/proc/readproc.c
+--- procps-3.2.6/proc/readproc.c	2005-09-12 14:24:41.000000000 +1200
++++ procps-3.2.6-STEP/proc/readproc.c	2006-04-12 08:07:36.422764104 +1200
+@@ -42,7 +42,7 @@
+ ///////////////////////////////////////////////////////////////////////////
+ 
+ typedef struct status_table_struct {
+-    unsigned char name[7];        // /proc/*/status field name
++    unsigned char name[7];        // /System/Processes/*/status field name
+     unsigned char len;            // name length
+ #ifdef LABEL_OFFSET
+     long offset;                  // jump address offset
+@@ -290,7 +290,7 @@
+ 
+ ///////////////////////////////////////////////////////////////////////
+ 
+-// Reads /proc/*/stat files, being careful not to trip over processes with
++// Reads /System/Processes/*/stat files, being careful not to trip over processes with
+ // names like ":-) 1 2 3 4 5 6".
+ static void stat2proc(const char* S, proc_t *restrict P) {
+     unsigned num;
+@@ -438,7 +438,7 @@
+     int fd;
+     unsigned n = 0;
+     dst[0] = '\0';
+-    snprintf(name, sizeof name, "/proc/%u/cmdline", pid);
++    snprintf(name, sizeof name, "/System/Processes/%u/cmdline", pid);
+     fd = open(name, O_RDONLY);
+     if(fd==-1) return 0;
+     for(;;){
+@@ -504,18 +504,18 @@
+     p->euid = sb.st_uid;			/* need a way to get real uid */
+     p->egid = sb.st_gid;			/* need a way to get real gid */
+ 
+-    if (flags & PROC_FILLSTAT) {         /* read, parse /proc/#/stat */
++    if (flags & PROC_FILLSTAT) {         /* read, parse /System/Processes/#/stat */
+ 	if (unlikely( file2str(path, "stat", sbuf, sizeof sbuf) == -1 ))
+-	    goto next_proc;			/* error reading /proc/#/stat */
+-	stat2proc(sbuf, p);				/* parse /proc/#/stat */
++	    goto next_proc;			/* error reading /System/Processes/#/stat */
++	stat2proc(sbuf, p);				/* parse /System/Processes/#/stat */
+     }
+ 
+-    if (unlikely(flags & PROC_FILLMEM)) {	/* read, parse /proc/#/statm */
++    if (unlikely(flags & PROC_FILLMEM)) {	/* read, parse /System/Processes/#/statm */
+ 	if (likely( file2str(path, "statm", sbuf, sizeof sbuf) != -1 ))
+ 	    statm2proc(sbuf, p);		/* ignore statm errors here */
+     }						/* statm fields just zero */
+ 
+-    if (flags & PROC_FILLSTATUS) {         /* read, parse /proc/#/status */
++    if (flags & PROC_FILLSTATUS) {         /* read, parse /System/Processes/#/status */
+        if (likely( file2str(path, "status", sbuf, sizeof sbuf) != -1 )){
+            status2proc(sbuf, p, 1);
+        }
+@@ -546,12 +546,12 @@
+         }
+     }
+ 
+-    if ((flags & PROC_FILLCOM) || (flags & PROC_FILLARG))	/* read+parse /proc/#/cmdline */
++    if ((flags & PROC_FILLCOM) || (flags & PROC_FILLARG))	/* read+parse /System/Processes/#/cmdline */
+ 	p->cmdline = file2strvec(path, "cmdline");
+     else
+         p->cmdline = NULL;
+ 
+-    if (unlikely(flags & PROC_FILLENV))			/* read+parse /proc/#/environ */
++    if (unlikely(flags & PROC_FILLENV))			/* read+parse /System/Processes/#/environ */
+ 	p->environ = file2strvec(path, "environ");
+     else
+         p->environ = NULL;
+@@ -562,7 +562,7 @@
+ }
+ 
+ //////////////////////////////////////////////////////////////////////////////////
+-// This reads /proc/*/task/* data, for one task.
++// This reads /System/Processes/*/task/* data, for one task.
+ // p is the POSIX process (task group summary) (not needed by THIS implementation)
+ // t is the POSIX thread (task group member, generally not the leader)
+ // path is a path to the task, with some room to spare.
+@@ -582,13 +582,13 @@
+     t->egid = sb.st_gid;			/* need a way to get real gid */
+ 
+ //printf("iii\n");
+-    if (flags & PROC_FILLSTAT) {         /* read, parse /proc/#/stat */
++    if (flags & PROC_FILLSTAT) {         /* read, parse /System/Processes/#/stat */
+ 	if (unlikely( file2str(path, "stat", sbuf, sizeof sbuf) == -1 ))
+-	    goto next_task;			/* error reading /proc/#/stat */
+-	stat2proc(sbuf, t);				/* parse /proc/#/stat */
++	    goto next_task;			/* error reading /System/Processes/#/stat */
++	stat2proc(sbuf, t);				/* parse /System/Processes/#/stat */
+     }
+ 
+-    if (unlikely(flags & PROC_FILLMEM)) {	/* read, parse /proc/#/statm */
++    if (unlikely(flags & PROC_FILLMEM)) {	/* read, parse /System/Processes/#/statm */
+ #if 0
+ 	if (likely( file2str(path, "statm", sbuf, sizeof sbuf) != -1 ))
+ 	    statm2proc(sbuf, t);		/* ignore statm errors here */
+@@ -603,7 +603,7 @@
+ #endif
+     }						/* statm fields just zero */
+ 
+-    if (flags & PROC_FILLSTATUS) {         /* read, parse /proc/#/status */
++    if (flags & PROC_FILLSTATUS) {         /* read, parse /System/Processes/#/status */
+        if (likely( file2str(path, "status", sbuf, sizeof sbuf) != -1 )){
+            status2proc(sbuf, t, 0);
+        }
+@@ -630,12 +630,12 @@
+     }
+ 
+ #if 0
+-    if ((flags & PROC_FILLCOM) || (flags & PROC_FILLARG))	/* read+parse /proc/#/cmdline */
++    if ((flags & PROC_FILLCOM) || (flags & PROC_FILLARG))	/* read+parse /System/Processes/#/cmdline */
+ 	t->cmdline = file2strvec(path, "cmdline");
+     else
+         t->cmdline = NULL;
+ 
+-    if (unlikely(flags & PROC_FILLENV))			/* read+parse /proc/#/environ */
++    if (unlikely(flags & PROC_FILLENV))			/* read+parse /System/Processes/#/environ */
+ 	t->environ = file2strvec(path, "environ");
+     else
+         t->environ = NULL;
+@@ -664,13 +664,13 @@
+   }
+   p->tgid = strtoul(ent->d_name, NULL, 10);
+   p->tid = p->tgid;
+-  memcpy(path, "/proc/", 6);
++  memcpy(path, "/System/Processes/", 6);
+   strcpy(path+6, ent->d_name);  // trust /proc to not contain evil top-level entries
+   return 1;
+ }
+ 
+ //////////////////////////////////////////////////////////////////////////////////
+-// This finds tasks in /proc/*/task/ in the traditional way.
++// This finds tasks in /System/Processes/*/task/ in the traditional way.
+ // Return non-zero on success.
+ static int simple_nexttid(PROCTAB *restrict const PT, const proc_t *restrict const p, proc_t *restrict const t, char *restrict const path) {
+   static struct direct *ent;		/* dirent handle */
+@@ -679,7 +679,7 @@
+       closedir(PT->taskdir);
+     }
+     // use "path" as some tmp space
+-    snprintf(path, PROCPATHLEN, "/proc/%d/task", p->tgid);
++    snprintf(path, PROCPATHLEN, "/System/Processes/%d/task", p->tgid);
+     PT->taskdir = opendir(path);
+     if(!PT->taskdir) return 0;
+     PT->taskdir_user = p->tgid;
+@@ -692,7 +692,7 @@
+   t->tid = strtoul(ent->d_name, NULL, 10);
+   t->tgid = p->tgid;
+   t->ppid = p->ppid;  // cover for kernel behavior? we want both actually...?
+-  snprintf(path, PROCPATHLEN, "/proc/%d/task/%s", p->tgid, ent->d_name);
++  snprintf(path, PROCPATHLEN, "/System/Processes/%d/task/%s", p->tgid, ent->d_name);
+   return 1;
+ }
+ 
+@@ -703,7 +703,7 @@
+   char *restrict const path = PT->path;
+   pid_t tgid = *(PT->pids)++;
+   if(likely( tgid )){
+-    snprintf(path, PROCPATHLEN, "/proc/%d", tgid);
++    snprintf(path, PROCPATHLEN, "/System/Processes/%d", tgid);
+     p->tgid = tgid;
+     p->tid = tgid;  // they match for leaders
+   }
+@@ -756,7 +756,7 @@
+ // pointer (boolean false).  Use the passed buffer instead of allocating
+ // space if it is non-NULL.
+ proc_t* readtask(PROCTAB *restrict const PT, const proc_t *restrict const p, proc_t *restrict t) {
+-  static char path[PROCPATHLEN];       // must hold /proc/2000222000/task/2000222000/cmdline
++  static char path[PROCPATHLEN];       // must hold /System/Processes/2000222000/task/2000222000/cmdline
+   proc_t *ret;
+   proc_t *saved_t;
+ 
+@@ -796,7 +796,7 @@
+     PROCTAB* PT = xmalloc(sizeof(PROCTAB));
+ 
+     if(!did_stat){
+-      task_dir_missing = stat("/proc/self/task", &sbuf);
++      task_dir_missing = stat("/System/Processes/self/task", &sbuf);
+       did_stat = 1;
+     }
+     PT->taskdir = NULL;
+@@ -855,11 +855,11 @@
+ void look_up_our_self(proc_t *p) {
+     char sbuf[1024];
+ 
+-    if(file2str("/proc/self", "stat", sbuf, sizeof sbuf) == -1){
+-        fprintf(stderr, "Error, do this: mount -t proc none /proc\n");
++    if(file2str("/System/Processes/self", "stat", sbuf, sizeof sbuf) == -1){
++        fprintf(stderr, "Error, do this: mount -t proc none /System/Processes\n");
+         _exit(47);
+     }
+-    stat2proc(sbuf, p);    // parse /proc/self/stat
++    stat2proc(sbuf, p);    // parse /System/Processes/self/stat
+ }
+ 
+ HIDDEN_ALIAS(readproc);
+@@ -988,14 +988,14 @@
+ 	static char path[PATH_MAX], sbuf[1024];
+ 	struct stat statbuf;
+ 
+-	sprintf(path, "/proc/%d", pid);
++	sprintf(path, "/System/Processes/%d", pid);
+ 	if (stat(path, &statbuf)) {
+ 		perror("stat");
+ 		return NULL;
+ 	}
+ 
+ 	if (file2str(path, "stat", sbuf, sizeof sbuf) >= 0)
+-		stat2proc(sbuf, p);	/* parse /proc/#/stat */
++		stat2proc(sbuf, p);	/* parse /System/Processes/#/stat */
+ 	if (file2str(path, "statm", sbuf, sizeof sbuf) >= 0)
+ 		statm2proc(sbuf, p);	/* ignore statm errors here */
+ 	if (file2str(path, "status", sbuf, sizeof sbuf) >= 0)
+diff -urN procps-3.2.6/proc/slab.c procps-3.2.6-STEP/proc/slab.c
+--- procps-3.2.6/proc/slab.c	2005-01-25 07:07:42.000000000 +1300
++++ procps-3.2.6-STEP/proc/slab.c	2006-04-12 08:09:46.479992400 +1200
+@@ -21,7 +21,7 @@
+ 
+ #define SLABINFO_LINE_LEN	2048
+ #define SLABINFO_VER_LEN	100
+-#define SLABINFO_FILE		"/proc/slabinfo"
++#define SLABINFO_FILE		"/System/Processes/slabinfo"
+ 
+ static struct slab_info *free_index;
+ 
+diff -urN procps-3.2.6/proc/sysinfo.c procps-3.2.6-STEP/proc/sysinfo.c
+--- procps-3.2.6/proc/sysinfo.c	2005-03-14 17:31:27.000000000 +1300
++++ procps-3.2.6-STEP/proc/sysinfo.c	2006-04-12 08:05:33.397466792 +1200
+@@ -32,15 +32,15 @@
+ "      /proc   /proc   proc    defaults\n"			\
+ "  In the meantime, mount /proc /proc -t proc\n"
+ 
+-#define STAT_FILE    "/proc/stat"
++#define STAT_FILE    "/System/Processes/stat"
+ static int stat_fd = -1;
+-#define UPTIME_FILE  "/proc/uptime"
++#define UPTIME_FILE  "/System/Processes/uptime"
+ static int uptime_fd = -1;
+-#define LOADAVG_FILE "/proc/loadavg"
++#define LOADAVG_FILE "/System/Processes/loadavg"
+ static int loadavg_fd = -1;
+-#define MEMINFO_FILE "/proc/meminfo"
++#define MEMINFO_FILE "/System/Processes/meminfo"
+ static int meminfo_fd = -1;
+-#define VMINFO_FILE "/proc/vmstat"
++#define VMINFO_FILE "/System/Processes/vmstat"
+ static int vminfo_fd = -1;
+ 
+ static char buf[1024];
+@@ -209,8 +209,8 @@
+ static void init_libproc(void) __attribute__((constructor));
+ static void init_libproc(void){
+   have_privs = check_for_privs();
+-  // ought to count CPUs in /proc/stat instead of relying
+-  // on glibc, which foolishly tries to parse /proc/cpuinfo
++  // ought to count CPUs in /System/Processes/stat instead of relying
++  // on glibc, which foolishly tries to parse /System/Processes/cpuinfo
+   //
+   // SourceForge has an old Alpha running Linux 2.2.20 that
+   // appears to have a non-SMP kernel on a 2-way SMP box.
+@@ -326,7 +326,7 @@
+   *running=0;
+   *blocked=0;
+ 
+-  if((proc=opendir("/proc"))==NULL) crash("/proc");
++  if((proc=opendir("/System/Processes"))==NULL) crash("/System/Processes");
+ 
+   while(( ent=readdir(proc) )) {
+     char tbuf[32];
+@@ -335,7 +335,7 @@
+     char c;
+ 
+     if (!isdigit(ent->d_name[0])) continue;
+-    sprintf(tbuf, "/proc/%s/stat", ent->d_name);
++    sprintf(tbuf, "/System/Processes/%s/stat", ent->d_name);
+ 
+     fd = open(tbuf, O_RDONLY, 0);
+     if (fd == -1) continue;
+@@ -376,8 +376,8 @@
+   if(fd){
+     lseek(fd, 0L, SEEK_SET);
+   }else{
+-    fd = open("/proc/stat", O_RDONLY, 0);
+-    if(fd == -1) crash("/proc/stat");
++    fd = open("/System/Processes/stat", O_RDONLY, 0);
++    if(fd == -1) crash("/System/Processes/stat");
+   }
+   read(fd,buff,BUFFSIZE-1);
+   *intr = 0; 
+@@ -600,7 +600,7 @@
+ 
+ /*****************************************************************/
+ 
+-/* read /proc/vminfo only for 2.5.41 and above */
++/* read /System/Processes/vminfo only for 2.5.41 and above */
+ 
+ typedef struct vm_table_struct {
+   const char *name;     /* VM statistic name */
+@@ -619,10 +619,10 @@
+ unsigned long vm_nr_reverse_maps;    // includes PageDirect
+ unsigned long vm_nr_mapped;          // mapped into pagetables
+ unsigned long vm_nr_slab;            // in slab
+-unsigned long vm_pgpgin;             // kB disk reads  (same as 1st num on /proc/stat page line)
+-unsigned long vm_pgpgout;            // kB disk writes (same as 2nd num on /proc/stat page line)
+-unsigned long vm_pswpin;             // swap reads     (same as 1st num on /proc/stat swap line)
+-unsigned long vm_pswpout;            // swap writes    (same as 2nd num on /proc/stat swap line)
++unsigned long vm_pgpgin;             // kB disk reads  (same as 1st num on /System/Processes/stat page line)
++unsigned long vm_pgpgout;            // kB disk writes (same as 2nd num on /System/Processes/stat page line)
++unsigned long vm_pswpin;             // swap reads     (same as 1st num on /System/Processes/stat swap line)
++unsigned long vm_pswpout;            // swap writes    (same as 2nd num on /System/Processes/stat swap line)
+ unsigned long vm_pgalloc;            // page allocations
+ unsigned long vm_pgfree;             // page freeings
+ unsigned long vm_pgactivate;         // pages moved inactive -> active
+@@ -756,7 +756,7 @@
+ }
+ 
+ ///////////////////////////////////////////////////////////////////////
+-// based on Fabian Frederick's /proc/diskstats parser
++// based on Fabian Frederick's /System/Processes/diskstats parser
+ 
+ 
+ unsigned int getpartitions_num(struct disk_stat *disks, int ndisks){
+@@ -782,8 +782,8 @@
+   *disks = NULL;
+   *partitions = NULL;
+   buff[BUFFSIZE-1] = 0; 
+-  fd = fopen("/proc/diskstats", "rb");
+-  if(!fd) crash("/proc/diskstats");
++  fd = fopen("/System/Processes/diskstats", "rb");
++  if(!fd) crash("/System/Processes/diskstats");
+ 
+   for (;;) {
+     if (!fgets(buff,BUFFSIZE-1,fd)){
+@@ -832,15 +832,15 @@
+ }
+ 
+ /////////////////////////////////////////////////////////////////////////////
+-// based on Fabian Frederick's /proc/slabinfo parser
++// based on Fabian Frederick's /System/Processes/slabinfo parser
+ 
+ unsigned int getslabinfo (struct slab_cache **slab){
+   FILE* fd;
+   int cSlab = 0;
+   buff[BUFFSIZE-1] = 0; 
+   *slab = NULL;
+-  fd = fopen("/proc/slabinfo", "rb");
+-  if(!fd) crash("/proc/slabinfo");
++  fd = fopen("/System/Processes/slabinfo", "rb");
++  if(!fd) crash("/System/Processes/slabinfo");
+   while (fgets(buff,BUFFSIZE-1,fd)){
+     if(!memcmp("slabinfo - version:",buff,19)) continue; // skip header
+     if(*buff == '#')                           continue; // skip comments
+@@ -869,7 +869,7 @@
+ 
+   if(ret) goto out;
+   ret = 5;
+-  fd = open("/proc/sys/kernel/pid_max", O_RDONLY);
++  fd = open("/System/Processes/sys/kernel/pid_max", O_RDONLY);
+   if(fd==-1) goto out;
+   rc = read(fd, pidbuf, sizeof pidbuf);
+   close(fd);
+diff -urN procps-3.2.6/ps/display.c procps-3.2.6-STEP/ps/display.c
+--- procps-3.2.6/ps/display.c	2005-01-06 12:44:37.000000000 +1300
++++ procps-3.2.6-STEP/ps/display.c	2006-04-12 08:10:42.263512016 +1200
+@@ -330,7 +330,7 @@
+   PROCTAB* ptp;
+   ptp = openproc(needs_for_format | needs_for_sort | needs_for_select | needs_for_threads);
+   if(!ptp) {
+-    fprintf(stderr, "Error: can not access /proc.\n");
++    fprintf(stderr, "Error: can not access /System/Processes.\n");
+     exit(1);
+   }
+   memset(&buf, '#', sizeof(proc_t));
+@@ -522,7 +522,7 @@
+ 
+   ptp = openproc(needs_for_format | needs_for_sort | needs_for_select | needs_for_threads);
+   if(!ptp) {
+-    fprintf(stderr, "Error: can not access /proc.\n");
++    fprintf(stderr, "Error: can not access /System/Processes.\n");
+     exit(1);
+   }
+ 
+diff -urN procps-3.2.6/ps/global.c procps-3.2.6-STEP/ps/global.c
+--- procps-3.2.6/ps/global.c	2005-10-30 12:43:34.000000000 +1300
++++ procps-3.2.6-STEP/ps/global.c	2006-04-11 21:07:57.833624216 +1200
+@@ -125,7 +125,7 @@
+     if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) != -1 && ws.ws_col>0 && ws.ws_row>0) break;
+     if(ioctl(STDERR_FILENO, TIOCGWINSZ, &ws) != -1 && ws.ws_col>0 && ws.ws_row>0) break;
+     if(ioctl(STDIN_FILENO,  TIOCGWINSZ, &ws) != -1 && ws.ws_col>0 && ws.ws_row>0) break;
+-    fd = open("/dev/tty", O_NOCTTY|O_NONBLOCK|O_RDONLY);
++    fd = open("/System/Devices/tty", O_NOCTTY|O_NONBLOCK|O_RDONLY);
+     if(fd != -1){
+       int ret = ioctl(fd, TIOCGWINSZ, &ws);
+       close(fd);
+diff -urN procps-3.2.6/ps/parser.c procps-3.2.6-STEP/ps/parser.c
+--- procps-3.2.6/ps/parser.c	2005-01-15 08:10:21.000000000 +1300
++++ procps-3.2.6-STEP/ps/parser.c	2006-04-12 07:59:06.486286232 +1200
+@@ -135,11 +135,11 @@
+   snprintf(path,4096,p,str); \
+   if(stat(path, &sbuf) >= 0) goto found_it
+ 
+-  lookup("/dev/pts/%s");  /* New Unix98 ptys go first */
+-  lookup("/dev/%s");
+-  lookup("/dev/tty%s");
+-  lookup("/dev/pty%s");
+-  lookup("/dev/%snsole"); /* "co" means "console", maybe do all VCs too? */
++  lookup("/System/Devices/pts/%s");  /* New Unix98 ptys go first */
++  lookup("/System/Devices/%s");
++  lookup("/System/Devices/tty%s");
++  lookup("/System/Devices/pty%s");
++  lookup("/System/Devices/%snsole"); /* "co" means "console", maybe do all VCs too? */
+   if(!strcmp(str,"-")){   /* "-" means no tty (from AIX) */
+     ret->tty = 0;  /* processes w/o tty */
+     return 0;
+@@ -422,7 +422,7 @@
+ #if 0
+     case 'r':
+       trace("-r some Digital Unix thing about warnings...\n");
+-      trace("   or SCO's option to chroot() for new /proc and /dev.\n");
++      trace("   or SCO's option to chroot() for new /System/Processes and /System/Devices.\n");
+       return "The -r option is reserved.";
+       break;
+ #endif
+@@ -598,8 +598,8 @@
+       display_version();
+       exit(0);
+     case 'W':
+-      trace("W N/A get swap info from ... not /dev/drum.\n");
+-      return "Obsolete W option not supported. (You have a /dev/drum?)";
++      trace("W N/A get swap info from ... not /System/Devices/drum.\n");
++      return "Obsolete W option not supported. (You have a /System/Devices/drum?)";
+       break;
+     case 'X':
+       trace("X Old Linux i386 register format\n");
+diff -urN procps-3.2.6/pwdx.c procps-3.2.6-STEP/pwdx.c
+--- procps-3.2.6/pwdx.c	2004-09-13 04:27:32.000000000 +1200
++++ procps-3.2.6-STEP/pwdx.c	2006-04-12 08:03:52.171855424 +1200
+@@ -46,7 +46,7 @@
+      //
+      // --version
+      // -V
+-     // /proc/nnnn
++     // /System/Processes/nnnn
+      // nnnn
+      //
+      // where nnnn is any number that doesn't begin with 0.
+@@ -54,7 +54,7 @@
+      // If --version or -V are present, further arguments are ignored
+      // completely.
+         
+-     regcomp(&re, "^((/proc/+)?[1-9][0-9]*|-V|--version)$",
++     regcomp(&re, "^((/System\/Processes/+)?[1-9][0-9]*|-V|--version)$",
+              REG_EXTENDED|REG_NOSUB);
+ 
+      for (i = 1; i < argc; i++) {
+@@ -72,15 +72,15 @@
+           char * s = buf;
+           int len;
+           
+-          // At this point, all arguments are in the form /proc/nnnn
++          // At this point, all arguments are in the form /System/Processes/nnnn
+           // or nnnn, so a simple check based on the first char is
+           // possible
+           if (argv[i][0] != '/')
+-               sprintf(buf, "/proc/%s/cwd", argv[i]);
++               sprintf(buf, "/System/Processes/%s/cwd", argv[i]);
+           else
+                sprintf(buf, "%s/cwd", argv[i]);
+ 
+-          // buf contains /proc/nnnn/cwd symlink name on entry, the
++          // buf contains /System/Processes/nnnn/cwd symlink name on entry, the
+           // target of that symlink on return
+           if ((len = readlink(buf, buf, PATH_MAX)) < 0) {
+                s = strerror(errno == ENOENT ? ESRCH : errno);
+diff -urN procps-3.2.6/skill.c procps-3.2.6-STEP/skill.c
+--- procps-3.2.6/skill.c	2004-09-10 01:49:38.000000000 +1200
++++ procps-3.2.6-STEP/skill.c	2006-04-12 08:00:51.165372592 +1200
+@@ -125,7 +125,7 @@
+   int fd;
+   int i;
+   if(pid==my_pid) return;
+-  sprintf(buf, "/proc/%d/stat", pid); /* pid (cmd) state ppid pgrp session tty */
++  sprintf(buf, "/System/Processes/%d/stat", pid); /* pid (cmd) state ppid pgrp session tty */
+   fd = open(buf,O_RDONLY);
+   if(fd==-1){  /* process exited maybe */
+     if(pids && w_flag) printf("WARNING: process %d could not be found.",pid);
+@@ -215,9 +215,9 @@
+   if(!ttys && !cmds && !pids && !i_flag){
+   }
+ #endif
+-  d = opendir("/proc");
++  d = opendir("/System/Processes");
+   if(!d){
+-    perror("/proc");
++    perror("/System/Processes");
+     exit(1);
+   }
+   while(( de = readdir(d) )){
+@@ -460,7 +460,7 @@
+         struct stat sbuf;
+         char path[32];
+         if(!argptr) skillsnice_usage(); /* Huh? Maybe "skill -t ''". */
+-        snprintf(path,32,"/dev/%s",argptr);
++        snprintf(path,32,"/System/Devices/%s",argptr);
+         if(stat(path, &sbuf)>=0 && S_ISCHR(sbuf.st_mode)){
+           num_found++;
+           ENLIST(tty,sbuf.st_rdev);
+diff -urN procps-3.2.6/sysctl.c procps-3.2.6-STEP/sysctl.c
+--- procps-3.2.6/sysctl.c	2005-01-06 10:00:47.000000000 +1300
++++ procps-3.2.6-STEP/sysctl.c	2006-04-12 08:02:32.573956144 +1200
+@@ -43,8 +43,8 @@
+  *    Globals...
+  */
+ 
+-static const char PROC_PATH[] = "/proc/sys/";
+-static const char DEFAULT_PRELOAD[] = "/etc/sysctl.conf";
++static const char PROC_PATH[] = "/System/Processes/sys/";
++static const char DEFAULT_PRELOAD[] = "/System/Settings/sysctl.conf";
+ static bool NameOnly;
+ static bool PrintName;
+ static bool PrintNewline;
+diff -urN procps-3.2.6/top.c procps-3.2.6-STEP/top.c
+--- procps-3.2.6/top.c	2005-10-30 18:05:28.000000000 +1300
++++ procps-3.2.6-STEP/top.c	2006-04-12 08:00:02.878713280 +1200
+@@ -905,22 +905,22 @@
+          * we preserve all cpu data in our CPU_t array which is organized
+          * as follows:
+          *    cpus[0] thru cpus[n] == tics for each separate cpu
+-         *    cpus[Cpu_tot]        == tics from the 1st /proc/stat line */
++         *    cpus[Cpu_tot]        == tics from the 1st /System/Processes/stat line */
+ static CPU_t *cpus_refresh (CPU_t *cpus)
+ {
+    static FILE *fp = NULL;
+    int i;
+    int num;
+-   // enough for a /proc/stat CPU line (not the intr line)
++   // enough for a /System/Processes/stat CPU line (not the intr line)
+    char buf[SMLBUFSIZ];
+ 
+    /* by opening this file once, we'll avoid the hit on minor page faults
+       (sorry Linux, but you'll have to close it for us) */
+    if (!fp) {
+-      if (!(fp = fopen("/proc/stat", "r")))
+-         std_err(fmtmk("Failed /proc/stat open: %s", strerror(errno)));
++      if (!(fp = fopen("/System/Processes/stat", "r")))
++         std_err(fmtmk("Failed /System/Processes/stat open: %s", strerror(errno)));
+       /* note: we allocate one more CPU_t than Cpu_tot so that the last slot
+-               can hold tics representing the /proc/stat cpu summary (the first
++               can hold tics representing the /System/Processes/stat cpu summary (the first
+                line read) -- that slot supports our View_CPUSUM toggle */
+       cpus = alloc_c((1 + Cpu_tot) * sizeof(CPU_t));
+    }
+@@ -928,7 +928,7 @@
+    fflush(fp);
+ 
+    // first value the last slot with the cpu summary line
+-   if (!fgets(buf, sizeof(buf), fp)) std_err("failed /proc/stat read");
++   if (!fgets(buf, sizeof(buf), fp)) std_err("failed /System/Processes/stat read");
+    cpus[Cpu_tot].x = 0;  // FIXME: can't tell by kernel version number
+    cpus[Cpu_tot].y = 0;  // FIXME: can't tell by kernel version number
+    num = sscanf(buf, "cpu %Lu %Lu %Lu %Lu %Lu %Lu %Lu",
+@@ -941,7 +941,7 @@
+       &cpus[Cpu_tot].y
+    );
+    if (num < 4)
+-         std_err("failed /proc/stat read");
++         std_err("failed /System/Processes/stat read");
+ 
+    // and just in case we're 2.2.xx compiled without SMP support...
+    if (Cpu_tot == 1) {
+@@ -951,7 +951,7 @@
+ 
+    // now value each separate cpu's tics
+    for (i = 0; 1 < Cpu_tot && i < Cpu_tot; i++) {
+-      if (!fgets(buf, sizeof(buf), fp)) std_err("failed /proc/stat read");
++      if (!fgets(buf, sizeof(buf), fp)) std_err("failed /System/Processes/stat read");
+       cpus[i].x = 0;  // FIXME: can't tell by kernel version number
+       cpus[i].y = 0;  // FIXME: can't tell by kernel version number
+       num = sscanf(buf, "cpu%u %Lu %Lu %Lu %Lu %Lu %Lu %Lu",
+@@ -959,7 +959,7 @@
+          &cpus[i].u, &cpus[i].n, &cpus[i].s, &cpus[i].i, &cpus[i].w, &cpus[i].x, &cpus[i].y
+       );
+       if (num < 4)
+-            std_err("failed /proc/stat read");
++            std_err("failed /System/Processes/stat read");
+    }
+    return cpus;
+ }
+@@ -2963,7 +2963,7 @@
+       smpcpu = cpus_refresh(smpcpu);
+ 
+       if (CHKw(Curwin, View_CPUSUM)) {
+-         // display just the 1st /proc/stat line
++         // display just the 1st /System/Processes/stat line
+          summaryhlp(&smpcpu[Cpu_tot], "Cpu(s):");
+       } else {
+          int i;
+diff -urN procps-3.2.6/vmstat.c procps-3.2.6-STEP/vmstat.c
+--- procps-3.2.6/vmstat.c	2005-10-30 18:25:00.000000000 +1300
++++ procps-3.2.6-STEP/vmstat.c	2006-04-12 08:01:46.116018824 +1200
+@@ -283,7 +283,7 @@
+     unsigned long ndisks, j, k, npartitions;
+     const char format[] = "%20u %10llu %10u %10u\n";
+ 
+-    fDiskstat=fopen("/proc/diskstats","rb");
++    fDiskstat=fopen("/System/Processes/diskstats","rb");
+     if(!fDiskstat){
+         fprintf(stderr, "Your kernel doesn't support diskstat. (2.5.70 or above required)\n"); 
+         exit(0);
+@@ -347,7 +347,7 @@
+   struct partition_stat *partitions;
+   unsigned long ndisks,i,j,k;
+   const char format[]="%-5s %6u %6u %7llu %7u %6u %6u %7llu %7u %6u %6u\n";
+-  if ((fDiskstat=fopen("/proc/diskstats", "rb"))){
++  if ((fDiskstat=fopen("/System/Processes/diskstats", "rb"))){
+     fclose(fDiskstat);
+     ndisks=getdiskstat(&disks,&partitions);
+     for(k=0; k<ndisks; k++){
+@@ -414,7 +414,7 @@
+   unsigned long nSlab,i,j,k;
+   const char format[]="%-24s %6u %6u %6u %6u\n";
+ 
+-  fSlab=fopen("/proc/slabinfo", "rb");
++  fSlab=fopen("/System/Processes/slabinfo", "rb");
+   if(!fSlab){
+     fprintf(stderr, "Your kernel doesn't support slabinfo");    
+     return;
+@@ -465,7 +465,7 @@
+   written_sectors=milli_writing=inprogress_IO=milli_spent_IO= \
+   weighted_milli_spent_IO=0;
+ 
+-  if ((fDiskstat=fopen("/proc/diskstats", "rb"))){
++  if ((fDiskstat=fopen("/System/Processes/diskstats", "rb"))){
+     fclose(fDiskstat);
+     ndisks=getdiskstat(&disks, &partitions);
+     printf("%13d disks \n", ndisks);
+@@ -609,7 +609,7 @@
+         statMode |= PARTITIONSTAT;
+ 	if (argv[1]){
+ 	  char *cp = *++argv;
+-	  if(!memcmp(cp,"/dev/",5)) cp += 5;
++	  if(!memcmp(cp,"/System/Devices/",5)) cp += 5;
+ 	  snprintf(partition, sizeof partition, "%s", cp);
+ 	}else{
+ 	  fprintf(stderr, "-p requires an argument\n");
+diff -urN procps-3.2.6/w.c procps-3.2.6-STEP/w.c
+--- procps-3.2.6/w.c	2005-10-30 12:43:14.000000000 +1300
++++ procps-3.2.6-STEP/w.c	2006-04-11 21:11:33.135893296 +1200
+@@ -173,7 +173,7 @@
+     int ut_pid_found;
+     unsigned i;
+     char uname[USERSZ + 1] = "",
+-	tty[5 + sizeof u->ut_line + 1] = "/dev/";
++	tty[5 + sizeof u->ut_line + 1] = "/System/Devices/";
+     const proc_t *best;
+ 
+     for (i=0; i < sizeof(u->ut_line); i++)	/* clean up tty if garbled */

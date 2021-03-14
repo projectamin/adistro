@@ -1,0 +1,24 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<amin:chroot dir='/opt/adistrobc'>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>/var/cache/man</amin:param>
+		<amin:flag>p</amin:flag>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>/var/spool/lpd</amin:param>
+		<amin:flag>p</amin:flag>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>/var/account</amin:param>
+		<amin:flag>p</amin:flag>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+		
+</amin:chroot>
+</amin:profile>

@@ -1,0 +1,63 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--applewmproto-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://xorg.freedesktop.org/releases/X11R7.0/src/everything/applewmproto-1.0.3.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/applewmproto-1.0.3.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/applewmproto-1.0.3-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/applewmproto-1.0.3-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/applewmproto-1.0.3.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/applewmproto-1.0.3-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/applewmproto-1.0.3</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>autoreconf</amin:param>
+		<amin:shell name='dir'>/build/applewmproto-1.0.3</amin:shell>
+ 		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Applications/Xorg-7.0
+                </amin:flag>
+                <amin:shell name='dir'>/build/applewmproto-1.0.3</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/applewmproto-1.0.3</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/applewmproto-1.0.3</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">applewmproto-1.0.3</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

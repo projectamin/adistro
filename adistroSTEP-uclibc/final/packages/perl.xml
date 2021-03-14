@@ -1,0 +1,50 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--perl-->
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='system_command'>
+		<amin:param name='basename'>./configure.gnu</amin:param>
+                <amin:flag>
+		--prefix=/System/Applications/Perl-5.8.7
+                </amin:flag>
+                <amin:shell name='dir'>/build/perl-5.8.7</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+        </amin:command>
+
+        <amin:command name='search_replace'>
+                <amin:param name='find'>/usr/include/</amin:param>
+                <amin:param name='replace'>/System/Library/Headers/</amin:param>
+                <amin:param name='target'>Errno_pm.PL</amin:param>
+                <amin:shell name='dir'>/build/perl-5.8.7/ext/Errno/</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/perl-5.8.7</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/perl-5.8.7</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">perl-5.8.7</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+<!--        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/perl-5.8.7/bin/sed</amin:param>
+                <amin:param name='target'>sed</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command> -->
+
+</amin:chroot>
+</amin:profile>

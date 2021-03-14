@@ -1,0 +1,27 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--gzip-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>ftp://alpha.gnu.org/gnu/gzip/gzip-1.3.5.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gzip-1.3.5.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/gzip-1.3.5-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/gzip-1.3.5-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/gzip-1.3.5.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/gzip-1.3.5-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gzip-1.3.5</amin:shell>
+        </amin:command>
+</amin:profile>

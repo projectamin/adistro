@@ -1,0 +1,59 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--toolchain-lockin -->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+	<amin:command name='move'>
+		<amin:flag>v</amin:flag>
+		<amin:param name='source'>ld</amin:param>
+		<amin:param name='target'>ld-old</amin:param>
+		<amin:shell name='dir'>/bootstrap/bin</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+        <amin:command name='move'>
+                <amin:flag>v</amin:flag>
+                <amin:param name='source'>ld-new</amin:param>
+                <amin:param name='target'>ld</amin:param>
+                <amin:shell name='dir'>/bootstrap/bin</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+	<amin:command name='link'>
+		<amin:flag>f</amin:flag>
+		<amin:param name='source'>ld</amin:param>
+		<amin:param name='target'>../i686-adistro-linux-uclibc/bin/ld</amin:param>
+		<amin:shell name='dir'>/bootstrap/bin</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='copy'>
+		<amin:param name='source'>adistro-uclibc-chroot-specs</amin:param>
+		<amin:param name='target'>/bootstrap/lib/gcc/i686-adistro-linux-uclibc/4.2.1/specs</amin:param>
+		<amin:shell name='dir'>/packages/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='textdump'>
+		<amin:param name='target'>config.site</amin:param>
+		<amin:param name='content'>
+host=$(uname -m)-adistro-linux-uclibc
+build=$host
+target=$host
+ac_cv_host=$host
+ac_cv_build=$build
+ac_cv_target=$target
+		</amin:param>
+		<amin:shell name='dir'>/etc</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>gcc-build</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+        <amin:command name='remove'>
+                <amin:param name='target'>gcc-4.2.1</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/build/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+
+</amin:profile>

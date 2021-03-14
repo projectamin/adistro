@@ -1,0 +1,121 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--ncurses-->
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/System/Library/Libraries/Ncurses-5.4/
+		sysconfdir=/System/Settings/
+		with-termpath=/System/Settings/termcap
+		without-ada 
+		enable-overwrite 
+		with-shared
+		without-cxx-binding
+		</amin:flag>
+		<amin:shell name='dir'>/build/ncurses-5.4</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/build/ncurses-5.4/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/ncurses-5.4</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>ncurses-5.4</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='textdump'>
+		<amin:param name='target'>/System/Settings/ld.so.conf</amin:param>
+		<amin:param name='content'>
+/System/Library/Libraries/Ncurses-5.4/lib
+		</amin:param>
+		<amin:shell name='dir'>/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='ldconfig'>
+		<amin:flag>v</amin:flag>
+	</amin:command>
+	  
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/captoinfo</amin:param>
+		<amin:param name='target'>captoinfo</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/clear</amin:param>
+		<amin:param name='target'>clear</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/infocmp</amin:param>
+		<amin:param name='target'>infocmp</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/infotocap</amin:param>
+		<amin:param name='target'>infotocap</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/reset</amin:param>
+		<amin:param name='target'>reset</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/tack</amin:param>
+		<amin:param name='target'>tack</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/tic</amin:param>
+		<amin:param name='target'>tic</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/toe</amin:param>
+		<amin:param name='target'>toe</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/tput</amin:param>
+		<amin:param name='target'>tput</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Ncurses-5.4/bin/tset</amin:param>
+		<amin:param name='target'>tset</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+	
+</amin:profile>

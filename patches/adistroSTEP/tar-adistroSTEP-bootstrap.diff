@@ -1,0 +1,159 @@
+diff -urN tar-1.15.1/lib/full-write.c tar-1.15.1-adistroSTEP/lib/full-write.c
+--- tar-1.15.1/lib/full-write.c	2004-08-09 01:41:03.000000000 +1200
++++ tar-1.15.1-adistroSTEP/lib/full-write.c	2005-05-18 09:49:08.385284280 +1200
+@@ -47,7 +47,7 @@
+ # define ZERO_BYTE_TRANSFER_ERRNO 0
+ #else
+ /* Some buggy drivers return 0 when one tries to write beyond
+-   a device's end.  (Example: Linux 1.2.13 on /dev/fd0.)
++   a device's end.  (Example: Linux 1.2.13 on /System/Devices/fd0.)
+    Set errno to ENOSPC so they get a sensible diagnostic.  */
+ # define ZERO_BYTE_TRANSFER_ERRNO ENOSPC
+ #endif
+diff -urN tar-1.15.1/lib/quotearg.c tar-1.15.1-adistroSTEP/lib/quotearg.c
+--- tar-1.15.1/lib/quotearg.c	2004-12-18 05:11:24.000000000 +1300
++++ tar-1.15.1-adistroSTEP/lib/quotearg.c	2005-05-18 09:49:08.401281848 +1200
+@@ -345,7 +345,7 @@
+ 	case '<':
+ 	case '=': /* sometimes special in 0th or (with "set -k") later args */
+ 	case '>': case '[':
+-	case '^': /* special in old /bin/sh, e.g. SunOS 4.1.4 */
++	case '^': /* special in old /System/Tools/sh, e.g. SunOS 4.1.4 */
+ 	case '`': case '|':
+ 	  /* A shell special character.  In theory, '$' and '`' could
+ 	     be the first bytes of multibyte characters, which means
+diff -urN tar-1.15.1/lib/rmdir.c tar-1.15.1-adistroSTEP/lib/rmdir.c
+--- tar-1.15.1/lib/rmdir.c	2004-08-09 01:41:03.000000000 +1200
++++ tar-1.15.1-adistroSTEP/lib/rmdir.c	2005-05-18 09:49:08.402281696 +1200
+@@ -54,7 +54,7 @@
+       return -1;		/* errno already set */
+ 
+     case 0:			/* child process */
+-      execl ("/bin/rmdir", "rmdir", dpath, (char *) 0);
++      execl ("/System/Tools/rmdir", "rmdir", dpath, (char *) 0);
+       _exit (1);
+ 
+     default:			/* parent process */
+@@ -67,7 +67,7 @@
+       if (status)
+ 	{
+ 
+-	  /* /bin/rmdir failed.  */
++	  /* /System/Tools/rmdir failed.  */
+ 
+ 	  errno = EIO;
+ 	  return -1;
+diff -urN tar-1.15.1/lib/rtapelib.c tar-1.15.1-adistroSTEP/lib/rtapelib.c
+--- tar-1.15.1/lib/rtapelib.c	2004-09-07 01:49:42.000000000 +1200
++++ tar-1.15.1-adistroSTEP/lib/rtapelib.c	2005-05-18 09:49:08.403281544 +1200
+@@ -285,13 +285,13 @@
+   /* When using cpio -o < filename, stdin is no longer the tty.  But the
+      rexec subroutine reads the login and the passwd on stdin, to allow
+      remote execution of the command.  So, reopen stdin and stdout on
+-     /dev/tty before the rexec and give them back their original value
++     /System/Devices/tty before the rexec and give them back their original value
+      after.  */
+ 
+-  if (! freopen ("/dev/tty", "r", stdin))
+-    freopen ("/dev/null", "r", stdin);
+-  if (! freopen ("/dev/tty", "w", stdout))
+-    freopen ("/dev/null", "w", stdout);
++  if (! freopen ("/System/Devices/tty", "r", stdin))
++    freopen ("/System/Devices/null", "r", stdin);
++  if (! freopen ("/System/Devices/tty", "w", stdout))
++    freopen ("/System/Devices/null", "w", stdout);
+ 
+   if (rexecserv = getservbyname ("exec", "tcp"), !rexecserv)
+     error (EXIT_ON_EXEC_ERROR, 0, _("exec/tcp: Service not available"));
+diff -urN tar-1.15.1/lib/system.h tar-1.15.1-adistroSTEP/lib/system.h
+--- tar-1.15.1/lib/system.h	2004-09-07 01:49:42.000000000 +1200
++++ tar-1.15.1-adistroSTEP/lib/system.h	2005-05-18 09:49:11.944743160 +1200
+@@ -382,7 +382,7 @@
+ 
+ /* This is a real challenge to properly get MTIO* symbols :-(.  ISC uses
+    <sys/gentape.h>.  SCO and BSDi uses <sys/tape.h>; BSDi also requires
+-   <sys/tprintf.h> and <sys/device.h> for defining tp_dev and tpr_t.  It
++   <sys/tprintf.h> and <sys/System/Devicesice.h> for defining tp_dev and tpr_t.  It
+    seems that the rest use <sys/mtio.h>, which itself requires other files,
+    depending on systems.  Pyramid defines _IOW in <sgtty.h>, for example.  */
+ 
+@@ -391,7 +391,7 @@
+ #else
+ # if HAVE_SYS_TAPE_H
+ #  if HAVE_SYS_DEVICE_H
+-#   include <sys/device.h>
++#   include <sys/System/Devicesice.h>
+ #  endif
+ #  if HAVE_SYS_PARAM_H
+ #   include <sys/param.h>
+@@ -514,7 +514,7 @@
+ # include <grp.h>
+ # define SET_BINARY_MODE(arc)
+ # define ERRNO_IS_EACCES 0
+-# define TTY_NAME "/dev/tty"
++# define TTY_NAME "/System/Devices/tty"
+ # define sys_reset_uid_gid() \
+  do { setuid (getuid ()); setgid (getgid ()); } while (0)
+ #endif
+diff -urN tar-1.15.1/src/common.h tar-1.15.1-adistroSTEP/src/common.h
+--- tar-1.15.1/src/common.h	2004-12-22 03:31:58.000000000 +1300
++++ tar-1.15.1-adistroSTEP/src/common.h	2005-05-18 09:48:49.880097496 +1200
+@@ -284,7 +284,7 @@
+ /* File descriptor for archive file.  */
+ GLOBAL int archive;
+ 
+-/* Nonzero when outputting to /dev/null.  */
++/* Nonzero when outputting to /System/Devices/null.  */
+ GLOBAL bool dev_null_output;
+ 
+ /* Timestamp for when we started execution.  */
+diff -urN tar-1.15.1/src/create.c tar-1.15.1-adistroSTEP/src/create.c
+--- tar-1.15.1/src/create.c	2004-10-04 22:21:31.000000000 +1300
++++ tar-1.15.1-adistroSTEP/src/create.c	2005-05-18 09:48:52.400714304 +1200
+@@ -334,7 +334,7 @@
+ 
+ /* A file is not dumpable if
+    a) it is empty *and* world-readable, or
+-   b) current archive is /dev/null */
++   b) current archive is /System/Devices/null */
+ 
+ bool
+ file_dumpable_p (struct tar_stat_info *st)
+diff -urN tar-1.15.1/src/system.c tar-1.15.1-adistroSTEP/src/system.c
+--- tar-1.15.1/src/system.c	2004-09-06 23:31:00.000000000 +1200
++++ tar-1.15.1-adistroSTEP/src/system.c	2005-05-18 09:48:52.417711720 +1200
+@@ -169,11 +169,11 @@
+     ar_dev = 0;
+ }
+ 
+-/* Detect if outputting to "/dev/null".  */
++/* Detect if outputting to "/System/Devices/null".  */
+ void
+ sys_detect_dev_null_output (void)
+ {
+-  static char const dev_null[] = "/dev/null";
++  static char const dev_null[] = "/System/Devices/null";
+   struct stat dev_null_stat;
+ 
+   dev_null_output = (strcmp (archive_name_array[0], dev_null) == 0
+@@ -231,7 +231,7 @@
+   pid_t child;
+   const char *shell = getenv ("SHELL");
+   if (! shell)
+-    shell = "/bin/sh";
++    shell = "/System/Tools/sh";
+   child = xfork ();
+   if (child == 0)
+     {
+diff -urN tar-1.15.1/src/xheader.c tar-1.15.1-adistroSTEP/src/xheader.c
+--- tar-1.15.1/src/xheader.c	2004-09-06 23:31:14.000000000 +1200
++++ tar-1.15.1-adistroSTEP/src/xheader.c	2005-05-18 09:48:52.422710960 +1200
+@@ -351,7 +351,7 @@
+       size_t len;
+       const char *tmp = getenv ("TMPDIR");
+       if (!tmp)
+-	tmp = "/tmp";
++	tmp = "/System/TemporaryFiles";
+       len = strlen (tmp) + sizeof (GLOBAL_HEADER_TEMPLATE); /* Includes nul */
+       globexthdr_name = xmalloc (len);
+       strcpy(globexthdr_name, tmp);

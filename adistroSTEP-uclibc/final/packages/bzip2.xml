@@ -1,0 +1,103 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Bzip2-->
+<amin:chroot dir='/opt/adistro'>
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/bzip2-1.0.2</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+       
+	<amin:command name='make'>
+		<amin:param>PREFIX=/System/Applications/Bzip2-1.0.2 install</amin:param>
+		<amin:shell name='dir'>/build/bzip2-1.0.2</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>bzip2-1.0.2</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bunzip2</amin:param>
+		<amin:param name='target'>bunzip2</amin:param>
+		<amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzcmp</amin:param>
+                <amin:param name='target'>bzcmp</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>	
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzegrep</amin:param>
+                <amin:param name='target'>bzegrep</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzip2recover</amin:param>
+                <amin:param name='target'>bzip2recover</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzmore</amin:param>
+                <amin:param name='target'>bzmore</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzcat</amin:param>
+                <amin:param name='target'>bzcat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzdiff</amin:param>
+                <amin:param name='target'>bzdiff</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzfgrep</amin:param>
+                <amin:param name='target'>bzfgrep</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzip2</amin:param>
+                <amin:param name='target'>bzip2</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Bzip2-1.0.2/bin/bzless</amin:param>
+                <amin:param name='target'>bzless</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

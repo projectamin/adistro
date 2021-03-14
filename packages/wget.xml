@@ -1,0 +1,76 @@
+<apackage:package xmlns:apackage="http://www.adistro.com/ns/apackage/0.1"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/"
+        xmlns:doap="http://usefulinc.com/ns/doap#"
+>
+  <doap:Project>
+    <doap:name>Wget</doap:name>
+    <doap:homepage rdf:resource="http://www.gnu.org/software/wget/" />
+    <doap:created>2009-01-21</doap:created>
+    <doap:shortdesc xml:lang="en">
+      GNU Wget is a free software package for retrieving files using HTTP, HTTPS and FTP
+    </doap:shortdesc>
+    <doap:description xml:lang="en">
+    GNU Wget has many features to make retrieving large files or mirroring entire web or FTP sites easy, including:
+       
+    * Can resume aborted downloads, using REST and RANGE
+    * Can use filename wild cards and recursively mirror directories
+    * NLS-based message files for many different languages
+    * Optionally converts absolute links in downloaded documents to relative, so that downloaded documents may link to each other locally
+    * Runs on most UNIX-like operating systems as well as Microsoft Windows
+    * Supports HTTP proxies
+    * Supports HTTP cookies
+    * Supports persistent HTTP connections
+    * Unattended / background operation
+    * Uses local file timestamps to determine whether documents need to be re-downloaded when mirroring
+    * GNU Wget is distributed under the GNU General Public License.
+    </doap:description>
+    <doap:mailing-list rdf:resource="http://wget.addictivecode.org/MailingLists" />
+    <doap:maintainer>
+      <foaf:Person>
+        <foaf:name>Micah Cowan</foaf:name>
+        <foaf:homepage rdf:resource="irc://irc.freenode.net/#wget" />
+      </foaf:Person>
+    </doap:maintainer>
+    <doap:release>
+      <doap:Version>
+        <doap:name>stable</doap:name>
+        <doap:created>2008-06-29</doap:created>
+        <doap:revision>1.11.4</doap:revision>
+      </doap:Version>
+    </doap:release>
+    <doap:license rdf:resource="http://www.gnu.org/copyleft/gpl.html" />
+    <doap:bug-database rdf:resource="http://wget.addictivecode.org/MailingLists" />
+    <doap:screenshots rdf:resource="http://ostatic.com/files/images/Wget-%5B1%5D.jpg" />
+  </doap:Project>
+  <apackage:stage name="echo" xmlns:amin='http://adistro.com/ns/'>
+  </apackage:stage>
+<apackage:stage name="source_install" xmlns:amin='http://adistro.com/ns/'>
+  <amin:profile xmlns:amin='http://projectamin.org/ns/'>
+    <amin:download>
+      <amin:param name='uri'>http://ftp.gnu.org/gnu/wget/wget-1.11.4.tar.gz</amin:param>
+      <amin:param name='file'>/var/apackage/source/wget-1.11.4.tar.gz</amin:param>
+    </amin:download>
+    <amin:command name='unpack'>
+      <amin:param name='target'>/var/apackage/build</amin:param>
+      <amin:param name='archive'>/var/apackage/source/wget-1.11.4.tar.gz</amin:param>
+    </amin:command>
+    <amin:command name='configure'>
+      <amin:flag>prefix=/usr</amin:flag>
+      <amin:shell name='dir'>/var/apackage/build/wget-1.11.4</amin:shell>
+    </amin:command>
+    <amin:command name='make'>
+      <amin:shell name='dir'>/var/apackage/build/wget-1.11.4</amin:shell>
+    </amin:command>
+    <amin:command name='make'>
+      <amin:param>install</amin:param>
+      <amin:shell name='dir'>/var/apackage/build/wget-1.11.4</amin:shell>
+    </amin:command>
+    <amin:command name='rm'>
+      <amin:param name='target'>wget-1.11.4</amin:param>
+      <amin:flag>rf</amin:flag>
+      <amin:shell name='dir'>/var/apackage/build</amin:shell>
+    </amin:command>
+  </amin:profile>
+</apackage:stage>
+</apackage:package>

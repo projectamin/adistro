@@ -1,0 +1,33 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--coreutils-7.4-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/pub/gnu/coreutils/coreutils-7.4.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/coreutils-7.4.tar.gz</amin:param>
+	</amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistrobc/src</amin:param>
+		<amin:param name='archive'>/opt/adistrobc/packages/coreutils-7.4.tar.gz</amin:param>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:flag>prefix=/adistrobc-bootstrap enable-install-program=hostname</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/coreutils-7.4</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistrobc/src/coreutils-7.4</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/src/coreutils-7.4</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>coreutils-7.4</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+</amin:profile>

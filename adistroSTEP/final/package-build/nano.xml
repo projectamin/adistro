@@ -1,0 +1,80 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--nano-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.nano-editor.org/dist/v1.2/nano-1.2.4.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/nano-1.2.4.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/nano-1.2.4-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/nano-1.2.4-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/nano-1.2.4.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:param name='input'>../../packages/nano-1.2.4-STEP.patch</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/nano-1.2.4</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>autoreconf</amin:param>
+		<amin:shell name='dir'>/build/nano-1.2.4</amin:shell>
+ 		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+	</amin:command>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Applications/Nano-1.2.4
+		enable-color
+                enable-multibuffer
+		enable-nanorc
+                </amin:flag>
+                <amin:shell name='dir'>/build/nano-1.2.4</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+                <amin:shell name='env'>CFLAGS=-L/System/Library/Libraries/Ncurses-5.4/lib</amin:shell>
+                <!--<amin:shell name='env'>LDFLAGS=-L/System/Library/Libraries/Ncurses-5.4/lib</amin:shell>-->
+		<amin:shell name='env'>CFLAGS=-I/System/Library/Libraries/Ncurses-5.4/include</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/nano-1.2.4</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/nano-1.2.4</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">nano-1.2.4</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Nano-1.2.4/bin/nano</amin:param>
+                <amin:param name='target'>nano</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

@@ -1,0 +1,185 @@
+diff -urN bzip2-1.0.2/Makefile bzip2-1.0.2-STEP/Makefile
+--- bzip2-1.0.2/Makefile	2002-01-26 12:34:53.000000000 +1300
++++ bzip2-1.0.2-STEP/Makefile	2005-08-23 00:30:27.582983176 +1200
+@@ -1,5 +1,5 @@
+ 
+-SHELL=/bin/sh
++SHELL=/System/Tools/sh
+ 
+ # To assist in cross-compiling
+ CC=gcc
+@@ -34,8 +34,8 @@
+ libbz2.a: $(OBJS)
+ 	rm -f libbz2.a
+ 	$(AR) cq libbz2.a $(OBJS)
+-	@if ( test -f $(RANLIB) -o -f /usr/bin/ranlib -o \
+-		-f /bin/ranlib -o -f /usr/ccs/bin/ranlib ) ; then \
++	@if ( test -f $(RANLIB) -o -f /System/Tools/ranlib -o \
++		-f /System/Tools/ranlib -o -f /usr/ccs/bin/ranlib ) ; then \
+ 		echo $(RANLIB) libbz2.a ; \
+ 		$(RANLIB) libbz2.a ; \
+ 	fi
+diff -urN bzip2-1.0.2/Makefile-libbz2_so bzip2-1.0.2-STEP/Makefile-libbz2_so
+--- bzip2-1.0.2/Makefile-libbz2_so	2001-12-30 15:15:59.000000000 +1300
++++ bzip2-1.0.2-STEP/Makefile-libbz2_so	2005-08-23 00:26:31.581860800 +1200
+@@ -6,7 +6,7 @@
+ # Please see the README file for some 
+ # important info about building the library like this.
+ 
+-SHELL=/bin/sh
++SHELL=/System/Tools/sh
+ CC=gcc
+ BIGFILES=-D_FILE_OFFSET_BITS=64
+ CFLAGS=-fpic -fPIC -Wall -Winline -O2 -fomit-frame-pointer -fno-strength-reduce $(BIGFILES)
+diff -urN bzip2-1.0.2/README.COMPILATION.PROBLEMS bzip2-1.0.2-STEP/README.COMPILATION.PROBLEMS
+--- bzip2-1.0.2/README.COMPILATION.PROBLEMS	2002-01-25 08:17:56.000000000 +1300
++++ bzip2-1.0.2-STEP/README.COMPILATION.PROBLEMS	2005-08-23 00:26:35.033336096 +1200
+@@ -46,11 +46,11 @@
+ * HP/UX 10.20 and 11.00, using gcc (2.7.2.3 and 2.95.2):  A large
+   number of warnings appear, including the following:
+ 
+-     /usr/include/sys/resource.h: In function `getrlimit':
+-     /usr/include/sys/resource.h:168: 
++     /usr/include/System/SystemFS/resource.h: In function `getrlimit':
++     /usr/include/System/SystemFS/resource.h:168: 
+         warning: implicit declaration of function `__getrlimit64'
+-     /usr/include/sys/resource.h: In function `setrlimit':
+-     /usr/include/sys/resource.h:170: 
++     /usr/include/System/SystemFS/resource.h: In function `setrlimit':
++     /usr/include/System/SystemFS/resource.h:170: 
+         warning: implicit declaration of function `__setrlimit64'
+ 
+   This would appear to be a problem with large file support, header
+diff -urN bzip2-1.0.2/bzdiff bzip2-1.0.2-STEP/bzdiff
+--- bzip2-1.0.2/bzdiff	2001-12-30 15:12:35.000000000 +1300
++++ bzip2-1.0.2-STEP/bzdiff	2005-08-23 00:31:34.387827296 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # sh is buggy on RS/6000 AIX 3.2. Replace above line with #!/bin/ksh
+ 
+ # Bzcmp/diff wrapped for bzip2, 
+@@ -12,7 +12,7 @@
+ # necessary) and fed to cmp or diff.  The exit status from cmp
+ # or diff is preserved.
+ 
+-PATH="/usr/bin:$PATH"; export PATH
++PATH="/System/Tools:$PATH"; export PATH
+ prog=`echo $0 | sed 's|.*/||'`
+ case "$prog" in
+   *cmp) comp=${CMP-cmp}   ;;
+@@ -37,7 +37,7 @@
+ 	echo "Usage: $prog [${comp}_options] file [file]"
+ 	exit 1
+ fi
+-tmp=`tempfile -d /tmp -p bz` || {
++tmp=`tempfile -d /System/TemporaryFiles -p bz` || {
+       echo 'cannot create a temporary file' >&2
+       exit 1
+ }
+@@ -56,7 +56,7 @@
+                         bzip2 -cdfq "$2" > $tmp
+                         bzip2 -cdfq "$1" | $comp $OPTIONS - $tmp
+                         STAT="$?"
+-			/bin/rm -f $tmp;;
++			/System/Tools/rm -f $tmp;;
+ 
+                 *)      bzip2 -cdfq "$1" | $comp $OPTIONS - "$2"
+                         STAT="$?";;
+diff -urN bzip2-1.0.2/bzgrep bzip2-1.0.2-STEP/bzgrep
+--- bzip2-1.0.2/bzgrep	2001-12-30 15:12:35.000000000 +1300
++++ bzip2-1.0.2-STEP/bzgrep	2005-08-23 00:31:57.361334792 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # Bzgrep wrapped for bzip2, 
+ # adapted from zgrep by Philippe Troin <phil@fifi.org> for Debian GNU/Linux.
+@@ -6,7 +6,7 @@
+ ## zgrep -- a wrapper around a grep program that decompresses files as needed
+ ## Adapted from a version sent by Charles Levert <charles@comm.polymtl.ca>
+ 
+-PATH="/usr/bin:$PATH"; export PATH
++PATH="/System/Tools:$PATH"; export PATH
+ 
+ prog=`echo $0 | sed 's|.*/||'`
+ case "$prog" in
+@@ -57,7 +57,7 @@
+ for i do
+   if test -f "$i"; then :; else if test -f "$i.bz2"; then i="$i.bz2"; fi; fi
+   if test $list -eq 1; then
+-    bzip2 -cdfq "$i" | $grep $opt "$pat" 2>&1 > /dev/null && echo $i
++    bzip2 -cdfq "$i" | $grep $opt "$pat" 2>&1 > /System/Devices/null && echo $i
+     r=$?
+   elif test $# -eq 1 -o $silent -eq 1; then
+     bzip2 -cdfq "$i" | $grep $opt "$pat"
+diff -urN bzip2-1.0.2/bzmore bzip2-1.0.2-STEP/bzmore
+--- bzip2-1.0.2/bzmore	2001-12-30 15:12:35.000000000 +1300
++++ bzip2-1.0.2-STEP/bzmore	2005-08-23 00:32:10.860282640 +1200
+@@ -1,9 +1,9 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # Bzmore wrapped for bzip2, 
+ # adapted from zmore by Philippe Troin <phil@fifi.org> for Debian GNU/Linux.
+ 
+-PATH="/usr/bin:$PATH"; export PATH
++PATH="/System/Tools:$PATH"; export PATH
+ 
+ prog=`echo $0 | sed 's|.*/||'`
+ case "$prog" in
+@@ -17,17 +17,17 @@
+ else
+   n1='-n'; n2=''
+ fi
+-oldtty=`stty -g 2>/dev/null`
+-if stty -cbreak 2>/dev/null; then
++oldtty=`stty -g 2>/System/Devices/null`
++if stty -cbreak 2>/System/Devices/null; then
+   cb='cbreak'; ncb='-cbreak'
+ else
+   # 'stty min 1' resets eof to ^a on both SunOS and SysV!
+   cb='min 1 -icanon'; ncb='icanon eof ^d'
+ fi
+ if test $? -eq 0 -a -n "$oldtty"; then
+-   trap 'stty $oldtty 2>/dev/null; exit' 0 2 3 5 10 13 15
++   trap 'stty $oldtty 2>/System/Devices/null; exit' 0 2 3 5 10 13 15
+ else
+-   trap 'stty $ncb echo 2>/dev/null; exit' 0 2 3 5 10 13 15
++   trap 'stty $ncb echo 2>/System/Devices/null; exit' 0 2 3 5 10 13 15
+ fi
+ 
+ if test $# = 0; then
+@@ -42,9 +42,9 @@
+     do
+ 	if test $FIRST -eq 0; then
+ 		echo $n1 "--More--(Next file: $FILE)$n2"
+-		stty $cb -echo 2>/dev/null
+-		ANS=`dd bs=1 count=1 2>/dev/null` 
+-		stty $ncb echo 2>/dev/null
++		stty $cb -echo 2>/System/Devices/null
++		ANS=`dd bs=1 count=1 2>/System/Devices/null` 
++		stty $ncb echo 2>/System/Devices/null
+ 		echo " "
+ 		if test "$ANS" = 'e' -o "$ANS" = 'q'; then
+ 			exit
+diff -urN bzip2-1.0.2/bzmore.1 bzip2-1.0.2-STEP/bzmore.1
+--- bzip2-1.0.2/bzmore.1	2001-12-30 15:12:35.000000000 +1300
++++ bzip2-1.0.2-STEP/bzmore.1	2005-08-23 00:26:24.762897440 +1200
+@@ -39,7 +39,7 @@
+ .PP
+ .I Bzmore
+ looks in the file
+-.I /etc/termcap
++.I /System/Settings/termcap
+ to determine terminal characteristics,
+ and to determine the default window size.
+ On a terminal capable of displaying 24 lines,
+@@ -147,6 +147,6 @@
+ except that a header is printed before each file.
+ .SH FILES
+ .DT
+-/etc/termcap		Terminal data base
++/System/Settings/termcap		Terminal data base
+ .SH "SEE ALSO"
+ more(1), less(1), bzip2(1), bzdiff(1), bzgrep(1)

@@ -1,0 +1,59 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/bash</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/bash</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin/sh</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/pwd</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/cat</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/grep</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/echo</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/stty</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/install</amin:param>
+		<amin:param name='target'>/opt/adistrobc/usr/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/bin/install</amin:param>
+		<amin:param name='target'>/opt/adistrobc/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/lib/libgcc_s.so.1</amin:param>
+		<amin:param name='target'>/opt/adistrobc/usr/lib</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/</amin:shell>
+        </amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../adistrobc-bootstrap/lib/libstdc++.so.6</amin:param>
+		<amin:param name='target'>/opt/adistrobc/usr/lib</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/</amin:shell>
+        </amin:command>
+</amin:profile>

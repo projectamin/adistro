@@ -1,0 +1,311 @@
+diff -urN gcc-3.4.3/gcc/config/alpha/gnu.h gcc-3.4.3-adistroSTEP/gcc/config/alpha/gnu.h
+--- gcc-3.4.3/gcc/config/alpha/gnu.h	2003-11-29 16:08:09.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/alpha/gnu.h	2005-02-11 23:58:02.000000000 +1300
+@@ -11,7 +11,7 @@
+     } while (0)
+ 
+ #undef ELF_DYNAMIC_LINKER
+-#define ELF_DYNAMIC_LINKER	"/lib/ld.so"
++#define ELF_DYNAMIC_LINKER	"/bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so"
+ 
+ #undef	STARTFILE_SPEC
+ #define STARTFILE_SPEC \
+diff -urN gcc-3.4.3/gcc/config/alpha/linux-elf.h gcc-3.4.3-adistroSTEP/gcc/config/alpha/linux-elf.h
+--- gcc-3.4.3/gcc/config/alpha/linux-elf.h	2003-09-27 16:48:12.000000000 +1200
++++ gcc-3.4.3-adistroSTEP/gcc/config/alpha/linux-elf.h	2005-02-11 23:59:20.000000000 +1300
+@@ -27,7 +27,7 @@
+ #define SUBTARGET_EXTRA_SPECS \
+ { "elf_dynamic_linker", ELF_DYNAMIC_LINKER },
+ 
+-#define ELF_DYNAMIC_LINKER	"/lib/ld-linux.so.2"
++#define ELF_DYNAMIC_LINKER	"/bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2"
+ 
+ #define LINK_SPEC "-m elf64alpha %{G*} %{relax:-relax}		\
+   %{O*:-O3} %{!O*:-O1}						\
+diff -urN gcc-3.4.3/gcc/config/arm/linux-elf.h gcc-3.4.3-adistroSTEP/gcc/config/arm/linux-elf.h
+--- gcc-3.4.3/gcc/config/arm/linux-elf.h	2004-01-31 19:18:11.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/arm/linux-elf.h	2005-02-12 00:11:24.000000000 +1300
+@@ -87,7 +87,7 @@
+    %{shared:-shared} \
+    %{symbolic:-Bsymbolic} \
+    %{rdynamic:-export-dynamic} \
+-   %{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2} \
++   %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2} \
+    -X \
+    %{mbig-endian:-EB}" \
+    SUBTARGET_EXTRA_LINK_SPEC
+diff -urN gcc-3.4.3/gcc/config/i386/gnu.h gcc-3.4.3-adistroSTEP/gcc/config/i386/gnu.h
+--- gcc-3.4.3/gcc/config/i386/gnu.h	2003-11-29 16:08:10.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/i386/gnu.h	2005-02-12 00:12:27.000000000 +1300
+@@ -27,7 +27,7 @@
+   %{!shared: \
+     %{!static: \
+       %{rdynamic:-export-dynamic} \
+-      %{!dynamic-linker:-dynamic-linker /lib/ld.so}} \
++      %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so}} \
+     %{static:-static}}"
+ 
+ #undef	STARTFILE_SPEC
+diff -urN gcc-3.4.3/gcc/config/i386/kfreebsdgnu.h gcc-3.4.3-adistroSTEP/gcc/config/i386/kfreebsdgnu.h
+--- gcc-3.4.3/gcc/config/i386/kfreebsdgnu.h	2003-10-21 22:52:47.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/i386/kfreebsdgnu.h	2005-02-12 00:12:56.000000000 +1300
+@@ -31,5 +31,5 @@
+     %{!ibcs: \
+       %{!static: \
+ 	%{rdynamic:-export-dynamic} \
+-	%{!dynamic-linker:-dynamic-linker /lib/ld.so.1}} \
++	%{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}} \
+ 	%{static:-static}}}"
+diff -urN gcc-3.4.3/gcc/config/i386/linux64.h gcc-3.4.3-adistroSTEP/gcc/config/i386/linux64.h
+--- gcc-3.4.3/gcc/config/i386/linux64.h	2003-11-29 16:08:10.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/i386/linux64.h	2005-02-12 00:15:38.000000000 +1300
+@@ -60,8 +60,8 @@
+   %{!shared: \
+     %{!static: \
+       %{rdynamic:-export-dynamic} \
+-      %{m32:%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
+-      %{!m32:%{!dynamic-linker:-dynamic-linker /lib64/ld-linux-x86-64.so.2}}} \
++      %{m32:%{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
++      %{!m32:%{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro-x86-64.so.2}}} \
+     %{static:-static}}"
+ 
+ #define MULTILIB_DEFAULTS { "m64" }
+diff -urN gcc-3.4.3/gcc/config/i386/linux.h gcc-3.4.3-adistroSTEP/gcc/config/i386/linux.h
+--- gcc-3.4.3/gcc/config/i386/linux.h	2003-11-29 16:08:10.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/i386/linux.h	2005-02-12 00:14:20.000000000 +1300
+@@ -115,7 +115,7 @@
+     %{!ibcs: \
+       %{!static: \
+ 	%{rdynamic:-export-dynamic} \
+-	%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.1}} \
++	%{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.1}} \
+ 	%{static:-static}}}"
+ #else
+ #define LINK_SPEC "-m elf_i386 %{shared:-shared} \
+@@ -123,7 +123,7 @@
+     %{!ibcs: \
+       %{!static: \
+ 	%{rdynamic:-export-dynamic} \
+-	%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
++	%{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
+ 	%{static:-static}}}"
+ #endif
+ 
+diff -urN gcc-3.4.3/gcc/config/i386/nto.h gcc-3.4.3-adistroSTEP/gcc/config/i386/nto.h
+--- gcc-3.4.3/gcc/config/i386/nto.h	2003-09-26 16:07:46.000000000 +1200
++++ gcc-3.4.3-adistroSTEP/gcc/config/i386/nto.h	2005-02-12 00:16:56.000000000 +1300
+@@ -80,7 +80,7 @@
+     %{!p:-Y P,%R/lib}} \
+    %{Qy:} %{!Qn:-Qy} \
+    -m i386nto \
+-   %{!shared: --dynamic-linker /usr/lib/ldqnx.so.2}"
++   %{!shared: --dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ldqnx.so.2}"
+ 
+ 
+ #undef SIZE_TYPE
+diff -urN gcc-3.4.3/gcc/config/ia64/linux.h gcc-3.4.3-adistroSTEP/gcc/config/ia64/linux.h
+--- gcc-3.4.3/gcc/config/ia64/linux.h	2004-02-07 20:56:17.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/ia64/linux.h	2005-02-12 00:20:34.000000000 +1300
+@@ -43,7 +43,7 @@
+   %{!shared: \
+     %{!static: \
+       %{rdynamic:-export-dynamic} \
+-      %{!dynamic-linker:-dynamic-linker /lib/ld-linux-ia64.so.2}} \
++      %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro-ia64.so.2}} \
+       %{static:-static}}"
+ 
+ 
+diff -urN gcc-3.4.3/gcc/config/m32r/linux.h gcc-3.4.3-adistroSTEP/gcc/config/m32r/linux.h
+--- gcc-3.4.3/gcc/config/m32r/linux.h	2003-12-31 23:33:02.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/m32r/linux.h	2005-02-12 00:21:40.000000000 +1300
+@@ -66,7 +66,7 @@
+     %{!ibcs: \
+       %{!static: \
+ 	%{rdynamic:-export-dynamic} \
+-	%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
++	%{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
+ 	%{static:-static}}}"
+ #else
+ #define LINK_SPEC "%(link_cpu) -m m32relf_linux %{shared:-shared} \
+@@ -74,7 +74,7 @@
+     %{!ibcs: \
+       %{!static: \
+ 	%{rdynamic:-export-dynamic} \
+-	%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
++	%{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
+ 	%{static:-static}}}"
+ #endif
+ 
+diff -urN gcc-3.4.3/gcc/config/m68k/linux.h gcc-3.4.3-adistroSTEP/gcc/config/m68k/linux.h
+--- gcc-3.4.3/gcc/config/m68k/linux.h	2003-11-29 16:08:11.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/m68k/linux.h	2005-02-12 00:22:29.000000000 +1300
+@@ -136,7 +136,7 @@
+   %{!shared: \
+     %{!static: \
+       %{rdynamic:-export-dynamic} \
+-      %{!dynamic-linker*:-dynamic-linker /lib/ld.so.1}} \
++      %{!dynamic-linker*:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}} \
+     %{static}}"
+ 
+ /* For compatibility with linux/a.out */
+diff -urN gcc-3.4.3/gcc/config/mips/linux64.h gcc-3.4.3-adistroSTEP/gcc/config/mips/linux64.h
+--- gcc-3.4.3/gcc/config/mips/linux64.h	2004-06-16 13:42:25.000000000 +1200
++++ gcc-3.4.3-adistroSTEP/gcc/config/mips/linux64.h	2005-02-12 00:24:52.000000000 +1300
+@@ -65,9 +65,9 @@
+       %{!static: \
+         %{rdynamic:-export-dynamic} \
+         %{!dynamic-linker: \
+-	  %{mabi=n32: -dynamic-linker /lib32/ld.so.1} \
+-	  %{mabi=64: -dynamic-linker /lib64/ld.so.1} \
+-	  %{mabi=32: -dynamic-linker /lib/ld.so.1}}} \
++	  %{mabi=n32: -dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1} \
++	  %{mabi=64: -dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1} \
++	  %{mabi=32: -dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}}} \
+       %{static:-static}}} \
+ %{mabi=n32:-melf32%{EB:b}%{EL:l}tsmipn32} \
+ %{mabi=64:-melf64%{EB:b}%{EL:l}tsmip} \
+diff -urN gcc-3.4.3/gcc/config/mips/linux.h gcc-3.4.3-adistroSTEP/gcc/config/mips/linux.h
+--- gcc-3.4.3/gcc/config/mips/linux.h	2004-06-16 13:42:24.000000000 +1200
++++ gcc-3.4.3-adistroSTEP/gcc/config/mips/linux.h	2005-02-12 00:23:39.000000000 +1300
+@@ -116,7 +116,7 @@
+     %{!ibcs: \
+       %{!static: \
+         %{rdynamic:-export-dynamic} \
+-        %{!dynamic-linker:-dynamic-linker /lib/ld.so.1}} \
++        %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}} \
+         %{static:-static}}}"
+ 
+ #undef SUBTARGET_ASM_SPEC
+diff -urN gcc-3.4.3/gcc/config/mn10300/linux.h gcc-3.4.3-adistroSTEP/gcc/config/mn10300/linux.h
+--- gcc-3.4.3/gcc/config/mn10300/linux.h	2003-11-29 16:08:11.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/mn10300/linux.h	2005-02-12 00:25:40.000000000 +1300
+@@ -37,7 +37,7 @@
+ #define LINK_SPEC "%{mrelax:--relax} %{shared:-shared} \
+    %{!static: \
+      %{rdynamic:-export-dynamic} \
+-     %{!dynamic-linker:-dynamic-linker /lib/ld.so.1}} \
++     %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}} \
+    %{static:-static}"
+ 
+ #undef  LIB_SPEC
+diff -urN gcc-3.4.3/gcc/config/pa/pa-linux.h gcc-3.4.3-adistroSTEP/gcc/config/pa/pa-linux.h
+--- gcc-3.4.3/gcc/config/pa/pa-linux.h	2003-11-29 16:08:11.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/pa/pa-linux.h	2005-02-12 00:27:54.000000000 +1300
+@@ -83,7 +83,7 @@
+   %{!shared: \
+     %{!static: \
+       %{rdynamic:-export-dynamic} \
+-      %{!dynamic-linker:-dynamic-linker /lib/ld.so.1}} \
++      %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}} \
+       %{static:-static}}"
+ 
+ /* glibc's profiling functions don't need gcc to allocate counters.  */
+diff -urN gcc-3.4.3/gcc/config/rs6000/linux64.h gcc-3.4.3-adistroSTEP/gcc/config/rs6000/linux64.h
+--- gcc-3.4.3/gcc/config/rs6000/linux64.h	2004-10-03 16:43:56.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/rs6000/linux64.h	2005-02-12 00:29:20.000000000 +1300
+@@ -349,11 +349,11 @@
+ 
+ #define LINK_OS_LINUX_SPEC32 "-m elf32ppclinux %{!shared: %{!static: \
+   %{rdynamic:-export-dynamic} \
+-  %{!dynamic-linker:-dynamic-linker /lib/ld.so.1}}}"
++  %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}}}"
+ 
+ #define LINK_OS_LINUX_SPEC64 "-m elf64ppc %{!shared: %{!static: \
+   %{rdynamic:-export-dynamic} \
+-  %{!dynamic-linker:-dynamic-linker /lib64/ld64.so.1}}}"
++  %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld64.so.1}}}"
+ 
+ #undef  TOC_SECTION_ASM_OP
+ #define TOC_SECTION_ASM_OP \
+diff -urN gcc-3.4.3/gcc/config/s390/linux.h gcc-3.4.3-adistroSTEP/gcc/config/s390/linux.h
+--- gcc-3.4.3/gcc/config/s390/linux.h	2003-11-29 16:08:12.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/s390/linux.h	2005-02-12 00:30:41.000000000 +1300
+@@ -86,8 +86,8 @@
+       %{!static: \
+ 	%{rdynamic:-export-dynamic} \
+ 	%{!dynamic-linker: \
+-          %{m31:-dynamic-linker /lib/ld.so.1} \
+-          %{m64:-dynamic-linker /lib/ld64.so.1}}}}"
++          %{m31:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1} \
++          %{m64:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld64.so.1}}}}"
+ 
+ 
+ #define TARGET_ASM_FILE_END file_end_indicate_exec_stack
+diff -urN gcc-3.4.3/gcc/config/sh/linux.h gcc-3.4.3-adistroSTEP/gcc/config/sh/linux.h
+--- gcc-3.4.3/gcc/config/sh/linux.h	2004-01-12 15:29:13.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/sh/linux.h	2005-02-12 00:31:38.000000000 +1300
+@@ -77,7 +77,7 @@
+   "%{shared:-shared} \
+    %{!static: \
+      %{rdynamic:-export-dynamic} \
+-     %{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
++     %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
+    %{static:-static}"
+ 
+ #undef LIB_SPEC
+diff -urN gcc-3.4.3/gcc/config/sparc/linux64.h gcc-3.4.3-adistroSTEP/gcc/config/sparc/linux64.h
+--- gcc-3.4.3/gcc/config/sparc/linux64.h	2004-06-06 15:55:17.000000000 +1200
++++ gcc-3.4.3-adistroSTEP/gcc/config/sparc/linux64.h	2005-02-12 00:33:51.000000000 +1300
+@@ -172,7 +172,7 @@
+     %{!ibcs: \
+       %{!static: \
+         %{rdynamic:-export-dynamic} \
+-        %{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
++        %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
+         %{static:-static}}} \
+ "
+ 
+@@ -181,7 +181,7 @@
+     %{!ibcs: \
+       %{!static: \
+         %{rdynamic:-export-dynamic} \
+-        %{!dynamic-linker:-dynamic-linker /lib64/ld-linux.so.2}} \
++        %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
+         %{static:-static}}} \
+ "
+ 
+diff -urN gcc-3.4.3/gcc/config/sparc/linux.h gcc-3.4.3-adistroSTEP/gcc/config/sparc/linux.h
+--- gcc-3.4.3/gcc/config/sparc/linux.h	2004-06-06 15:55:17.000000000 +1200
++++ gcc-3.4.3-adistroSTEP/gcc/config/sparc/linux.h	2005-02-12 00:32:50.000000000 +1300
+@@ -159,7 +159,7 @@
+     %{!ibcs: \
+       %{!static: \
+         %{rdynamic:-export-dynamic} \
+-        %{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.1}} \
++        %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.1}} \
+         %{static:-static}}}"
+ #else
+ #define LINK_SPEC "-m elf32_sparc -Y P,/usr/lib %{shared:-shared} \
+@@ -168,7 +168,7 @@
+     %{!ibcs: \
+       %{!static: \
+         %{rdynamic:-export-dynamic} \
+-        %{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
++        %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2}} \
+         %{static:-static}}}"
+ #endif
+ 
+diff -urN gcc-3.4.3/gcc/config/xtensa/linux.h gcc-3.4.3-adistroSTEP/gcc/config/xtensa/linux.h
+--- gcc-3.4.3/gcc/config/xtensa/linux.h	2003-11-29 16:08:13.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/config/xtensa/linux.h	2005-02-12 00:35:08.000000000 +1300
+@@ -50,7 +50,7 @@
+     %{!ibcs: \
+       %{!static: \
+         %{rdynamic:-export-dynamic} \
+-        %{!dynamic-linker:-dynamic-linker /lib/ld.so.1}} \
++        %{!dynamic-linker:-dynamic-linker /bootstrap/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1}} \
+       %{static:-static}}}"
+ 
+ #undef LOCAL_LABEL_PREFIX
+diff -urN gcc-3.4.3/gcc/cppdefault.c gcc-3.4.3-adistroSTEP/gcc/cppdefault.c
+--- gcc-3.4.3/gcc/cppdefault.c	2003-03-02 03:31:12.000000000 +1300
++++ gcc-3.4.3-adistroSTEP/gcc/cppdefault.c	2005-02-12 02:19:39.074090744 +1300
+@@ -26,7 +26,7 @@
+ #include "cppdefault.h"
+ 
+ #ifndef STANDARD_INCLUDE_DIR
+-#define STANDARD_INCLUDE_DIR "/usr/include"
++#define STANDARD_INCLUDE_DIR "/bootstrap/System/Library/Headers"
+ #endif
+ 
+ #ifndef STANDARD_INCLUDE_COMPONENT

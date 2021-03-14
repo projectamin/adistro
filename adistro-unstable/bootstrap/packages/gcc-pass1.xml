@@ -1,0 +1,73 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gcc-->
+
+<!--grabbing packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/pub/gnu/gcc/gcc-4.3.1/gcc-4.3.1.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-4.3.1.tar.bz2</amin:param>
+	</amin:download>
+	
+
+<!-- no patches in inital build phase -->
+        
+
+<!--running install-->
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gcc-4.3.1.tar.bz2</amin:param>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-4.3.1/configure</amin:param>
+		<amin:flag> 
+		prefix=/bootstrap 
+		disable-nls  
+		enable-languages=c
+		with-local-prefix=/bootstrap
+		enable-shared
+		with-gmp-include=/bootstrap/include
+		with-gmp-lib=/bootstrap/lib
+		with-mpfr-include=/bootstrap/include
+		with-mpfr-lib=/bootstrap/lib
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-L/bootstrap/lib -I/bootstrap/include</amin:shell>
+		<amin:shell name='env'>LD_FLAGS=-L/bootstrap/lib -R/bootstrap/lib</amin:shell>
+		<amin:shell name='env'>LD_LIBRARY_PATH=/bootstrap/lib</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>bootstrap</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>gcc-build</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>gcc-4.3.1</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+                <amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+        </amin:command>
+
+</amin:profile>

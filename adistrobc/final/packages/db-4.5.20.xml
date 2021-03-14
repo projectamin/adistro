@@ -1,0 +1,39 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/db-4.5.20.tar.gz</amin:param>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:shell name='dir'>/src/db-4.5.20</amin:shell>
+		<amin:flag>prefix=/usr bindir=/bin</amin:flag>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../dist/configure</amin:param>
+		<amin:flag>
+			prefix=/usr
+			enable-compat185
+			enable-cxx
+		</amin:flag>
+		<amin:shell name='dir'>/src/db-4.5.20</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/src/db-4.5.20</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/src/db-4.5.20</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>db-4.5.20</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

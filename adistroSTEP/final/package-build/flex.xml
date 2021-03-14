@@ -1,0 +1,76 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Flex-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>ftp://ftp.gnu.org/gnu/gawk/flex-2.5.31.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/flex-2.5.31.tar.gz</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/flex-2.5.31-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/flex-2.5.31-STEP.patch</amin:param>
+        </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/flex-2.5.31.tar.gz</amin:param>
+	</amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:param name='input'>../../packages/flex-2.5.31-STEP.patch</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/flex-2.5.31</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='system_command'>
+                <amin:param name='basename'>autoreconf</amin:param>
+                <amin:shell name='dir'>/build/flex-2.5.31</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name="system_command">
+                <amin:param name="basename">touch</amin:param>
+                <amin:param>doc/flex.1</amin:param>
+                <amin:shell name="dir">/build/flex-2.5.31</amin:shell>
+        </amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/System/Applications/Flex-2.5.31/
+		</amin:flag>
+		<amin:shell name='dir'>/build/flex-2.5.31</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/build/flex-2.5.31</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/flex-2.5.31</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>flex-2.5.31</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/flex-2.5.31/bin/flex</amin:param>
+                <amin:param name='target'>flex</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+
+</amin:profile>

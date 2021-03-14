@@ -1,0 +1,65 @@
+--- gcc-4.2.2.orig/gcc/config/arm/linux-elf.h	2007-09-01 11:28:30.000000000 -0400
++++ gcc-4.2.2/gcc/config/arm/linux-elf.h	2008-02-12 04:50:21.000000000 -0500
+@@ -50,7 +50,7 @@
+ 
+ #define LIBGCC_SPEC "%{msoft-float:-lfloat} %{mfloat-abi=soft*:-lfloat} -lgcc"
+ 
+-#define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
++#define GLIBC_DYNAMIC_LINKER "/adistrobc-bootstrap/lib/ld-linux.so.2"
+ 
+ #define LINUX_TARGET_LINK_SPEC  "%{h*} %{version:-v} \
+    %{b} \
+--- gcc-4.2.2.orig/gcc/config/i386/gnu.h	2005-11-21 22:09:59.000000000 -0500
++++ gcc-4.2.2/gcc/config/i386/gnu.h	2008-02-12 04:52:33.000000000 -0500
+@@ -22,7 +22,7 @@
+   %{!shared: \
+     %{!static: \
+       %{rdynamic:-export-dynamic} \
+-      %{!dynamic-linker:-dynamic-linker /lib/ld.so}} \
++      %{!dynamic-linker:-dynamic-linker /adistrobc-bootstrap/lib/ld.so}} \
+     %{static:-static}}"
+ 
+ #undef	STARTFILE_SPEC
+--- gcc-4.2.2.orig/gcc/config/i386/linux.h	2007-09-01 11:28:30.000000000 -0400
++++ gcc-4.2.2/gcc/config/i386/linux.h	2008-02-12 04:57:30.000000000 -0500
+@@ -100,7 +100,7 @@
+ 
+ /* These macros may be overridden in k*bsd-gnu.h and i386/k*bsd-gnu.h. */
+ #define LINK_EMULATION "elf_i386"
+-#define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
++#define GLIBC_DYNAMIC_LINKER "/adistrobc-bootstrap/lib/ld-linux.so.2"
+ 
+ #undef  SUBTARGET_EXTRA_SPECS
+ #define SUBTARGET_EXTRA_SPECS \
+--- gcc-4.2.2.orig/gcc/config/i386/linux64.h	2007-09-01 11:28:30.000000000 -0400
++++ gcc-4.2.2/gcc/config/i386/linux64.h	2008-02-12 04:58:23.000000000 -0500
+@@ -48,8 +48,8 @@
+    When the -shared link option is used a final link is not being
+    done.  */
+ 
+-#define GLIBC_DYNAMIC_LINKER32 "/lib/ld-linux.so.2"
+-#define GLIBC_DYNAMIC_LINKER64 "/lib64/ld-linux-x86-64.so.2"
++#define GLIBC_DYNAMIC_LINKER32 "/adistrobc-bootstrap/lib/ld-linux.so.2"
++#define GLIBC_DYNAMIC_LINKER64 "/adistrobc-bootstrap/lib64/ld-linux-x86-64.so.2"
+ 
+ #undef	LINK_SPEC
+ #define LINK_SPEC "%{!m32:-m elf_x86_64} %{m32:-m elf_i386} \
+--- gcc-4.2.2.orig/gcc/config/ia64/linux.h	2006-12-12 10:21:53.000000000 -0500
++++ gcc-4.2.2/gcc/config/ia64/linux.h	2008-02-12 04:58:55.000000000 -0500
+@@ -37,7 +37,7 @@
+ /* Define this for shared library support because it isn't in the main
+    linux.h file.  */
+ 
+-#define GLIBC_DYNAMIC_LINKER "/lib/ld-linux-ia64.so.2"
++#define GLIBC_DYNAMIC_LINKER "/adistrobc-bootstrap/lib/ld-linux-ia64.so.2"
+ 
+ #undef LINK_SPEC
+ #define LINK_SPEC "\
+--- gcc-4.2.2.orig/gcc/config/linux.h	2007-09-01 11:28:30.000000000 -0400
++++ gcc-4.2.2/gcc/config/linux.h	2008-02-12 05:03:22.000000000 -0500
+@@ -126,3 +126,5 @@
+ #define TARGET_C99_FUNCTIONS (OPTION_GLIBC)
+ 
+ #define TARGET_POSIX_IO
++#undef STANDARD_INCLUDE_DIR
++#define STANDARD_INCLUDE_DIR 0

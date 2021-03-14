@@ -1,0 +1,219 @@
+diff -urN make-3.80/getloadavg.c make-3.80-adistroSTEP/getloadavg.c
+--- make-3.80/getloadavg.c	2002-05-10 15:15:08.000000000 +1200
++++ make-3.80-adistroSTEP/getloadavg.c	2005-05-17 14:03:36.558965560 +1200
+@@ -192,7 +192,7 @@
+ #  include <sys/table.h>
+ # endif
+ 
+-/* UTek's /bin/cc on the 4300 has no architecture specific cpp define by
++/* UTek's /System/Tools/cc on the 4300 has no architecture specific cpp define by
+    default, but _MACH_IND_SYS_TYPES is defined in <sys/types.h>.  Combine
+    that with a couple of other things and we'll have a unique match.  */
+ # if !defined (tek4300) && defined (unix) && defined (m68k) && defined (mc68000) && defined (mc68020) && defined (_MACH_IND_SYS_TYPES)
+@@ -475,7 +475,7 @@
+ # endif /* DGUX */
+ 
+ #if !defined(HAVE_LIBKSTAT) && defined(LOAD_AVE_TYPE)
+-/* File descriptor open to /dev/kmem or VMS load ave driver.  */
++/* File descriptor open to /System/Devices/kmem or VMS load ave driver.  */
+ static int channel;
+ /* Nonzero iff channel is valid.  */
+ static int getloadavg_initialized;
+@@ -678,7 +678,7 @@
+ # if !defined (LDAV_DONE) && defined (UMAX)
+ #  define LDAV_DONE
+ /* UMAX 4.2, which runs on the Encore Multimax multiprocessor, does not
+-   have a /dev/kmem.  Information about the workings of the running kernel
++   have a /System/Devices/kmem.  Information about the workings of the running kernel
+    can be gathered with inq_stats system calls.
+    We only know how to get the 1-minute average for this system.  */
+ 
+@@ -862,7 +862,7 @@
+ 
+ # if !defined (LDAV_DONE) && defined(LOAD_AVE_TYPE) && !defined(VMS)
+ 
+-  /* UNIX-specific code -- read the average from /dev/kmem.  */
++  /* UNIX-specific code -- read the average from /System/Devices/kmem.  */
+ 
+ #  define LDAV_PRIVILEGED		/* This code requires special installation.  */
+ 
+@@ -910,11 +910,11 @@
+ #  endif /* sgi */
+     }
+ 
+-  /* Make sure we have /dev/kmem open.  */
++  /* Make sure we have /System/Devices/kmem open.  */
+   if (!getloadavg_initialized)
+     {
+ #  ifndef SUNOS_5
+-      channel = open ("/dev/kmem", 0);
++      channel = open ("/System/Devices/kmem", 0);
+       if (channel >= 0)
+ 	{
+ 	  /* Set the channel to close on exec, so it does not
+diff -urN make-3.80/job.c make-3.80-adistroSTEP/job.c
+--- make-3.80/job.c	2002-08-10 13:27:17.000000000 +1200
++++ make-3.80-adistroSTEP/job.c	2005-05-17 14:03:36.567964192 +1200
+@@ -51,7 +51,7 @@
+ #    include <descrip.h>
+ char default_shell[] = "";
+ #   else
+-char default_shell[] = "/bin/sh";
++char default_shell[] = "/System/Tools/sh";
+ #   endif /* VMS */
+ #  endif /* __MSDOS__ */
+ int batch_mode_shell = 0;
+@@ -301,7 +301,7 @@
+   while (*ibuf && !isspace ((unsigned char)*ibuf))
+     ibuf++;
+   *ibuf = 0;
+-  if (strcmp (fptr, "/dev/null") != 0)
++  if (strcmp (fptr, "/System/Devices/null") != 0)
+     {
+       strcpy (fname, vmsify (fptr, 0));
+       if (strchr (fname, '.') == 0)
+@@ -1009,7 +1009,7 @@
+ #ifdef __MSDOS__
+       unixy_shell	/* the test is complicated and we already did it */
+ #else
+-      (argv[0] && !strcmp (argv[0], "/bin/sh"))
++      (argv[0] && !strcmp (argv[0], "/System/Tools/sh"))
+ #endif
+       && (argv[1]
+           && argv[1][0] == '-' && argv[1][1] == 'c' && argv[1][2] == '\0')
+diff -urN make-3.80/loadavg.c make-3.80-adistroSTEP/loadavg.c
+--- make-3.80/loadavg.c	2002-10-04 06:24:26.000000000 +1200
++++ make-3.80-adistroSTEP/loadavg.c	2005-05-17 14:03:36.568964040 +1200
+@@ -192,7 +192,7 @@
+ #  include <sys/table.h>
+ # endif
+ 
+-/* UTek's /bin/cc on the 4300 has no architecture specific cpp define by
++/* UTek's /System/Tools/cc on the 4300 has no architecture specific cpp define by
+    default, but _MACH_IND_SYS_TYPES is defined in <sys/types.h>.  Combine
+    that with a couple of other things and we'll have a unique match.  */
+ # if !defined (tek4300) && defined (unix) && defined (m68k) && defined (mc68000) && defined (mc68020) && defined (_MACH_IND_SYS_TYPES)
+@@ -475,7 +475,7 @@
+ # endif /* DGUX */
+ 
+ #if !defined(HAVE_LIBKSTAT) && defined(LOAD_AVE_TYPE)
+-/* File descriptor open to /dev/kmem or VMS load ave driver.  */
++/* File descriptor open to /System/Devices/kmem or VMS load ave driver.  */
+ static int channel;
+ /* Nonzero iff channel is valid.  */
+ static int getloadavg_initialized;
+@@ -678,7 +678,7 @@
+ # if !defined (LDAV_DONE) && defined (UMAX)
+ #  define LDAV_DONE
+ /* UMAX 4.2, which runs on the Encore Multimax multiprocessor, does not
+-   have a /dev/kmem.  Information about the workings of the running kernel
++   have a /System/Devices/kmem.  Information about the workings of the running kernel
+    can be gathered with inq_stats system calls.
+    We only know how to get the 1-minute average for this system.  */
+ 
+@@ -862,7 +862,7 @@
+ 
+ # if !defined (LDAV_DONE) && defined(LOAD_AVE_TYPE) && !defined(VMS)
+ 
+-  /* UNIX-specific code -- read the average from /dev/kmem.  */
++  /* UNIX-specific code -- read the average from /System/Devices/kmem.  */
+ 
+ #  define LDAV_PRIVILEGED		/* This code requires special installation.  */
+ 
+@@ -910,11 +910,11 @@
+ #  endif /* sgi */
+     }
+ 
+-  /* Make sure we have /dev/kmem open.  */
++  /* Make sure we have /System/Devices/kmem open.  */
+   if (!getloadavg_initialized)
+     {
+ #  ifndef SUNOS_5
+-      channel = open ("/dev/kmem", 0);
++      channel = open ("/System/Devices/kmem", 0);
+       if (channel >= 0)
+ 	{
+ 	  /* Set the channel to close on exec, so it does not
+diff -urN make-3.80/main.c make-3.80-adistroSTEP/main.c
+--- make-3.80/main.c	2002-08-10 13:27:17.000000000 +1200
++++ make-3.80-adistroSTEP/main.c	2005-05-17 14:03:36.573963280 +1200
+@@ -680,9 +680,9 @@
+ }
+ 
+ /*
+- * On WIN32 systems we don't have the luxury of a /bin directory that
++ * On WIN32 systems we don't have the luxury of a /System/Tools directory that
+  * is mapped globally to every drive mounted to the system. Since make could
+- * be invoked from any drive, and we don't want to propogate /bin/sh
++ * be invoked from any drive, and we don't want to propogate /System/Tools/sh
+  * to every single drive. Allow ourselves a chance to search for
+  * a value for default shell here (if the default path does not exist).
+  */
+@@ -1327,7 +1327,7 @@
+ # ifdef P_tmpdir
+ #  define DEFAULT_TMPDIR    P_tmpdir
+ # else
+-#  define DEFAULT_TMPDIR    "/tmp"
++#  define DEFAULT_TMPDIR    "/System/TemporaryFiles"
+ # endif
+ #endif
+ #define DEFAULT_TMPFILE     "GmXXXXXX"
+diff -urN make-3.80/remote-cstms.c make-3.80-adistroSTEP/remote-cstms.c
+--- make-3.80/remote-cstms.c	2000-06-07 17:43:37.000000000 +1200
++++ make-3.80-adistroSTEP/remote-cstms.c	2005-05-17 14:03:36.582961912 +1200
+@@ -37,7 +37,7 @@
+ 
+ /* File name of the Customs `export' client command.
+    A full path name can be used to avoid some path-searching overhead.  */
+-#define	EXPORT_COMMAND	"/usr/local/bin/export"
++#define	EXPORT_COMMAND	"/usr/local/System/Tools/export"
+ 
+ /* ExportPermit gotten by start_remote_job_p, and used by start_remote_job.  */
+ static ExportPermit permit;
+diff -urN make-3.80/variable.c make-3.80-adistroSTEP/variable.c
+--- make-3.80/variable.c	2002-10-04 14:13:42.000000000 +1200
++++ make-3.80-adistroSTEP/variable.c	2005-05-17 14:03:36.585961456 +1200
+@@ -886,18 +886,18 @@
+     }
+ 
+ #ifdef __MSDOS__
+-  /* Many Unix Makefiles include a line saying "SHELL=/bin/sh", but
++  /* Many Unix Makefiles include a line saying "SHELL=/System/Tools/sh", but
+      non-Unix systems don't conform to this default configuration (in
+-     fact, most of them don't even have `/bin').  On the other hand,
++     fact, most of them don't even have `/System/Tools').  On the other hand,
+      $SHELL in the environment, if set, points to the real pathname of
+      the shell.
+-     Therefore, we generally won't let lines like "SHELL=/bin/sh" from
++     Therefore, we generally won't let lines like "SHELL=/System/Tools/sh" from
+      the Makefile override $SHELL from the environment.  But first, we
+      look for the basename of the shell in the directory where SHELL=
+      points, and along the $PATH; if it is found in any of these places,
+      we define $SHELL to be the actual pathname of the shell.  Thus, if
+      you have bash.exe installed as d:/unix/bash.exe, and d:/unix is on
+-     your $PATH, then SHELL=/usr/local/bin/bash will have the effect of
++     your $PATH, then SHELL=/usr/local/System/Tools/bash will have the effect of
+      defining SHELL to be "d:/unix/bash.exe".  */
+   if ((origin == o_file || origin == o_override)
+       && strcmp (varname, "SHELL") == 0)
+@@ -905,7 +905,7 @@
+       char shellpath[PATH_MAX];
+       extern char * __dosexec_find_on_path (const char *, char *[], char *);
+ 
+-      /* See if we can find "/bin/sh.exe", "/bin/sh.com", etc.  */
++      /* See if we can find "/System/Tools/sh.exe", "/bin/sh.com", etc.  */
+       if (__dosexec_find_on_path (p, (char **)0, shellpath))
+ 	{
+ 	  char *p;
+diff -urN make-3.80/vmsify.c make-3.80-adistroSTEP/vmsify.c
+--- make-3.80/vmsify.c	2000-01-22 18:43:03.000000000 +1300
++++ make-3.80-adistroSTEP/vmsify.c	2005-05-17 14:03:36.588961000 +1200
+@@ -889,7 +889,7 @@
+ /*
+   convert from vms-style to unix-style
+ 
+-  dev:[dir1.dir2]	//dev/dir1/dir2/
++  dev:[dir1.dir2]	//System/Devices/dir1/dir2/
+ */
+ 
+ char *

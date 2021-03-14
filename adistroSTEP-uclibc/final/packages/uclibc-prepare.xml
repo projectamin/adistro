@@ -1,0 +1,22 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/uClibc-0.9.27.tar.bz2</amin:param>
+                <amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name='input'>/opt/adistro/packages/uClibc-0.9.27-STEP.patch</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/uClibc-0.9.27</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>/opt/adistro/packages/uClibc-0.9.27-STEP-config.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+</amin:profile>

@@ -1,0 +1,170 @@
+diff -urN coreutils-5.2.1/lib/getloadavg.c coreutils-5.2.1-adistroSTEP/lib/getloadavg.c
+--- coreutils-5.2.1/lib/getloadavg.c	2004-03-04 21:41:15.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/lib/getloadavg.c	2005-06-14 02:49:51.000000000 +1200
+@@ -588,7 +588,7 @@
+ #  undef LOAD_AVE_TYPE
+ 
+ #  ifndef LINUX_LDAV_FILE
+-#   define LINUX_LDAV_FILE "/proc/loadavg"
++#   define LINUX_LDAV_FILE "/System/Processes/loadavg"
+ #  endif
+ 
+   char ldavgbuf[40];
+@@ -921,7 +921,7 @@
+   if (!getloadavg_initialized)
+     {
+ #  ifndef SUNOS_5
+-      channel = open ("/dev/kmem", 0);
++      channel = open ("/System/Devices/kmem", 0);
+       if (channel >= 0)
+ 	{
+ 	  /* Set the channel to close on exec, so it does not
+diff -urN coreutils-5.2.1/lib/getpass.c coreutils-5.2.1-adistroSTEP/lib/getpass.c
+--- coreutils-5.2.1/lib/getpass.c	2003-10-16 19:28:49.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/lib/getpass.c	2005-06-14 02:50:12.000000000 +1200
+@@ -97,7 +97,7 @@
+   /* Try to write to and read from the terminal if we can.
+      If we can't open the terminal, use stderr and stdin.  */
+ 
+-  tty = fopen ("/dev/tty", "w+" NOTCANCEL_MODE);
++  tty = fopen ("/System/Devices/tty", "w+" NOTCANCEL_MODE);
+   if (tty == NULL)
+     {
+       in = stdin;
+diff -urN coreutils-5.2.1/lib/mountlist.c coreutils-5.2.1-adistroSTEP/lib/mountlist.c
+--- coreutils-5.2.1/lib/mountlist.c	2004-01-26 21:58:12.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/lib/mountlist.c	2005-06-14 02:52:00.000000000 +1200
+@@ -598,7 +598,7 @@
+ 	me->me_devname = xstrdup (mnt.mt_dev);
+ # else
+ 	me->me_devname = xmalloc (strlen (mnt.mt_dev) + 6);
+-	strcpy (me->me_devname, "/dev/");
++	strcpy (me->me_devname, "/System/Devices/");
+ 	strcpy (me->me_devname + 5, mnt.mt_dev);
+ # endif
+ 	me->me_mountdir = xstrdup (mnt.mt_filsys);
+diff -urN coreutils-5.2.1/lib/tempname.c coreutils-5.2.1-adistroSTEP/lib/tempname.c
+--- coreutils-5.2.1/lib/tempname.c	2003-09-14 00:06:33.000000000 +1200
++++ coreutils-5.2.1-adistroSTEP/lib/tempname.c	2005-06-14 02:49:14.000000000 +1200
+@@ -31,7 +31,7 @@
+ 
+ #include <stdio.h>
+ #ifndef P_tmpdir
+-# define P_tmpdir "/tmp"
++# define P_tmpdir "/System/TemporaryFiles"
+ #endif
+ #ifndef TMP_MAX
+ # define TMP_MAX 238328
+@@ -184,8 +184,8 @@
+     {
+       if (direxists (P_tmpdir))
+ 	dir = P_tmpdir;
+-      else if (strcmp (P_tmpdir, "/tmp") != 0 && direxists ("/tmp"))
+-	dir = "/tmp";
++      else if (strcmp (P_tmpdir, "/System/TemporaryFiles") != 0 && direxists ("/System/TemporaryFiles"))
++	dir = "/System/TemporaryFiles";
+       else
+ 	{
+ 	  __set_errno (ENOENT);
+diff -urN coreutils-5.2.1/src/pinky.c coreutils-5.2.1-adistroSTEP/src/pinky.c
+--- coreutils-5.2.1/src/pinky.c	2004-01-22 11:27:02.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/src/pinky.c	2005-06-14 02:43:10.000000000 +1200
+@@ -169,7 +169,7 @@
+   time_t last_change;
+   char mesg;
+ 
+-#define DEV_DIR_WITH_TRAILING_SLASH "/dev/"
++#define DEV_DIR_WITH_TRAILING_SLASH "/System/Devices/"
+ #define DEV_DIR_LEN (sizeof (DEV_DIR_WITH_TRAILING_SLASH) - 1)
+ 
+   char line[sizeof (utmp_ent->ut_line) + DEV_DIR_LEN + 1];
+diff -urN coreutils-5.2.1/src/shred.c coreutils-5.2.1-adistroSTEP/src/shred.c
+--- coreutils-5.2.1/src/shred.c	2004-01-22 11:27:02.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/src/shred.c	2005-06-14 02:44:11.000000000 +1200
+@@ -631,7 +631,7 @@
+ 
+   {
+     char buf[32];
+-    int fd = open ("/dev/urandom", O_RDONLY | O_NOCTTY);
++    int fd = open ("/System/Devices/urandom", O_RDONLY | O_NOCTTY);
+     if (fd >= 0)
+       {
+ 	read (fd, buf, 32);
+@@ -640,7 +640,7 @@
+       }
+     else
+       {
+-	fd = open ("/dev/random", O_RDONLY | O_NONBLOCK | O_NOCTTY);
++	fd = open ("/System/Devices/random", O_RDONLY | O_NONBLOCK | O_NOCTTY);
+ 	if (fd >= 0)
+ 	  {
+ 	    /* /dev/random is more precious, so use less */
+@@ -1465,7 +1465,7 @@
+ 	    fd = open (name, O_WRONLY | O_NOCTTY);
+ 	}
+       else if ((errno == ENOENT || errno == ENOTDIR)
+-	       && strncmp (name, "/dev/fd/", 8) == 0)
++	       && strncmp (name, "/System/Devices/fd/", 8) == 0)
+ 	{
+ 	  /* We accept /dev/fd/# even if the OS doesn't support it */
+ 	  int errnum = errno;
+diff -urN coreutils-5.2.1/src/sort.c coreutils-5.2.1-adistroSTEP/src/sort.c
+--- coreutils-5.2.1/src/sort.c	2004-02-17 23:47:35.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/src/sort.c	2005-06-14 02:46:32.000000000 +1200
+@@ -68,7 +68,7 @@
+ #define UCHAR(c) ((unsigned char) (c))
+ 
+ #ifndef DEFAULT_TMPDIR
+-# define DEFAULT_TMPDIR "/tmp"
++# define DEFAULT_TMPDIR "/System/TemporaryFiles"
+ #endif
+ 
+ /* Exit statuses.  */
+diff -urN coreutils-5.2.1/src/su.c coreutils-5.2.1-adistroSTEP/src/su.c
+--- coreutils-5.2.1/src/su.c	2004-01-22 11:27:02.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/src/su.c	2005-06-14 02:44:43.000000000 +1200
+@@ -288,7 +288,7 @@
+   unencrypted = getpass (_("Password:"));
+   if (unencrypted == NULL)
+     {
+-      error (0, 0, _("getpass: cannot open /dev/tty"));
++      error (0, 0, _("getpass: cannot open /System/Devices/tty"));
+       return 0;
+     }
+   encrypted = crypt (unencrypted, correct);
+diff -urN coreutils-5.2.1/src/tac.c coreutils-5.2.1-adistroSTEP/src/tac.c
+--- coreutils-5.2.1/src/tac.c	2004-01-22 11:27:02.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/src/tac.c	2005-06-14 02:46:52.000000000 +1200
+@@ -62,7 +62,7 @@
+ 
+ 
+ #ifndef DEFAULT_TMPDIR
+-# define DEFAULT_TMPDIR "/tmp"
++# define DEFAULT_TMPDIR "/System/TemporaryFiles"
+ #endif
+ 
+ /* The number of bytes per atomic read. */
+diff -urN coreutils-5.2.1/src/uptime.c coreutils-5.2.1-adistroSTEP/src/uptime.c
+--- coreutils-5.2.1/src/uptime.c	2004-02-05 22:36:07.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/src/uptime.c	2005-06-14 02:47:39.000000000 +1200
+@@ -64,7 +64,7 @@
+   FILE *fp;
+   double upsecs;
+ 
+-  fp = fopen ("/proc/uptime", "r");
++  fp = fopen ("/System/Processes/uptime", "r");
+   if (fp != NULL)
+     {
+       char buf[BUFSIZ];
+diff -urN coreutils-5.2.1/src/who.c coreutils-5.2.1-adistroSTEP/src/who.c
+--- coreutils-5.2.1/src/who.c	2004-01-22 11:27:02.000000000 +1300
++++ coreutils-5.2.1-adistroSTEP/src/who.c	2005-06-14 02:45:02.000000000 +1200
+@@ -322,7 +322,7 @@
+   static char *hoststr;
+   static size_t hostlen;
+ 
+-#define DEV_DIR_WITH_TRAILING_SLASH "/dev/"
++#define DEV_DIR_WITH_TRAILING_SLASH "/System/Devices/"
+ #define DEV_DIR_LEN (sizeof (DEV_DIR_WITH_TRAILING_SLASH) - 1)
+ 
+   char line[sizeof (utmp_ent->ut_line) + DEV_DIR_LEN + 1];

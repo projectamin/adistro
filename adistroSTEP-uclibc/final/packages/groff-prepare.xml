@@ -1,0 +1,27 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--groff-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/groff/groff-1.19.1.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/groff-1.19.1.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/groff-1.19.1-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/groff-1.19.1-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/groff-1.19.1.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/groff-1.19.1-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/groff-1.19.1</amin:shell>
+        </amin:command>
+</amin:profile>

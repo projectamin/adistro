@@ -1,0 +1,72 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Binutils-2.18-->
+
+<!--grabbing packages-->
+
+        <amin:download>
+              	<amin:param name='uri'>http://ftp.gnu.org/gnu/binutils/binutils-2.18.tar.bz2</amin:param>
+              	<amin:param name='file'>/opt/adistro/packages/binutils-2.18.tar.bz2</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/*checkout*/trunk/buildroot/toolchain/binutils/2.18/100-makeinfo-version.patch?rev=20086</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/makeinfo-version.patch</amin:param>
+        </amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/binutils-2.18.tar.bz2</amin:param>
+	</amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/makeinfo-version.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/binutils-2.18</amin:shell>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>binutils-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../binutils-2.18/configure</amin:param>
+		<amin:flag>
+		prefix=/bootstrap
+		disable-nls
+		enable-werror
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:flag>C</amin:flag>
+		<amin:param>ld clean</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:flag>C</amin:flag>
+		<amin:param>ld LIB_PATH=/bootstrap/lib</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+        <amin:command name='make'>
+                <amin:flag>C</amin:flag>
+                <amin:param>ld LIB_PATH=/bootstrap/lib EXEEXT=-new install-exec-local</amin:param> 
+                <amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+                <amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+        </amin:command>
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>binutils-build</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>binutils-2.18</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+</amin:profile>

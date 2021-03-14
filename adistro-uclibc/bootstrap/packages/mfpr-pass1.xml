@@ -1,0 +1,50 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--GMP-->
+
+<!--grabbing packages-->
+
+	<amin:download>
+		<amin:param name='uri'>ftp://gcc.gnu.org/pub/gcc/infrastructure/mpfr-2.3.0.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/mpfr-2.3.0.tar.bz2</amin:param>
+	</amin:download>
+	
+
+<!-- no patches in inital build phase -->
+        
+
+<!--running install-->
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/mpfr-2.3.0.tar.bz2</amin:param>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>./configure</amin:param>
+		<amin:flag> 
+			prefix=/adistro-uclibc-bootstrap 
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/mpfr-2.3.0</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-L/adistro-uclibc-bootstrap/lib -I/adistro-uclibc-bootstrap/include</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/mpfr-2.3.0</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/mpfr-2.3.0</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>mpfr-2.3.0</amin:param>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+                <amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+        </amin:command>
+
+</amin:profile>

@@ -1,0 +1,61 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Libnointl-->
+
+<!--retreiving package-->
+<amin:chroot dir="/opt/adistro-uclibc">
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/libnointl.tar.gz</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>gcc</amin:param>
+		<amin:param>-I. -L/lib -O2 -shared -fPIC -o libintl.so.8.0.1 nointl.c</amin:param>
+		<amin:shell name='dir'>/build/libnointl</amin:shell>
+		<amin:shell name="env">PATH=/bin:/bin:/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='copy'>
+		<amin:param name='source'>libintl.so.8.0.1</amin:param>
+		<amin:param name='target'>/lib/libintl.so.8.0.1</amin:param>
+		<amin:shell name='dir'>/build/libnointl</amin:shell>
+		<amin:shell name="env">PATH=/bin:/bin:/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='system_command'>
+                <amin:param name='basename'>ar</amin:param>
+                <amin:param>rcs libintl.a  libintl.so.8.0.1</amin:param>
+                <amin:shell name='dir'>/build/libnointl</amin:shell>
+                <amin:shell name="env">PATH=/bin:/bin:/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='copy'>
+                <amin:param name='source'>libintl.h</amin:param>
+                <amin:param name='target'>/usr/include/libintl.h</amin:param>
+                <amin:shell name='dir'>/build/libnointl</amin:shell>
+                <amin:shell name="env">PATH=/bin:/bin:/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>libnointl</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>libintl.so.8.0.1</amin:param>
+		<amin:param name='target'>libintl.so.8</amin:param>
+		<amin:shell name='dir'>/lib/</amin:shell>
+        </amin:command>	
+	
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>libintl.so.8.0.1</amin:param>
+                <amin:param name='target'>libintl.so</amin:param>
+                <amin:shell name='dir'>/lib/</amin:shell>
+        </amin:command>
+</amin:chroot>
+</amin:profile>

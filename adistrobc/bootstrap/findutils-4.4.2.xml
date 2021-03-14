@@ -1,0 +1,28 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--findutils-4.4.2-->
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/pub/gnu/findutils/findutils-4.4.2.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/findutils-4.4.2.tar.gz</amin:param>
+	</amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistrobc/src</amin:param>
+		<amin:param name='archive'>/opt/adistrobc/packages/findutils-4.4.2.tar.gz</amin:param>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:flag>prefix=/adistrobc-bootstrap </amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/findutils-4.4.2</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/src/findutils-4.4.2</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>findutils-4.4.2</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+</amin:profile>

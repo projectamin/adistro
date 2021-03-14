@@ -1,0 +1,1362 @@
+diff -urN man-1.5p/HISTORY man-1.5p-STEP/HISTORY
+--- man-1.5p/HISTORY	2005-01-09 09:12:25.000000000 +1300
++++ man-1.5p-STEP/HISTORY	2006-04-09 17:45:36.760940792 +1200
+@@ -33,7 +33,7 @@
+ - Added mess.??.codeset (with dummy content)
+ - No funny Russian messages
+ - man2html: handle .so with trailing whitespace
+-- replace -grepsilent by >/dev/null 2>/dev/null
++- replace -grepsilent by >/System/Devices/null 2>/System/Devices/null
+ 
+ man-1.5m:
+ 
+diff -urN man-1.5p/INSTALL man-1.5p-STEP/INSTALL
+--- man-1.5p/INSTALL	2003-06-17 23:37:19.000000000 +1200
++++ man-1.5p-STEP/INSTALL	2006-04-09 17:45:36.744943224 +1200
+@@ -15,7 +15,7 @@
+    Only English man pages, no message catalogs, man not suid,
+    handle compressed man pages, compress cat pages, create cat pages
+    whenever the appropriate directory exists,
+-   follow FHS by putting cat pages under /var/cache/man provided that
++   follow FHS by putting cat pages under /System/ApplicationData/cache/man provided that
+    that directory exists.
+ 
+ In order to select man pages in other languages, replace Step 1 by
+diff -urN man-1.5p/Makefile.in man-1.5p-STEP/Makefile.in
+--- man-1.5p/Makefile.in	2005-01-09 09:43:41.000000000 +1300
++++ man-1.5p-STEP/Makefile.in	2006-04-09 17:45:36.745943072 +1200
+@@ -54,7 +54,7 @@
+ 	@echo 'In case you want to browse man pages using a www browser,'
+ 	@echo '"cd man2html", read README, and perhaps "make install-scripts".'
+ #	@echo; echo 'Done. In case you want to mount /usr read-only, please'
+-#	@echo 'install a symlink /usr/man/whatis -> /var/catman/whatis, or so.'
++#	@echo 'install a symlink /usr/man/whatis -> /System/ApplicationData/catman/whatis, or so.'
+ 
+ clean: src/Makefile man/Makefile msgs/Makefile man2html/Makefile
+ 	cd src; $(MAKE) clean
+diff -urN man-1.5p/README.GNU-WIN32 man-1.5p-STEP/README.GNU-WIN32
+--- man-1.5p/README.GNU-WIN32	2003-03-12 04:53:27.000000000 +1300
++++ man-1.5p-STEP/README.GNU-WIN32	2006-04-09 17:45:36.743943376 +1200
+@@ -3,7 +3,7 @@
+ To run man with Cygnus cygwin B20.1 you will need groff and associated
+ utilities, for example from
+ 
+-ftp://ftp.franken.de/pub/win32/develop/gnuwin32/cygwin32/porters/Hirmke_Michael/B20/groff-1.10-cygwin-b20-bin.tar.gz
++ftp://ftp.franken.de/pub/win32/System/Deviceselop/gnuwin32/cygwin32/porters/Hirmke_Michael/B20/groff-1.10-cygwin-b20-bin.tar.gz
+ 
+ Adjust the paths in configure and man2html/Makefile.in to suit your
+ installation.
+diff -urN man-1.5p/configure man-1.5p-STEP/configure
+--- man-1.5p/configure	2005-01-09 09:01:39.000000000 +1300
++++ man-1.5p-STEP/configure	2006-04-09 17:55:21.915983704 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # Guess values for system-dependant variables and create `Makefile'.
+ # Can be distributed according to GPL.
+@@ -16,8 +16,8 @@
+ #                               (language(s) as given)
+ #				("all" will specify all available languages)
+ #				("none" will disable NLS support)
+-#   configure +fhs		(follow FHS: use /var/cache/man)
+-#   configure +fsstnd		(follow FSSTND: use /var/catman)
++#   configure +fhs		(follow FHS: use /System/ApplicationData/cache/man)
++#   configure +fsstnd		(follow FSSTND: use /System/ApplicationData/catman)
+ #
+ LANGUAGES="cs,da,de,el,en,es,fi,fr,hr,it,ja,ko,nl,pl,pt,ro,ru,sl"
+ LANGOPT="+lang {$LANGUAGES|all|none}"
+@@ -28,7 +28,7 @@
+ #
+ DEFAULTLESSOPT="-is"
+ #
+-# Note that not creating any cat directories (/var/cache/man or so)
++# Note that not creating any cat directories (/System/ApplicationData/cache/man or so)
+ # and not making man suid or sgid is recommended.
+ # This avoids security problems, the fact that different users have
+ # different window sizes and different character sets, etc.
+@@ -48,7 +48,7 @@
+   echo 'The option +suid will make man suid to a user "man". Create this first.'
+   echo 'The option +sgid will make man sgid to a group "man". Create this first.'
+   echo 'The options +fhs, +fsstnd, +traditional will make man use'
+-  echo ' /var/cache/man, /var/catman and /usr/man/cat?, respectively.'
++  echo ' /System/ApplicationData/cache/man, /System/ApplicationData/catman and /usr/man/cat?, respectively.'
+   echo 'It is recommended not to use suid/sgid and not to keep cat pages.'
+   echo 'The -confdir option specifies where man.conf lives (default /usr/share/misc).'
+   echo
+@@ -164,7 +164,7 @@
+   echo 'The option +suid will make man suid to a user "man". Create this first.'
+   echo 'The option +sgid will make man sgid to a group "man". Create this first.'
+   echo 'The options +fhs, +fsstnd, +traditional will make man use'
+-  echo ' /var/cache/man, /var/catman and /usr/man/cat?, respectively.'
++  echo ' /System/ApplicationData/cache/man, /System/ApplicationData/catman and /usr/man/cat?, respectively.'
+   echo 'The -confdir option specifies where man.conf lives (default /usr/share/misc).'
+   exit 1
+ 	  ;;
+@@ -216,7 +216,7 @@
+ INCLUDEDIR=${INCLUDEDIR-/usr/include}
+ 
+ rm -f conftest conftest.c
+-compile="$CC $DEFS conftest.c -o conftest $LIBS >/dev/null 2>&1"
++compile="$CC $DEFS conftest.c -o conftest $LIBS >/System/Devices/null 2>&1"
+ 
+ # Check for various header files.
+ 
+@@ -225,7 +225,7 @@
+ #include <string.h>
+ main() { exit(0); strerror(0); }" > conftest.c
+ eval $compile
+-if test -s conftest && ./conftest 2>/dev/null; then
++if test -s conftest && ./conftest 2>/System/Devices/null; then
+   DEFS="$DEFS -DSTDC_HEADERS"
+ fi
+ rm -f conftest conftest.c
+@@ -240,7 +240,7 @@
+ #endif
+ }" > conftest.c
+ eval $compile
+-if test -s conftest && ./conftest 2>/dev/null; then
++if test -s conftest && ./conftest 2>/System/Devices/null; then
+   DEFS="$DEFS -DPOSIX"
+ fi
+ rm -f conftest conftest.c
+@@ -249,7 +249,7 @@
+ echo "#include <strings.h>
+ main() { exit(0); rindex(0, 0); bzero(0, 0); }" > conftest.c
+ eval $compile
+-if test -s conftest && ./conftest 2>/dev/null; then :
++if test -s conftest && ./conftest 2>/System/Devices/null; then :
+   else DEFS="$DEFS -DUSG"
+ fi
+ rm -f conftest conftest.c
+@@ -258,7 +258,7 @@
+ echo '#include <sys/types.h>
+ main() { uid_t x; exit(0); }' > conftest.c
+ eval $compile
+-if test -s conftest && ./conftest 2>/dev/null; then :
++if test -s conftest && ./conftest 2>/System/Devices/null; then :
+ else
+   uid_t=`awk '/pw_uid;/ {print $1}' $INCLUDEDIR/pwd.h`
+   DEFS="$DEFS -Duid_t=${uid_t} -Dgid_t=${uid_t}"
+@@ -291,7 +291,7 @@
+ #endif
+ main() { char *p = (char *) alloca(1); exit(0); }' > conftest.c
+ eval $compile
+-if test -s conftest && ./conftest 2>/dev/null; then :
++if test -s conftest && ./conftest 2>/System/Devices/null; then :
+ elif test -d /usr/ucblib; then LIBS="$LIBS -L/usr/ucblib -lucb"
+ elif test -f /usr/lib/libPW.a; then LIBS="$LIBS -lPW"
+ else DEFS="$DEFS -DALLOCA_MISSING"
+@@ -303,7 +303,7 @@
+   echo '#include <nl_types.h>
+   main() {nl_catd catfd; exit(0); }' > conftest.c
+   eval $compile
+-  if test -s conftest && ./conftest 2>/dev/null; then :
++  if test -s conftest && ./conftest 2>/System/Devices/null; then :
+   else
+     usenls=false
+   fi
+@@ -321,7 +321,7 @@
+ struct option long_opts[] = { { "", no_argument, NULL, 0 } };
+ main() { exit(0); }' > conftest.c
+ eval $compile
+-if test -s conftest && ./conftest 2>/dev/null; then
++if test -s conftest && ./conftest 2>/System/Devices/null; then
+   manpathoption="--path"
+ else
+   manpathoption="-w"
+@@ -334,7 +334,7 @@
+ 
+ echo "Checking echo to see how to suppress newlines..."
+ (echo "hi there\c" ; echo " ") >conftest
+-if grep c conftest >/dev/null 2>&1 ; then
++if grep c conftest >/System/Devices/null 2>&1 ; then
+     echo "...using -n."
+     n='-n'
+     c=''
+@@ -350,10 +350,10 @@
+ # Ask the installer where various things are located.
+ # (A separate variable is needed since various shells do
+ # word-splitting at different moments, which means that
+-#   for i in /bin:/usr/bin:$PATH
++#   for i in /System/Tools:/System/Tools:$PATH
+ # does not work everywhere.)
+ # Some people might prefer having $PATH first in PREPATH
+-PREPATH=/bin:/usr/bin:/usr/ucb:/usr/local/bin:$PATH
++PREPATH=/System/Tools:/System/Tools:/usr/ucb:/usr/local/System/Tools:$PATH
+ IFS0="$IFS"
+ IFS=":$IFS"
+ for i in $PREPATH
+@@ -599,8 +599,8 @@
+   
+ fhs="# "
+ fsstnd="# "
+-FHSDIR=/var/cache/man
+-FSSTNDDIR=/var/catman
++FHSDIR=/System/ApplicationData/cache/man
++FSSTNDDIR=/System/ApplicationData/catman
+ if [ x$usefhs = x -a x$usefsstnd = x ]; then
+   if [ x$default = x ]; then
+     echo ""
+@@ -901,13 +901,13 @@
+   if [ x$sgid = x ]; then
+     man_user=man
+     man_mode=4555
+-    if grep -q '^man:' /etc/group >/dev/null 2>/dev/null;
++    if grep -q '^man:' /etc/group >/System/Devices/null 2>/System/Devices/null;
+     then
+       man_group=man
+     else
+       man_group=root
+     fi
+-    if grep -q '^man:' /etc/passwd >/dev/null 2>/dev/null;
++    if grep -q '^man:' /etc/passwd >/System/Devices/null 2>/System/Devices/null;
+     then
+       :
+     else
+@@ -917,7 +917,7 @@
+     man_user=root
+     man_group=man
+     man_mode=2555
+-    if grep -q '^man:' /etc/group >/dev/null 2>/dev/null;
++    if grep -q '^man:' /etc/group >/System/Devices/null 2>/System/Devices/null;
+     then
+       :
+     else
+@@ -1243,7 +1243,7 @@
+ version=`cat version`
+ 
+ cat > conf_script << EOS
+-#!/bin/sh
++#!/System/Tools/sh
+ infiles=$allargs
+ trap 'rm -f $infiles; exit 1' 1 3 15
+ 
+diff -urN man-1.5p/gencat/Makefile man-1.5p-STEP/gencat/Makefile
+--- man-1.5p/gencat/Makefile	2003-04-16 05:54:46.000000000 +1200
++++ man-1.5p-STEP/gencat/Makefile	2006-04-09 17:46:29.851869744 +1200
+@@ -11,7 +11,7 @@
+ genlib.o: msgcat.h
+ 
+ install: gencat
+-	cp gencat $(PREFIX)/usr/bin
++	cp gencat $(PREFIX)/System/Tools
+ 
+ clean:
+ 	rm -f *~ *.o gencat
+diff -urN man-1.5p/gencat/gencat.c man-1.5p-STEP/gencat/gencat.c
+--- man-1.5p/gencat/gencat.c	2003-03-12 04:53:34.000000000 +1300
++++ man-1.5p-STEP/gencat/gencat.c	2006-04-09 17:46:29.842871112 +1200
+@@ -203,7 +203,7 @@
+     }
+ 
+     /* If it does exist, create a temp file for now */
+-    sprintf(tmpname, "/tmp/gencat.%d", (int) getpid());
++    sprintf(tmpname, "/System/TemporaryFiles/gencat.%d", (int) getpid());
+     if ((tfd = open(tmpname, O_RDWR|O_CREAT, 0666)) < 0) {
+ 	fprintf(stderr, "gencat: Unable to open temporary file: %s\n", tmpname);
+ 	exit(1);
+diff -urN man-1.5p/man/bg/man.conf.man man-1.5p-STEP/man/bg/man.conf.man
+--- man-1.5p/man/bg/man.conf.man	2003-03-12 04:53:33.000000000 +1300
++++ man-1.5p-STEP/man/bg/man.conf.man	2006-04-09 17:46:23.984761680 +1200
+@@ -20,7 +20,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -28,7 +28,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/cs/man.conf.man man-1.5p-STEP/man/cs/man.conf.man
+--- man-1.5p/man/cs/man.conf.man	2003-03-12 04:53:32.000000000 +1300
++++ man-1.5p-STEP/man/cs/man.conf.man	2006-04-09 17:46:17.719714112 +1200
+@@ -24,7 +24,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -32,7 +32,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/da/man.conf.man man-1.5p-STEP/man/da/man.conf.man
+--- man-1.5p/man/da/man.conf.man	2003-03-12 04:53:33.000000000 +1300
++++ man-1.5p-STEP/man/da/man.conf.man	2006-04-09 17:46:17.739711072 +1200
+@@ -26,7 +26,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -34,7 +34,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/de/man.conf.man man-1.5p-STEP/man/de/man.conf.man
+--- man-1.5p/man/de/man.conf.man	2003-03-12 04:53:31.000000000 +1300
++++ man-1.5p-STEP/man/de/man.conf.man	2006-04-09 17:46:06.065485824 +1200
+@@ -22,7 +22,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tascii
++NROFF /System/Tools/groff -mandoc -Tascii
+ .fi
+ .RE
+ .LP
+@@ -30,7 +30,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tascii -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tascii -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/el/man.conf.man man-1.5p-STEP/man/el/man.conf.man
+--- man-1.5p/man/el/man.conf.man	2003-07-25 03:34:59.000000000 +1200
++++ man-1.5p-STEP/man/el/man.conf.man	2006-04-09 17:46:24.015756968 +1200
+@@ -24,7 +24,7 @@
+ .LP
+ .RS 
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -32,7 +32,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/el/man2html.man man-1.5p-STEP/man/el/man2html.man
+--- man-1.5p/man/el/man2html.man	2003-07-25 03:34:59.000000000 +1200
++++ man-1.5p-STEP/man/el/man2html.man	2006-04-09 17:46:29.838871720 +1200
+@@ -33,7 +33,7 @@
+ ./" .BR man (1)
+ ./" ãéá ðëçñïöïñßåò ðëïÞãçóçò óôéò óåëßäåò åã÷åéñéäßïõ ìÝóù ôçò
+ ./" .BR man2html .
+-./" ÓõíÞèùò áñêåß íá âÜëëåéò "MANHTMLPAGER=/usr/bin/lynx"
++./" ÓõíÞèùò áñêåß íá âÜëëåéò "MANHTMLPAGER=/System/Tools/lynx"
+ ./" óôï ðåñéâÜëëïí óïõ.)
+ 
+ Ôï âáóéêü êïììÜôé ôçò
+diff -urN man-1.5p/man/en/man.conf.man man-1.5p-STEP/man/en/man.conf.man
+--- man-1.5p/man/en/man.conf.man	2003-03-12 04:53:31.000000000 +1300
++++ man-1.5p-STEP/man/en/man.conf.man	2006-04-09 17:46:12.092569568 +1200
+@@ -21,7 +21,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -29,7 +29,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/es/man.conf.man man-1.5p-STEP/man/es/man.conf.man
+--- man-1.5p/man/es/man.conf.man	2003-03-12 04:53:32.000000000 +1300
++++ man-1.5p-STEP/man/es/man.conf.man	2006-04-09 17:46:17.730712440 +1200
+@@ -24,7 +24,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -32,7 +32,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/fi/man.conf.man man-1.5p-STEP/man/fi/man.conf.man
+--- man-1.5p/man/fi/man.conf.man	2003-03-12 04:53:32.000000000 +1300
++++ man-1.5p-STEP/man/fi/man.conf.man	2006-04-09 17:46:12.113566376 +1200
+@@ -21,7 +21,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -29,7 +29,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/fr/man.conf.man man-1.5p-STEP/man/fr/man.conf.man
+--- man-1.5p/man/fr/man.conf.man	2003-03-12 04:53:32.000000000 +1300
++++ man-1.5p-STEP/man/fr/man.conf.man	2006-04-09 17:46:12.108567136 +1200
+@@ -26,7 +26,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -34,7 +34,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/hr/man.conf.man man-1.5p-STEP/man/hr/man.conf.man
+--- man-1.5p/man/hr/man.conf.man	2003-03-12 04:53:33.000000000 +1300
++++ man-1.5p-STEP/man/hr/man.conf.man	2006-04-09 17:46:17.741710768 +1200
+@@ -28,7 +28,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -36,7 +36,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/it/man.conf.man man-1.5p-STEP/man/it/man.conf.man
+--- man-1.5p/man/it/man.conf.man	2003-03-12 04:53:32.000000000 +1300
++++ man-1.5p-STEP/man/it/man.conf.man	2006-04-09 17:46:17.724713352 +1200
+@@ -27,7 +27,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -35,7 +35,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/ja/man.conf.man man-1.5p-STEP/man/ja/man.conf.man
+--- man-1.5p/man/ja/man.conf.man	2003-03-12 04:53:33.000000000 +1300
++++ man-1.5p-STEP/man/ja/man.conf.man	2006-04-09 17:46:17.756708488 +1200
+@@ -28,7 +28,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -36,7 +36,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/ja/whatis.man man-1.5p-STEP/man/ja/whatis.man
+--- man-1.5p/man/ja/whatis.man	2003-03-12 04:53:33.000000000 +1300
++++ man-1.5p-STEP/man/ja/whatis.man	2006-04-09 17:46:17.755708640 +1200
+@@ -29,6 +29,6 @@
+ ¥Ù¡¼¥¹¤Î½¸¹ç¤ò¸¡º÷¤·¡¢·ë²Ì¤òÉ¸½à½ÐÎÏ¤ËÉ½¼¨¤¹¤ë¡£´°Á´¤Ë¥Þ¥Ã¥Á¤·¤¿Ã±¸ì
+ ¤Î¤ß¤¬É½¼¨¤µ¤ì¤ë¡£
+ 
+-whatis ¥Ç¡¼¥¿¥Ù¡¼¥¹¤Ï /usr/sbin/makewhatis ¥³¥Þ¥ó¥É¤ò»ÈÍÑ¤·¤ÆºîÀ®¤¹¤ë¡£
++whatis ¥Ç¡¼¥¿¥Ù¡¼¥¹¤Ï /System/AdminTools/makewhatis ¥³¥Þ¥ó¥É¤ò»ÈÍÑ¤·¤ÆºîÀ®¤¹¤ë¡£
+ .SH ´ØÏ¢¹àÌÜ
+ apropos(1), man(1).
+diff -urN man-1.5p/man/ko/man.conf.man man-1.5p-STEP/man/ko/man.conf.man
+--- man-1.5p/man/ko/man.conf.man	2003-03-12 04:53:34.000000000 +1300
++++ man-1.5p-STEP/man/ko/man.conf.man	2006-04-09 17:46:23.999759400 +1200
+@@ -21,7 +21,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -29,7 +29,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/nl/man.conf.man man-1.5p-STEP/man/nl/man.conf.man
+--- man-1.5p/man/nl/man.conf.man	2003-03-12 04:53:30.000000000 +1300
++++ man-1.5p-STEP/man/nl/man.conf.man	2006-04-09 17:46:06.060486584 +1200
+@@ -23,7 +23,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -31,7 +31,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/pl/man.conf.man man-1.5p-STEP/man/pl/man.conf.man
+--- man-1.5p/man/pl/man.conf.man	2004-08-23 09:46:01.000000000 +1200
++++ man-1.5p-STEP/man/pl/man.conf.man	2006-04-09 17:46:12.104567744 +1200
+@@ -23,7 +23,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -31,7 +31,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/pt/man.conf.man man-1.5p-STEP/man/pt/man.conf.man
+--- man-1.5p/man/pt/man.conf.man	2003-03-12 04:53:31.000000000 +1300
++++ man-1.5p-STEP/man/pt/man.conf.man	2006-04-09 17:46:12.098568656 +1200
+@@ -21,7 +21,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -29,7 +29,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/ro/man.conf.man man-1.5p-STEP/man/ro/man.conf.man
+--- man-1.5p/man/ro/man.conf.man	2003-03-12 04:53:33.000000000 +1300
++++ man-1.5p-STEP/man/ro/man.conf.man	2006-04-09 17:46:23.990760768 +1200
+@@ -23,7 +23,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -31,7 +31,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man/ro/man2html.man man-1.5p-STEP/man/ro/man2html.man
+--- man-1.5p/man/ro/man2html.man	2003-03-12 04:53:34.000000000 +1300
++++ man-1.5p-STEP/man/ro/man2html.man	2006-04-09 17:46:23.998759552 +1200
+@@ -30,7 +30,7 @@
+ ./" .BR man (1)
+ ./" pentru informaþii despre cum sã navighezi prin paginile de manual cu
+ ./" .BR man2html .
+-./" De obicei este suficientã adãugarea "MANHTMLPAGER=/usr/bin/lynx"
++./" De obicei este suficientã adãugarea "MANHTMLPAGER=/System/Tools/lynx"
+ ./" la mediu.)
+ 
+ Partea principalã a
+diff -urN man-1.5p/man/sl/man.conf.man man-1.5p-STEP/man/sl/man.conf.man
+--- man-1.5p/man/sl/man.conf.man	2003-03-12 04:53:32.000000000 +1300
++++ man-1.5p-STEP/man/sl/man.conf.man	2006-04-09 17:46:17.735711680 +1200
+@@ -22,7 +22,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1
++NROFF /System/Tools/groff -mandoc -Tlatin1
+ .fi
+ .RE
+ .LP
+@@ -30,7 +30,7 @@
+ .LP
+ .RS
+ .nf
+-NROFF /usr/bin/groff -mandoc -Tlatin1 -P-u -P-b
++NROFF /System/Tools/groff -mandoc -Tlatin1 -P-u -P-b
+ .fi
+ .RE
+ .LP
+diff -urN man-1.5p/man2html/Makefile.in man-1.5p-STEP/man2html/Makefile.in
+--- man-1.5p/man2html/Makefile.in	2005-01-08 13:49:37.000000000 +1300
++++ man-1.5p-STEP/man2html/Makefile.in	2006-04-09 17:45:55.496092616 +1200
+@@ -1,9 +1,9 @@
+ CC = @CC@
+ CFLAGS += -Wall -Wstrict-prototypes -Wmissing-prototypes
+ OBJECTS = man2html.o cgibase.o abbrev.o strdefs.o
+-bindir = $(DESTDIR)$(PREFIX)/usr/bin
++bindir = $(DESTDIR)$(PREFIX)/System/Tools
+ mandir = $(DESTDIR)$(PREFIX)@mandir@
+-vardir = $(DESTDIR)$(PREFIX)/var
++vardir = $(DESTDIR)$(PREFIX)/System/ApplicationData
+ httpdir = $(DESTDIR)$(PREFIX)/home/httpd
+ cgiowner = nobody
+ cgigroup = nobody
+diff -urN man-1.5p/man2html/README man-1.5p-STEP/man2html/README
+--- man-1.5p/man2html/README	2003-03-12 04:53:29.000000000 +1300
++++ man-1.5p-STEP/man2html/README	2006-04-09 17:45:55.494092920 +1200
+@@ -31,7 +31,7 @@
+ This first part (that can be done separately with "make install-man-scripts")
+ puts various scripts under /home/httpd/cgi-bin and /home/httpd/cgi-aux
+ in a subdirectory man.
+-It will create a directory /var/man2html to hold the indices.
++It will create a directory /System/ApplicationData/man2html to hold the indices.
+ (This directory should be writable by the cgi scripts;
+ probably that means that the owner should be nobody.
+ Choose a group and add all non-httpd users that should be
+@@ -50,13 +50,13 @@
+ 2B. glimpse stuff
+ The second part (that can be done separately with
+ "make install-glimpse-stuff") installs .glimpse_filters
+-in /var/man2html, in order to tell glimpse what decompressors to use.
++in /System/ApplicationData/man2html, in order to tell glimpse what decompressors to use.
+ 
+ 2C. user interface stuff
+ The third part (that can be done separately with "make install-hman")
+-installs a user interface to these scripts in /usr/bin/hman.
++installs a user interface to these scripts in /System/Tools/hman.
+ Now people can say
+-    alias man=/usr/bin/hman
++    alias man=/System/Tools/hman
+ and have a man that uses a html browser.
+ The browser is chosen via environment variables - look at the script.
+ 
+@@ -65,29 +65,29 @@
+ For the glimpse part, I quote Michael Hamilton:
+ ----------------------------------------------------------------------
+ To use the Glimpse full text searching, you will need to install
+-glimpse in /usr/bin.  Redhat rpm users can get glimpse from 
++glimpse in /System/Tools.  Redhat rpm users can get glimpse from 
+ 
+  ftp://ftp.redhat.com/pub/contrib/i386/glimpse-4.0-6.i386.rpm
+ 
+ The glimpse home ftp site is cs.arizona.edu.  N.B. glimpse is not
+ freely redistributable for commercial use, I'd be very interested in a
+ more liberal alternative.  Having installed glimpse, you will need to
+-build a glimpse index in /var/man2html.  This doesn't take too long -
++build a glimpse index in /System/ApplicationData/man2html.  This doesn't take too long -
+ about 3 minutes on my 486DX2/66 16MB machine.  As root do:
+ 
+- /usr/bin/glimpseindex -z -H /var/man2html /usr/man/man* /usr/X11R6/man/man* \
++ /System/Tools/glimpseindex -z -H /System/ApplicationData/man2html /usr/man/man* /usr/X11R6/man/man* \
+      /usr/local/man/man* /opt/man/man*
+- chmod ugo+r /var/man2html/.glimpse*
++ chmod ugo+r /System/ApplicationData/man2html/.glimpse*
+ 
+ The -z option causes glimpse to apply any filters (for decompression etc)
+-specified in /var/man2html/.glimpse_filters.
++specified in /System/ApplicationData/man2html/.glimpse_filters.
+ 
+ This could be set up as a cron job in /etc/crontab, e.g. (the following
+ must be all on one line):
+ 
+-  21 04 * * 1 root /usr/bin/glimpseindex -z -H /var/man2html /usr/man/man* 
++  21 04 * * 1 root /System/Tools/glimpseindex -z -H /System/ApplicationData/man2html /usr/man/man* 
+       /usr/X11R6/man/man* /usr/local/man/man* /opt/man/man* ;
+-      chmod +r /var/man2html/.glimpse*
++      chmod +r /System/ApplicationData/man2html/.glimpse*
+ --------------------------------------------------------------------------
+ 
+ 
+diff -urN man-1.5p/man2html/TODO man-1.5p-STEP/man2html/TODO
+--- man-1.5p/man2html/TODO	2003-03-12 04:53:29.000000000 +1300
++++ man-1.5p-STEP/man2html/TODO	2006-04-09 17:45:55.493093072 +1200
+@@ -29,7 +29,7 @@
+ 	/etc/auto.master (5) - Master Map for automounter
+ 	/etc/init.d/rc.d/autofs (8) - Control Script for automounter
+ 	/etc/pcmcia/config (5) - PCMCIA card configuration database
+-	/proc (5)            - process information pseudo-filesystem
++	/System/Processes (5)            - process information pseudo-filesystem
+   )
+   As a consequence, the corresponding manwhatis links are bad.
+ - Some manpages have bad .so information.
+diff -urN man-1.5p/man2html/hman.sh man-1.5p-STEP/man2html/hman.sh
+--- man-1.5p/man2html/hman.sh	2003-03-12 04:53:29.000000000 +1300
++++ man-1.5p-STEP/man2html/hman.sh	2006-04-09 17:45:45.362633136 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # hman - interface to the man2html scripts
+ #
+@@ -43,7 +43,7 @@
+ 
+ # Interface to a live (already running) netscape browser.
+ function nsfunc () {
+-	if ( /bin/ps xc | grep -q 'netscape$' ) ; then
++	if ( /System/Tools/ps xc | grep -q 'netscape$' ) ; then
+ 		if [ -x  netscape-remote ] ; then
+ 			exec netscape-remote  -remote "openURL($1,new_window)"
+ 		else
+diff -urN man-1.5p/man2html/man2html.1 man-1.5p-STEP/man2html/man2html.1
+--- man-1.5p/man2html/man2html.1	2003-03-12 04:53:30.000000000 +1300
++++ man-1.5p-STEP/man2html/man2html.1	2006-04-09 17:45:55.497092464 +1200
+@@ -29,7 +29,7 @@
+ ./" .BR man (1)
+ ./" for info on how to browse man pages via
+ ./" .BR man2html .
+-./" Usually it would suffice to put "MANHTMLPAGER=/usr/bin/lynx"
++./" Usually it would suffice to put "MANHTMLPAGER=/System/Tools/lynx"
+ ./" in the environment.)
+ 
+ The main part of
+diff -urN man-1.5p/man2html/man2html.c man-1.5p-STEP/man2html/man2html.c
+--- man-1.5p/man2html/man2html.c	2004-09-29 07:24:52.000000000 +1200
++++ man-1.5p-STEP/man2html/man2html.c	2006-04-09 17:45:50.584839240 +1200
+@@ -31,7 +31,7 @@
+ static char NEWLINE[2]="\n";
+ static char idxlabel[6] = "ixAAA";
+ 
+-#define INDEXFILE "/tmp/manindex.list"
++#define INDEXFILE "/System/TemporaryFiles/manindex.list"
+ 
+ char *fname;
+ char *directory;
+diff -urN man-1.5p/man2html/scripts/cgi-bin/man/man2html man-1.5p-STEP/man2html/scripts/cgi-bin/man/man2html
+--- man-1.5p/man2html/scripts/cgi-bin/man/man2html	2003-03-12 04:53:29.000000000 +1300
++++ man-1.5p-STEP/man2html/scripts/cgi-bin/man/man2html	2006-04-09 17:45:55.500092008 +1200
+@@ -1,9 +1,9 @@
+-#!/bin/sh
+-# man2html cgi script - uses /usr/bin/man2html to format man pages
++#!/System/Tools/sh
++# man2html cgi script - uses /System/Tools/man2html to format man pages
+ # auxiliary text files in /home/httpd/cgi-aux/man
+ # aeb@cwi.nl - 980109
+ 
+-MAN2HTML="/usr/bin/man2html"
++MAN2HTML="/System/Tools/man2html"
+ MANX="/home/httpd/cgi-aux/man/man.aux"
+ 
+ # Do we need lynxcgi URLs? For the moment our criterion is
+@@ -67,11 +67,11 @@
+ 	    PAGE="$1"
+ 	    ;;
+ 	*)
+-	    PAGE=`man -w -c "$@" 2>/dev/null`
++	    PAGE=`man -w -c "$@" 2>/System/Devices/null`
+ 	    ;;
+     esac
+ else
+-	PAGE=`man -w -c "$@" 2>/dev/null`
++	PAGE=`man -w -c "$@" 2>/System/Devices/null`
+ fi
+ 
+ if [ x"$PAGE" = x ]; then
+diff -urN man-1.5p/man2html/scripts/cgi-bin/man/mansearch man-1.5p-STEP/man2html/scripts/cgi-bin/man/mansearch
+--- man-1.5p/man2html/scripts/cgi-bin/man/mansearch	2003-03-12 04:53:30.000000000 +1300
++++ man-1.5p-STEP/man2html/scripts/cgi-bin/man/mansearch	2006-04-09 17:45:55.506091096 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ #  Interface to a glimpse search of the man pages.
+ #  Michael Hamilton <michael@actrix.gen.nz>
+@@ -62,7 +62,7 @@
+   sedcmd = ENVIRON["SED"];
+   truncate_at = 11;		# Single page display match limit.
+ 
+-  glimpse_cmd = "glimpse -z -H /var/man2html -y -W -i "
++  glimpse_cmd = "glimpse -z -H /System/ApplicationData/man2html -y -W -i "
+ 
+   for (i = 1; i < ARGC; i++) {
+     string = string " " ARGV[i];
+@@ -112,7 +112,7 @@
+   print "<DL>";
+ 				# Unless you like being hacked, the single
+ 				# forward quotes are most important.
+-  cmd = glimpse_cmd " " options " " quote string quote " 2>/dev/null" ;
++  cmd = glimpse_cmd " " options " " quote string quote " 2>/System/Devices/null" ;
+ 
+   while ((cmd | getline matchline) > 0) {
+     if (split(matchline, part, ": ") == 1) {
+diff -urN man-1.5p/man2html/scripts/cgi-bin/man/mansearchhelp man-1.5p-STEP/man2html/scripts/cgi-bin/man/mansearchhelp
+--- man-1.5p/man2html/scripts/cgi-bin/man/mansearchhelp	2003-03-12 04:53:30.000000000 +1300
++++ man-1.5p-STEP/man2html/scripts/cgi-bin/man/mansearchhelp	2006-04-09 17:45:55.507090944 +1200
+@@ -1,5 +1,5 @@
+-#!/bin/sh
+-MAN2HTML=/usr/bin/man2html
++#!/System/Tools/sh
++MAN2HTML=/System/Tools/man2html
+ MANSH=/home/httpd/cgi-aux/man/mansearchhelp.aux
+ 
+ # Do we need lynxcgi URLs? For the moment our criterion is
+diff -urN man-1.5p/man2html/scripts/cgi-bin/man/mansec man-1.5p-STEP/man2html/scripts/cgi-bin/man/mansec
+--- man-1.5p/man2html/scripts/cgi-bin/man/mansec	2004-08-23 12:17:40.000000000 +1200
++++ man-1.5p-STEP/man2html/scripts/cgi-bin/man/mansec	2006-04-09 17:45:55.504091400 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/awk -f
++#!/System/Tools/awk -f
+ #
+ #  Generate an index into a manual section by using find.
+ #  Michael Hamilton <michael@actrix.gen.nz>
+@@ -40,7 +40,7 @@
+     cache_suffix = "h";
+   }
+ 
+-  cache_dir  = "/var/man2html";
++  cache_dir  = "/System/ApplicationData/man2html";
+   cache_file = "manindex" cache_suffix "-" section ".html";
+   cache = cache_dir "/" cache_file;
+   cache_tmp = cache "_" pid;
+@@ -175,9 +175,9 @@
+       }
+     }
+     print "</body>\n</html>" > cache_tmp;
+-    system("/bin/mv " cache_tmp " " cache);
+-    system("/bin/rm -f " buffer_tmp);
++    system("/System/Tools/mv " cache_tmp " " cache);
++    system("/System/Tools/rm -f " buffer_tmp);
+   }
+-  system("/bin/cat " cache);
++  system("/System/Tools/cat " cache);
+   exit;
+ }
+diff -urN man-1.5p/man2html/scripts/cgi-bin/man/manwhatis man-1.5p-STEP/man2html/scripts/cgi-bin/man/manwhatis
+--- man-1.5p/man2html/scripts/cgi-bin/man/manwhatis	2003-03-12 04:53:29.000000000 +1300
++++ man-1.5p-STEP/man2html/scripts/cgi-bin/man/manwhatis	2006-04-09 17:45:55.502091704 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/awk -f
++#!/System/Tools/awk -f
+ #
+ #  Generate a whatis index into the manual pages by using find to
+ #  locate all the whatis files.
+@@ -39,7 +39,7 @@
+     cache_suffix = "h";
+   }
+ 
+-  cache_dir  = "/var/man2html";
++  cache_dir  = "/System/ApplicationData/man2html";
+   cache_file = "whatis" cache_suffix "-" section ".html";
+   cache = cache_dir "/" cache_file;
+ 
+@@ -114,12 +114,12 @@
+       exit;
+     }
+ 	     # Try to parse valid entries - those that contain ([0-9])
+-	     # Note that egrep is sometimes in /bin, sometimes in /usr/bin
++	     # Note that egrep is sometimes in /System/Tools, sometimes in /System/Tools
+     extract_cmd = "egrep -h '\\(" section "[A-Za-z]*\\)' " whatis_files ;
+ 
+     print "<br>Manual pages referenced in " whatis_files "<p>" > cache_tmp;
+ 
+-    # Note that sort sometimes lives in /bin and sometimes in /usr/bin
++    # Note that sort sometimes lives in /System/Tools and sometimes in /System/Tools
+     sort_cmd = "sort -f >> " sort_tmp;
+ 
+     while ( (extract_cmd | getline) > 0 ) { 
+@@ -166,7 +166,7 @@
+     print "\n</dl><p>" > buffer_tmp;
+     close(buffer_tmp);
+ 
+-    system("/bin/rm " sort_tmp);
++    system("/System/Tools/rm " sort_tmp);
+ 
+ 				# Print out alphabetic quick index and other links
+     for (i = 1; i <= num_letters; i++) {
+@@ -200,9 +200,9 @@
+     }
+     print "</body>" > cache_tmp;
+     print "</html>" > cache_tmp;
+-    system("/bin/mv " cache_tmp " " cache);
+-    system("/bin/rm " buffer_tmp);
++    system("/System/Tools/mv " cache_tmp " " cache);
++    system("/System/Tools/rm " buffer_tmp);
+   }
+-  system("/bin/cat " cache);
++  system("/System/Tools/cat " cache);
+   exit;
+ }
+diff -urN man-1.5p/misc/manlint man-1.5p-STEP/misc/manlint
+--- man-1.5p/misc/manlint	2003-03-12 04:53:34.000000000 +1300
++++ man-1.5p-STEP/misc/manlint	2006-04-09 17:46:35.677984040 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -w
++#!/System/Tools/perl -w
+ 
+ # manlint - report "errors" in man page(s).
+ 
+diff -urN man-1.5p/msgs/Makefile.in man-1.5p-STEP/msgs/Makefile.in
+--- man-1.5p/msgs/Makefile.in	2005-01-08 19:54:54.000000000 +1300
++++ man-1.5p-STEP/msgs/Makefile.in	2006-04-09 17:46:00.707300392 +1200
+@@ -16,13 +16,13 @@
+ 	rm -f Makefile
+ 
+ # Various versions of libc use different format message catalog files
+-# So we have to use the installed /usr/bin/gencat if possible.
+-# On the other hand, /usr/bin/gencat doesnt work in glibc 2.0.7
++# So we have to use the installed /System/Tools/gencat if possible.
++# On the other hand, /System/Tools/gencat doesnt work in glibc 2.0.7
+ # The source in ../gencat is OK for libc4 and libc5, not for glibc.
+ gencat:
+-	if [ -f /usr/bin/gencat ]; then \
+-		if gencat gencat.out gencat.in 2>/dev/null; then \
+-			ln -s /usr/bin/gencat gencat; \
++	if [ -f /System/Tools/gencat ]; then \
++		if gencat gencat.out gencat.in 2>/System/Devices/null; then \
++			ln -s /System/Tools/gencat gencat; \
+ 		else \
+ 			cp gencat207fix.sh gencat; \
+ 		fi \
+diff -urN man-1.5p/msgs/gencat207fix.sh man-1.5p-STEP/msgs/gencat207fix.sh
+--- man-1.5p/msgs/gencat207fix.sh	2003-03-12 04:53:30.000000000 +1300
++++ man-1.5p-STEP/msgs/gencat207fix.sh	2006-04-09 17:46:00.728297200 +1200
+@@ -1,2 +1,2 @@
+-#!/bin/sh
+-/usr/bin/gencat --new $1 $2
++#!/System/Tools/sh
++/System/Tools/gencat --new $1 $2
+diff -urN man-1.5p/msgs/inst.sh man-1.5p-STEP/msgs/inst.sh
+--- man-1.5p/msgs/inst.sh	2003-03-12 04:53:30.000000000 +1300
++++ man-1.5p-STEP/msgs/inst.sh	2006-04-09 17:46:00.708300240 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # install message catalogs - very primitive
+ 
+diff -urN man-1.5p/src/apropos.sh man-1.5p-STEP/src/apropos.sh
+--- man-1.5p/src/apropos.sh	2005-01-08 14:53:08.000000000 +1300
++++ man-1.5p-STEP/src/apropos.sh	2006-04-09 17:45:45.358633744 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # apropos -- search the whatis database for keywords.
+ # whatis  -- idem, but match only commands (as whole words).
+@@ -13,7 +13,7 @@
+ # apropos/whatis-1.5m aeb 2003-08-01 (from %version%)
+ #
+ # keep old PATH - 000323 - Bryan Henderson
+-# also look in /var/cache/man - 030801 - aeb
++# also look in /System/ApplicationData/cache/man - 030801 - aeb
+ 
+ program=`basename $0`
+ 
+@@ -63,7 +63,7 @@
+ while [ "$1" != "" ]
+ do
+     found=0
+-    for d in /var/cache/man $manpath /usr/lib
++    for d in /System/ApplicationData/cache/man $manpath /usr/lib
+     do
+         if [ -f $d/whatis ]
+         then
+diff -urN man-1.5p/src/makewhatis.sh man-1.5p-STEP/src/makewhatis.sh
+--- man-1.5p/src/makewhatis.sh	2005-01-09 07:04:00.000000000 +1300
++++ man-1.5p-STEP/src/makewhatis.sh	2006-04-09 17:45:45.341636328 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # makewhatis: create the whatis database
+ # Created: Sun Jun 14 10:49:37 1992
+ # Revised: Sat Jan  8 14:12:37 1994 by faith@cs.unc.edu
+@@ -27,7 +27,7 @@
+ # 000323 - do not change PATH, better treatment of catpages - Bryan Henderson
+ # 011117 - avoid suspicious filenames
+ # 030310 - find files only; fix LAPACK cruft; no /usr/man default;
+-#	use /dev/stderr instead of /dev/tty; handle files with strange names;
++#	use /System/Devices/stderr instead of /System/Devices/tty; handle files with strange names;
+ #	add support for chinese, hungarian, indonesian, japanese, korean,
+ #	polish, russian (Thierry Vignaud);
+ #
+@@ -39,7 +39,7 @@
+ 
+ # In case both /usr/man and /usr/share/man exist, the former is local
+ # and should be first.
+-# It is a bug to add /var/cache/man to DEFCATPATH.
++# It is a bug to add /System/ApplicationData/cache/man to DEFCATPATH.
+ dm=
+ for d in /usr/man /usr/share/man /usr/X11R6/man /usr/local/man
+ do
+@@ -58,21 +58,21 @@
+ DEFCATPATH=$dc
+ 
+ # In case /usr is read-only, make /usr/foo/whatis (etc) a symlink to
+-# something like /var/cache/man/foo-whatis.
+-# Some distributions make a single big /var/cache/man/whatis file,
++# something like /System/ApplicationData/cache/man/foo-whatis.
++# Some distributions make a single big /System/ApplicationData/cache/man/whatis file,
+ # but that leads to problems and bugs.
+ 
+-# AWK=/usr/bin/gawk
++# AWK=/System/Tools/gawk
+ AWK=%awk%
+ 
+ # Find a place for our temporary files. If security is not a concern, use
+-#	TMPFILE=/tmp/whatis$$; TMPFILEDIR=none
++#	TMPFILE=/System/TemporaryFiles/whatis$$; TMPFILEDIR=none
+ # Of course makewhatis should only have the required permissions
+ # (for reading and writing directories like /usr/man).
+ # We try here to be careful (and avoid preconstructed symlinks)
+-# in case makewhatis is run as root, by creating a subdirectory of /tmp.
++# in case makewhatis is run as root, by creating a subdirectory of /System/TemporaryFiles.
+ 
+-TMPFILEDIR=/tmp/whatis.tmp.dir.$$
++TMPFILEDIR=/System/TemporaryFiles/whatis.tmp.dir.$$
+ rm -rf TMPFILEDIR
+ if ! mkdir -m 0700 $TMPFILEDIR; then
+     echo Could not create $TMPFILEDIR
+@@ -156,7 +156,7 @@
+       eval path="\$$pages"path
+       for mandir in $path
+       do
+-	 cp /dev/null $mandir/whatis
++	 cp /System/Devices/null $mandir/whatis
+       done
+    done
+ fi
+@@ -168,11 +168,11 @@
+    for mandir in $path
+    do
+      if [ x$verbose != x ]; then
+-	echo "about to enter $mandir" > /dev/stderr
++	echo "about to enter $mandir" > /System/Devices/stderr
+      fi
+      if [ -s ${mandir}/whatis -a $pages = man -a x$update = x ]; then
+ 	if [ x$verbose != x ]; then
+-	   echo skipping $mandir - we did it already > /dev/stderr
++	   echo skipping $mandir - we did it already > /System/Devices/stderr
+ 	fi
+      else      
+        here=`pwd`
+@@ -191,12 +191,12 @@
+ 	      if (use_zcat || use_bzcat) {
+ 		result = (pipe_cmd | getline);
+ 		if (result < 0) {
+-		  print "Pipe error: " pipe_cmd " " ERRNO > "/dev/stderr";
++		  print "Pipe error: " pipe_cmd " " ERRNO > "/System/Devices/stderr";
+ 		}
+ 	      } else {
+ 		result = (getline < filename);
+ 		if (result < 0) {
+-		  print "Read file error: " filename " " ERRNO > "/dev/stderr";
++		  print "Read file error: " filename " " ERRNO > "/System/Devices/stderr";
+ 		}
+ 	      }
+ 	      return result;
+@@ -215,7 +215,7 @@
+ 	      entire_line = "";
+ 
+ 	      if (verbose) {
+-		print "adding " filename > "/dev/stderr"
++		print "adding " filename > "/System/Devices/stderr"
+ 	      }
+ 	      
+ 	      use_zcat = match(filename,"\\.Z$") ||
+@@ -243,7 +243,7 @@
+ 		}
+ 		# try to avoid suspicious stuff
+ 		if (filename ~ /[;&|`$(]/) {
+-		  print "ignored strange file name " filename " in " curdir > "/dev/stderr";
++		  print "ignored strange file name " filename " in " curdir > "/System/Devices/stderr";
+ 		  return;
+ 		}
+ 	      }
+diff -urN man-1.5p/src/man-config.c man-1.5p-STEP/src/man-config.c
+--- man-1.5p/src/man-config.c	2005-01-09 10:13:21.000000000 +1300
++++ man-1.5p-STEP/src/man-config.c	2006-04-09 17:45:45.344635872 +1200
+@@ -4,14 +4,14 @@
+  * Read the man.conf file
+  *
+  * Input line types:
+- *	MANBIN		/usr/bin/man
+- *	MANPATH         /usr/X386/man	[/var/catman/X386]
+- *	MANPATH_MAP     /usr/bin     /usr/man
++ *	MANBIN		/System/Tools/man
++ *	MANPATH         /usr/X386/man	[/System/ApplicationData/catman/X386]
++ *	MANPATH_MAP     /System/Tools     /usr/man
+  *      FHS
+  *	FSSTND
+  *  NOAUTOPATH
+- *	NROFF           /usr/bin/groff -Tascii -mandoc
+- *	.gz             /usr/bin/gunzip -c
++ *	NROFF           /System/Tools/groff -Tascii -mandoc
++ *	.gz             /System/Tools/gunzip -c
+  *	# Comment
+  *
+  * Allow globbing in MANPATH elements.
+diff -urN man-1.5p/src/man-iconv.c man-1.5p-STEP/src/man-iconv.c
+--- man-1.5p/src/man-iconv.c	2004-07-16 02:09:27.000000000 +1200
++++ man-1.5p-STEP/src/man-iconv.c	2006-04-09 17:45:45.359633592 +1200
+@@ -43,7 +43,7 @@
+ 	if (!inited) {
+ 		char *file = getenv("MAN_ICONV_PATH");
+ 		if (!file)
+-			file = "/usr/bin/iconv";
++			file = "/System/Tools/iconv";
+ 		if (access(file, X_OK) == 0)
+ 			iconv_path = my_strdup(file);
+ 		inited = 1;
+diff -urN man-1.5p/src/man.c man-1.5p-STEP/src/man.c
+--- man-1.5p/src/man.c	2005-01-08 21:08:09.000000000 +1300
++++ man-1.5p-STEP/src/man.c	2006-04-09 17:45:40.891312880 +1200
+@@ -69,7 +69,7 @@
+ 				   old or corrupt or so */
+ int can_use_cache;		/* output device is a tty, width 80 */
+ 				/* this means that the result may be written
+-				   in /var/cache, and may be read from there */
++				   in /System/ApplicationData/cache, and may be read from there */
+ int findall;
+ int print_where;
+ int one_per_line;
+@@ -716,7 +716,7 @@
+ 
+ 	       /* maybe the real user can write it */
+ 	       /* note: just doing "> %s" gives the wrong exit status */
+-	       command = my_xsprintf("cp /dev/null %S 2>/dev/null", cat_file);
++	       command = my_xsprintf("cp /System/Devices/null %S 2>/System/Devices/null", cat_file);
+ 	       if (do_system_command(command, 1)) {
+ 		    if (debug)
+ 			 gripe (USER_CANNOT_OPEN_CAT);
+@@ -1105,11 +1105,11 @@
+ 		    const char *expander = get_expander (*gf);
+ 		    if (expander)
+ 			 command = my_xsprintf("%s %S | grep '%Q'"
+-					       "> /dev/null 2> /dev/null",
++					       "> /System/Devices/null 2> /System/Devices/null",
+ 				 expander, *gf, name);
+ 		    else
+ 			 command = my_xsprintf("grep '%Q' %S"
+-					       "> /dev/null 2> /dev/null",
++					       "> /System/Devices/null 2> /System/Devices/null",
+ 				 name, *gf);
+ 		    res = do_system_command (command, 1);
+ 		    status |= res;
+diff -urN man-1.5p/src/man.conf.in man-1.5p-STEP/src/man.conf.in
+--- man-1.5p/src/man.conf.in	2005-01-09 07:50:45.000000000 +1300
++++ man-1.5p-STEP/src/man.conf.in	2006-04-09 17:45:45.349635112 +1200
+@@ -18,11 +18,11 @@
+ # (so that this dir has both man1 etc. and cat1 etc. subdirs).
+ # This is the traditional Unix setup.
+ # Certain versions of the FSSTND recommend putting formatted versions
+-# of /usr/.../man/manx/page.x into /var/catman/.../catx/page.x.
++# of /usr/.../man/manx/page.x into /System/ApplicationData/catman/.../catx/page.x.
+ # The keyword FSSTND will cause this behaviour.
+ # Certain versions of the FHS recommend putting formatted versions of
+ # /usr/.../share/man/[locale/]manx/page.x into
+-# /var/cache/man/.../[locale/]catx/page.x.
++# /System/ApplicationData/cache/man/.../[locale/]catx/page.x.
+ # The keyword FHS will cause this behaviour (and overrides FSSTND).
+ # Explicitly given catdirs override.
+ #
+@@ -32,7 +32,7 @@
+ # This file is also read by man in order to find how to call nroff, less, etc.,
+ # and to determine the correspondence between extensions and decompressors.
+ #
+-# MANBIN		/usr/local/bin/man
++# MANBIN		/usr/local/System/Tools/man
+ #
+ # Every automatically generated MANPATH includes these fields
+ #
+@@ -51,22 +51,22 @@
+ #
+ # Set up PATH to MANPATH mapping
+ #
+-# If people ask for "man foo" and have "/dir/bin/foo" in their PATH
++# If people ask for "man foo" and have "/dir/System/Tools/foo" in their PATH
+ # and the docs are found in "/dir/man", then no mapping is required.
+ #
+ # The below mappings are superfluous when the right hand side is
+ # in the mandatory manpath already, but will keep man from statting
+ # lots of other nearby files and directories.
+ #
+-MANPATH_MAP	/bin			/usr/share/man
+-MANPATH_MAP	/sbin			/usr/share/man
+-MANPATH_MAP	/usr/bin		/usr/share/man
+-MANPATH_MAP	/usr/sbin		/usr/share/man
+-MANPATH_MAP	/usr/local/bin		/usr/local/share/man
+-MANPATH_MAP	/usr/local/sbin		/usr/local/share/man
+-MANPATH_MAP	/usr/X11R6/bin		/usr/X11R6/man
+-MANPATH_MAP	/usr/bin/X11		/usr/X11R6/man
+-MANPATH_MAP	/usr/bin/mh		/usr/share/man
++MANPATH_MAP	/System/Tools			/usr/share/man
++MANPATH_MAP	/System/AdminTools			/usr/share/man
++MANPATH_MAP	/System/Tools		/usr/share/man
++MANPATH_MAP	/System/AdminTools		/usr/share/man
++MANPATH_MAP	/usr/local/System/Tools		/usr/local/share/man
++MANPATH_MAP	/usr/local/System/AdminTools		/usr/local/share/man
++MANPATH_MAP	/usr/X11R6/System/Tools		/usr/X11R6/man
++MANPATH_MAP	/System/Tools/X11		/usr/X11R6/man
++MANPATH_MAP	/System/Tools/mh		/usr/share/man
+ #
+ # NOAUTOPATH keeps man from automatically adding directories that look like
+ # manual page directories to the path.
+diff -urN man-1.5p/src/man2dvi man-1.5p-STEP/src/man2dvi
+--- man-1.5p/src/man2dvi	2003-03-12 04:53:29.000000000 +1300
++++ man-1.5p-STEP/src/man2dvi	2006-04-09 17:45:45.360633440 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ #
+ # script to format manpages to dvi
+ # Copyright (c) 1997 Tobias Begalke (tb@lst.de)
+diff -urN man-1.5p/src/manpath.c man-1.5p-STEP/src/manpath.c
+--- man-1.5p/src/manpath.c	2005-01-09 04:04:16.000000000 +1300
++++ man-1.5p-STEP/src/manpath.c	2006-04-09 17:45:45.354634352 +1200
+@@ -137,13 +137,13 @@
+ 	  len += 3;
+      }
+ 
+-     /* look for the situation with packagedir/bin and packagedir/man */
++     /* look for the situation with packagedir/System/Tools and packagedir/man */
+      strcpy (t + len, "/man");
+ 
+      if (is_directory (t) == 1)
+ 	  return t;
+ 
+-     /* look for the situation with pkg/bin and pkg/man1 or pkg/man8 */
++     /* look for the situation with pkg/System/Tools and pkg/man1 or pkg/man8 */
+      /* (looking for all man[1-9] would probably be a waste of stats) */
+      strcpy (t + len, "/man1");
+ 
+@@ -300,8 +300,8 @@
+  * in the man.conf file, see if there is a subdirectory `man' or
+  * `MAN'.  If so, and it is not already in the manpath, add it.
+  *
+- * Example:  user has <dir>/bin in his path and the directory
+- * <dir>/bin/man exists -- the directory <dir>/bin/man will be added
++ * Example:  user has <dir>/System/Tools in his path and the directory
++ * <dir>/System/Tools/man exists -- the directory <dir>/System/Tools/man will be added
+  * to the manpath.
+  * Try also <dir>/man ?and <dir>?, and, if LANG is set, <dir>/$LANG/man.
+  * aeb - 940320
+diff -urN man-1.5p/src/mwi man-1.5p-STEP/src/mwi
+--- man-1.5p/src/mwi	2003-03-12 04:53:28.000000000 +1300
++++ man-1.5p-STEP/src/mwi	2006-04-09 17:45:40.901311360 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # test which words in all caps end a NAME section in a (compressed) cat page
+ #
+ # Found so far:
+diff -urN man-1.5p/src/to_cat.c man-1.5p-STEP/src/to_cat.c
+--- man-1.5p/src/to_cat.c	2003-03-12 04:53:28.000000000 +1300
++++ man-1.5p-STEP/src/to_cat.c	2006-04-09 17:45:36.773938816 +1200
+@@ -49,9 +49,9 @@
+  * Change a name of the form PATH/man1/name.1[.Z]
+  *                      into PATH/cat1/name.1.EXT
+  * or (FSSTND) change /usr/PA/man/PB/man1/name.1
+- *               into /var/catman/PA/PB/cat1/name.1.EXT
++ *               into /System/ApplicationData/catman/PA/PB/cat1/name.1.EXT
+  * or (FHS) change /usr/PATH/share/man/LOC/man1/name.1
+- *            into /var/cache/man/PATH/LOC/cat1/name.1.EXT
++ *            into /System/ApplicationData/cache/man/PATH/LOC/cat1/name.1.EXT
+  * (here the /LOC part is absent or a single [locale] dir).
+  *
+  * Returns 0 on failure.
+@@ -118,9 +118,9 @@
+ 		    t4[-6] = 0;
+ 	       *t3 = '/';
+ 
+-	       len += strlen("/var/cache/man") + strlen(name) + strlen(t3) + 1;
++	       len += strlen("/System/ApplicationData/cache/man") + strlen(name) + strlen(t3) + 1;
+ 	       cat_name = (char *) my_malloc (len);
+-	       strcpy (cat_name, "/var/cache/man");
++	       strcpy (cat_name, "/System/ApplicationData/cache/man");
+ 	       strcat (cat_name, name);
+ 	       strcat (cat_name, t3);
+ 	       goto gotit;
+@@ -140,9 +140,9 @@
+ 	  *t3 = '/';
+ 	  if (t4) {
+ 	       *t4 = 0;
+-	       len += strlen("/var/catman") + strlen (name+4) + strlen (t3) + 1;
++	       len += strlen("/System/ApplicationData/catman") + strlen (name+4) + strlen (t3) + 1;
+ 	       cat_name = (char *) my_malloc (len);
+-	       strcpy (cat_name, "/var/catman");
++	       strcpy (cat_name, "/System/ApplicationData/catman");
+ 	       strcat (cat_name, name+4);
+ 	       strcat (cat_name, t3);
+ 	       goto gotit;

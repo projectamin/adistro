@@ -1,0 +1,769 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--coreutils-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/pub/gnu/coreutils/coreutils-5.2.1.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/coreutils-5.2.1.tar.bz2</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/coreutils-5.2.1-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/coreutils-5.2.1-STEP.patch</amin:param>
+        </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/coreutils-5.2.1.tar.bz2</amin:param>
+	</amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/coreutils-5.2.1-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/coreutils-5.2.1</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/System/Applications/Coreutils-5.2.1/
+		</amin:flag>
+		<amin:shell name='dir'>/build/coreutils-5.2.1</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/build/coreutils-5.2.1</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/coreutils-5.2.1</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	
+	<amin:command name='remove'>
+		<amin:param name='target'>coreutils-5.2.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/[</amin:param>
+                <amin:param name='target'>[</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/chroot</amin:param>
+                <amin:param name='target'>chroot</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/date</amin:param>
+                <amin:param name='target'>date</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/du</amin:param>
+                <amin:param name='target'>du</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/false</amin:param>
+                <amin:param name='target'>false</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/hostname</amin:param>
+                <amin:param name='target'>hostname</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/ln</amin:param>
+                <amin:param name='target'>ln</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/mknod</amin:param>
+                <amin:param name='target'>mknod</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/paste</amin:param>
+                <amin:param name='target'>paste</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/ptx</amin:param>
+                <amin:param name='target'>ptx</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/sha1sum</amin:param>
+                <amin:param name='target'>sha1sum</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/stty</amin:param>
+                <amin:param name='target'>stty</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/test</amin:param>
+                <amin:param name='target'>test</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/uname</amin:param>
+                <amin:param name='target'>uname</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/vdir</amin:param>
+                <amin:param name='target'>vdir</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/basename</amin:param>
+                <amin:param name='target'>basename</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/cksum</amin:param>
+                <amin:param name='target'>cksum</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/dd</amin:param>
+                <amin:param name='target'>dd</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/echo</amin:param>
+                <amin:param name='target'>echo</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/fmt</amin:param>
+                <amin:param name='target'>fmt</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/id</amin:param>
+                <amin:param name='target'>id</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/logname</amin:param>
+                <amin:param name='target'>logname</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/mv</amin:param>
+                <amin:param name='target'>mv</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/pathchk</amin:param>
+                <amin:param name='target'>pathchk</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/pwd</amin:param>
+                <amin:param name='target'>pwd</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/shred</amin:param>
+                <amin:param name='target'>shred</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/sum</amin:param>
+                <amin:param name='target'>sum</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/touch</amin:param>
+                <amin:param name='target'>touch</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/unexpand</amin:param>
+                <amin:param name='target'>unexpand</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/wc</amin:param>
+                <amin:param name='target'>wc</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/cat</amin:param>
+                <amin:param name='target'>cat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/comm</amin:param>
+                <amin:param name='target'>comm</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/df</amin:param>
+                <amin:param name='target'>df</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/env</amin:param>
+                <amin:param name='target'>env</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/fold</amin:param>
+                <amin:param name='target'>fold</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/install</amin:param>
+                <amin:param name='target'>install</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/ls</amin:param>
+                <amin:param name='target'>ls</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/nice</amin:param>
+                <amin:param name='target'>nice</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/pinky</amin:param>
+                <amin:param name='target'>pinky</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/readlink</amin:param>
+                <amin:param name='target'>readlink</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/sleep</amin:param>
+                <amin:param name='target'>sleep</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/sync</amin:param>
+                <amin:param name='target'>sync</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/tr</amin:param>
+                <amin:param name='target'>tr</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/uniq</amin:param>
+                <amin:param name='target'>uniq</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/who</amin:param>
+                <amin:param name='target'>who</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/chgrp</amin:param>
+                <amin:param name='target'>chgrp</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/cp</amin:param>
+                <amin:param name='target'>cp</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/dir</amin:param>
+                <amin:param name='target'>dir</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/expand</amin:param>
+                <amin:param name='target'>expand</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/groups</amin:param>
+                <amin:param name='target'>groups</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/join</amin:param>
+                <amin:param name='target'>join</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/md5sum</amin:param>
+                <amin:param name='target'>md5sum</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/nl</amin:param>
+                <amin:param name='target'>nl</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/pr</amin:param>
+                <amin:param name='target'>pr</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/rm</amin:param>
+                <amin:param name='target'>rm</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/sort</amin:param>
+                <amin:param name='target'>sort</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/tac</amin:param>
+                <amin:param name='target'>tac</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/true</amin:param>
+                <amin:param name='target'>true</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/unlink</amin:param>
+                <amin:param name='target'>unlink</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/whoami</amin:param>
+                <amin:param name='target'>whoami</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/chmod</amin:param>
+                <amin:param name='target'>chmod</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/csplit</amin:param>
+                <amin:param name='target'>csplit</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/dircolors</amin:param>
+                <amin:param name='target'>dircolors</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/expr</amin:param>
+                <amin:param name='target'>expr</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/head</amin:param>
+                <amin:param name='target'>head</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/kill</amin:param>
+                <amin:param name='target'>kill</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/mkdir</amin:param>
+                <amin:param name='target'>mkdir</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/nohup</amin:param>
+                <amin:param name='target'>nohup</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/printenv</amin:param>
+                <amin:param name='target'>printenv</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/rmdir</amin:param>
+                <amin:param name='target'>rmdir</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/split</amin:param>
+                <amin:param name='target'>split</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/tail</amin:param>
+                <amin:param name='target'>tail</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/tsort</amin:param>
+                <amin:param name='target'>tsort</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/uptime</amin:param>
+                <amin:param name='target'>uptime</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/yes</amin:param>
+                <amin:param name='target'>yes</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/chown</amin:param>
+                <amin:param name='target'>chown</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/cut</amin:param>
+                <amin:param name='target'>cut</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/dirname</amin:param>
+                <amin:param name='target'>dirname</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/factor</amin:param>
+                <amin:param name='target'>factor</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/hostid</amin:param>
+                <amin:param name='target'>hostid</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/link</amin:param>
+                <amin:param name='target'>link</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/mkfifo</amin:param>
+                <amin:param name='target'>mkfifo</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/od</amin:param>
+                <amin:param name='target'>od</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/printf</amin:param>
+                <amin:param name='target'>printf</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/seq</amin:param>
+                <amin:param name='target'>seq</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/stat</amin:param>
+                <amin:param name='target'>stat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/tee</amin:param>
+                <amin:param name='target'>tee</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/tty</amin:param>
+                <amin:param name='target'>tty</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Coreutils-5.2.1/bin/users</amin:param>
+                <amin:param name='target'>users</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+
+</amin:profile>

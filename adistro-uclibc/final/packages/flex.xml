@@ -1,0 +1,68 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--flex-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/flex-2.5.33.tar.gz</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+                <amin:flag>
+                prefix=/usr
+                </amin:flag>
+                <amin:shell name='dir'>/build/flex-2.5.33</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>SHLIB_XLDFLAGS=-lncurses</amin:param>
+                <amin:shell name='dir'>/build/flex-2.5.33</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/flex-2.5.33</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:param name='source'>libfl.a</amin:param>
+		<amin:param name='target'>/lib/libfl.a</amin:param>
+                <amin:shell name='dir'>/usr/lib</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='textdump'>
+                <amin:param name='content'>
+#!/bin/sh
+# Begin /usr/bin/lex
+exec /usr/bin/flex -l "$@"
+# End /usr/bin/lex
+		</amin:param>
+		<amin:param name='target'>/usr/bin/lex</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='system_command'>
+                <amin:param name='basename'>chmod</amin:param>
+		<amin:param>755 /usr/bin/lex</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>flex-2.5.33</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/build/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+</amin:chroot>
+</amin:profile>
+

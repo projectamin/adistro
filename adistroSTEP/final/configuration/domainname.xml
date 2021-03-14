@@ -1,0 +1,23 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--domainname-mod-me-to-suite-->
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='system_command'>
+                <amin:param name='basename'>touch</amin:param>
+                <amin:param>/System/Settings/domainname</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+        </amin:command>
+
+        <amin:command name='textdump'>
+		<amin:param name='content'>
+DOMAINNAME=domain.com
+		</amin:param>
+                <amin:shell name='target'>/System/Settings/domainname</amin:shell>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

@@ -1,0 +1,40 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--linux-libc-headers-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ep09.pld-linux.org/~mmazur/linux-libc-headers/linux-libc-headers-2.6.11.2.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/linux-libc-headers-2.6.11.2.tar.bz2</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/linux-libc-headers-2.6.11.2.tar.bz2</amin:param>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>/bootstrap/System/Library/Headers/include/</amin:param>
+	</amin:command>
+
+	<amin:command name='copy'>
+		<amin:flag>R</amin:flag>
+		<amin:param name="source">/opt/adistro/build/linux-libc-headers-2.6.11.2/include/asm-i386</amin:param>
+		<amin:param name="target">/bootstrap/System/Library/Headers/include/asm</amin:param>
+	</amin:command>
+        <amin:command name='copy'>
+                <amin:flag>R</amin:flag>
+                <amin:param name="source">/opt/adistro/build/linux-libc-headers-2.6.11.2/include/linux</amin:param>
+                <amin:param name="target">/bootstrap/System/Library/Headers/include</amin:param>
+        </amin:command>
+
+<!--no furthur voodoo required here -->
+
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>linux-libc-headers-2.6.11.2</amin:param>
+		<amin:shell name="dir">/opt/adistro/build</amin:shell>
+	</amin:command>
+	
+</amin:profile>

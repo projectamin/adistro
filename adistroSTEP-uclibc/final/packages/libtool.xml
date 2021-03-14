@@ -1,0 +1,46 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--libtool-->
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>autoreconf</amin:param>
+		<amin:shell name='dir'>/build/libtool-1.5.14</amin:shell>
+ 		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell> 
+	</amin:command>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Applications/Libtool-1.5.14
+                </amin:flag>
+                <amin:shell name='dir'>/build/libtool-1.5.14</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/libtool-1.5.14</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/libtool-1.5.14</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">libtool-1.5.14</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+<!--        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/libtool-1.5.14/bin/sed</amin:param>
+                <amin:param name='target'>sed</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command> -->
+
+</amin:chroot>
+</amin:profile>

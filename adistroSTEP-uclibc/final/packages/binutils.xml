@@ -1,0 +1,158 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Binutils-->
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>../../packages/binutils-2.16.1-STEP-uclibc.patch</amin:flag>
+                <amin:shell name='dir'>/build/binutils-2.16.1</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>binutils-build</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../binutils-2.16.1/configure</amin:param>
+		<amin:flag>
+		prefix=/System/Applications/Binutils-2.16.1/
+		with-lib-path=/System/Library/Libraries/uClibc-0.9.27/lib
+		includedir=/System/Library/Headers
+		enable-shared
+		</amin:flag>
+		<amin:shell name='dir'>/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LDFLAGS=-L/System/Library/Libraries/uClibc-0.9.27/lib</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>LIB_PATH=/System/Library/Libraries/uClibc-0.9.27/lib/</amin:param>
+		<amin:shell name='dir'>/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>tooldir=/bootstrap/System/Applications/Binutils-2.16.1/ install</amin:param>
+		<amin:shell name='dir'>/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>/build/binutils-build</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>/build/binutils-2.16.1</amin:param>
+                <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/addr2line</amin:param>
+                <amin:param name='target'>addr2line</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/as</amin:param>
+                <amin:param name='target'>as</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/gprof</amin:param>
+                <amin:param name='target'>gprof</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/nm</amin:param>
+                <amin:param name='target'>nm</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/objdump</amin:param>
+                <amin:param name='target'>objdump</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/readelf</amin:param>
+                <amin:param name='target'>readelf</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/strings</amin:param>
+                <amin:param name='target'>strings</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/ar</amin:param>
+                <amin:param name='target'>ar</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/c++filt</amin:param>
+                <amin:param name='target'>c++filt</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/ld</amin:param>
+                <amin:param name='target'>ld</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/objcopy</amin:param>
+                <amin:param name='target'>objcopy</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/ranlib</amin:param>
+                <amin:param name='target'>ranlib</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/size</amin:param>
+                <amin:param name='target'>size</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Binutils-2.16.1/bin/strip</amin:param>
+                <amin:param name='target'>strip</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools/:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+</amin:chroot>
+
+</amin:profile>

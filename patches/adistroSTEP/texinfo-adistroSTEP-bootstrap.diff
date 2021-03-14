@@ -1,0 +1,68 @@
+diff -urN texinfo-4.8/lib/system.h texinfo-4.8-adistroSTEP/lib/system.h
+--- texinfo-4.8/lib/system.h	2004-04-27 01:56:57.000000000 +1200
++++ texinfo-4.8-adistroSTEP/lib/system.h	2005-05-18 10:13:08.030424952 +1200
+@@ -199,9 +199,9 @@
+ #  include <limits.h>
+ #  ifdef __DJGPP__
+ #   define HAVE_LONG_FILENAMES(dir)  (pathconf (dir, _PC_NAME_MAX) > 12)
+-#   define NULL_DEVICE	"/dev/null"
++#   define NULL_DEVICE	"/System/Devices/null"
+ #   define DEFAULT_INFOPATH "c:/djgpp/info;/usr/local/info;/usr/info;."
+-    /* DJGPP supports /dev/null, which is okay for Unix aficionados,
++    /* DJGPP supports /System/Devices/null, which is okay for Unix aficionados,
+        shell scripts and Makefiles, but interactive DOS die-hards
+        would probably want to have NUL as well.  */
+ #   define ALSO_NULL_DEVICE  "NUL"
+@@ -217,7 +217,7 @@
+ #  define NULL_DEVICE	"NUL"
+ # endif  /* O_BINARY && !__MSDOS__ */
+ # ifdef __CYGWIN__
+-#  define DEFAULT_TMPDIR	"/tmp/"
++#  define DEFAULT_TMPDIR	"/System/TemporaryFiles/"
+ #  define PATH_SEP	":"
+ # else  /* O_BINARY && !__CYGWIN__ */
+ #  define DEFAULT_TMPDIR	"c:/"
+@@ -250,9 +250,9 @@
+ # ifdef VMS
+ #  define DEFAULT_TMPDIR "sys$scratch:"
+ # else
+-#  define DEFAULT_TMPDIR "/tmp/"
++#  define DEFAULT_TMPDIR "/System/TemporaryFiles/"
+ # endif
+-# define NULL_DEVICE	"/dev/null"
++# define NULL_DEVICE	"/System/Devices/null"
+ # define PIPE_USE_FORK	1
+ #endif /* not O_BINARY */
+ 
+diff -urN texinfo-4.8/lib/tempname.c texinfo-4.8-adistroSTEP/lib/tempname.c
+--- texinfo-4.8/lib/tempname.c	2003-09-16 01:25:45.000000000 +1200
++++ texinfo-4.8-adistroSTEP/lib/tempname.c	2005-05-18 10:13:05.496810120 +1200
+@@ -31,7 +31,7 @@
+ 
+ #include <stdio.h>
+ #ifndef P_tmpdir
+-# define P_tmpdir "/tmp"
++# define P_tmpdir "/System/TemporaryFiles"
+ #endif
+ #ifndef TMP_MAX
+ # define TMP_MAX 238328
+@@ -147,7 +147,7 @@
+ 
+ /* Path search algorithm, for tmpnam, tmpfile, etc.  If DIR is
+    non-null and exists, uses it; otherwise uses the first of $TMPDIR,
+-   P_tmpdir, /tmp that exists.  Copies into TMPL a template suitable
++   P_tmpdir, /System/TemporaryFiles that exists.  Copies into TMPL a template suitable
+    for use with mk[s]temp.  Will fail (-1) if DIR is non-null and
+    doesn't exist, none of the searched dirs exists, or there's not
+    enough space in TMPL. */
+@@ -184,8 +184,8 @@
+     {
+       if (direxists (P_tmpdir))
+ 	dir = P_tmpdir;
+-      else if (strcmp (P_tmpdir, "/tmp") != 0 && direxists ("/tmp"))
+-	dir = "/tmp";
++      else if (strcmp (P_tmpdir, "/System/TemporaryFiles") != 0 && direxists ("/tmp"))
++	dir = "/System/TemporaryFiles";
+       else
+ 	{
+ 	  __set_errno (ENOENT);

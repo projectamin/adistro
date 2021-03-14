@@ -1,0 +1,70 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--util-linux-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.kernel.org/pub/linux/utils/util-linux/util-linux-2.12i.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/util-linux-2.12i.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/util-linux-2.12i-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/util-linux-2.12i-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/util-linux-2.12i.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/util-linux-2.12i-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/util-linux-2.12i</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Applications/Util-Linux-2.12i
+                </amin:flag>
+                <amin:shell name='dir'>/build/util-linux-2.12i</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name='env'>CFLAGS=-L/System/Library/Libraries/Ncurses-5.4/lib -I/System/Library/Libraries/Ncurses-5.4/include</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-L/System/Library/Libraries/Ncurses-5.4/lib</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>HAVE_KILL=yes HAVE_SLN=yes DESTDIR=/System/Applications/Util-Linux-2.12i</amin:param>
+                <amin:shell name='dir'>/build/util-linux-2.12i</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>DESTDIR=/System/Applications/Util-Linux-2.12i HAVE_KILL=yes HAVE_SLN=yes install</amin:param>
+                <amin:shell name='dir'>/build/util-linux-2.12i</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">util-linux-2.12i</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <!--<amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/util-linux-2.12i/bin/sed</amin:param>
+                <amin:param name='target'>sed</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>-->
+
+</amin:chroot>
+</amin:profile>

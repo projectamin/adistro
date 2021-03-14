@@ -1,0 +1,139 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+
+<!--Make new FHS Compliant Filesystem-->
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>bin boot dev etc/opt home lib mnt root sbin srv tmp usr/local var opt</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>media media/floppy media/cdrom</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>bin include lib sbin share src</amin:param>
+		<amin:shell name='dir'>/usr</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>bin include lib sbin share src</amin:param>
+		<amin:shell name='dir'>/usr</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>doc info locale man misc terminfo zoneinfo</amin:param>
+		<amin:shell name='dir'>/usr/share</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>man1 man2 man3 man4 man5 man6 man7 man8</amin:param>
+		<amin:shell name='dir'>/usr/share/man</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>bin etc include lib sbin share src</amin:param>
+		<amin:shell name='dir'>/usr/local</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>/usr/share/man</amin:param>
+		<amin:param name='target'>/usr/local</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		<amin:shell name='dir'>/</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>/usr/share/doc</amin:param>
+		<amin:param name='target'>/usr/local</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		 <amin:shell name='dir'>/</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>/usr/share/info</amin:param>
+		<amin:param name='target'>/usr/local</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		 <amin:shell name='dir'>/</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>doc info locale man misc terminfo zoneinfo</amin:param>
+		<amin:shell name='dir'>/usr/local/share</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>man1 man2 man3 man4 man5 man6 man7 man8</amin:param>
+		<amin:shell name='dir'>/usr/local/share/man</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>lock log mail run spool</amin:param>
+		<amin:shell name='dir'>/var</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>tmp opt cache lib/misc lib/locate local</amin:param>
+		<amin:shell name='dir'>/var</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>bin doc include info</amin:param>
+		<amin:shell name='dir'>/opt</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>lib man/man1 man/man2 man/man3 man/man4 man/man5 man/man6 man/man7 man/man8</amin:param>
+		<amin:shell name='dir'>/opt</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>chown</amin:param>
+		<amin:param>0750 /root</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		 <amin:shell name='dir'>/</amin:shell>
+	</amin:command>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>chown</amin:param>
+		<amin:param>1777 /tmp /var/tmp</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		 <amin:shell name='dir'>/</amin:shell>
+	</amin:command>
+
+</amin:chroot>
+
+</amin:profile>

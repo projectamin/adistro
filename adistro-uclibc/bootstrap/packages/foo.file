@@ -1,0 +1,3 @@
+
+#undef STARTFILE_PREFIX_SPEC
+#define STARTFILE_PREFIX_SPEC "/tools/lib/"

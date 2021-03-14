@@ -1,0 +1,148 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Gcc-pass2-->
+
+<!--grabbing packages-->
+
+	<amin:download>
+		<amin:param name='uri'>ftp://mirror.aarnet.edu.au/pub/gcc/releases/gcc-3.4.4/gcc-core-3.4.4.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-core-3.4.4.tar.bz2</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://mirror.aarnet.edu.au/pub/gcc/releases/gcc-3.4.4/gcc-g++-3.4.4.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-g++-3.4.4.tar.bz2</amin:param>
+        </amin:download>
+
+<!--grabbing patches -->
+        
+        <amin:download>
+		<amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/gcc-3.4.4-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-3.4.4-STEP.patch</amin:param>
+        </amin:download>
+ 
+<!--running install-->
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gcc-core-3.4.4.tar.bz2</amin:param>
+	</amin:command>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/gcc-g++-3.4.4.tar.bz2</amin:param>
+        </amin:command>
+
+	<amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/opt/adistro/packages/gcc-3.4.4-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gcc-3.4.4</amin:shell>
+        </amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+<amin:chroot dir="/opt/adistro">
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>/System/Library/Libraries/Glibc-2.3.4/sbin/ldconfig</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Library/Tools:/System/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-3.4.4/configure</amin:param>
+		<amin:flag>
+			with-local-prefix=/System/Applications/GCC-3.4.4/
+			prefix=/System/Applications/GCC-3.4.4/
+			includedir=/System/Library/Headers/
+			enable-clocale=gnu 
+			enable-shared
+			enable-threads=posix
+			enable-__cxa_atexit 
+			enable-languages=c,c++
+			disable-libstdcxx-pch
+		</amin:flag>
+		<amin:shell name='dir'>/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/System/Library/Tools:/System/Tools:/System/AdminTools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>bootstrap</amin:param>
+		<amin:shell name='dir'>/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/System/AdminTools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/System/Library/Tools:/System/Tools:/System/AdminTools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>gcc-build gcc-3.4.4</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build</amin:shell>
+	</amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/i686-pc-linux-gnu-g++</amin:param>
+                <amin:param name='target'>i686-pc-linux-gnu-g++</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/i686-pc-linux-gnu-c++</amin:param>
+                <amin:param name='target'>i686-pc-linux-gnu-c++</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/g++</amin:param>
+                <amin:param name='target'>g++</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/c++</amin:param>
+                <amin:param name='target'>c++</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/cpp</amin:param>
+                <amin:param name='target'>cpp</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/gcc</amin:param>
+                <amin:param name='target'>gcc</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/gccbug</amin:param>
+                <amin:param name='target'>gccbug</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-3.4.4/bin/gcov</amin:param>
+                <amin:param name='target'>gcov</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+
+</amin:profile>

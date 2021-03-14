@@ -1,0 +1,27 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--nano-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.nano-editor.org/dist/v1.2/nano-1.2.4.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/nano-1.2.4.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/nano-1.2.4-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/nano-1.2.4-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/nano-1.2.4.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>../../packages/nano-1.2.4-STEP.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/nano-1.2.4</amin:shell>
+        </amin:command>
+</amin:profile>

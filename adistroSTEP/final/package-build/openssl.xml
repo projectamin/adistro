@@ -1,0 +1,66 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--openssl-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.openssl.org/source/openssl-0.9.7g.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/openssl-0.9.7g.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/openssl-0.9.7g-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/openssl-0.9.7g-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/openssl-0.9.7g.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/openssl-0.9.7g-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/openssl-0.9.7g</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='system_command'>
+		<amin:param name='basename'>./config</amin:param>
+                <amin:param>--prefix=/System/Library/Libraries/OpenSSL-0.9.7g</amin:param>
+                <amin:shell name='dir'>/build/openssl-0.9.7g</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell> 
+       </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/openssl-0.9.7g</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/openssl-0.9.7g</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">openssl-0.9.7g</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <!--<amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/OpenSSL-0.9.7g/bin/sed</amin:param>
+                <amin:param name='target'>sed</amin:param>
+                <amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+        </amin:command>-->
+
+</amin:chroot>
+</amin:profile>

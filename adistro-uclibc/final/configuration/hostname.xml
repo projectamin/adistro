@@ -1,0 +1,17 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--hostname-mod-me-to-suite-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='textdump'>
+		<amin:param name='content'>
+HOSTNAME=machine
+		</amin:param>
+                <amin:param name='target'>/etc/hostname</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		<amin:shell name='dir'>/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

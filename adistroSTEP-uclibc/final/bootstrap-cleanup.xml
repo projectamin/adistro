@@ -1,0 +1,8 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--removing the bootstrap files ....no longer required-->
+        
+	<amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>/opt/adistro/bootstrap/ /opt/adistro/packages/ /opt/adistro/build</amin:param>
+        </amin:command>
+</amin:profile>

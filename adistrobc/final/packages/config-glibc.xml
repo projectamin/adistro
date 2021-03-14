@@ -1,0 +1,48 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<amin:chroot dir='/opt/adistrobc/'>
+<!--Config Glibc-->
+
+	<amin:command name='textdump'>
+                <amin:param name='target'>nsswitch.conf</amin:param>
+                <amin:param name='content'># Begin /etc/nsswitch.conf
+					   passwd: files
+					   group: files
+					   shadow: files
+					   
+					   publickey: files
+					   
+					   hosts: files dns
+					   networks: files
+					   
+					   protocols: db files
+					   services: db files
+					   ethers: db files
+					   rpc: db files
+					   
+					   netgroup: db files
+					   
+					   # End /etc/nsswitch.conf</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/usr/share/zoneinfo/EST5EDT</amin:param>
+                <amin:param name='target'>localtime</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name='dir'>/etc</amin:shell>
+	</amin:command>
+
+<!--setup ldso-->
+
+<amin:command name='textdump'>
+	<amin:param name='target'>ld.so.conf</amin:param>
+	<amin:param name='content'>/usr/local/lib</amin:param>
+	<amin:shell name='dir'>/etc</amin:shell>
+</amin:command>
+<amin:command name='system_command'>
+	<amin:param name='basename'>ldconfig</amin:param>
+	<amin:flag>v</amin:flag>
+</amin:command>
+
+</amin:chroot>
+</amin:profile>

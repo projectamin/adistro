@@ -1,0 +1,3022 @@
+diff -urN ncurses-5.4/ANNOUNCE ncurses-5.4-STEP/ANNOUNCE
+--- ncurses-5.4/ANNOUNCE	2004-01-18 14:28:25.000000000 +1300
++++ ncurses-5.4-STEP/ANNOUNCE	2005-08-24 03:01:43.617419208 +1200
+@@ -346,7 +346,7 @@
+        environment  variable  and/or  a ~/.termcap local entries file and
+        converts   it   to   an   equivalent  local  terminfo  tree  under
+        $HOME/.terminfo.
+-     * Automatic  fallback  to  the  /etc/termcap file can be compiled in
++     * Automatic  fallback  to  the  /System/Settings/termcap file can be compiled in
+        when  it is not possible to build a terminfo tree. This feature is
+        neither  fast  nor cheap, you don't want to use it unless you have
+        to, but it's there.
+diff -urN ncurses-5.4/Ada95/Makefile.in ncurses-5.4-STEP/Ada95/Makefile.in
+--- ncurses-5.4/Ada95/Makefile.in	2003-10-26 04:39:18.000000000 +1300
++++ ncurses-5.4-STEP/Ada95/Makefile.in	2005-08-24 03:01:23.926412696 +1200
+@@ -31,7 +31,7 @@
+ #  Version Control
+ #  $Revision: 1.15 $
+ #
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ SUBDIRS         = @ADA_SUBDIRS@
+diff -urN ncurses-5.4/Ada95/gen/Makefile.in ncurses-5.4-STEP/Ada95/gen/Makefile.in
+--- ncurses-5.4/Ada95/gen/Makefile.in	2003-10-26 04:39:18.000000000 +1300
++++ ncurses-5.4-STEP/Ada95/gen/Makefile.in	2005-08-24 03:01:23.930412088 +1200
+@@ -33,7 +33,7 @@
+ #
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ x		= @PROG_EXT@
+diff -urN ncurses-5.4/Ada95/samples/Makefile.in ncurses-5.4-STEP/Ada95/samples/Makefile.in
+--- ncurses-5.4/Ada95/samples/Makefile.in	2003-10-26 04:39:18.000000000 +1300
++++ ncurses-5.4-STEP/Ada95/samples/Makefile.in	2005-08-24 03:01:23.934411480 +1200
+@@ -33,7 +33,7 @@
+ #
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ x		= @PROG_EXT@
+diff -urN ncurses-5.4/Ada95/src/Makefile.in ncurses-5.4-STEP/Ada95/src/Makefile.in
+--- ncurses-5.4/Ada95/src/Makefile.in	2003-10-26 04:39:18.000000000 +1300
++++ ncurses-5.4-STEP/Ada95/src/Makefile.in	2005-08-24 03:01:23.938410872 +1200
+@@ -33,7 +33,7 @@
+ #
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ MODEL		= ../../@DFT_OBJ_SUBDIR@
+diff -urN ncurses-5.4/INSTALL ncurses-5.4-STEP/INSTALL
+--- ncurses-5.4/INSTALL	2004-02-08 10:06:05.000000000 +1300
++++ ncurses-5.4-STEP/INSTALL	2005-08-24 03:01:43.673410696 +1200
+@@ -147,7 +147,7 @@
+ 
+     You can make curses and terminfo fall back to an existing file of termcap
+     definitions by configuring with --enable-termcap.  If you do this, the
+-    library will search /etc/termcap before the terminfo database, and will
++    library will search /System/Settings/termcap before the terminfo database, and will
+     also interpret the contents of the TERM environment variable.  See the
+     section BSD CONVERSION NOTES below.
+ 
+@@ -383,13 +383,13 @@
+ 	Use the 4.4BSD getcap code if available, or a bundled version of it to
+ 	fetch termcap entries.  Entries read in this way cannot use (make
+ 	cross-references to) the terminfo tree, but it is faster than reading
+-	/etc/termcap.
++	/System/Settings/termcap.
+ 
+     --enable-getcap-cache
+ 	Cache translated termcaps under the directory $HOME/.terminfo
+ 
+ 	NOTE:  this sounds good - it makes ncurses run faster the second time. 
+-	But look where the data comes from - an /etc/termcap containing lots of
++	But look where the data comes from - an /System/Settings/termcap containing lots of
+ 	entries that are not up to date.  If you configure with this option and
+ 	forget to install the terminfo database before running an ncurses
+ 	application, you will end up with a hidden terminfo database that
+@@ -566,7 +566,7 @@
+ 
+ 	If a parameter value is given, it must be the full pathname of the
+ 	particular version of libtool, e.g.,
+-		/usr/bin/libtool-1.2.3
++		/System/Tools/libtool-1.2.3
+ 
+     --with-manpage-aliases
+ 	Tell the configure script you wish to create entries in the
+@@ -665,7 +665,7 @@
+ 
+     --with-termpath=XXX
+ 	Specify a search-list of termcap files which will be compiled into the
+-	ncurses library (default:  /etc/termcap:/usr/share/misc/termcap)
++	ncurses library (default:  /System/Settings/termcap:/usr/share/misc/termcap)
+ 
+     --with-trace
+ 	Configure the trace() function as part of the all models of the ncurses
+@@ -1018,7 +1018,7 @@
+ 	Note that if you have $TERMCAP set, ncurses will use that value
+ 	to locate termcap data.  In particular, running from xterm will
+ 	set $TERMCAP to the contents of the xterm's termcap entry.
+-	If ncurses sees that, it will not examine /etc/termcap.
++	If ncurses sees that, it will not examine /System/Settings/termcap.
+ 
+     Keyboard Mapping:
+ 
+@@ -1040,7 +1040,7 @@
+ 	be called `console'.
+ 
+ 	Please pick a name unique to your console driver and set that up
+-	in the /etc/inittab table or local equivalent.  Send the entry to the
++	in the /System/Settings/inittab table or local equivalent.  Send the entry to the
+ 	terminfo maintainer (listed in the misc/terminfo file) to be included
+ 	in the terminfo file, if it's not already there.  See the
+ 	term(7) manual page included with this distribution for more on
+diff -urN ncurses-5.4/Makefile.in ncurses-5.4-STEP/Makefile.in
+--- ncurses-5.4/Makefile.in	2001-10-28 07:17:22.000000000 +1300
++++ ncurses-5.4-STEP/Makefile.in	2005-08-24 03:01:30.341437464 +1200
+@@ -31,7 +31,7 @@
+ #
+ # Master Makefile for ncurses library.
+ 
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ 
+ DESTDIR=@DESTDIR@
+ CF_MFLAGS = @cf_cv_makeflags@ DESTDIR="$(DESTDIR)"
+@@ -74,10 +74,10 @@
+ 	@ test "$(includedir)" = "$(prefix)/include" || \
+ 		echo '** Include-directory is not in a standard location'
+ 	@ test ! -f $(includedir)/termcap.h || \
+-		fgrep NCURSES_VERSION $(includedir)/termcap.h >/dev/null || \
++		fgrep NCURSES_VERSION $(includedir)/termcap.h >/System/Devices/null || \
+ 		echo '** Will overwrite non-ncurses termcap.h'
+ 	@ test ! -f $(includedir)/curses.h || \
+-		fgrep NCURSES_VERSION $(includedir)/curses.h >/dev/null || \
++		fgrep NCURSES_VERSION $(includedir)/curses.h >/System/Devices/null || \
+ 		echo '** Will overwrite non-ncurses curses.h'
+ 
+ # Put the common rules here so that we can easily construct the list of
+diff -urN ncurses-5.4/NEWS ncurses-5.4-STEP/NEWS
+--- ncurses-5.4/NEWS	2004-02-09 10:15:26.000000000 +1300
++++ ncurses-5.4-STEP/NEWS	2005-08-24 03:02:00.432862872 +1200
+@@ -1418,7 +1418,7 @@
+ 	+ modify configure script to allow building with termcap only, or with
+ 	  fallbacks only.  In this case, we do not build tic and toe.
+ 	+ add configure --with-termpath option, to override default TERMPATH
+-	  value of /etc/termcap:/usr/share/misc/termcap.
++	  value of /System/Settings/termcap:/usr/share/misc/termcap.
+ 	+ cosmetic change to tack: make menu descriptions agree with menu
+ 	  titles.
+ 
+@@ -1831,7 +1831,7 @@
+ 
+ 20010303
+ 	+ modify interface of _nc_get_token() to pass 'silent' parameter to it,
+-	  to make quieter loading of /etc/termcap (patch by Todd C Miller).
++	  to make quieter loading of /System/Settings/termcap (patch by Todd C Miller).
+ 	+ correct a few typos in curs_slk.3x and curs_outopts.3x manpages
+ 	  (patch by Todd C Miller).
+ 
+@@ -2107,7 +2107,7 @@
+ 	+ using parameter check added to tic, corrected 27 typos in
+ 	  terminfo.src -TD
+ 	+ modify tic to verify that its inputs are really files, in case
+-	  someone tries to read a directory (or /dev/zero).
++	  someone tries to read a directory (or /System/Devices/zero).
+ 	+ add a check for empty buffers returned by fgets() in comp_scan.c
+ 	  next_char() function, in case tic is run on a non-text file (fixes
+ 	  a core dump reported by Aaron Campbell <aaron@cs.dal.ca>).
+@@ -2486,7 +2486,7 @@
+ 	  (patch by Daniel Weaver).
+ 	+ modify gdc.c to recognize 'q' for quit, 's' for single-step and ' '
+ 	  for resume.  Add '-n' option to force gdc's standard input to
+-	  /dev/null, to both illustrate the use of newterm() for specifying
++	  /System/Devices/null, to both illustrate the use of newterm() for specifying
+ 	  alternate inputs as well as for testing signal handling.
+ 	+ minor fix for configure option --with-manpage-symlinks, for target
+ 	  directories that contain a period ('.') (reported by Larry Virden).
+@@ -4354,7 +4354,7 @@
+ 	+ change getcap-cache ifdef's to eliminate unnecessary chdir/mkdir
+ 	  when that feature is not configured.
+ 	+ remove _nc_err_abort() calls when write_entry.c finds a directory but
+-	  cannot write to it, e.g., when translating part/all of /etc/termcap
++	  cannot write to it, e.g., when translating part/all of /System/Settings/termcap
+ 	  (reported by Andreas Jaeger <aj@arthur.rhein-neckar.de>).
+ 	  (this dates back to 951102, in 1.9.7a).
+ 	+ minor ifdef fixes to compile with atac and glibc 2.0.5c
+@@ -4822,7 +4822,7 @@
+ 	+ modify tset to behave more like SVr4's tset, which does not modify
+ 	  the settings of intr, quit or erase unless they are given as command
+ 	  options (reported by Nelson H. F. Beebe <beebe@math.utah.edu>).
+-	+ modify tset to look in /etc/ttys or /etc/ttytype if the configuration
++	+ modify tset to look in /System/Settings/ttys or /System/Settings/ttytype if the configuration
+ 	  does not have getttynam().
+ 	+ extend baudrate table in tset.c to match baudrate() function.
+ 	+ add table entries for 230400 and 460800 bd to baudrate() function.
+@@ -5888,7 +5888,7 @@
+ 	  msgwin needed scrollok set.
+ 	+ corrected last change to IDcTransformLine logic to avoid conflict
+ 	  between PutRange and InsStr
+-	+ modified run_tic.sh to not use /usr/tmp (reported by David
++	+ modified run_tic.sh to not use /usr/System/TemporaryFiles (reported by David
+ 	  MacKenzie), and further revised it and aclocal.m4 to use $TMPDIR if
+ 	  set.
+ 	+ corrected off-by-one in RoomFor call in read_entry.c
+@@ -6558,7 +6558,7 @@
+ * Addition of several missing functions.
+ * No more crashes if screen size is undefined (use SIGWINCH handler).
+ * added a handler to cleanup after SIGSEGV (hopefully never needed).
+-* changed SRCDIR from /etc/term to /usr/lib/terminfo.
++* changed SRCDIR from /System/Settings/term to /usr/lib/terminfo.
+ * renamed compile/dump to tic/untic.
+ * New scrolling code.
+ * fixed bug that reversed the sense of nl() and nonl().
+diff -urN ncurses-5.4/README ncurses-5.4-STEP/README
+--- ncurses-5.4/README	2003-02-09 08:36:39.000000000 +1300
++++ ncurses-5.4-STEP/README	2005-08-24 03:01:43.863381816 +1200
+@@ -75,11 +75,11 @@
+ capabilities.
+ 
+ In older (V7/BSD) versions of curses, the database was a flat text file,
+-/etc/termcap; in newer (USG/USL) versions, the database is a hierarchy of
++/System/Settings/termcap; in newer (USG/USL) versions, the database is a hierarchy of
+ fast-loading binary description blocks under /usr/lib/terminfo.  These binary
+ blocks are compiled from an improved editable text representation called
+ `terminfo' format (documented in man/terminfo.5).  The ncurses library can use
+-either /etc/termcap or the compiled binary terminfo blocks, but prefers the
++either /System/Settings/termcap or the compiled binary terminfo blocks, but prefers the
+ second form.
+ 
+ In the `misc' directory, there is a text file terminfo.src, in editable
+diff -urN ncurses-5.4/aclocal.m4 ncurses-5.4-STEP/aclocal.m4
+--- ncurses-5.4/aclocal.m4	2004-01-31 09:59:56.000000000 +1300
++++ ncurses-5.4-STEP/aclocal.m4	2005-08-24 03:02:00.496853144 +1200
+@@ -324,7 +324,7 @@
+ do
+ 	cf_dir=`eval echo $cf_symbol`
+ 	if test -f $cf_dir/curses.h ; then
+-	if ( fgrep NCURSES_VERSION $cf_dir/curses.h 2>&1 >/dev/null ) ; then
++	if ( fgrep NCURSES_VERSION $cf_dir/curses.h 2>&1 >/System/Devices/null ) ; then
+ 		includedir="$cf_symbol"
+ 		test -n "$verbose"  && echo $ac_n "	found " 1>&AC_FD_MSG
+ 		break
+@@ -377,9 +377,9 @@
+ 	ifelse([$1],,[AC_CANONICAL_HOST],[$1])
+ 	system_name="$host_os"
+ else
+-	system_name="`(uname -s -r) 2>/dev/null`"
++	system_name="`(uname -s -r) 2>/System/Devices/null`"
+ 	if test -z "$system_name" ; then
+-		system_name="`(hostname) 2>/dev/null`"
++		system_name="`(hostname) 2>/System/Devices/null`"
+ 	fi
+ fi
+ test -n "$system_name" && AC_DEFINE_UNQUOTED(SYSTEM_NAME,"$system_name")
+@@ -1365,7 +1365,7 @@
+ dnl ( generating this script makes the makefiles a little tidier :-)
+ echo creating headers.sh
+ cat >headers.sh <<CF_EOF
+-#! /bin/sh
++#! /System/Tools/sh
+ # This shell script is generated by the 'configure' script.  It is invoked in a
+ # subdirectory of the build tree.  It generates a sed-script in the parent
+ # directory that is used to adjust includes for header files that reside in a
+@@ -1378,8 +1378,8 @@
+ DST=\[$]1
+ REF=\[$]2
+ SRC=\[$]3
+-TMPSRC=\${TMPDIR-/tmp}/\`basename \$SRC\`\$\$
+-TMPSED=\${TMPDIR-/tmp}/headers.sed\$\$
++TMPSRC=\${TMPDIR-/System/TemporaryFiles}/\`basename \$SRC\`\$\$
++TMPSED=\${TMPDIR-/System/TemporaryFiles}/headers.sed\$\$
+ echo installing \$SRC in \$DST
+ CF_EOF
+ if test $WITH_CURSES_H = yes; then
+@@ -1557,7 +1557,7 @@
+ EOF
+ 	if AC_TRY_EVAL(ac_compile) ; then
+ 		mv conftest.o data.o && \
+-		( $AR $AR_OPTS conftest.a data.o ) 2>&AC_FD_CC 1>/dev/null
++		( $AR $AR_OPTS conftest.a data.o ) 2>&AC_FD_CC 1>/System/Devices/null
+ 	fi
+ 	rm -f conftest.$ac_ext data.o
+ 	cat >conftest.$ac_ext <<EOF
+@@ -1576,10 +1576,10 @@
+ EOF
+ 	if AC_TRY_EVAL(ac_compile); then
+ 		mv conftest.o func.o && \
+-		( $AR $AR_OPTS conftest.a func.o ) 2>&AC_FD_CC 1>/dev/null
++		( $AR $AR_OPTS conftest.a func.o ) 2>&AC_FD_CC 1>/System/Devices/null
+ 	fi
+ 	rm -f conftest.$ac_ext func.o
+-	( eval $RANLIB conftest.a ) 2>&AC_FD_CC >/dev/null
++	( eval $RANLIB conftest.a ) 2>&AC_FD_CC >/System/Devices/null
+ 	cf_saveLIBS="$LIBS"
+ 	LIBS="conftest.a $LIBS"
+ 	AC_TRY_RUN([
+@@ -1673,14 +1673,14 @@
+ 	for cf_option in '-$(MAKEFLAGS)' '$(MFLAGS)'
+ 	do
+ 		cat >cf_makeflags.tmp <<CF_EOF
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ all :
+ 	@ echo '.$cf_option'
+ CF_EOF
+-		cf_result=`${MAKE-make} -k -f cf_makeflags.tmp 2>/dev/null`
++		cf_result=`${MAKE-make} -k -f cf_makeflags.tmp 2>/System/Devices/null`
+ 		case "$cf_result" in
+ 		.*k)
+-			cf_result=`${MAKE-make} -k -f cf_makeflags.tmp CC=cc 2>/dev/null`
++			cf_result=`${MAKE-make} -k -f cf_makeflags.tmp CC=cc 2>/System/Devices/null`
+ 			case "$cf_result" in
+ 			.*CC=*)	cf_cv_makeflags=
+ 				;;
+@@ -1856,7 +1856,7 @@
+   ;;
+ .|.yes)
+   # Debian 'man' program?
+-  if test -f /etc/debian_version ; then
++  if test -f /System/Settings/debian_version ; then
+     MANPAGE_RENAMES=`cd $srcdir && pwd`/man/man_db.renames
+   else
+     MANPAGE_RENAMES=no
+@@ -1995,7 +1995,7 @@
+ cf_edit_man=man/edit_man.sh
+ 
+ cat >$cf_edit_man <<CF_EOF
+-#! /bin/sh
++#! /System/Tools/sh
+ # this script is generated by the configure-script CF_MAN_PAGES macro.
+ prefix="$cf_prefix"
+ datadir="$datadir"
+@@ -2006,7 +2006,7 @@
+ INSTALL_DATA="$INSTALL_DATA"
+ transform="$program_transform_name"
+ 
+-TMP=\${TMPDIR-/tmp}/man\$\$
++TMP=\${TMPDIR-/System/TemporaryFiles}/man\$\$
+ trap "rm -f \$TMP" 0 1 2 5 15
+ 
+ form=\[$]1
+@@ -2515,9 +2515,9 @@
+ else
+ case "$cf_cv_system_name" in #(vi
+ freebsd*) #(vi
+-  test -z "$LDCONFIG" && LDCONFIG="/sbin/ldconfig -R"
++  test -z "$LDCONFIG" && LDCONFIG="/System/AdminTools/ldconfig -R"
+   ;;
+-*) LDPATH=$PATH:/sbin:/usr/sbin
++*) LDPATH=$PATH:/sbin:/System/AdminTools
+   AC_PATH_PROG(LDCONFIG,ldconfig,,$LDPATH)
+   ;;
+ esac
+@@ -3397,7 +3397,7 @@
+ dnl But that still does not work properly since the macro is expanded outside
+ dnl the CF_WITH_LIBTOOL macro:
+ dnl
+-dnl	#!/bin/sh
++dnl	#!/System/Tools/sh
+ dnl	ACLOCAL=`aclocal --print-ac-dir`
+ dnl	if test -z "$ACLOCAL" ; then
+ dnl		echo cannot find aclocal directory
+@@ -3606,7 +3606,7 @@
+ dnl If we can compile with sysmouse, make it available unless it is not wanted.
+ AC_DEFUN([CF_WITH_SYSMOUSE],[
+ # not everyone has "test -c"
+-if test -c /dev/sysmouse 2>/dev/null ; then
++if test -c /System/Devices/sysmouse 2>/System/Devices/null ; then
+ AC_MSG_CHECKING(if you want to use sysmouse)
+ AC_ARG_WITH(sysmouse,
+ 	[  --with-sysmouse         use sysmouse (FreeBSD console)],
+diff -urN ncurses-5.4/announce.html.in ncurses-5.4-STEP/announce.html.in
+--- ncurses-5.4/announce.html.in	2004-01-18 14:27:26.000000000 +1300
++++ ncurses-5.4-STEP/announce.html.in	2005-08-24 03:01:43.889377864 +1200
+@@ -421,7 +421,7 @@
+ transition from termcap to terminfo.  It gathers the information in a
+ TERMCAP environment variable and/or a ~/.termcap local entries file
+ and converts it to an equivalent local terminfo tree under $HOME/.terminfo.
+-<LI>Automatic fallback to the /etc/termcap file can be compiled in
++<LI>Automatic fallback to the /System/Settings/termcap file can be compiled in
+ when it is not possible to build a terminfo tree.  This feature is neither
+ fast nor cheap, you don't want to use it unless you have to,
+ but it's there.
+diff -urN ncurses-5.4/c++/Makefile.in ncurses-5.4-STEP/c++/Makefile.in
+--- ncurses-5.4/c++/Makefile.in	2004-01-17 11:44:56.000000000 +1300
++++ ncurses-5.4-STEP/c++/Makefile.in	2005-08-24 03:01:24.035396128 +1200
+@@ -34,7 +34,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ 
+ CF_MFLAGS 	= @cf_cv_makeflags@
+ @SET_MAKE@
+diff -urN ncurses-5.4/c++/edit_cfg.sh ncurses-5.4-STEP/c++/edit_cfg.sh
+--- ncurses-5.4/c++/edit_cfg.sh	2003-12-21 02:14:25.000000000 +1300
++++ ncurses-5.4-STEP/c++/edit_cfg.sh	2005-08-24 03:01:30.604397488 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: edit_cfg.sh,v 1.13 2003/12/20 13:14:25 tom Exp $
+ ##############################################################################
+ # Copyright (c) 1998-2001,2003 Free Software Foundation, Inc.                #
+@@ -52,7 +52,7 @@
+ do
+ 	rm -f $2.bak
+ 	mv $2 $2.bak
+-	if ( grep "[ 	]$name[ 	]1" $1 2>&1 >/dev/null)
++	if ( grep "[ 	]$name[ 	]1" $1 2>&1 >/System/Devices/null)
+ 	then
+ 		value=1
+ 		sed -e 's/define '$name'.*$/define '$name' 1/' $2.bak >$2
+diff -urN ncurses-5.4/config.guess ncurses-5.4-STEP/config.guess
+--- ncurses-5.4/config.guess	2004-01-07 13:58:42.000000000 +1300
++++ ncurses-5.4-STEP/config.guess	2005-08-24 03:02:00.506851624 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Attempt to guess a canonical system name.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+ #   2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+@@ -101,10 +101,10 @@
+ # Portable tmp directory creation inspired by the Autoconf team.
+ 
+ set_cc_for_build='
+-trap "exitcode=\$?; (rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null) && exit \$exitcode" 0 ;
+-trap "rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null; exit 1" 1 2 13 15 ;
+-: ${TMPDIR=/tmp} ;
+- { tmp=`(umask 077 && mktemp -d -q "$TMPDIR/cgXXXXXX") 2>/dev/null` && test -n "$tmp" && test -d "$tmp" ; } ||
++trap "exitcode=\$?; (rm -f \$tmpfiles 2>/System/Devices/null; rmdir \$tmp 2>/System/Devices/null) && exit \$exitcode" 0 ;
++trap "rm -f \$tmpfiles 2>/System/Devices/null; rmdir \$tmp 2>/System/Devices/null; exit 1" 1 2 13 15 ;
++: ${TMPDIR=/System/TemporaryFiles} ;
++ { tmp=`(umask 077 && mktemp -d -q "$TMPDIR/cgXXXXXX") 2>/System/Devices/null` && test -n "$tmp" && test -d "$tmp" ; } ||
+  { test -n "$RANDOM" && tmp=$TMPDIR/cg$$-$RANDOM && (umask 077 && mkdir $tmp) ; } ||
+  { tmp=$TMPDIR/cg-$$ && (umask 077 && mkdir $tmp) && echo "Warning: creating insecure temp directory" >&2 ; } ||
+  { echo "$me: cannot create a temporary directory in $TMPDIR" >&2 ; exit 1 ; } ;
+@@ -113,7 +113,7 @@
+ case $CC_FOR_BUILD,$HOST_CC,$CC in
+  ,,)    echo "int x;" > $dummy.c ;
+ 	for c in cc gcc c89 c99 ; do
+-	  if ($c -c -o $dummy.o $dummy.c) >/dev/null 2>&1 ; then
++	  if ($c -c -o $dummy.o $dummy.c) >/System/Devices/null 2>&1 ; then
+ 	     CC_FOR_BUILD="$c"; break ;
+ 	  fi ;
+ 	done ;
+@@ -127,14 +127,14 @@
+ 
+ # This is needed to find uname on a Pyramid OSx when run in the BSD universe.
+ # (ghazi@noc.rutgers.edu 1994-08-24)
+-if (test -f /.attbin/uname) >/dev/null 2>&1 ; then
++if (test -f /.attbin/uname) >/System/Devices/null 2>&1 ; then
+ 	PATH=$PATH:/.attbin ; export PATH
+ fi
+ 
+-UNAME_MACHINE=`(uname -m) 2>/dev/null` || UNAME_MACHINE=unknown
+-UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+-UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
+-UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
++UNAME_MACHINE=`(uname -m) 2>/System/Devices/null` || UNAME_MACHINE=unknown
++UNAME_RELEASE=`(uname -r) 2>/System/Devices/null` || UNAME_RELEASE=unknown
++UNAME_SYSTEM=`(uname -s) 2>/System/Devices/null`  || UNAME_SYSTEM=unknown
++UNAME_VERSION=`(uname -v) 2>/System/Devices/null` || UNAME_VERSION=unknown
+ 
+ # Note: order is significant - the case branches are not exclusive.
+ 
+@@ -151,8 +151,8 @@
+ 	# Note: NetBSD doesn't particularly care about the vendor
+ 	# portion of the name.  We always set it to "unknown".
+ 	sysctl="sysctl -n hw.machine_arch"
+-	UNAME_MACHINE_ARCH=`(/sbin/$sysctl 2>/dev/null || \
+-	    /usr/sbin/$sysctl 2>/dev/null || echo unknown)`
++	UNAME_MACHINE_ARCH=`(/System/AdminTools/$sysctl 2>/System/Devices/null || \
++	    /System/AdminTools/$sysctl 2>/System/Devices/null || echo unknown)`
+ 	case "${UNAME_MACHINE_ARCH}" in
+ 	    armeb) machine=armeb-unknown ;;
+ 	    arm*) machine=arm-unknown ;;
+@@ -165,8 +165,8 @@
+ 	case "${UNAME_MACHINE_ARCH}" in
+ 	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
+ 		eval $set_cc_for_build
+-		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
+-			| grep __ELF__ >/dev/null
++		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/System/Devices/null \
++			| grep __ELF__ >/System/Devices/null
+ 		then
+ 		    # Once all utilities can be ECOFF (netbsdecoff) or a.out (netbsdaout).
+ 		    # Return netbsd for either.  FIX?
+@@ -241,13 +241,13 @@
+ 	exit 0 ;;
+     alpha:OSF1:*:*)
+ 	if test $UNAME_RELEASE = "V4.0"; then
+-		UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $3}'`
++		UNAME_RELEASE=`/System/AdminTools/sizer -v | awk '{print $3}'`
+ 	fi
+-	# According to Compaq, /usr/sbin/psrinfo has been available on
++	# According to Compaq, /System/AdminTools/psrinfo has been available on
+ 	# OSF/1 and Tru64 systems produced since 1995.  I hope that
+ 	# covers most systems running today.  This code pipes the CPU
+ 	# types through head -n 1, so we only detect the type of CPU 0.
+-	ALPHA_CPU_TYPE=`/usr/sbin/psrinfo -v | sed -n -e 's/^  The alpha \(.*\) processor.*$/\1/p' | head -n 1`
++	ALPHA_CPU_TYPE=`/System/AdminTools/psrinfo -v | sed -n -e 's/^  The alpha \(.*\) processor.*$/\1/p' | head -n 1`
+ 	case "$ALPHA_CPU_TYPE" in
+ 	    "EV4 (21064)")
+ 		UNAME_MACHINE="alpha" ;;
+@@ -321,7 +321,7 @@
+ 	exit 0;;
+     Pyramid*:OSx*:*:* | MIS*:OSx*:*:* | MIS*:SMP_DC-OSx*:*:*)
+ 	# akee@wpdis03.wpafb.af.mil (Earle F. Ake) contributed MIS and NILE.
+-	if test "`(/bin/universe) 2>/dev/null`" = att ; then
++	if test "`(/System/Tools/universe) 2>/System/Devices/null`" = att ; then
+ 		echo pyramid-pyramid-sysv3
+ 	else
+ 		echo pyramid-pyramid-bsd
+@@ -334,7 +334,7 @@
+ 	echo sparc-icl-nx6
+ 	exit 0 ;;
+     DRS?6000:UNIX_SV:4.2*:7*)
+-	case `/usr/bin/uname -p` in
++	case `/System/Tools/uname -p` in
+ 	    sparc) echo sparc-icl-nx7 && exit 0 ;;
+ 	esac ;;
+     sun4H:SunOS:5.*:*)
+@@ -353,7 +353,7 @@
+ 	echo sparc-sun-solaris3`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+ 	exit 0 ;;
+     sun4*:SunOS:*:*)
+-	case "`/usr/bin/arch -k`" in
++	case "`/System/Tools/arch -k`" in
+ 	    Series*|S4*)
+ 		UNAME_RELEASE=`uname -v`
+ 		;;
+@@ -365,9 +365,9 @@
+ 	echo m68k-sun-sunos${UNAME_RELEASE}
+ 	exit 0 ;;
+     sun*:*:4.2BSD:*)
+-	UNAME_RELEASE=`(sed 1q /etc/motd | awk '{print substr($5,1,3)}') 2>/dev/null`
++	UNAME_RELEASE=`(sed 1q /System/Settings/motd | awk '{print substr($5,1,3)}') 2>/System/Devices/null`
+ 	test "x${UNAME_RELEASE}" = "x" && UNAME_RELEASE=3
+-	case "`/bin/arch`" in
++	case "`/System/Tools/arch`" in
+ 	    sun3)
+ 		echo m68k-sun-sunos${UNAME_RELEASE}
+ 		;;
+@@ -471,7 +471,7 @@
+ 	exit 0 ;;
+     AViiON:dgux:*:*)
+         # DG/UX returns AViiON for all architectures
+-        UNAME_PROCESSOR=`/usr/bin/uname -p`
++        UNAME_PROCESSOR=`/System/Tools/uname -p`
+ 	if [ $UNAME_PROCESSOR = mc88100 ] || [ $UNAME_PROCESSOR = mc88110 ]
+ 	then
+ 	    if [ ${TARGET_BINARY_INTERFACE}x = m88kdguxelfx ] || \
+@@ -508,15 +508,15 @@
+ 	echo i386-ibm-aix
+ 	exit 0 ;;
+     ia64:AIX:*:*)
+-	if [ -x /usr/bin/oslevel ] ; then
+-		IBM_REV=`/usr/bin/oslevel`
++	if [ -x /System/Tools/oslevel ] ; then
++		IBM_REV=`/System/Tools/oslevel`
+ 	else
+ 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
+ 	fi
+ 	echo ${UNAME_MACHINE}-ibm-aix${IBM_REV}
+ 	exit 0 ;;
+     *:AIX:2:3)
+-	if grep bos325 /usr/include/stdio.h >/dev/null 2>&1; then
++	if grep bos325 /usr/include/stdio.h >/System/Devices/null 2>&1; then
+ 		eval $set_cc_for_build
+ 		sed 's/^		//' << EOF >$dummy.c
+ 		#include <sys/systemcfg.h>
+@@ -531,21 +531,21 @@
+ EOF
+ 		$CC_FOR_BUILD -o $dummy $dummy.c && $dummy && exit 0
+ 		echo rs6000-ibm-aix3.2.5
+-	elif grep bos324 /usr/include/stdio.h >/dev/null 2>&1; then
++	elif grep bos324 /usr/include/stdio.h >/System/Devices/null 2>&1; then
+ 		echo rs6000-ibm-aix3.2.4
+ 	else
+ 		echo rs6000-ibm-aix3.2
+ 	fi
+ 	exit 0 ;;
+     *:AIX:*:[45])
+-	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | sed 1q | awk '{ print $1 }'`
+-	if /usr/sbin/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/dev/null 2>&1; then
++	IBM_CPU_ID=`/System/AdminTools/lsdev -C -c processor -S available | sed 1q | awk '{ print $1 }'`
++	if /System/AdminTools/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/System/Devices/null 2>&1; then
+ 		IBM_ARCH=rs6000
+ 	else
+ 		IBM_ARCH=powerpc
+ 	fi
+-	if [ -x /usr/bin/oslevel ] ; then
+-		IBM_REV=`/usr/bin/oslevel`
++	if [ -x /System/Tools/oslevel ] ; then
++		IBM_REV=`/System/Tools/oslevel`
+ 	else
+ 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
+ 	fi
+@@ -578,9 +578,9 @@
+ 	    9000/31? )            HP_ARCH=m68000 ;;
+ 	    9000/[34]?? )         HP_ARCH=m68k ;;
+ 	    9000/[678][0-9][0-9])
+-		if [ -x /usr/bin/getconf ]; then
+-		    sc_cpu_version=`/usr/bin/getconf SC_CPU_VERSION 2>/dev/null`
+-                    sc_kernel_bits=`/usr/bin/getconf SC_KERNEL_BITS 2>/dev/null`
++		if [ -x /System/Tools/getconf ]; then
++		    sc_cpu_version=`/System/Tools/getconf SC_CPU_VERSION 2>/System/Devices/null`
++                    sc_kernel_bits=`/System/Tools/getconf SC_KERNEL_BITS 2>/System/Devices/null`
+                     case "${sc_cpu_version}" in
+                       523) HP_ARCH="hppa1.0" ;; # CPU_PA_RISC1_0
+                       528) HP_ARCH="hppa1.1" ;; # CPU_PA_RISC1_1
+@@ -627,7 +627,7 @@
+                   exit (0);
+               }
+ EOF
+-		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
++		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/System/Devices/null) && HP_ARCH=`$dummy`
+ 		    test -z "$HP_ARCH" && HP_ARCH=hppa
+ 		fi ;;
+ 	esac
+@@ -635,7 +635,7 @@
+ 	then
+ 	    # avoid double evaluation of $set_cc_for_build
+ 	    test -n "$CC_FOR_BUILD" || eval $set_cc_for_build
+-	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E -) | grep __LP64__ >/dev/null
++	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E -) | grep __LP64__ >/System/Devices/null
+ 	    then
+ 		HP_ARCH="hppa2.0w"
+ 	    else
+@@ -694,7 +694,7 @@
+ 	echo hppa1.0-hp-osf
+ 	exit 0 ;;
+     i*86:OSF1:*:*)
+-	if [ -x /usr/sbin/sysversion ] ; then
++	if [ -x /System/AdminTools/sysversion ] ; then
+ 	    echo ${UNAME_MACHINE}-unknown-osf1mk
+ 	else
+ 	    echo ${UNAME_MACHINE}-unknown-osf1
+@@ -773,7 +773,7 @@
+ 	LIBC=
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^LIBC=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^LIBC=`
+ 	# GNU/KFreeBSD systems have a "k" prefix to indicate we are using
+ 	# FreeBSD's kernel, but not the complete OS.
+ 	case ${LIBC} in gnu) kernel_only='k' ;; esac
+@@ -848,7 +848,7 @@
+ 	#endif
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^CPU=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^CPU=`
+ 	test x"${CPU}" != x && echo "${CPU}-unknown-linux-gnu" && exit 0
+ 	;;
+     mips64:Linux:*:*)
+@@ -867,7 +867,7 @@
+ 	#endif
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^CPU=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^CPU=`
+ 	test x"${CPU}" != x && echo "${CPU}-unknown-linux-gnu" && exit 0
+ 	;;
+     ppc:Linux:*:*)
+@@ -877,7 +877,7 @@
+ 	echo powerpc64-unknown-linux-gnu
+ 	exit 0 ;;
+     alpha:Linux:*:*)
+-	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
++	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /System/Processes/cpuinfo` in
+ 	  EV5)   UNAME_MACHINE=alphaev5 ;;
+ 	  EV56)  UNAME_MACHINE=alphaev56 ;;
+ 	  PCA56) UNAME_MACHINE=alphapca56 ;;
+@@ -886,13 +886,13 @@
+ 	  EV67)  UNAME_MACHINE=alphaev67 ;;
+ 	  EV68*) UNAME_MACHINE=alphaev68 ;;
+         esac
+-	objdump --private-headers /bin/sh | grep ld.so.1 >/dev/null
++	objdump --private-headers /System/Tools/sh | grep ld.so.1 >/System/Devices/null
+ 	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
+ 	exit 0 ;;
+     parisc:Linux:*:* | hppa:Linux:*:*)
+ 	# Look for CPU level
+-	case `grep '^cpu[^a-z]*:' /proc/cpuinfo 2>/dev/null | cut -d' ' -f2` in
++	case `grep '^cpu[^a-z]*:' /System/Processes/cpuinfo 2>/System/Devices/null | cut -d' ' -f2` in
+ 	  PA7*) echo hppa1.1-unknown-linux-gnu ;;
+ 	  PA8*) echo hppa2.0-unknown-linux-gnu ;;
+ 	  *)    echo hppa-unknown-linux-gnu ;;
+@@ -968,7 +968,7 @@
+ 	LIBC=dietlibc
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^LIBC=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^LIBC=`
+ 	test x"${LIBC}" != x && echo "${UNAME_MACHINE}-pc-linux-${LIBC}" && exit 0
+ 	test x"${TENTATIVE}" != x && echo "${TENTATIVE}" && exit 0
+ 	;;
+@@ -1008,14 +1008,14 @@
+ 	exit 0 ;;
+     i*86:*:4.*:* | i*86:SYSTEM_V:4.*:*)
+ 	UNAME_REL=`echo ${UNAME_RELEASE} | sed 's/\/MP$//'`
+-	if grep Novell /usr/include/link.h >/dev/null 2>/dev/null; then
++	if grep Novell /usr/include/link.h >/System/Devices/null 2>/System/Devices/null; then
+ 		echo ${UNAME_MACHINE}-univel-sysv${UNAME_REL}
+ 	else
+ 		echo ${UNAME_MACHINE}-pc-sysv${UNAME_REL}
+ 	fi
+ 	exit 0 ;;
+     i*86:*:5:[78]*)
+-	case `/bin/uname -X | grep "^Machine"` in
++	case `/System/Tools/uname -X | grep "^Machine"` in
+ 	    *486*)	     UNAME_MACHINE=i486 ;;
+ 	    *Pentium)	     UNAME_MACHINE=i586 ;;
+ 	    *Pent*|*Celeron) UNAME_MACHINE=i686 ;;
+@@ -1026,14 +1026,14 @@
+ 	if test -f /usr/options/cb.name; then
+ 		UNAME_REL=`sed -n 's/.*Version //p' </usr/options/cb.name`
+ 		echo ${UNAME_MACHINE}-pc-isc$UNAME_REL
+-	elif /bin/uname -X 2>/dev/null >/dev/null ; then
+-		UNAME_REL=`(/bin/uname -X|grep Release|sed -e 's/.*= //')`
+-		(/bin/uname -X|grep i80486 >/dev/null) && UNAME_MACHINE=i486
+-		(/bin/uname -X|grep '^Machine.*Pentium' >/dev/null) \
++	elif /System/Tools/uname -X 2>/System/Devices/null >/System/Devices/null ; then
++		UNAME_REL=`(/System/Tools/uname -X|grep Release|sed -e 's/.*= //')`
++		(/System/Tools/uname -X|grep i80486 >/System/Devices/null) && UNAME_MACHINE=i486
++		(/System/Tools/uname -X|grep '^Machine.*Pentium' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i586
+-		(/bin/uname -X|grep '^Machine.*Pent *II' >/dev/null) \
++		(/System/Tools/uname -X|grep '^Machine.*Pent *II' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i686
+-		(/bin/uname -X|grep '^Machine.*Pentium Pro' >/dev/null) \
++		(/System/Tools/uname -X|grep '^Machine.*Pentium Pro' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i686
+ 		echo ${UNAME_MACHINE}-pc-sco$UNAME_REL
+ 	else
+@@ -1053,7 +1053,7 @@
+ 	echo i860-intel-osf1
+ 	exit 0 ;;
+     i860:*:4.*:*) # i860-SVR4
+-	if grep Stardent /usr/include/sys/uadmin.h >/dev/null 2>&1 ; then
++	if grep Stardent /usr/include/System/SystemFS/uadmin.h >/System/Devices/null 2>&1 ; then
+ 	  echo i860-stardent-sysv${UNAME_RELEASE} # Stardent Vistra i860-SVR4
+ 	else # Add other i860-SVR4 vendors below as they are discovered.
+ 	  echo i860-unknown-sysv${UNAME_RELEASE}  # Unknown i860-SVR4
+@@ -1073,14 +1073,14 @@
+ 	test -r /sysV68 && echo 'm68k-motorola-sysv' && exit 0 ;;
+     3[345]??:*:4.0:3.0 | 3[34]??A:*:4.0:3.0 | 3[34]??,*:*:4.0:3.0 | 3[34]??/*:*:4.0:3.0 | 4400:*:4.0:3.0 | 4850:*:4.0:3.0 | SKA40:*:4.0:3.0 | SDS2:*:4.0:3.0 | SHG2:*:4.0:3.0)
+ 	OS_REL=''
+-	test -r /etc/.relid \
+-	&& OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
+-	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++	test -r /System/Settings/.relid \
++	&& OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /System/Settings/.relid`
++	/System/Tools/uname -p 2>/System/Devices/null | grep 86 >/System/Devices/null \
+ 	  && echo i486-ncr-sysv4.3${OS_REL} && exit 0
+-	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
++	/System/Tools/uname -p 2>/System/Devices/null | /System/Tools/grep entium >/System/Devices/null \
+ 	  && echo i586-ncr-sysv4.3${OS_REL} && exit 0 ;;
+     3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
+-        /bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++        /System/Tools/uname -p 2>/System/Devices/null | grep 86 >/System/Devices/null \
+           && echo i486-ncr-sysv4 && exit 0 ;;
+     m68*:LynxOS:2.*:* | m68*:LynxOS:3.0*:*)
+ 	echo m68k-unknown-lynxos${UNAME_RELEASE}
+@@ -1107,8 +1107,8 @@
+ 	echo mips-sni-sysv4
+ 	exit 0 ;;
+     *:SINIX-*:*:*)
+-	if uname -p 2>/dev/null >/dev/null ; then
+-		UNAME_MACHINE=`(uname -p) 2>/dev/null`
++	if uname -p 2>/System/Devices/null >/System/Devices/null ; then
++		UNAME_MACHINE=`(uname -p) 2>/System/Devices/null`
+ 		echo ${UNAME_MACHINE}-sni-sysv4
+ 	else
+ 		echo ns32k-sni-sysv
+@@ -1276,7 +1276,7 @@
+ #define __ARCHITECTURE__ "m68k"
+ #endif
+   int version;
+-  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/dev/null`;
++  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/System/Devices/null`;
+   if (version < 4)
+     printf ("%s-next-nextstep%d\n", __ARCHITECTURE__, version);
+   else
+@@ -1353,7 +1353,7 @@
+ }
+ EOF
+ 
+-$CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null && $dummy && exit 0
++$CC_FOR_BUILD -o $dummy $dummy.c 2>/System/Devices/null && $dummy && exit 0
+ 
+ # Apollos put the system type in the environment.
+ 
+@@ -1401,20 +1401,20 @@
+ 
+ config.guess timestamp = $timestamp
+ 
+-uname -m = `(uname -m) 2>/dev/null || echo unknown`
+-uname -r = `(uname -r) 2>/dev/null || echo unknown`
+-uname -s = `(uname -s) 2>/dev/null || echo unknown`
+-uname -v = `(uname -v) 2>/dev/null || echo unknown`
+-
+-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
+-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
+-
+-hostinfo               = `(hostinfo) 2>/dev/null`
+-/bin/universe          = `(/bin/universe) 2>/dev/null`
+-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
+-/bin/arch              = `(/bin/arch) 2>/dev/null`
+-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
+-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
++uname -m = `(uname -m) 2>/System/Devices/null || echo unknown`
++uname -r = `(uname -r) 2>/System/Devices/null || echo unknown`
++uname -s = `(uname -s) 2>/System/Devices/null || echo unknown`
++uname -v = `(uname -v) 2>/System/Devices/null || echo unknown`
++
++/System/Tools/uname -p = `(/System/Tools/uname -p) 2>/System/Devices/null`
++/System/Tools/uname -X     = `(/System/Tools/uname -X) 2>/System/Devices/null`
++
++hostinfo               = `(hostinfo) 2>/System/Devices/null`
++/System/Tools/universe          = `(/System/Tools/universe) 2>/System/Devices/null`
++/System/Tools/arch -k       = `(/System/Tools/arch -k) 2>/System/Devices/null`
++/System/Tools/arch              = `(/System/Tools/arch) 2>/System/Devices/null`
++/System/Tools/oslevel       = `(/System/Tools/oslevel) 2>/System/Devices/null`
++/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/System/Devices/null`
+ 
+ UNAME_MACHINE = ${UNAME_MACHINE}
+ UNAME_RELEASE = ${UNAME_RELEASE}
+diff -urN ncurses-5.4/config.sub ncurses-5.4-STEP/config.sub
+--- ncurses-5.4/config.sub	2004-01-07 14:00:46.000000000 +1300
++++ ncurses-5.4-STEP/config.sub	2005-08-24 03:01:24.218368312 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Configuration validation subroutine script.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+ #   2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+diff -urN ncurses-5.4/configure ncurses-5.4-STEP/configure
+--- ncurses-5.4/configure	2004-02-01 14:03:42.000000000 +1300
++++ ncurses-5.4-STEP/configure	2005-08-24 03:02:00.993777600 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # From configure.in Revision: 1.312 .
+ # Guess values for system-dependent variables and create Makefiles.
+ # Generated by Autoconf 2.52.20030208.
+@@ -22,17 +22,17 @@
+ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g"
+ 
+ # Be Bourne compatible
+-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
++if test -n "${ZSH_VERSION+set}" && (emulate sh) >/System/Devices/null 2>&1; then
+   emulate sh
+   NULLCMD=:
+-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
++elif test -n "${BASH_VERSION+set}" && (set -o posix) >/System/Devices/null 2>&1; then
+   set -o posix
+ fi
+ 
+ # Name of the executable.
+ as_me=`echo "$0" |sed 's,.*[\\/],,'`
+ 
+-if expr a : '\(a\)' >/dev/null 2>&1; then
++if expr a : '\(a\)' >/System/Devices/null 2>&1; then
+   as_expr=expr
+ else
+   as_expr=false
+@@ -40,7 +40,7 @@
+ 
+ rm -f conf$$ conf$$.exe conf$$.file
+ echo >conf$$.file
+-if ln -s conf$$.file conf$$ 2>/dev/null; then
++if ln -s conf$$.file conf$$ 2>/System/Devices/null; then
+   # We could just check for DJGPP; but this test a) works b) is more generic
+   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
+   if test -f conf$$.exe; then
+@@ -49,7 +49,7 @@
+   else
+     as_ln_s='ln -s'
+   fi
+-elif ln conf$$.file conf$$ 2>/dev/null; then
++elif ln conf$$.file conf$$ 2>/System/Devices/null; then
+   as_ln_s=ln
+ else
+   as_ln_s='cp -p'
+@@ -59,7 +59,7 @@
+ as_executable_p="test -f"
+ 
+ # Support unset when possible.
+-if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
++if (FOO=FOO; unset FOO) >/System/Devices/null 2>&1; then
+   as_unset=unset
+ else
+   as_unset=false
+@@ -87,7 +87,7 @@
+ # Name of the host.
+ # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
+ # so uname gets run too.
+-ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
++ac_hostname=`(hostname || uname -n) 2>/System/Devices/null | sed 1q`
+ 
+ exec 6>&1
+ 
+@@ -98,7 +98,7 @@
+ cross_compiling=no
+ subdirs=
+ MFLAGS= MAKEFLAGS=
+-SHELL=${CONFIG_SHELL-/bin/sh}
++SHELL=${CONFIG_SHELL-/System/Tools/sh}
+ 
+ # Maximum number of lines to put in a shell here document.
+ # This variable seems obsolete.  It should probably be removed, and
+@@ -112,7 +112,7 @@
+ ac_init_version=false
+ # The variables have the same names as the options, with
+ # dashes changed to underlines.
+-cache_file=/dev/null
++cache_file=/System/Devices/null
+ exec_prefix=NONE
+ no_create=
+ no_recursion=
+@@ -197,7 +197,7 @@
+   -disable-* | --disable-*)
+     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid feature name: $ac_feature" >&2
+    { (exit 1); exit 1; }; }
+     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
+@@ -206,7 +206,7 @@
+   -enable-* | --enable-*)
+     ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid feature name: $ac_feature" >&2
+    { (exit 1); exit 1; }; }
+     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
+@@ -388,7 +388,7 @@
+   -with-* | --with-*)
+     ac_package=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid package name: $ac_package" >&2
+    { (exit 1); exit 1; }; }
+     ac_package=`echo $ac_package| sed 's/-/_/g'`
+@@ -401,7 +401,7 @@
+   -without-* | --without-*)
+     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid package name: $ac_package" >&2
+    { (exit 1); exit 1; }; }
+     ac_package=`echo $ac_package | sed 's/-/_/g'`
+@@ -433,7 +433,7 @@
+   *=*)
+     ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid variable name: $ac_envvar" >&2
+    { (exit 1); exit 1; }; }
+     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
+@@ -443,7 +443,7 @@
+   *)
+     # FIXME: should be removed in autoconf 3.0.
+     echo "$as_me: WARNING: you should use --build, --host, --target" >&2
+-    expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/System/Devices/null &&
+       echo "$as_me: WARNING: invalid host type: $ac_option" >&2
+     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
+     ;;
+@@ -500,7 +500,7 @@
+ ac_tool_prefix=
+ test -n "$host_alias" && ac_tool_prefix=$host_alias-
+ 
+-test "$silent" = yes && exec 6>/dev/null
++test "$silent" = yes && exec 6>/System/Devices/null
+ 
+ # Find the source files, if location was not specified.
+ if test -z "$srcdir"; then
+@@ -692,7 +692,7 @@
+   --with-default-terminfo-dir=DIR default terminfo directory (default: DATADIR/terminfo)
+   --disable-big-core      assume machine has little memory
+   --enable-termcap        compile in termcap fallback support
+-  --with-termpath=XXX     specify list of termcap files (default: /etc/termcap:/usr/share/misc/termcap)
++  --with-termpath=XXX     specify list of termcap files (default: /System/Settings/termcap:/usr/share/misc/termcap)
+   --enable-getcap         fast termcap load, no xrefs to terminfo
+   --enable-getcap-cache   cache translated termcaps in ~/.terminfo
+   --disable-home-terminfo drop ~/.terminfo from terminfo search-path
+@@ -823,22 +823,22 @@
+ ## Platform.  ##
+ ## ---------- ##
+ 
+-hostname = `(hostname || uname -n) 2>/dev/null | sed 1q`
+-uname -m = `(uname -m) 2>/dev/null || echo unknown`
+-uname -r = `(uname -r) 2>/dev/null || echo unknown`
+-uname -s = `(uname -s) 2>/dev/null || echo unknown`
+-uname -v = `(uname -v) 2>/dev/null || echo unknown`
+-
+-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null || echo unknown`
+-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null     || echo unknown`
+-
+-/bin/arch              = `(/bin/arch) 2>/dev/null              || echo unknown`
+-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null       || echo unknown`
+-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null || echo unknown`
+-hostinfo               = `(hostinfo) 2>/dev/null               || echo unknown`
+-/bin/machine           = `(/bin/machine) 2>/dev/null           || echo unknown`
+-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null       || echo unknown`
+-/bin/universe          = `(/bin/universe) 2>/dev/null          || echo unknown`
++hostname = `(hostname || uname -n) 2>/System/Devices/null | sed 1q`
++uname -m = `(uname -m) 2>/System/Devices/null || echo unknown`
++uname -r = `(uname -r) 2>/System/Devices/null || echo unknown`
++uname -s = `(uname -s) 2>/System/Devices/null || echo unknown`
++uname -v = `(uname -v) 2>/System/Devices/null || echo unknown`
++
++/System/Tools/uname -p = `(/System/Tools/uname -p) 2>/System/Devices/null || echo unknown`
++/System/Tools/uname -X     = `(/System/Tools/uname -X) 2>/System/Devices/null     || echo unknown`
++
++/System/Tools/arch              = `(/System/Tools/arch) 2>/System/Devices/null              || echo unknown`
++/System/Tools/arch -k       = `(/System/Tools/arch -k) 2>/System/Devices/null       || echo unknown`
++/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/System/Devices/null || echo unknown`
++hostinfo               = `(hostinfo) 2>/System/Devices/null               || echo unknown`
++/System/Tools/machine           = `(/System/Tools/machine) 2>/System/Devices/null           || echo unknown`
++/System/Tools/oslevel       = `(/System/Tools/oslevel) 2>/System/Devices/null       || echo unknown`
++/System/Tools/universe          = `(/System/Tools/universe) 2>/System/Devices/null          || echo unknown`
+ 
+ PATH = $PATH
+ 
+@@ -929,9 +929,9 @@
+ # Prefer explicitly selected file to automatically selected ones.
+ if test -z "$CONFIG_SITE"; then
+   if test "x$prefix" != xNONE; then
+-    CONFIG_SITE="$prefix/share/config.site $prefix/etc/config.site"
++    CONFIG_SITE="$prefix/share/config.site $prefix/System/Settings/config.site"
+   else
+-    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/etc/config.site"
++    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/System/Settings/config.site"
+   fi
+ fi
+ for ac_site_file in $CONFIG_SITE; do
+@@ -944,7 +944,7 @@
+ done
+ 
+ if test -r "$cache_file"; then
+-  # Some versions of bash will fail to source /dev/null (special
++  # Some versions of bash will fail to source /System/Devices/null (special
+   # files actually), so we avoid doing that.
+   if test -f "$cache_file"; then
+     { echo "$as_me:950: loading cache $cache_file" >&5
+@@ -1146,7 +1146,7 @@
+ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
+ 
+ # Make sure we can run config.sub.
+-$ac_config_sub sun4 >/dev/null 2>&1 ||
++$ac_config_sub sun4 >/System/Devices/null 2>&1 ||
+   { { echo "$as_me:1150: error: cannot run $ac_config_sub" >&5
+ echo "$as_me: error: cannot run $ac_config_sub" >&2;}
+    { (exit 1); exit 1; }; }
+@@ -1227,9 +1227,9 @@
+   program_prefix=${target_alias}-
+ 	system_name="$host_os"
+ else
+-	system_name="`(uname -s -r) 2>/dev/null`"
++	system_name="`(uname -s -r) 2>/System/Devices/null`"
+ 	if test -z "$system_name" ; then
+-		system_name="`(hostname) 2>/dev/null`"
++		system_name="`(hostname) 2>/System/Devices/null`"
+ 	fi
+ fi
+ test -n "$system_name" && cat >>confdefs.h <<EOF
+@@ -1298,7 +1298,7 @@
+ do
+ 	cf_dir=`eval echo $cf_symbol`
+ 	if test -f $cf_dir/curses.h ; then
+-	if ( fgrep NCURSES_VERSION $cf_dir/curses.h 2>&1 >/dev/null ) ; then
++	if ( fgrep NCURSES_VERSION $cf_dir/curses.h 2>&1 >/System/Devices/null ) ; then
+ 		includedir="$cf_symbol"
+ 		test -n "$verbose"  && echo $ac_n "	found " 1>&6
+ 		break
+@@ -1608,18 +1608,18 @@
+ echo "$as_me:1608:" \
+      "checking for C compiler version" >&5
+ ac_compiler=`set X $ac_compile; echo $2`
+-{ (eval echo "$as_me:1611: \"$ac_compiler --version </dev/null >&5\"") >&5
+-  (eval $ac_compiler --version </dev/null >&5) 2>&5
++{ (eval echo "$as_me:1611: \"$ac_compiler --version </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler --version </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:1614: \$? = $ac_status" >&5
+   (exit $ac_status); }
+-{ (eval echo "$as_me:1616: \"$ac_compiler -v </dev/null >&5\"") >&5
+-  (eval $ac_compiler -v </dev/null >&5) 2>&5
++{ (eval echo "$as_me:1616: \"$ac_compiler -v </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler -v </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:1619: \$? = $ac_status" >&5
+   (exit $ac_status); }
+-{ (eval echo "$as_me:1621: \"$ac_compiler -V </dev/null >&5\"") >&5
+-  (eval $ac_compiler -V </dev/null >&5) 2>&5
++{ (eval echo "$as_me:1621: \"$ac_compiler -V </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler -V </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:1624: \$? = $ac_status" >&5
+   (exit $ac_status); }
+@@ -1652,9 +1652,9 @@
+   # Find the output, starting from the most likely.  This scheme is
+ # not robust to junk in `.', hence go to wildcards (a.*) only as a last
+ # resort.
+-for ac_file in `ls a.exe conftest.exe 2>/dev/null;
+-                ls a.out conftest 2>/dev/null;
+-                ls a.* conftest.* 2>/dev/null`; do
++for ac_file in `ls a.exe conftest.exe 2>/System/Devices/null;
++                ls a.out conftest 2>/System/Devices/null;
++                ls a.* conftest.* 2>/System/Devices/null`; do
+   case $ac_file in
+     *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+     a.out ) # We found the default executable, but exeext='' is most
+@@ -1728,7 +1728,7 @@
+ # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
+ # work properly (i.e., refer to `conftest.exe'), while it won't with
+ # `rm'.
+-for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
++for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/System/Devices/null`; do
+   case $ac_file in
+     *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+     *.* ) ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
+@@ -1773,7 +1773,7 @@
+   ac_status=$?
+   echo "$as_me:1774: \$? = $ac_status" >&5
+   (exit $ac_status); }; then
+-  for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/dev/null`; do
++  for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/System/Devices/null`; do
+   case $ac_file in
+     *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb ) ;;
+     *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
+@@ -2055,7 +2055,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:2057: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -2088,7 +2088,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:2090: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -2146,7 +2146,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:2148: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -2179,7 +2179,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:2181: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -2231,7 +2231,7 @@
+ int Autoconf = TIOCGETP;
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "$ac_pattern" >/dev/null 2>&1; then
++  egrep "$ac_pattern" >/System/Devices/null 2>&1; then
+   ac_cv_prog_gcc_traditional=yes
+ else
+   ac_cv_prog_gcc_traditional=no
+@@ -2246,7 +2246,7 @@
+ int Autoconf = TCGETA;
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "$ac_pattern" >/dev/null 2>&1; then
++  egrep "$ac_pattern" >/System/Devices/null 2>&1; then
+   ac_cv_prog_gcc_traditional=yes
+ fi
+ rm -f conftest*
+@@ -2262,8 +2262,8 @@
+ 
+ echo "$as_me:2263: checking for POSIXized ISC" >&5
+ echo $ECHO_N "checking for POSIXized ISC... $ECHO_C" >&6
+-if test -d /etc/conf/kconfig.d &&
+-   grep _POSIX_VERSION /usr/include/sys/unistd.h >/dev/null 2>&1
++if test -d /System/Settings/conf/kconfig.d &&
++   grep _POSIX_VERSION /usr/include/System/SystemFS/unistd.h >/System/Devices/null 2>&1
+ then
+   echo "$as_me:2268: result: yes" >&5
+ echo "${ECHO_T}yes" >&6
+@@ -2463,9 +2463,9 @@
+ else
+ case "$cf_cv_system_name" in #(vi
+ freebsd*) #(vi
+-  test -z "$LDCONFIG" && LDCONFIG="/sbin/ldconfig -R"
++  test -z "$LDCONFIG" && LDCONFIG="/System/AdminTools/ldconfig -R"
+   ;;
+-*) LDPATH=$PATH:/sbin:/usr/sbin
++*) LDPATH=$PATH:/sbin:/System/AdminTools
+   # Extract the first word of "ldconfig", so it can be a program name with args.
+ set dummy ldconfig; ac_word=$2
+ echo "$as_me:2471: checking for $ac_word" >&5
+@@ -2614,18 +2614,18 @@
+ echo "$as_me:2614:" \
+      "checking for C++ compiler version" >&5
+ ac_compiler=`set X $ac_compile; echo $2`
+-{ (eval echo "$as_me:2617: \"$ac_compiler --version </dev/null >&5\"") >&5
+-  (eval $ac_compiler --version </dev/null >&5) 2>&5
++{ (eval echo "$as_me:2617: \"$ac_compiler --version </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler --version </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:2620: \$? = $ac_status" >&5
+   (exit $ac_status); }
+-{ (eval echo "$as_me:2622: \"$ac_compiler -v </dev/null >&5\"") >&5
+-  (eval $ac_compiler -v </dev/null >&5) 2>&5
++{ (eval echo "$as_me:2622: \"$ac_compiler -v </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler -v </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:2625: \$? = $ac_status" >&5
+   (exit $ac_status); }
+-{ (eval echo "$as_me:2627: \"$ac_compiler -V </dev/null >&5\"") >&5
+-  (eval $ac_compiler -V </dev/null >&5) 2>&5
++{ (eval echo "$as_me:2627: \"$ac_compiler -V </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler -V </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:2630: \$? = $ac_status" >&5
+   (exit $ac_status); }
+@@ -3001,7 +3001,7 @@
+ 	@echo 'ac_maketemp="${MAKE}"'
+ EOF
+ # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+-eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
++eval `${MAKE-make} -f conftest.make 2>/System/Devices/null | grep temp=`
+ if test -n "$ac_maketemp"; then
+   eval ac_cv_prog_make_${ac_make}_set=yes
+ else
+@@ -3022,13 +3022,13 @@
+ # Find a good install program.  We prefer a C program (faster),
+ # so one script is as good as another.  But avoid the broken or
+ # incompatible versions:
+-# SysV /etc/install, /usr/sbin/install
+-# SunOS /usr/etc/install
+-# IRIX /sbin/install
+-# AIX /bin/install
++# SysV /System/Settings/install, /System/AdminTools/install
++# SunOS /usr/System/Settings/install
++# IRIX /System/AdminTools/install
++# AIX /System/Tools/install
+ # AmigaOS /C/install, which installs bootblocks on floppy discs
+-# AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
+-# AFS /usr/afsws/bin/install, which mishandles nonexistent args
++# AIX 4 /System/Tools/installbsd, which doesn't work without a -g flag
++# AFS /usr/afsws/System/Tools/install, which mishandles nonexistent args
+ # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+ # ./install, which can be erroneously created by make from ./install.sh.
+ echo "$as_me:3034: checking for a BSD compatible install" >&5
+@@ -3043,7 +3043,7 @@
+     # Account for people who put trailing slashes in PATH elements.
+     case $ac_dir/ in
+     / | ./ | .// | /cC/* \
+-    | /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* \
++    | /System/Settings/* | /System/AdminTools/* | /usr/System/Settings/* | /System/AdminTools/* | /usr/afsws/System/Tools/* \
+     | /usr/ucb/* ) ;;
+     *)
+       # OSF1 and SCO ODT 3.0 have their own names for install.
+@@ -3052,11 +3052,11 @@
+       for ac_prog in ginstall scoinst install; do
+         if $as_executable_p "$ac_dir/$ac_prog"; then
+ 	  if test $ac_prog = install &&
+-            grep dspmsg "$ac_dir/$ac_prog" >/dev/null 2>&1; then
++            grep dspmsg "$ac_dir/$ac_prog" >/System/Devices/null 2>&1; then
+ 	    # AIX install.  It has an incompatible calling convention.
+ 	    :
+ 	  elif test $ac_prog = install &&
+-	    grep pwplus "$ac_dir/$ac_prog" >/dev/null 2>&1; then
++	    grep pwplus "$ac_dir/$ac_prog" >/System/Devices/null 2>&1; then
+ 	    # program-specific install script used by HP pwplus--don't use.
+ 	    :
+ 	  else
+@@ -3114,30 +3114,30 @@
+ # eval it to expand exec_prefix.
+ #      $TMPDIR		if set, where it might want to write temporary files
+ # if $TMPDIR is not set:
+-#      /tmp		where it might want to write temporary files
+-#      /var/tmp		likewise
+-#      /usr/tmp		likewise
++#      /System/TemporaryFiles		where it might want to write temporary files
++#      /System/ApplicationData/TemporaryFiles		likewise
++#      /usr/System/TemporaryFiles		likewise
+ if test -n "$TMPDIR" && test -d "$TMPDIR" && test -w "$TMPDIR"; then
+   ac_tmpdirs=$TMPDIR
+ else
+-  ac_tmpdirs='/tmp /var/tmp /usr/tmp'
++  ac_tmpdirs='/System/TemporaryFiles /System/ApplicationData/TemporaryFiles /usr/System/TemporaryFiles'
+ fi
+ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
+   test -d $ac_dir || continue
+   test -w $ac_dir || continue # It is less confusing to not echo anything here.
+   ac_xdir=$ac_dir/cf$$
+-  (umask 077 && mkdir $ac_xdir 2>/dev/null) || continue
++  (umask 077 && mkdir $ac_xdir 2>/System/Devices/null) || continue
+   ac_tf1=$ac_xdir/conftest9012345
+   ac_tf2=$ac_xdir/conftest9012346
+-  (echo 1 >$ac_tf1) 2>/dev/null
+-  (echo 2 >$ac_tf2) 2>/dev/null
+-  ac_val=`cat $ac_tf1 2>/dev/null`
++  (echo 1 >$ac_tf1) 2>/System/Devices/null
++  (echo 2 >$ac_tf2) 2>/System/Devices/null
++  ac_val=`cat $ac_tf1 2>/System/Devices/null`
+   if test ! -f $ac_tf1 || test "$ac_val" != 1; then
+     ac_cv_sys_long_file_names=no
+-    rm -rf $ac_xdir 2>/dev/null
++    rm -rf $ac_xdir 2>/System/Devices/null
+     break
+   fi
+-  rm -rf $ac_xdir 2>/dev/null
++  rm -rf $ac_xdir 2>/System/Devices/null
+ done
+ fi
+ echo "$as_me:3143: result: $ac_cv_sys_long_file_names" >&5
+@@ -3598,14 +3598,14 @@
+ 	for cf_option in '-$(MAKEFLAGS)' '$(MFLAGS)'
+ 	do
+ 		cat >cf_makeflags.tmp <<CF_EOF
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ all :
+ 	@ echo '.$cf_option'
+ CF_EOF
+-		cf_result=`${MAKE-make} -k -f cf_makeflags.tmp 2>/dev/null`
++		cf_result=`${MAKE-make} -k -f cf_makeflags.tmp 2>/System/Devices/null`
+ 		case "$cf_result" in
+ 		.*k)
+-			cf_result=`${MAKE-make} -k -f cf_makeflags.tmp CC=cc 2>/dev/null`
++			cf_result=`${MAKE-make} -k -f cf_makeflags.tmp CC=cc 2>/System/Devices/null`
+ 			case "$cf_result" in
+ 			.*CC=*)	cf_cv_makeflags=
+ 				;;
+@@ -4230,7 +4230,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:4232: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -4266,7 +4266,7 @@
+ fi
+ 
+ # not everyone has "test -c"
+-if test -c /dev/sysmouse 2>/dev/null ; then
++if test -c /System/Devices/sysmouse 2>/System/Devices/null ; then
+ echo "$as_me:4270: checking if you want to use sysmouse" >&5
+ echo $ECHO_N "checking if you want to use sysmouse... $ECHO_C" >&6
+ 
+@@ -4957,7 +4957,7 @@
+   withval="$with_termpath"
+ 
+ else
+-  withval=${TERMPATH-/etc/termcap:/usr/share/misc/termcap}
++  withval=${TERMPATH-/System/Settings/termcap:/usr/share/misc/termcap}
+ fi;
+ IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${PATHSEP}"
+ cf_dst_path=
+@@ -5538,7 +5538,7 @@
+   ;;
+ .|.yes)
+   # Debian 'man' program?
+-  if test -f /etc/debian_version ; then
++  if test -f /System/Settings/debian_version ; then
+     MANPAGE_RENAMES=`cd $srcdir && pwd`/man/man_db.renames
+   else
+     MANPAGE_RENAMES=no
+@@ -5665,7 +5665,7 @@
+ cf_edit_man=man/edit_man.sh
+ 
+ cat >$cf_edit_man <<CF_EOF
+-#! /bin/sh
++#! /System/Tools/sh
+ # this script is generated by the configure-script CF_MAN_PAGES macro.
+ prefix="$cf_prefix"
+ datadir="$datadir"
+@@ -5676,7 +5676,7 @@
+ INSTALL_DATA="$INSTALL_DATA"
+ transform="$program_transform_name"
+ 
+-TMP=\${TMPDIR-/tmp}/man\$\$
++TMP=\${TMPDIR-/System/TemporaryFiles}/man\$\$
+ trap "rm -f \$TMP" 0 1 2 5 15
+ 
+ form=\$1
+@@ -7612,7 +7612,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:7614: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -7639,7 +7639,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "memchr" >/dev/null 2>&1; then
++  egrep "memchr" >/System/Devices/null 2>&1; then
+   :
+ else
+   ac_cv_header_stdc=no
+@@ -7657,7 +7657,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "free" >/dev/null 2>&1; then
++  egrep "free" >/System/Devices/null 2>&1; then
+   :
+ else
+   ac_cv_header_stdc=no
+@@ -7667,7 +7667,7 @@
+ fi
+ 
+ if test $ac_cv_header_stdc = yes; then
+-  # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
++  # /System/Tools/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
+   if test "$cross_compiling" = yes; then
+   :
+ else
+@@ -8114,7 +8114,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:8116: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -8820,7 +8820,7 @@
+   echo "$as_me:8820: \$? = $ac_status" >&5
+   (exit $ac_status); } ; then
+ 		mv conftest.o data.o && \
+-		( $AR $AR_OPTS conftest.a data.o ) 2>&5 1>/dev/null
++		( $AR $AR_OPTS conftest.a data.o ) 2>&5 1>/System/Devices/null
+ 	fi
+ 	rm -f conftest.$ac_ext data.o
+ 	cat >conftest.$ac_ext <<EOF
+@@ -8843,10 +8843,10 @@
+   echo "$as_me:8843: \$? = $ac_status" >&5
+   (exit $ac_status); }; then
+ 		mv conftest.o func.o && \
+-		( $AR $AR_OPTS conftest.a func.o ) 2>&5 1>/dev/null
++		( $AR $AR_OPTS conftest.a func.o ) 2>&5 1>/System/Devices/null
+ 	fi
+ 	rm -f conftest.$ac_ext func.o
+-	( eval $RANLIB conftest.a ) 2>&5 >/dev/null
++	( eval $RANLIB conftest.a ) 2>&5 >/System/Devices/null
+ 	cf_saveLIBS="$LIBS"
+ 	LIBS="conftest.a $LIBS"
+ 	if test "$cross_compiling" = yes; then
+@@ -9195,7 +9195,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:9197: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -9245,7 +9245,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:9247: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+   else
+@@ -10572,7 +10572,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:10574: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_cxx_preproc_warn_flag
+   else
+@@ -10605,7 +10605,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:10607: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_cxx_preproc_warn_flag
+   else
+@@ -10663,7 +10663,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:10665: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_cxx_preproc_warn_flag
+   else
+@@ -10696,7 +10696,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:10698: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_cxx_preproc_warn_flag
+   else
+@@ -10754,7 +10754,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:10756: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_cxx_preproc_warn_flag
+   else
+@@ -11161,7 +11161,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:11163: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_cxx_preproc_warn_flag
+   else
+@@ -12102,7 +12102,7 @@
+      : end' >>confcache
+ if cmp -s $cache_file confcache; then :; else
+   if test -w $cache_file; then
+-    test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
++    test "x$cache_file" != "x/System/Devices/null" && echo "updating cache $cache_file"
+     cat confcache >$cache_file
+   else
+     echo "not updating unwritable cache $cache_file"
+@@ -12151,17 +12151,17 @@
+ 
+ cat >>$CONFIG_STATUS <<\_ACEOF
+ # Be Bourne compatible
+-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
++if test -n "${ZSH_VERSION+set}" && (emulate sh) >/System/Devices/null 2>&1; then
+   emulate sh
+   NULLCMD=:
+-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
++elif test -n "${BASH_VERSION+set}" && (set -o posix) >/System/Devices/null 2>&1; then
+   set -o posix
+ fi
+ 
+ # Name of the executable.
+ as_me=`echo "$0" |sed 's,.*[\\/],,'`
+ 
+-if expr a : '\(a\)' >/dev/null 2>&1; then
++if expr a : '\(a\)' >/System/Devices/null 2>&1; then
+   as_expr=expr
+ else
+   as_expr=false
+@@ -12169,7 +12169,7 @@
+ 
+ rm -f conf$$ conf$$.exe conf$$.file
+ echo >conf$$.file
+-if ln -s conf$$.file conf$$ 2>/dev/null; then
++if ln -s conf$$.file conf$$ 2>/System/Devices/null; then
+   # We could just check for DJGPP; but this test a) works b) is more generic
+   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
+   if test -f conf$$.exe; then
+@@ -12178,7 +12178,7 @@
+   else
+     as_ln_s='ln -s'
+   fi
+-elif ln conf$$.file conf$$ 2>/dev/null; then
++elif ln conf$$.file conf$$ 2>/System/Devices/null; then
+   as_ln_s=ln
+ else
+   as_ln_s='cp -p'
+@@ -12188,7 +12188,7 @@
+ as_executable_p="test -f"
+ 
+ # Support unset when possible.
+-if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
++if (FOO=FOO; unset FOO) >/System/Devices/null 2>&1; then
+   as_unset=unset
+ else
+   as_unset=false
+@@ -12354,7 +12354,7 @@
+   CONFIG_LINKS    = $CONFIG_LINKS
+   CONFIG_COMMANDS = $CONFIG_COMMANDS
+   > $ac_cs_invocation
+-on `(hostname || uname -n) 2>/dev/null | sed 1q`
++on `(hostname || uname -n) 2>/System/Devices/null | sed 1q`
+ 
+ _ACEOF
+ EOF
+@@ -12433,9 +12433,9 @@
+ }
+ 
+ # Create a (secure) tmp directory for tmp files.
+-: ${TMPDIR=/tmp}
++: ${TMPDIR=/System/TemporaryFiles}
+ {
+-  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/csXXXXXX") 2>/dev/null` &&
++  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/csXXXXXX") 2>/System/Devices/null` &&
+   test -n "$tmp" && test -d "$tmp"
+ }  ||
+ {
+@@ -12700,7 +12700,7 @@
+          X"$ac_file" : 'X\(//\)[^/]' \| \
+          X"$ac_file" : 'X\(//\)$' \| \
+          X"$ac_file" : 'X\(/\)' \| \
+-         .     : '\(.\)' 2>/dev/null ||
++         .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$ac_file" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -12782,7 +12782,7 @@
+            # Source tree
+            echo $srcdir/$f
+          else
+-           # /dev/null tree
++           # /System/Devices/null tree
+            { { echo "$as_me:12786: error: cannot find input file: $f" >&5
+ echo "$as_me: error: cannot find input file: $f" >&2;}
+    { (exit 1); exit 1; }; }
+@@ -12872,7 +12872,7 @@
+            # Source tree
+            echo $srcdir/$f
+          else
+-           # /dev/null tree
++           # /System/Devices/null tree
+            { { echo "$as_me:12876: error: cannot find input file: $f" >&5
+ echo "$as_me: error: cannot find input file: $f" >&2;}
+    { (exit 1); exit 1; }; }
+@@ -12894,7 +12894,7 @@
+ 
+ rm -f conftest.tail
+ echo '  rm -f conftest.frag' >> $CONFIG_STATUS
+-while grep . conftest.vals >/dev/null
++while grep . conftest.vals >/System/Devices/null
+ do
+   # Write chunks of a limited-size here document to conftest.frag.
+   echo '  cat >> conftest.frag <<CEOF' >> $CONFIG_STATUS
+@@ -12930,7 +12930,7 @@
+   cat $tmp/in >>$tmp/config.h
+   rm -f $tmp/in
+   if test x"$ac_file" != x-; then
+-    if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
++    if cmp -s $ac_file $tmp/config.h 2>/System/Devices/null; then
+       { echo "$as_me:12934: $ac_file is unchanged" >&5
+ echo "$as_me: $ac_file is unchanged" >&6;}
+     else
+@@ -12938,7 +12938,7 @@
+          X"$ac_file" : 'X\(//\)[^/]' \| \
+          X"$ac_file" : 'X\(//\)$' \| \
+          X"$ac_file" : 'X\(/\)' \| \
+-         .     : '\(.\)' 2>/dev/null ||
++         .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$ac_file" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -13247,7 +13247,7 @@
+ 
+ echo creating headers.sh
+ cat >headers.sh <<CF_EOF
+-#! /bin/sh
++#! /System/Tools/sh
+ # This shell script is generated by the 'configure' script.  It is invoked in a
+ # subdirectory of the build tree.  It generates a sed-script in the parent
+ # directory that is used to adjust includes for header files that reside in a
+@@ -13260,8 +13260,8 @@
+ DST=\$1
+ REF=\$2
+ SRC=\$3
+-TMPSRC=\${TMPDIR-/tmp}/\`basename \$SRC\`\$\$
+-TMPSED=\${TMPDIR-/tmp}/headers.sed\$\$
++TMPSRC=\${TMPDIR-/System/TemporaryFiles}/\`basename \$SRC\`\$\$
++TMPSED=\${TMPDIR-/System/TemporaryFiles}/headers.sed\$\$
+ echo installing \$SRC in \$DST
+ CF_EOF
+ if test $WITH_CURSES_H = yes; then
+@@ -13388,13 +13388,13 @@
+ # config.status does its own redirection, appending to config.log.
+ # Unfortunately, on DOS this fails, as config.log is still kept open
+ # by configure, so config.status won't be able to write to it; its
+-# output is simply discarded.  So we exec the FD to /dev/null,
++# output is simply discarded.  So we exec the FD to /System/Devices/null,
+ # effectively closing config.log, so it can be properly (re)opened and
+ # appended to by config.status.  When coming back to configure, we
+ # need to make the FD available again.
+ if test "$no_create" != yes; then
+   ac_cs_success=:
+-  exec 5>/dev/null
++  exec 5>/System/Devices/null
+   $SHELL $CONFIG_STATUS || ac_cs_success=false
+   exec 5>>config.log
+   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
+diff -urN ncurses-5.4/configure.in ncurses-5.4-STEP/configure.in
+--- ncurses-5.4/configure.in	2004-01-25 08:29:13.000000000 +1300
++++ ncurses-5.4-STEP/configure.in	2005-08-24 03:01:44.560275872 +1200
+@@ -488,7 +488,7 @@
+ CF_WITH_PATHLIST(termpath,
+ 	[  --with-termpath=XXX     specify list of termcap files],
+ 	TERMPATH,
+-	/etc/termcap:/usr/share/misc/termcap)
++	/System/Settings/termcap:/usr/share/misc/termcap)
+ AC_MSG_RESULT($TERMPATH)
+ test -n "$TERMPATH" && AC_DEFINE_UNQUOTED(TERMPATH,"$TERMPATH")
+ 
+diff -urN ncurses-5.4/convert_configure.pl ncurses-5.4-STEP/convert_configure.pl
+--- ncurses-5.4/convert_configure.pl	2000-10-10 12:53:57.000000000 +1300
++++ ncurses-5.4-STEP/convert_configure.pl	2005-08-24 03:02:00.999776688 +1200
+@@ -3,20 +3,20 @@
+ # The converted script is written to stdout, so run this script as
+ #    convert_configure configure > configure.cmd
+ #
+-# When the converted script runs, it expects that /tmp dir is
++# When the converted script runs, it expects that /System/TemporaryFiles dir is
+ # available (so we create it).
+ #
+ # run the result like this:
+ #    .\configure
+ 
+ # Some frequent manual intervention:
+-# a) Some makefiles hardwire SHELL = /bin/sh ==> change to: sh
++# a) Some makefiles hardwire SHELL = /System/Tools/sh ==> change to: sh
+ # b) Some makefiles recognize that exe files terminate on .exe
+ #    You need to give this script -no-zexe option...
+ 
+ shift, $no_zexe = 1 if @ARGV and $ARGV[0] eq '-no-zexe';
+ 
+-mkdir '/tmp', 0777 unless -d '/tmp';
++mkdir '/System/TemporaryFiles', 0777 unless -d '/System/TemporaryFiles';
+ 
+ print <<EOF;
+ extproc sh
+@@ -64,10 +64,10 @@
+   s{^((\s*)if\s+test)\s*-f\s*(\$$varname/\S+)\s*;}
+    {$2$subst$1 -f $3 -o -f $3.exe ;}
+       if $checking_path;	# Checking for executables
+-  # change |/usr/sbin/*| to |/usr/sbin/*|?:[\\/]os2[\\/]install[\\/]*|
++  # change |/System/AdminTools/*| to |/System/AdminTools/*|?:[\\/]os2[\\/]install[\\/]*|
+   # in the list of things to skip (with both cases)
+-  s{\Q|/usr/sbin/*|}
+-   {|/usr/sbin/*|?:[\\\\/]os2[\\\\/]install[\\\\/]*|?:[\\\\/]OS2[\\\\/]INSTALL[\\\\/]*|}
++  s{\Q|/System/AdminTools/*|}
++   {|/System/AdminTools/*|?:[\\\\/]os2[\\\\/]install[\\\\/]*|?:[\\\\/]OS2[\\\\/]INSTALL[\\\\/]*|}
+       if $checking_install;	# Do not accept d:/os2/install/install.exe
+   s/^(host|build)=NONE$/$1=x86-emx-os2/;	# Make default host/build
+   s/"\$\{IFS}:"$/"\${IFS};"/;	# Fix IFS line
+@@ -75,8 +75,8 @@
+   s/\btest\s+-s\s+conftest\b/test -f conftest/g; # Fix exe test
+   # This one is needed for curses:
+   s/^\s*host=`.*\$ac_config_sub \$host_alias`/$&\nif test -z "\$host"; then host=\$host_alias; fi/;
+-  s,/bin/sh(?![/\w]),sh,g;
+-  s,^(\s*/usr/sbin/sendmail\s*)\\$,$1 "`whence sendmail | tr '\\\\\\\\' / `" \\,;
++  s,/System/Tools/sh(?![/\w]),sh,g;
++  s,^(\s*/System/AdminTools/sendmail\s*)\\$,$1 "`whence sendmail | tr '\\\\\\\\' / `" \\,;
+   print;
+ }
+ 
+diff -urN ncurses-5.4/dist.mk ncurses-5.4-STEP/dist.mk
+--- ncurses-5.4/dist.mk	2004-02-09 09:56:43.000000000 +1300
++++ ncurses-5.4-STEP/dist.mk	2005-08-24 03:01:38.497197600 +1200
+@@ -5,7 +5,7 @@
+ # configure mines the current version number out of here.  To move
+ # to a new version number, just edit this file and run configure.
+ #
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ 
+ # These define the major/minor/patch versions of ncurses.
+ NCURSES_MAJOR = 5
+@@ -60,7 +60,7 @@
+ 	@for f in man/*.[0-9]*; do \
+ 	   m=`basename $$f` ;\
+ 	   x=`echo $$m | awk -F. '{print $$2;}'` ;\
+-	   xu=`echo $$x | dd conv=ucase 2>/dev/null` ;\
++	   xu=`echo $$x | dd conv=ucase 2>/System/Devices/null` ;\
+ 	   if [ "$${x}" != "$${xu}" ]; then \
+ 	     echo "s/$${xu}/$${x}/g" >> subst.tmp ;\
+ 	   fi ;\
+diff -urN ncurses-5.4/doc/hackguide.doc ncurses-5.4-STEP/doc/hackguide.doc
+--- ncurses-5.4/doc/hackguide.doc	2003-10-26 05:15:09.000000000 +1300
++++ ncurses-5.4-STEP/doc/hackguide.doc	2005-08-24 03:01:44.660260672 +1200
+@@ -300,7 +300,7 @@
+ 
+    Finally,  there  is  a  group  of  files  that is actually most of the
+    terminfo  compiler.  The reason this code lives in the ncurses library
+-   is to support fallback to /etc/termcap. These files include
++   is to support fallback to /System/Settings/termcap. These files include
+ 
+      alloc_entry.c  captoinfo.c  comp_captab.c  comp_error.c comp_hash.c
+      comp_parse.c comp_scan.c parse_entry.c read_termcap.c write_entry.c
+diff -urN ncurses-5.4/doc/html/announce.html ncurses-5.4-STEP/doc/html/announce.html
+--- ncurses-5.4/doc/html/announce.html	2004-01-18 14:28:19.000000000 +1300
++++ ncurses-5.4-STEP/doc/html/announce.html	2005-08-24 03:01:44.654261584 +1200
+@@ -421,7 +421,7 @@
+ transition from termcap to terminfo.  It gathers the information in a
+ TERMCAP environment variable and/or a ~/.termcap local entries file
+ and converts it to an equivalent local terminfo tree under $HOME/.terminfo.
+-<LI>Automatic fallback to the /etc/termcap file can be compiled in
++<LI>Automatic fallback to the /System/Settings/termcap file can be compiled in
+ when it is not possible to build a terminfo tree.  This feature is neither
+ fast nor cheap, you don't want to use it unless you have to,
+ but it's there.
+diff -urN ncurses-5.4/doc/html/hackguide.html ncurses-5.4-STEP/doc/html/hackguide.html
+--- ncurses-5.4/doc/html/hackguide.html	2003-10-05 11:34:02.000000000 +1300
++++ ncurses-5.4-STEP/doc/html/hackguide.html	2005-08-24 03:01:44.649262344 +1200
+@@ -447,7 +447,7 @@
+ 
+ Finally, there is a group of files that is actually most of the
+ terminfo compiler.  The reason this code lives in the <STRONG>ncurses</STRONG>
+-library is to support fallback to /etc/termcap.  These files include
++library is to support fallback to /System/Settings/termcap.  These files include
+ <blockquote>
+ <code>
+ alloc_entry.c
+diff -urN ncurses-5.4/doc/html/man/ncurses.3x.html ncurses-5.4-STEP/doc/html/man/ncurses.3x.html
+--- ncurses-5.4/doc/html/man/ncurses.3x.html	2004-01-11 14:46:29.000000000 +1300
++++ ncurses-5.4-STEP/doc/html/man/ncurses.3x.html	2005-08-24 03:01:44.642263408 +1200
+@@ -829,7 +829,7 @@
+             name telling where the  information  denoted  by  the
+             TERM  symbol  exists.   In  either  case,  setting it
+             directs <STRONG>ncurses</STRONG> to ignore the usual  place  for  this
+-            information, e.g., /etc/termcap.
++            information, e.g., /System/Settings/termcap.
+ 
+        TERMINFO
+             Overrides the directory in which <STRONG>ncurses</STRONG> searches for
+@@ -863,7 +863,7 @@
+             checks  the TERMPATH symbol.  This is a list of file-
+             names separated by spaces or colons  (i.e.,  ":")  on
+             Unix, semicolons on OS/2 EMX.  If the TERMPATH symbol
+-            is not set, <STRONG>ncurses</STRONG> looks in the files  /etc/termcap,
++            is not set, <STRONG>ncurses</STRONG> looks in the files  /System/Settings/termcap,
+             /usr/share/misc/termcap  and  $HOME/.termcap, in that
+             order.
+ 
+@@ -890,7 +890,7 @@
+ </PRE>
+ <H2>EXTENSIONS</H2><PRE>
+        The  <STRONG>ncurses</STRONG>  library  can  be  compiled  with  an  option
+-       (<STRONG>-DUSE_GETCAP</STRONG>) that falls back to the old-style /etc/term-
++       (<STRONG>-DUSE_GETCAP</STRONG>) that falls back to the old-style /System/Settings/term-
+        cap file if the terminal setup code cannot find a terminfo
+        entry  corresponding  to <STRONG>TERM</STRONG>.  Use of this feature is not
+        recommended, as it essentially includes an entire  termcap
+diff -urN ncurses-5.4/doc/html/man/term.7.html ncurses-5.4-STEP/doc/html/man/term.7.html
+--- ncurses-5.4/doc/html/man/term.7.html	2003-10-26 06:39:59.000000000 +1300
++++ ncurses-5.4-STEP/doc/html/man/term.7.html	2005-08-24 03:01:44.576273440 +1200
+@@ -59,8 +59,8 @@
+        mailer.
+ 
+        A  default  <STRONG>TERM</STRONG>  value will be set on a per-line basis by
+-       either <STRONG>/etc/inittab</STRONG> (Linux and  System-V-like  UNIXes)  or
+-       <STRONG>/etc/ttys</STRONG>  (BSD  UNIXes).  This will nearly always suffice
++       either <STRONG>/System/Settings/inittab</STRONG> (Linux and  System-V-like  UNIXes)  or
++       <STRONG>/System/Settings/ttys</STRONG>  (BSD  UNIXes).  This will nearly always suffice
+        for workstation and microcomputer consoles.
+ 
+        If you use a dialup line, the type of device  attached  to
+@@ -227,10 +227,10 @@
+        /usr/share/terminfo/?/*
+             compiled terminal capability data base
+ 
+-       /etc/inittab
++       /System/Settings/inittab
+             tty line initialization (AT&amp;T-like UNIXes)
+ 
+-       /etc/ttys
++       /System/Settings/ttys
+             tty line initialization (BSD-like UNIXes)
+ 
+ 
+diff -urN ncurses-5.4/doc/html/man/terminfo.5.html ncurses-5.4-STEP/doc/html/man/terminfo.5.html
+--- ncurses-5.4/doc/html/man/terminfo.5.html	2003-10-26 06:40:00.000000000 +1300
++++ ncurses-5.4-STEP/doc/html/man/terminfo.5.html	2005-08-24 03:01:44.591271160 +1200
+@@ -2150,7 +2150,7 @@
+        The  "before  tc  expansion"  length is the most important
+        one, because it affects more than just users of that  par-
+        ticular  terminal.   This is the length of the entry as it
+-       exists in /etc/termcap, minus the backslash-newline pairs,
++       exists in /System/Settings/termcap, minus the backslash-newline pairs,
+        which tgetent() strips out while reading it.  Some termcap
+        libraries strip off the final newline,  too  (GNU  termcap
+        does not).  Now suppose:
+diff -urN ncurses-5.4/doc/html/man/tset.1.html ncurses-5.4-STEP/doc/html/man/tset.1.html
+--- ncurses-5.4/doc/html/man/tset.1.html	2003-10-26 06:40:00.000000000 +1300
++++ ncurses-5.4-STEP/doc/html/man/tset.1.html	2005-08-24 03:01:44.613267816 +1200
+@@ -69,10 +69,10 @@
+        2. The value of the <STRONG>TERM</STRONG> environmental variable.
+ 
+        3.  (BSD  systems only.) The terminal type associated with
+-       the standard error output device in  the  <EM>/etc/ttys</EM>  file.
++       the standard error output device in  the  <EM>/System/Settings/ttys</EM>  file.
+        (On Linux and System-V-like UNIXes, <EM>getty</EM> does this job by
+        setting <STRONG>TERM</STRONG>  according  to  the  type  passed  to  it  by
+-       <EM>/etc/inittab</EM>.)
++       <EM>/System/Settings/inittab</EM>.)
+ 
+        4. The default terminal type, ``unknown''.
+ 
+@@ -169,7 +169,7 @@
+ <H2>TERMINAL TYPE MAPPING</H2><PRE>
+        When the terminal is not hardwired into the system (or the
+        current system information is incorrect) the terminal type
+-       derived  from the <EM>/etc/ttys</EM> file or the <STRONG>TERM</STRONG> environmental
++       derived  from the <EM>/System/Settings/ttys</EM> file or the <STRONG>TERM</STRONG> environmental
+        variable is often something generic like <STRONG>network</STRONG>,  <STRONG>dialup</STRONG>,
+        or  <STRONG>unknown</STRONG>.   When <STRONG>tset</STRONG> is used in a startup script it is
+        often desirable to provide information about the  type  of
+@@ -237,7 +237,7 @@
+ <H2>COMPATIBILITY</H2><PRE>
+        The <STRONG>tset</STRONG> utility has been provided  for  backward-compati-
+        bility  with  BSD  environments (under most modern UNIXes,
+-       <STRONG>/etc/inittab</STRONG> and <STRONG><A HREF="getty.1.html">getty(1)</A></STRONG> can set <STRONG>TERM</STRONG>  appropriately  for
++       <STRONG>/System/Settings/inittab</STRONG> and <STRONG><A HREF="getty.1.html">getty(1)</A></STRONG> can set <STRONG>TERM</STRONG>  appropriately  for
+        each  dial-up  line;  this  obviates  what was <STRONG>tset</STRONG>'s most
+        important use).  This implementation behaves  like  4.4BSD
+        tset, with a few exceptions specified here.
+@@ -284,7 +284,7 @@
+ 
+ </PRE>
+ <H2>FILES</H2><PRE>
+-       /etc/ttys
++       /System/Settings/ttys
+             system  port  name  to terminal type mapping database
+             (BSD versions only).
+ 
+diff -urN ncurses-5.4/form/Makefile.in ncurses-5.4-STEP/form/Makefile.in
+--- ncurses-5.4/form/Makefile.in	2003-11-02 11:44:33.000000000 +1300
++++ ncurses-5.4-STEP/form/Makefile.in	2005-08-24 03:01:25.165224368 +1200
+@@ -42,7 +42,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ x		= @EXEEXT@
+diff -urN ncurses-5.4/include/MKhashsize.sh ncurses-5.4-STEP/include/MKhashsize.sh
+--- ncurses-5.4/include/MKhashsize.sh	1996-05-12 01:17:23.000000000 +1200
++++ ncurses-5.4-STEP/include/MKhashsize.sh	2005-08-24 03:01:25.168223912 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # MKhashsize.sh --- generate size include for hash functions
+ #
+diff -urN ncurses-5.4/include/MKkey_defs.sh ncurses-5.4-STEP/include/MKkey_defs.sh
+--- ncurses-5.4/include/MKkey_defs.sh	2003-12-07 06:10:09.000000000 +1300
++++ ncurses-5.4-STEP/include/MKkey_defs.sh	2005-08-24 03:01:38.505196384 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # $Id: MKkey_defs.sh,v 1.14 2003/12/06 17:10:09 tom Exp $
+ ##############################################################################
+ # Copyright (c) 2001-2002,2003 Free Software Foundation, Inc.                #
+@@ -46,11 +46,11 @@
+ 
+ # change repeated tabs (used for readability) to single tabs (needed to make
+ # awk see the right field alignment of the corresponding columns):
+-if sort -k 6 $DATA >$data 2>/dev/null
++if sort -k 6 $DATA >$data 2>/System/Devices/null
+ then
+ 	# POSIX
+ 	sed -e 's/[	][	]*/	/g' < $DATA |sort -n -k 6 >$data
+-elif sort -n +5 $DATA >$data 2>/dev/null
++elif sort -n +5 $DATA >$data 2>/System/Devices/null
+ then
+ 	# SunOS (and SVr4, marked as obsolete but still recognized)
+ 	sed -e 's/[	][	]*/	/g' < $DATA |sort -n +5 >$data
+diff -urN ncurses-5.4/include/MKncurses_def.sh ncurses-5.4-STEP/include/MKncurses_def.sh
+--- ncurses-5.4/include/MKncurses_def.sh	2003-10-26 05:19:46.000000000 +1300
++++ ncurses-5.4-STEP/include/MKncurses_def.sh	2005-08-24 03:01:25.179222240 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # $Id: MKncurses_def.sh,v 1.2 2003/10/25 16:19:46 tom Exp $
+ ##############################################################################
+ # Copyright (c) 2000 Free Software Foundation, Inc.                          #
+diff -urN ncurses-5.4/include/MKparametrized.sh ncurses-5.4-STEP/include/MKparametrized.sh
+--- ncurses-5.4/include/MKparametrized.sh	2000-10-01 13:57:24.000000000 +1300
++++ ncurses-5.4-STEP/include/MKparametrized.sh	2005-08-24 03:01:25.170223608 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: MKparametrized.sh,v 1.5 2000/10/01 00:57:24 tom Exp $
+ #
+ # MKparametrized.sh -- generate indirection vectors for various sort methods
+diff -urN ncurses-5.4/include/Makefile.in ncurses-5.4-STEP/include/Makefile.in
+--- ncurses-5.4/include/Makefile.in	2001-12-09 07:50:06.000000000 +1300
++++ ncurses-5.4-STEP/include/Makefile.in	2005-08-24 03:01:25.173223152 +1200
+@@ -39,7 +39,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ DESTDIR		= @DESTDIR@
+diff -urN ncurses-5.4/include/edit_cfg.sh ncurses-5.4-STEP/include/edit_cfg.sh
+--- ncurses-5.4/include/edit_cfg.sh	2001-12-23 13:52:40.000000000 +1300
++++ ncurses-5.4-STEP/include/edit_cfg.sh	2005-08-24 03:01:25.176222696 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: edit_cfg.sh,v 1.12 2001/12/23 00:52:40 tom Exp $
+ ##############################################################################
+ # Copyright (c) 1998,2000,2001 Free Software Foundation, Inc.                #
+diff -urN ncurses-5.4/install-sh ncurses-5.4-STEP/install-sh
+--- ncurses-5.4/install-sh	1998-12-10 04:28:30.000000000 +1300
++++ ncurses-5.4-STEP/install-sh	2005-08-24 03:01:25.190220568 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ #
+ # install - install a program, script, or datafile
+ # This comes from X11R5 (mit/util/scripts/install.sh).
+@@ -95,7 +95,7 @@
+ 	    then
+ 		src=$1
+ 	    else
+-		# this colon is to work around a 386BSD /bin/sh bug
++		# this colon is to work around a 386BSD /System/Tools/sh bug
+ 		:
+ 		dst=$1
+ 	    fi
+diff -urN ncurses-5.4/man/MKterminfo.sh ncurses-5.4-STEP/man/MKterminfo.sh
+--- ncurses-5.4/man/MKterminfo.sh	2003-01-12 10:42:12.000000000 +1300
++++ ncurses-5.4-STEP/man/MKterminfo.sh	2005-08-24 03:01:25.193220112 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: MKterminfo.sh,v 1.12 2003/01/11 21:42:12 tom Exp $
+ #
+ # MKterminfo.sh -- generate terminfo.5 from Caps tabular data
+diff -urN ncurses-5.4/man/Makefile.in ncurses-5.4-STEP/man/Makefile.in
+--- ncurses-5.4/man/Makefile.in	2003-12-21 07:41:10.000000000 +1300
++++ ncurses-5.4-STEP/man/Makefile.in	2005-08-24 03:01:25.199219200 +1200
+@@ -34,7 +34,7 @@
+ # NOTE: When you add or rename a man page, make sure you update both
+ # the top-level MANIFEST and any man/*.renames files!
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ 
+ DESTDIR		= @DESTDIR@
+ srcdir		= @srcdir@
+diff -urN ncurses-5.4/man/make_sed.sh ncurses-5.4-STEP/man/make_sed.sh
+--- ncurses-5.4/man/make_sed.sh	2003-10-26 09:33:16.000000000 +1300
++++ ncurses-5.4-STEP/man/make_sed.sh	2005-08-24 03:01:25.196219656 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: make_sed.sh,v 1.7 2003/10/25 20:33:16 tom Exp $
+ ##############################################################################
+ # Copyright (c) 1998,2003 Free Software Foundation, Inc.                     #
+diff -urN ncurses-5.4/man/ncurses.3x ncurses-5.4-STEP/man/ncurses.3x
+--- ncurses-5.4/man/ncurses.3x	2004-01-11 14:45:54.000000000 +1300
++++ ncurses-5.4-STEP/man/ncurses.3x	2005-08-24 03:01:44.723251096 +1200
+@@ -774,7 +774,7 @@
+ newlines stripped out),
+ or a file name telling where the information denoted by the TERM symbol exists.
+ In either case, setting it directs \fBncurses\fR to ignore
+-the usual place for this information, e.g., /etc/termcap.
++the usual place for this information, e.g., /System/Settings/termcap.
+ .TP 5
+ TERMINFO
+ Overrides the directory in which \fBncurses\fR searches for your terminal
+@@ -812,7 +812,7 @@
+ the TERMPATH symbol.
+ This is a list of filenames separated by spaces or colons (i.e., ":") on Unix, semicolons on OS/2 EMX.
+ If the TERMPATH symbol is not set, \fBncurses\fR looks in the files
+-/etc/termcap, /usr/share/misc/termcap and $HOME/.termcap, in that order.
++/System/Settings/termcap, /usr/share/misc/termcap and $HOME/.termcap, in that order.
+ .PP
+ The library may be configured to disregard the following variables when the
+ current user is the superuser (root), or if the application uses setuid or
+@@ -829,7 +829,7 @@
+ descriptions.
+ .SH EXTENSIONS
+ The \fBncurses\fR library can be compiled with an option (\fB\-DUSE_GETCAP\fR)
+-that falls back to the old-style /etc/termcap file if the terminal setup code
++that falls back to the old-style /System/Settings/termcap file if the terminal setup code
+ cannot find a terminfo entry corresponding to \fBTERM\fR.  Use of this feature
+ is not recommended, as it essentially includes an entire termcap compiler in
+ the \fBncurses\fR startup code, at significant cost in core and startup cycles.
+diff -urN ncurses-5.4/man/term.7 ncurses-5.4-STEP/man/term.7
+--- ncurses-5.4/man/term.7	2003-05-11 08:33:49.000000000 +1200
++++ ncurses-5.4-STEP/man/term.7	2005-08-24 03:01:44.672258848 +1200
+@@ -39,7 +39,7 @@
+ is critical for all screen-oriented programs, including your editor and mailer.
+ .PP
+ A default \fBTERM\fR value will be set on a per-line basis by either
+-\fB/etc/inittab\fR (Linux and System-V-like UNIXes) or \fB/etc/ttys\fR (BSD
++\fB/System/Settings/inittab\fR (Linux and System-V-like UNIXes) or \fB/System/Settings/ttys\fR (BSD
+ UNIXes).  This will nearly always suffice for workstation and microcomputer
+ consoles.
+ .PP
+@@ -189,10 +189,10 @@
+ \*d/?/*
+ compiled terminal capability data base
+ .TP 5
+-/etc/inittab
++/System/Settings/inittab
+ tty line initialization (AT&T-like UNIXes)
+ .TP 5
+-/etc/ttys
++/System/Settings/ttys
+ tty line initialization (BSD-like UNIXes)
+ .SH SEE ALSO
+ \fBcurses\fR(3X), \fBterminfo\fR(\*n), \fBterm\fR(\*n).
+diff -urN ncurses-5.4/man/terminfo.tail ncurses-5.4-STEP/man/terminfo.tail
+--- ncurses-5.4/man/terminfo.tail	2003-01-06 11:47:05.000000000 +1300
++++ ncurses-5.4-STEP/man/terminfo.tail	2005-08-24 03:01:44.683257176 +1200
+@@ -1510,7 +1510,7 @@
+ The "before tc expansion" length is the most important one, because it
+ affects more than just users of that particular terminal.
+ This is the
+-length of the entry as it exists in /etc/termcap, minus the
++length of the entry as it exists in /System/Settings/termcap, minus the
+ backslash-newline pairs, which tgetent() strips out while reading it.
+ Some termcap libraries strip off the final newline, too (GNU termcap does not).
+ Now suppose:
+diff -urN ncurses-5.4/man/tset.1 ncurses-5.4-STEP/man/tset.1
+--- ncurses-5.4/man/tset.1	2003-05-11 12:32:53.000000000 +1200
++++ ncurses-5.4-STEP/man/tset.1	2005-08-24 03:01:44.702254288 +1200
+@@ -44,9 +44,9 @@
+ 2. The value of the \fBTERM\fR environmental variable.
+ .PP
+ 3. (BSD systems only.) The terminal type associated with the standard
+-error output device in the \fI/etc/ttys\fR file.  (On Linux and
++error output device in the \fI/System/Settings/ttys\fR file.  (On Linux and
+ System-V-like UNIXes, \fIgetty\fR does this job by setting
+-\fBTERM\fR according to the type passed to it by \fI/etc/inittab\fR.)
++\fBTERM\fR according to the type passed to it by \fI/System/Settings/inittab\fR.)
+ .PP
+ 4. The default terminal type, ``unknown''.
+ .PP
+@@ -137,7 +137,7 @@
+ .SH TERMINAL TYPE MAPPING
+ When the terminal is not hardwired into the system (or the current
+ system information is incorrect) the terminal type derived from the
+-\fI/etc/ttys\fR file or the \fBTERM\fR environmental variable is often
++\fI/System/Settings/ttys\fR file or the \fBTERM\fR environmental variable is often
+ something generic like \fBnetwork\fR, \fBdialup\fR, or \fBunknown\fR.
+ When \fBtset\fR is used in a startup script it is often desirable to
+ provide information about the type of terminal used on such ports.
+@@ -192,7 +192,7 @@
+ S. Raymond <esr@snark.thyrsus.com>.
+ .SH COMPATIBILITY
+ The \fBtset\fR utility has been provided for backward-compatibility with BSD
+-environments (under most modern UNIXes, \fB/etc/inittab\fR and \fIgetty\fR(1)
++environments (under most modern UNIXes, \fB/System/Settings/inittab\fR and \fIgetty\fR(1)
+ can set \fBTERM\fR appropriately for each dial-up line; this obviates what was
+ \fBtset\fR's most important use).  This implementation behaves like 4.4BSD
+ tset, with a few exceptions specified here.
+@@ -231,7 +231,7 @@
+ environment variables.
+ .SH FILES
+ .TP 5
+-/etc/ttys
++/System/Settings/ttys
+ system port name to terminal type mapping database (BSD versions only).
+ .TP
+ @TERMINFO@
+diff -urN ncurses-5.4/menu/Makefile.in ncurses-5.4-STEP/menu/Makefile.in
+--- ncurses-5.4/menu/Makefile.in	2003-11-02 11:44:33.000000000 +1300
++++ ncurses-5.4-STEP/menu/Makefile.in	2005-08-24 03:01:25.203218592 +1200
+@@ -42,7 +42,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ x		= @EXEEXT@
+diff -urN ncurses-5.4/misc/Makefile.in ncurses-5.4-STEP/misc/Makefile.in
+--- ncurses-5.4/misc/Makefile.in	2002-01-13 12:54:39.000000000 +1300
++++ ncurses-5.4-STEP/misc/Makefile.in	2005-08-24 03:01:25.212217224 +1200
+@@ -42,7 +42,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES :
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ CF_MFLAGS 	= @cf_cv_makeflags@
+diff -urN ncurses-5.4/misc/csort ncurses-5.4-STEP/misc/csort
+--- ncurses-5.4/misc/csort	2002-10-20 10:42:09.000000000 +1300
++++ ncurses-5.4-STEP/misc/csort	2005-08-24 03:01:25.215216768 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: csort,v 1.2 2002/10/19 21:42:09 tom Exp $
+ ##############################################################################
+ # Copyright (c) 2002 Free Software Foundation, Inc.                          #
+diff -urN ncurses-5.4/misc/makellib ncurses-5.4-STEP/misc/makellib
+--- ncurses-5.4/misc/makellib	2000-10-29 10:37:10.000000000 +1300
++++ ncurses-5.4-STEP/misc/makellib	2005-08-24 03:01:25.206218136 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ ##############################################################################
+ # Copyright (c) 1998,2000 Free Software Foundation, Inc.                     #
+ #                                                                            #
+diff -urN ncurses-5.4/misc/run_tic.in ncurses-5.4-STEP/misc/run_tic.in
+--- ncurses-5.4/misc/run_tic.in	2003-09-07 10:31:44.000000000 +1200
++++ ncurses-5.4-STEP/misc/run_tic.in	2005-08-24 03:02:01.003776080 +1200
+@@ -91,14 +91,14 @@
+ # would generate a lot of confusing error messages if we tried to overwrite it.
+ # We explicitly remove its contents rather than the directory itself, in case
+ # the directory is actually a symbolic link.
+-( cd $TERMINFO && rm -fr ? 2>/dev/null )
++( cd $TERMINFO && rm -fr ? 2>/System/Devices/null )
+ 
+ # If we're not installing into /usr/share/, we'll have to adjust the location
+ # of the tabset files in terminfo.src (which are in a parallel directory).
+ TABSET=`echo $ticdir | sed -e 's%/terminfo$%/tabset%'`
+ if test "x$TABSET" != "x/usr/share/tabset" ; then
+ 	echo '** adjusting tabset paths'
+-	TMP=${TMPDIR-/tmp}/$$
++	TMP=${TMPDIR-/System/TemporaryFiles}/$$
+ 	sed -e s%/usr/share/tabset%$TABSET%g $source >$TMP
+ 	trap "rm -f $TMP" 0 1 2 5 15
+ 	source=$TMP
+@@ -128,8 +128,8 @@
+ # all systems support symbolic links, and those that do provide a variety
+ # of options for 'test'.
+ if test "$TICDIR" != "$TERMINFO" ; then
+-	( rm -f $TICDIR 2>/dev/null )
+-	if ( cd $TICDIR 2>/dev/null )
++	( rm -f $TICDIR 2>/System/Devices/null )
++	if ( cd $TICDIR 2>/System/Devices/null )
+ 	then
+ 		cd $TICDIR
+ 		TICDIR=`pwd`
+diff -urN ncurses-5.4/misc/shlib ncurses-5.4-STEP/misc/shlib
+--- ncurses-5.4/misc/shlib	2003-07-20 10:58:14.000000000 +1200
++++ ncurses-5.4-STEP/misc/shlib	2005-08-24 03:01:25.218216312 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ ##############################################################################
+ # Copyright (c) 1998,2000 Free Software Foundation, Inc.                     #
+ #                                                                            #
+diff -urN ncurses-5.4/misc/tdlint ncurses-5.4-STEP/misc/tdlint
+--- ncurses-5.4/misc/tdlint	2000-10-29 09:53:36.000000000 +1300
++++ ncurses-5.4-STEP/misc/tdlint	2005-08-24 03:01:25.209217680 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ ##############################################################################
+ # Copyright (c) 1998 Free Software Foundation, Inc.                          #
+ #                                                                            #
+diff -urN ncurses-5.4/misc/terminfo.src ncurses-5.4-STEP/misc/terminfo.src
+--- ncurses-5.4/misc/terminfo.src	2004-01-18 14:37:18.000000000 +1300
++++ ncurses-5.4-STEP/misc/terminfo.src	2005-08-24 03:01:45.575121592 +1200
+@@ -15870,7 +15870,7 @@
+ #
+ # The default Mac OS X and Darwin installation reports "vt100" as the
+ # terminal type, and exports no helpful environment variables. To fix
+-# this, change the "console" entry in /etc/ttys from "vt100" to
++# this, change the "console" entry in /System/Settings/ttys from "vt100" to
+ # "xnuppc-WxH", where W and H are the character dimensions of your
+ # console (see below.)
+ #
+@@ -19499,12 +19499,12 @@
+ #	GS	smacs		start alternate character set
+ #	GE	rmacs		end alternate character set
+ #	GG			:as:/:ae: glitch (analogous to :sg:/:ug:)
+-#	bo	blink		begin blink (not used in /etc/termcap)
+-#	be			end blink (not used in /etc/termcap)
+-#	bb			blink glitch  (not used in /etc/termcap)
+-#	it	dim		begin dim (not used in /etc/termcap)
+-#	ie			end dim (not used in /etc/termcap)
+-#	ig			dim glitch  (not used in /etc/termcap)
++#	bo	blink		begin blink (not used in /System/Settings/termcap)
++#	be			end blink (not used in /System/Settings/termcap)
++#	bb			blink glitch  (not used in /System/Settings/termcap)
++#	it	dim		begin dim (not used in /System/Settings/termcap)
++#	ie			end dim (not used in /System/Settings/termcap)
++#	ig			dim glitch  (not used in /System/Settings/termcap)
+ #
+ # Finally, XENIX also used the following forms-drawing capabilities:
+ #
+@@ -19595,7 +19595,7 @@
+ #
+ ######## CHANGE HISTORY
+ #
+-# The last /etc/termcap version maintained by John Kunze was 8.3, dated 8/5/94.
++# The last /System/Settings/termcap version maintained by John Kunze was 8.3, dated 8/5/94.
+ # Releases 9 and up are maintained by Eric S. Raymond as part of the ncurses
+ # project.
+ #
+diff -urN ncurses-5.4/mkinstalldirs ncurses-5.4-STEP/mkinstalldirs
+--- ncurses-5.4/mkinstalldirs	2002-06-30 06:52:57.000000000 +1200
++++ ncurses-5.4-STEP/mkinstalldirs	2005-08-24 03:01:25.220216008 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # mkinstalldirs --- make directory hierarchy
+ # Author: Noah Friedman <friedman@prep.ai.mit.edu>
+ # Created: 1993-05-16
+diff -urN ncurses-5.4/ncurses/Makefile.in ncurses-5.4-STEP/ncurses/Makefile.in
+--- ncurses-5.4/ncurses/Makefile.in	2003-11-02 11:48:53.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/Makefile.in	2005-08-24 03:01:25.240212968 +1200
+@@ -45,7 +45,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ CF_MFLAGS 	= @cf_cv_makeflags@
+diff -urN ncurses-5.4/ncurses/base/MKlib_gen.sh ncurses-5.4-STEP/ncurses/base/MKlib_gen.sh
+--- ncurses-5.4/ncurses/base/MKlib_gen.sh	2004-02-08 02:31:35.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/base/MKlib_gen.sh	2005-08-24 03:01:38.533192128 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # MKlib_gen.sh -- generate sources from curses.h macro definitions
+ #
+@@ -391,7 +391,7 @@
+ | $AWK -f $AW1 using=$USE \
+ | sed -e 's/^\([a-z_][a-z_]*[ *]*\)/\1 gen_/' -e 's/  / /g' >>$TMP
+ 
+-$preprocessor $TMP 2>/dev/null \
++$preprocessor $TMP 2>/System/Devices/null \
+ | sed -e 's/  / /g' -e 's/^ //' \
+ | $AWK -f $AW2 \
+ | sed -f $ED3 \
+diff -urN ncurses-5.4/ncurses/base/lib_initscr.c ncurses-5.4-STEP/ncurses/base/lib_initscr.c
+--- ncurses-5.4/ncurses/base/lib_initscr.c	2003-12-28 08:13:51.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/base/lib_initscr.c	2005-08-24 03:01:38.529192736 +1200
+@@ -68,11 +68,11 @@
+ 	 * 2002/9/21
+ 	 * Work around a bug in Cygwin.  Full-screen subprocesses run from
+ 	 * bash, in turn spawned from another full-screen process, will dump
+-	 * core when attempting to write to stdout.  Opening /dev/tty
++	 * core when attempting to write to stdout.  Opening /System/Devices/tty
+ 	 * explicitly seems to fix the problem.
+ 	 */
+ 	if (isatty(fileno(stdout))) {
+-	    FILE *fp = fopen("/dev/tty", "w");
++	    FILE *fp = fopen("/System/Devices/tty", "w");
+ 	    if (fp != 0 && isatty(fileno(fp))) {
+ 		fclose(stdout);
+ 		dup2(fileno(fp), STDOUT_FILENO);
+diff -urN ncurses-5.4/ncurses/base/lib_mouse.c ncurses-5.4-STEP/ncurses/base/lib_mouse.c
+--- ncurses-5.4/ncurses/base/lib_mouse.c	2003-11-09 10:50:50.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/base/lib_mouse.c	2005-08-24 03:01:38.523193648 +1200
+@@ -405,7 +405,7 @@
+ 	if (isatty(SP->_ifd))
+ 	    the_device = ttyname(SP->_ifd);
+ 	if (the_device == 0)
+-	    the_device = "/dev/tty";
++	    the_device = "/System/Devices/tty";
+ 
+ 	SP->_mouse_fd = open(the_device, O_RDWR);
+ 
+diff -urN ncurses-5.4/ncurses/tinfo/MKcaptab.awk ncurses-5.4-STEP/ncurses/tinfo/MKcaptab.awk
+--- ncurses-5.4/ncurses/tinfo/MKcaptab.awk	2000-12-10 13:14:12.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/tinfo/MKcaptab.awk	2005-08-24 03:01:25.228214792 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: MKcaptab.awk,v 1.12 2000/12/10 00:14:12 tom Exp $
+ AWK=${1-awk}
+ DATA=${2-../include/Caps}
+diff -urN ncurses-5.4/ncurses/tinfo/MKfallback.sh ncurses-5.4-STEP/ncurses/tinfo/MKfallback.sh
+--- ncurses-5.4/ncurses/tinfo/MKfallback.sh	2001-12-02 14:55:30.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/tinfo/MKfallback.sh	2005-08-24 03:01:25.231214336 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: MKfallback.sh,v 1.11 2001/12/02 01:55:30 tom Exp $
+ #
+ # MKfallback.sh -- create fallback table for entry reads
+diff -urN ncurses-5.4/ncurses/tinfo/MKkeys_list.sh ncurses-5.4-STEP/ncurses/tinfo/MKkeys_list.sh
+--- ncurses-5.4/ncurses/tinfo/MKkeys_list.sh	2003-10-26 05:19:54.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/tinfo/MKkeys_list.sh	2005-08-24 03:01:25.234213880 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # $Id: MKkeys_list.sh,v 1.4 2003/10/25 16:19:54 tom Exp $
+ ##############################################################################
+ # Copyright (c) 2001,2003 Free Software Foundation, Inc.                     #
+diff -urN ncurses-5.4/ncurses/tinfo/comp_scan.c ncurses-5.4-STEP/ncurses/tinfo/comp_scan.c
+--- ncurses-5.4/ncurses/tinfo/comp_scan.c	2003-12-14 13:32:40.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/tinfo/comp_scan.c	2005-08-24 03:01:45.618115056 +1200
+@@ -54,7 +54,7 @@
+ 
+ /*
+  * Maximum length of string capability we'll accept before raising an error.
+- * Yes, there is a real capability in /etc/termcap this long, an "is".
++ * Yes, there is a real capability in /System/Settings/termcap this long, an "is".
+  */
+ #define MAXCAPLEN	600
+ 
+diff -urN ncurses-5.4/ncurses/tinfo/read_termcap.c ncurses-5.4-STEP/ncurses/tinfo/read_termcap.c
+--- ncurses-5.4/ncurses/tinfo/read_termcap.c	2003-11-09 09:22:45.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/tinfo/read_termcap.c	2005-08-24 03:01:45.612115968 +1200
+@@ -795,12 +795,12 @@
+ 
+     /*
+      * TERMCAP can have one of two things in it.  It can be the name of a file
+-     * to use instead of /etc/termcap.  In this case it better start with a
++     * to use instead of /System/Settings/termcap.  In this case it better start with a
+      * "/".  Or it can be an entry to use so we don't have to read the file. 
+      * In this case it has to already have the newlines crunched out.  If
+      * TERMCAP does not hold a file name then a path of names is searched
+      * instead.  The path is found in the TERMPATH variable, or becomes
+-     * "$HOME/.termcap /etc/termcap" if no TERMPATH exists.
++     * "$HOME/.termcap /System/Settings/termcap" if no TERMPATH exists.
+      */
+     _nc_str_init(&desc, pathbuf, sizeof(pathbuf));
+     if (cp == NULL) {
+@@ -1044,7 +1044,7 @@
+     }
+ 
+     /*
+-     * Probably /etc/termcap is a symlink to /usr/share/misc/termcap.
++     * Probably /System/Settings/termcap is a symlink to /usr/share/misc/termcap.
+      * Avoid reading the same file twice.
+      */
+ #ifdef HAVE_LINK
+@@ -1138,7 +1138,7 @@
+ 		 * be very fast.
+ 		 *
+ 		 * Disadvantage:  After the first time a termcap type is loaded
+-		 * by its user, editing it in the /etc/termcap file, or in
++		 * by its user, editing it in the /System/Settings/termcap file, or in
+ 		 * TERMCAP, or in a local ~/.termcap, will be ineffective
+ 		 * unless the terminfo entry is explicitly removed.
+ 		 */
+diff -urN ncurses-5.4/ncurses/tty/MKexpanded.sh ncurses-5.4-STEP/ncurses/tty/MKexpanded.sh
+--- ncurses-5.4/ncurses/tty/MKexpanded.sh	2000-12-10 13:24:33.000000000 +1300
++++ ncurses-5.4-STEP/ncurses/tty/MKexpanded.sh	2005-08-24 03:01:38.537191520 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ ##############################################################################
+ # Copyright (c) 1998,2000 Free Software Foundation, Inc.                     #
+ #                                                                            #
+@@ -90,7 +90,7 @@
+ }
+ EOF
+ 
+-$preprocessor $TMP 2>/dev/null | sed -e '1,/^IGNORE$/d'
++$preprocessor $TMP 2>/System/Devices/null | sed -e '1,/^IGNORE$/d'
+ 
+ cat <<EOF
+ #else /* ! NCURSES_EXPANDED */
+diff -urN ncurses-5.4/panel/Makefile.in ncurses-5.4-STEP/panel/Makefile.in
+--- ncurses-5.4/panel/Makefile.in	2003-11-02 11:44:33.000000000 +1300
++++ ncurses-5.4-STEP/panel/Makefile.in	2005-08-24 03:01:25.244212360 +1200
+@@ -42,7 +42,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ x		= @EXEEXT@
+diff -urN ncurses-5.4/progs/MKtermsort.sh ncurses-5.4-STEP/progs/MKtermsort.sh
+--- ncurses-5.4/progs/MKtermsort.sh	2003-01-12 11:23:50.000000000 +1300
++++ ncurses-5.4-STEP/progs/MKtermsort.sh	2005-08-24 03:01:25.255210688 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: MKtermsort.sh,v 1.9 2003/01/11 22:23:50 tom Exp $
+ #
+ # MKtermsort.sh -- generate indirection vectors for the various sort methods
+diff -urN ncurses-5.4/progs/Makefile.in ncurses-5.4-STEP/progs/Makefile.in
+--- ncurses-5.4/progs/Makefile.in	2003-11-02 11:45:57.000000000 +1300
++++ ncurses-5.4-STEP/progs/Makefile.in	2005-08-24 03:01:25.259210080 +1200
+@@ -42,7 +42,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ CF_MFLAGS 	= @cf_cv_makeflags@
+diff -urN ncurses-5.4/progs/capconvert ncurses-5.4-STEP/progs/capconvert
+--- ncurses-5.4/progs/capconvert	1997-08-03 09:52:06.000000000 +1200
++++ ncurses-5.4-STEP/progs/capconvert	2005-08-24 03:01:38.545190304 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: capconvert,v 1.3 1997/08/02 21:52:06 tom Exp $
+ #
+ # capconvert -- automated conversion from termcap to terminfo
+@@ -180,7 +180,7 @@
+ sed -n $master \
+ 	-e '1,/SPLIT HERE/w 'tsplit$$.01 \
+ 	-e '/SPLIT HERE/,$w 'tsplit$$.02 \
+-	2>/dev/null
++	2>/System/Devices/null
+ for x in tsplit$$.*; do eval $TIC $x; done
+ rm tsplit$$.*
+ trap 0 1 2 5 15
+diff -urN ncurses-5.4/progs/tic.c ncurses-5.4-STEP/progs/tic.c
+--- ncurses-5.4/progs/tic.c	2003-12-07 06:36:57.000000000 +1300
++++ ncurses-5.4-STEP/progs/tic.c	2005-08-24 03:02:01.012774712 +1200
+@@ -602,14 +602,14 @@
+     } else {
+ 	if (infodump == TRUE) {
+ 	    /* captoinfo's no-argument case */
+-	    source_file = "/etc/termcap";
++	    source_file = "/System/Settings/termcap";
+ 	    if ((termcap = getenv("TERMCAP")) != 0
+ 		&& (namelst = make_namelist(getenv("TERM"))) != 0) {
+ 		if (access(termcap, F_OK) == 0) {
+ 		    /* file exists */
+ 		    source_file = termcap;
+ 		} else if ((tmp_fp = open_tempfile(strcpy(my_tmpname,
+-							  "/tmp/XXXXXX")))
++							  "/System/TemporaryFiles/XXXXXX")))
+ 			   != 0) {
+ 		    source_file = my_tmpname;
+ 		    fprintf(tmp_fp, "%s\n", termcap);
+diff -urN ncurses-5.4/progs/tset.c ncurses-5.4-STEP/progs/tset.c
+--- ncurses-5.4/progs/tset.c	2003-12-07 06:21:01.000000000 +1300
++++ ncurses-5.4-STEP/progs/tset.c	2005-08-24 03:01:45.660108672 +1200
+@@ -531,7 +531,7 @@
+ #if HAVE_GETTTYNAM
+ 	/*
+ 	 * We have the 4.3BSD library call getttynam(3); that means
+-	 * there's an /etc/ttys to look up device-to-type mappings in.
++	 * there's an /System/Settings/ttys to look up device-to-type mappings in.
+ 	 * Try ttyname(3); check for dialup or other mapping.
+ 	 */
+ 	if ((t = getttynam(p))) {
+@@ -539,8 +539,8 @@
+ 	    goto map;
+ 	}
+ #else
+-	if ((fp = fopen("/etc/ttytype", "r")) != 0
+-	    || (fp = fopen("/etc/ttys", "r")) != 0) {
++	if ((fp = fopen("/System/Settings/ttytype", "r")) != 0
++	    || (fp = fopen("/System/Settings/ttys", "r")) != 0) {
+ 	    char buffer[BUFSIZ];
+ 	    char *s, *t, *d;
+ 
+@@ -571,7 +571,7 @@
+ 
+     /*
+      * If not a path, remove TERMCAP from the environment so we get a
+-     * real entry from /etc/termcap.  This prevents us from being fooled
++     * real entry from /System/Settings/termcap.  This prevents us from being fooled
+      * by out of date stuff in the environment.
+      */
+   found:if ((p = getenv("TERMCAP")) != 0 && *p != '/') {
+diff -urN ncurses-5.4/tack/Makefile.in ncurses-5.4-STEP/tack/Makefile.in
+--- ncurses-5.4/tack/Makefile.in	2003-11-02 11:46:24.000000000 +1300
++++ ncurses-5.4-STEP/tack/Makefile.in	2005-08-24 03:01:25.263209472 +1200
+@@ -10,7 +10,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ CF_MFLAGS 	= @cf_cv_makeflags@
+diff -urN ncurses-5.4/tack/ansi.c ncurses-5.4-STEP/tack/ansi.c
+--- ncurses-5.4/tack/ansi.c	2001-06-19 06:44:17.000000000 +1200
++++ ncurses-5.4-STEP/tack/ansi.c	2005-08-24 03:01:38.551189392 +1200
+@@ -497,7 +497,7 @@
+ #ifdef TEDANSI
+ 			fp = fopen("ted.ansi", "w");
+ #else
+-			fp = fopen("/dev/console", "w");
++			fp = fopen("/System/Devices/console", "w");
+ #endif
+ #endif
+ 			for (i = j = 0; j < modes_found; j = ++i >> 1) {
+diff -urN ncurses-5.4/tar-copy.sh ncurses-5.4-STEP/tar-copy.sh
+--- ncurses-5.4/tar-copy.sh	2003-10-26 03:40:07.000000000 +1300
++++ ncurses-5.4-STEP/tar-copy.sh	2005-08-24 03:01:38.557188480 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: tar-copy.sh,v 1.5 2003/10/25 14:40:07 tom Exp $
+ ##############################################################################
+ # Copyright (c) 1998,2003 Free Software Foundation, Inc.                     #
+@@ -57,7 +57,7 @@
+ TMP=$WD/copy$$
+ 
+ cd $2
+-TEST=`ls -d $1 2>/dev/null`
++TEST=`ls -d $1 2>/System/Devices/null`
+ if test -z "$TEST"
+ then
+ 	echo "... no match for \"$1\" in $2"
+@@ -68,7 +68,7 @@
+ 	then
+ 		cd $3
+ 		LIST=`tar tf $TMP 2>&1`
+-		$DOIT rm -rf $LIST 2>/dev/null
++		$DOIT rm -rf $LIST 2>/System/Devices/null
+ 		$DOIT tar xvf $TMP
+ 	else
+ 		echo "Cannot create tar of $1 files"
+diff -urN ncurses-5.4/test/Makefile.in ncurses-5.4-STEP/test/Makefile.in
+--- ncurses-5.4/test/Makefile.in	2003-12-07 14:36:16.000000000 +1300
++++ ncurses-5.4-STEP/test/Makefile.in	2005-08-24 03:01:25.544166760 +1200
+@@ -34,7 +34,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES:
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ 
+ @SET_MAKE@
+ 
+diff -urN ncurses-5.4/test/aclocal.m4 ncurses-5.4-STEP/test/aclocal.m4
+--- ncurses-5.4/test/aclocal.m4	2003-10-19 13:09:23.000000000 +1300
++++ ncurses-5.4-STEP/test/aclocal.m4	2005-08-24 03:01:39.269080256 +1200
+@@ -54,9 +54,9 @@
+ 	ifelse([$1],,[AC_CANONICAL_HOST],[$1])
+ 	system_name="$host_os"
+ else
+-	system_name="`(uname -s -r) 2>/dev/null`"
++	system_name="`(uname -s -r) 2>/System/Devices/null`"
+ 	if test -z "$system_name" ; then
+-		system_name="`(hostname) 2>/dev/null`"
++		system_name="`(hostname) 2>/System/Devices/null`"
+ 	fi
+ fi
+ test -n "$system_name" && AC_DEFINE_UNQUOTED(SYSTEM_NAME,"$system_name")
+diff -urN ncurses-5.4/test/configure ncurses-5.4-STEP/test/configure
+--- ncurses-5.4/test/configure	2004-01-31 13:07:15.000000000 +1300
++++ ncurses-5.4-STEP/test/configure	2005-08-24 03:01:45.713100616 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ # Guess values for system-dependent variables and create Makefiles.
+ # Generated automatically using autoconf version 2.13.20030927 
+@@ -49,7 +49,7 @@
+ # Initialize some other variables.
+ subdirs=
+ MFLAGS= MAKEFLAGS=
+-SHELL=${CONFIG_SHELL-/bin/sh}
++SHELL=${CONFIG_SHELL-/System/Tools/sh}
+ # Maximum number of lines to put in a shell here document.
+ ac_max_here_lines=12
+ 
+@@ -406,12 +406,12 @@
+ # 0 standard input
+ # 1 file creation
+ # 2 errors and warnings
+-# 3 some systems may open it to /dev/tty
++# 3 some systems may open it to /System/Devices/tty
+ # 4 used on the Kubota Titan
+ # 6 checking for... messages and results
+ # 5 compiler messages saved in config.log
+ if test "$silent" = yes; then
+-  exec 6>/dev/null
++  exec 6>/System/Devices/null
+ else
+   exec 6>&1
+ fi
+@@ -483,9 +483,9 @@
+ # Prefer explicitly selected file to automatically selected ones.
+ if test -z "$CONFIG_SITE"; then
+   if test "x$prefix" != xNONE; then
+-    CONFIG_SITE="$prefix/share/config.site $prefix/etc/config.site"
++    CONFIG_SITE="$prefix/share/config.site $prefix/System/Settings/config.site"
+   else
+-    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/etc/config.site"
++    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/System/Settings/config.site"
+   fi
+ fi
+ for ac_site_file in $CONFIG_SITE; do
+@@ -512,9 +512,9 @@
+ 
+ ac_exeext=
+ ac_objext=o
+-if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
++if (echo "testing\c"; echo 1,2,3) | grep c >/System/Devices/null; then
+   # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
+-  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
++  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/System/Devices/null; then
+     ac_n= ac_c='
+ ' ac_t='	'
+   else
+@@ -556,7 +556,7 @@
+ if test -f $srcdir/config.guess ; then
+ 	
+ # Make sure we can run config.sub.
+-if ${CONFIG_SHELL-/bin/sh} $ac_config_sub sun4 >/dev/null 2>&1; then :
++if ${CONFIG_SHELL-/System/Tools/sh} $ac_config_sub sun4 >/System/Devices/null 2>&1; then :
+ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
+ fi
+ 
+@@ -568,14 +568,14 @@
+ NONE)
+   case $nonopt in
+   NONE)
+-    if host_alias=`${CONFIG_SHELL-/bin/sh} $ac_config_guess`; then :
++    if host_alias=`${CONFIG_SHELL-/System/Tools/sh} $ac_config_guess`; then :
+     else { echo "configure: error: can not guess host type; you must specify one" 1>&2; exit 1; }
+     fi ;;
+   *) host_alias=$nonopt ;;
+   esac ;;
+ esac
+ 
+-host=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $host_alias`
++host=`${CONFIG_SHELL-/System/Tools/sh} $ac_config_sub $host_alias`
+ host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+ host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+@@ -583,9 +583,9 @@
+ 
+ 	system_name="$host_os"
+ else
+-	system_name="`(uname -s -r) 2>/dev/null`"
++	system_name="`(uname -s -r) 2>/System/Devices/null`"
+ 	if test -z "$system_name" ; then
+-		system_name="`(hostname) 2>/dev/null`"
++		system_name="`(hostname) 2>/System/Devices/null`"
+ 	fi
+ fi
+ test -n "$system_name" && cat >> confdefs.h <<EOF
+@@ -619,7 +619,7 @@
+ 	@echo 'ac_maketemp="${MAKE}"'
+ EOF
+ # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+-eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
++eval `${MAKE-make} -f conftestmake 2>/System/Devices/null | grep temp=`
+ if test -n "$ac_maketemp"; then
+   eval ac_cv_prog_make_${ac_make}_set=yes
+ else
+@@ -770,7 +770,7 @@
+ if { (eval echo configure:771: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+   # If we can't run a trivial program, we are probably using a cross compiler.
+-  if (./conftest; exit) 2>/dev/null; then
++  if (./conftest; exit) 2>/System/Devices/null; then
+     ac_cv_prog_cc_cross=no
+   else
+     ac_cv_prog_cc_cross=yes
+@@ -807,7 +807,7 @@
+   yes;
+ #endif
+ EOF
+-if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:811: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
++if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:811: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/System/Devices/null 2>&1; then
+   ac_cv_prog_gcc=yes
+ else
+   ac_cv_prog_gcc=no
+@@ -878,7 +878,7 @@
+ #include <assert.h>
+ Syntax Error
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:883: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -895,7 +895,7 @@
+ #include <assert.h>
+ Syntax Error
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:900: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -912,7 +912,7 @@
+ #include <assert.h>
+ Syntax Error
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:917: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -1288,7 +1288,7 @@
+ #include "confdefs.h"
+ #include <$ac_hdr>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:1293: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -1378,7 +1378,7 @@
+ 	exit(0);
+ }
+ EOF
+-if { (eval echo configure:1382: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:1382: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   
+ 	cf_cv_ncurses_version=`cat $cf_tempfile`
+@@ -2180,7 +2180,7 @@
+ 	exit(0);
+ }
+ EOF
+-if { (eval echo configure:2184: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:2184: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   
+ 	cf_cv_ncurses_version=`cat $cf_tempfile`
+@@ -3139,7 +3139,7 @@
+ 	exit(0);
+ }
+ EOF
+-if { (eval echo configure:3143: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:3143: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   
+ 	cf_cv_ncurses_version=`cat $cf_tempfile`
+@@ -3715,7 +3715,7 @@
+ #include <string.h>
+ #include <float.h>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:3720: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -3738,7 +3738,7 @@
+ #include <string.h>
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "memchr" >/dev/null 2>&1; then
++  egrep "memchr" >/System/Devices/null 2>&1; then
+   :
+ else
+   rm -rf conftest*
+@@ -3756,7 +3756,7 @@
+ #include <stdlib.h>
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "free" >/dev/null 2>&1; then
++  egrep "free" >/System/Devices/null 2>&1; then
+   :
+ else
+   rm -rf conftest*
+@@ -3767,7 +3767,7 @@
+ fi
+ 
+ if test $ac_cv_header_stdc = yes; then
+-  # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
++  # /System/Tools/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
+ if test "$cross_compiling" = yes; then
+   :
+ else
+@@ -3783,7 +3783,7 @@
+ exit (0); }
+ 
+ EOF
+-if { (eval echo configure:3787: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:3787: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   :
+ else
+@@ -3867,7 +3867,7 @@
+ #include "confdefs.h"
+ #include <$ac_hdr>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:3872: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -4063,7 +4063,7 @@
+ }
+ 
+ EOF
+-if { (eval echo configure:4067: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:4067: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   cf_cv_func_curses_version=yes
+ 
+@@ -4263,7 +4263,7 @@
+ # the --cache-file=FILE option to use a different cache file; that is
+ # what configure does when it calls configure scripts in
+ # subdirectories, so they share the cache.
+-# Giving --cache-file=/dev/null disables caching, for debugging configure.
++# Giving --cache-file=/System/Devices/null disables caching, for debugging configure.
+ # config.status only pays attention to the cache file if you give it the
+ # --recheck option to rerun configure.
+ #
+@@ -4322,11 +4322,11 @@
+ echo creating $CONFIG_STATUS
+ rm -f $CONFIG_STATUS
+ cat > $CONFIG_STATUS <<EOF
+-#! /bin/sh
++#! /System/Tools/sh
+ # Generated automatically by configure.
+ # Run this file to recreate the current configuration.
+ # This directory was configured as follows,
+-# on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
++# on host `(hostname || uname -n) 2>/System/Devices/null | sed 1q`:
+ #
+ # $0 $ac_configure_args
+ #
+@@ -4338,8 +4338,8 @@
+ do
+   case "\$ac_option" in
+   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
+-    echo "running \${CONFIG_SHELL-/bin/sh} $0 $ac_configure_args --no-create --no-recursion"
+-    exec \${CONFIG_SHELL-/bin/sh} $0 $ac_configure_args --no-create --no-recursion ;;
++    echo "running \${CONFIG_SHELL-/System/Tools/sh} $0 $ac_configure_args --no-create --no-recursion"
++    exec \${CONFIG_SHELL-/System/Tools/sh} $0 $ac_configure_args --no-create --no-recursion ;;
+   -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
+     echo "$CONFIG_STATUS generated by autoconf version 2.13.20030927"
+     exit 0 ;;
+@@ -4600,7 +4600,7 @@
+   echo "/* $ac_file.  Generated automatically by configure.  */" > conftest.h
+   cat conftest.in >> conftest.h
+   rm -f conftest.in
+-  if cmp -s $ac_file conftest.h 2>/dev/null; then
++  if cmp -s $ac_file conftest.h 2>/System/Devices/null; then
+     echo "$ac_file is unchanged"
+     rm -f conftest.h
+   else
+@@ -4645,5 +4645,5 @@
+ EOF
+ chmod +x $CONFIG_STATUS
+ rm -fr confdefs* $ac_clean_files
+-test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
++test "$no_create" = yes || ${CONFIG_SHELL-/System/Tools/sh} $CONFIG_STATUS || exit 1
+ 
+diff -urN ncurses-5.4/test/ditto.c ncurses-5.4-STEP/test/ditto.c
+--- ncurses-5.4/test/ditto.c	2001-09-16 09:53:37.000000000 +1200
++++ ncurses-5.4-STEP/test/ditto.c	2005-08-24 03:01:38.560188024 +1200
+@@ -34,7 +34,7 @@
+  * The program illustrates how to set up multiple screens from a single
+  * program.  Invoke the program by specifying another terminal on the same
+  * machine by specifying its device, e.g.,
+- *	ditto /dev/ttyp1
++ *	ditto /System/Devices/ttyp1
+  */
+ #include <test.priv.h>
+ #include <sys/stat.h>
+diff -urN ncurses-5.4/test/gdc.c ncurses-5.4-STEP/test/gdc.c
+--- ncurses-5.4/test/gdc.c	2002-08-11 07:20:14.000000000 +1200
++++ ncurses-5.4-STEP/test/gdc.c	2005-08-24 03:01:39.255082384 +1200
+@@ -110,7 +110,7 @@
+ 	"Usage: gdc [options] [count]"
+ 	,""
+ 	,"Options:"
+-	,"  -n  redirect input to /dev/null"
++	,"  -n  redirect input to /System/Devices/null"
+ 	,"  -s  scroll each number into place, rather than flipping"
+ 	,""
+ 	,"If you specify a count, gdc runs for that number of seconds"
+@@ -144,7 +144,7 @@
+ 	    scrol = TRUE;
+ 	    break;
+ 	case 'n':
+-	    ifp = fopen("/dev/null", "r");
++	    ifp = fopen("/System/Devices/null", "r");
+ 	    redirected = TRUE;
+ 	    break;
+ 	default:
+diff -urN ncurses-5.4/test/listused.sh ncurses-5.4-STEP/test/listused.sh
+--- ncurses-5.4/test/listused.sh	2003-07-06 07:02:41.000000000 +1200
++++ ncurses-5.4-STEP/test/listused.sh	2005-08-24 03:01:25.536167976 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Id: listused.sh,v 1.5 2003/07/05 19:02:41 tom Exp $
+ # A very simple script to list entrypoints that are used by either a test
+ # program, or within the libraries.  This relies on the output format of 'nm',
+diff -urN ncurses-5.4/test/tracemunch ncurses-5.4-STEP/test/tracemunch
+--- ncurses-5.4/test/tracemunch	2002-09-23 04:31:18.000000000 +1200
++++ ncurses-5.4-STEP/test/tracemunch	2005-08-24 03:01:23.799432000 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -w
++#!/System/Tools/perl -w
+ # $Id: tracemunch,v 1.3 2002/09/22 16:31:18 tom Exp $
+ ##############################################################################
+ # Copyright (c) 1998,2002 Free Software Foundation, Inc.                     #

@@ -1,0 +1,139 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Gcc-pass2-->
+
+<!--grabbing packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/gcc/gcc-4.1.1/gcc-core-4.1.1.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-core-4.1.1.tar.bz2</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/gcc/gcc-4.1.1/gcc-g++-4.1.1.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-g++-4.1.1.tar.bz2</amin:param>
+        </amin:download>
+
+<!--grabbing patches -->
+        
+        <amin:download>
+		<amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/gcc-4.1.1-bootstrap-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-4.1.1-bootstrap-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/gcc-4.1.1-STEP-nofixincludes.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-4.1.1-STEP-nofixincludes.patch</amin:param>
+        </amin:download>
+ 
+<!--running install-->
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gcc-core-4.1.1.tar.bz2</amin:param>
+	</amin:command>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/gcc-g++-4.1.1.tar.bz2</amin:param>
+        </amin:command>
+
+	<amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/opt/adistro/packages/gcc-4.1.1-bootstrap-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gcc-4.1.1</amin:shell>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/gcc-4.1.1-STEP-nofixincludes.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gcc-4.1.1</amin:shell>
+        </amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-4.1.1/configure</amin:param>
+		<amin:flag>
+			with-local-prefix=/bootstrap/System/Applications/GCC-4.1.1/
+			prefix=/bootstrap/System/Applications/GCC-4.1.1/
+			includedir=/bootstrap/System/Library/Headers/
+			enable-clocale=gnu 
+			enable-shared
+			enable-threads=posix
+			enable-__cxa_atexit 
+			enable-languages=c,c++
+			disable-libstdcxx-pch
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>gcc-build gcc-4.1.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/i686-pc-linux-gnu-g++</amin:param>
+                <amin:param name='target'>i686-pc-linux-gnu-g++</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/i686-pc-linux-gnu-c++</amin:param>
+                <amin:param name='target'>i686-pc-linux-gnu-c++</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/g++</amin:param>
+                <amin:param name='target'>g++</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/c++</amin:param>
+                <amin:param name='target'>c++</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/cpp</amin:param>
+                <amin:param name='target'>cpp</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='copy'>
+                <amin:param name='source'>specs</amin:param>
+                <amin:param name='target'>/bootstrap/System/Applications/GCC-4.1.1/lib/gcc/i686-pc-linux-gnu/4.1.1/specs</amin:param>
+                <amin:shell name='dir'>/opt/adistro/packages/</amin:shell>
+        </amin:command>
+
+        <amin:command name='search_replace'>
+                <amin:param name='target'>/bootstrap/System/Applications/GCC-4.1.1/lib/gcc/i686-pc-linux-gnu/4.1.1/specs</amin:param>
+                <amin:flag name='find'>/lib/ld-linux.so.2</amin:flag>
+                <amin:flag name='replace'>/bootstrap/System/Library/Libraries/Glibc-2.4/lib/ld-adistro.so.2</amin:flag>
+        </amin:command>
+
+</amin:profile>

@@ -1,0 +1,89 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!-- symlinks to bootstrap tools created until actual is built and installed in new FS -->
+
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>/bootstrap/System/Tools/bash</amin:param>
+		<amin:param name='target'>System/Tools/</amin:param>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name='dir'>/</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/System/Tools/pwd</amin:param>
+		<amin:param name='target'>System/Tools</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/System/Tools/cat</amin:param>
+		<amin:param name='target'>System/Tools</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/System/Tools/stty</amin:param>
+		<amin:param name='target'>System/Tools</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/System/Tools/perl</amin:param>
+		<amin:param name='target'>System/Tools</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/System/Tools/bash</amin:param>
+		<amin:param name='target'>System/Tools/sh</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='link'>
+                <amin:param name='source'>/bootstrap/System/Tools/awk</amin:param>
+                <amin:param name='target'>System/Tools/awk</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:param name='source'>/bootstrap/System/Tools/uname</amin:param>
+                <amin:param name='target'>System/Tools/uname</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:param name='source'>/bootstrap/System/Tools/perl</amin:param>
+                <amin:param name='target'>System/AdminTools/perl</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:param name='source'>/bootstrap/System/Applications/GCC-3.4.5/bin/cpp</amin:param>
+                <amin:param name='target'>System/Library/Tools/cpp</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/bootstrap/System/Tools/:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+</amin:chroot>
+
+</amin:profile>

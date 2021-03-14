@@ -1,0 +1,41 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Flex-->
+
+<!--retreiveing package-->
+
+	<amin:download>
+		<amin:param name='uri'>http://www.happy-monkey.net/architect/src/flex-2.5.33.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/flex-2.5.33.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/flex-2.5.33.tar.gz</amin:param>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/bootstrap
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/flex-2.5.33</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/flex-2.5.33</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/flex-2.5.33</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>flex-2.5.33</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+	</amin:command>
+</amin:profile>

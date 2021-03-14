@@ -1,0 +1,38 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Ncurses-5.7-->
+
+<!--retreiving package-->
+
+<amin:chroot dir='/opt/adistrobc'>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/ncurses-5.7.tar.gz</amin:param>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/usr 
+		with-shared
+		without-debug
+		</amin:flag>
+		<amin:shell name='dir'>/src/ncurses-5.7</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/src/ncurses-5.7</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/src/ncurses-5.7</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>ncurses-5.7</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+	</amin:command>
+</amin:chroot>
+
+</amin:profile>

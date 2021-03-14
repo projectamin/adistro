@@ -1,0 +1,36 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/sysklogd-1.5.tar.gz</amin:param>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/src/sysklogd-1.5</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/src/sysklogd-1.5</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name="textdump">
+		<amin:param name="target">syslog.conf</amin:param>
+		<amin:param name="content">
+			auth,authpriv.* -/var/log/auth.log
+			*.*;auth,authpriv.none -/var/log/sys.log
+			daemon.* -/var/log/daemon.log
+			kern.* -/var/log/kern.log
+			mail.* -/var/log/mail.log
+			user.* -/var/log/user.log
+			*.emerg *
+		</amin:param>
+		<amin:shell name="dir">/etc/</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>sysklogd-1.5</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

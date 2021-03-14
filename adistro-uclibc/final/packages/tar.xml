@@ -1,0 +1,42 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--tar-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/tar-1.19.tar.bz2</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+		<amin:flag>
+		bindir=/bin 
+		prefix=/usr
+		</amin:flag>
+                <amin:shell name='dir'>/build/tar-1.19</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/tar-1.19</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/tar-1.19</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">tar-1.19</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

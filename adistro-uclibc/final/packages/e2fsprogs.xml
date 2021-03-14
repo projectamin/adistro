@@ -1,0 +1,69 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--e2fsprogs-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/build</amin:param>
+		<amin:param name='archive'>/packages/e2fsprogs-1.40.2.tar.gz</amin:param>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/usr
+		disable-nls
+		sysconfdir=/etc
+		enable-elf-shlibs
+		</amin:flag>
+		<amin:shell name='dir'>/build/e2fsprogs-1.40.2</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/build/e2fsprogs-1.40.2</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/e2fsprogs-1.40.2</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/usr/include/blkid</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='mkdir'>
+                <amin:flag>p</amin:flag>
+                <amin:param name='target'>/usr/include/uuid</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='copy'>
+		<amin:flag>av</amin:flag>
+		<amin:param name='source'>*.h</amin:param>
+		<amin:param name='target'>/usr/include/blkid/</amin:param>
+		<amin:shell name='dir'>/build/e2fsprogs-1.40.2/lib/blkid</amin:shell>
+	</amin:command>
+
+        <amin:command name='copy'>
+                <amin:flag>av</amin:flag>
+                <amin:param name='source'>*.h</amin:param>
+                <amin:param name='target'>/usr/include/uuid/</amin:param>
+                <amin:shell name='dir'>/build/e2fsprogs-1.40.2/lib/uuid</amin:shell>
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>e2fsprogs-1.40.2</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

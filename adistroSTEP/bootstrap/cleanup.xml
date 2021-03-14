@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--cleaning up the host-->
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>umount</amin:param>
+		<amin:param>/System/Processes</amin:param>
+	</amin:command>
+	
+	<amin:command name='system_command'>
+		<amin:param name='basename'>umount</amin:param>
+		<amin:param>/System/SystemFS</amin:param>
+	</amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name='target'>/System</amin:param>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>/Local</amin:param>
+        </amin:command>
+
+</amin:profile>

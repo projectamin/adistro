@@ -1,0 +1,111 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Binutils-2.18-->
+
+<!--grabbing packages-->
+
+        <amin:download>
+              	<amin:param name='uri'>ftp://ftp.gnu.org/gnu/binutils/binutils-2.18.tar.bz2</amin:param>
+              	<amin:param name='file'>/opt/adistro-uclibc/packages/binutils-2.18.tar.bz2</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/*checkout*/trunk/buildroot/toolchain/binutils/2.18/100-makeinfo-version.patch?rev=20086</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/makeinfo-version.patch</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/*checkout*/trunk/buildroot/toolchain/binutils/2.18/110-arm-eabi-conf.patch?rev=19864</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/arm-eabi-conf.patch</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/*checkout*/trunk/buildroot/toolchain/binutils/2.18/300-012_check_ldrunpath_length.patch?rev=19864</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/check_ldrunpath_length.patch</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/*checkout*/trunk/buildroot/toolchain/binutils/2.18/300-001_ld_makefile_patch.patch?rev=19864</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/ld_makefile_patch.patch</amin:param>
+        </amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/binutils-2.18.tar.bz2</amin:param>
+	</amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro-uclibc/packages/makeinfo-version.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/binutils-2.18</amin:shell>
+        </amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro-uclibc/packages/arm-eabi-conf.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/binutils-2.18</amin:shell>
+        </amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro-uclibc/packages/check_ldrunpath_length.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/binutils-2.18</amin:shell>
+        </amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro-uclibc/packages/ld_makefile_patch.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/binutils-2.18</amin:shell>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>binutils-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../binutils-2.18/configure</amin:param>
+		<amin:flag>
+		prefix=/adistro-uclibc-bootstrap
+		enable-shared
+		target=i686-adistro-linux-uclibc
+		host=i686-adistro-linux-uclibc
+		build=i686-adistro-linux-uclibc
+		with-lib-path=/adistro-uclibc-bootstrap/lib
+		disable-werror
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=/adistro-uclibc-bootstrap/bin/gcc</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:flag>C</amin:flag>
+		<amin:param>ld clean</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:flag>C</amin:flag>
+		<amin:param>ld LIB_PATH=/usr/lib:/lib</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+	</amin:command>
+        <amin:command name='make'>
+                <amin:flag>C</amin:flag>
+                <amin:param>ld EXEEXT=-new install-exec-local</amin:param>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/binutils-build</amin:shell>
+                <amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+                <amin:shell name='env'>CC=gcc</amin:shell>
+        </amin:command>
+	<amin:command name="remove">
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>binutils-2.18</amin:param>
+		<amin:shell name="dir">/opt/adistro-uclibc/build</amin:shell>
+	</amin:command>
+        <amin:command name="remove">
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>binutils-build</amin:param>
+                <amin:shell name="dir">/opt/adistro-uclibc/build</amin:shell>
+        </amin:command>
+</amin:profile>

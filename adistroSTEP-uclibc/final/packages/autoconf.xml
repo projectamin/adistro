@@ -1,0 +1,83 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--autoconf-->
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Applications/Autoconf-2.59
+                </amin:flag>
+                <amin:shell name='dir'>/build/autoconf-2.59</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/autoconf-2.59</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/autoconf-2.59</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">autoconf-2.59</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Autoconf-2.59/bin/autoconf</amin:param>
+                <amin:param name='target'>autoconf</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Autoconf-2.59/bin/autoheader</amin:param>
+                <amin:param name='target'>autoheader</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Autoconf-2.59/bin/autom4te</amin:param>
+                <amin:param name='target'>autom4te</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Autoconf-2.59/bin/autoreconf</amin:param>
+                <amin:param name='target'>autoreconf</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Autoconf-2.59/bin/autoscan</amin:param>
+                <amin:param name='target'>autoscan</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Autoconf-2.59/bin/autoupdate</amin:param>
+                <amin:param name='target'>autoupdate</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Autoconf-2.59/bin/ifnames</amin:param>
+                <amin:param name='target'>ifnames</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

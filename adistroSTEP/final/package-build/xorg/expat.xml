@@ -1,0 +1,65 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--expat-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://superb-west.dl.sourceforge.net/sourceforge/expat/expat-2.0.0.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/expat-2.0.0.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/expat-2.0.0-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/expat-2.0.0-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/expat-2.0.0.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/expat-2.0.0-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/expat-2.0.0</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Library/Libraries/Expat-2.0.0
+                </amin:flag>
+                <amin:shell name='dir'>/build/expat-2.0.0</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/expat-2.0.0</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/expat-2.0.0</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">expat-2.0.0</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Expat-2.0.0/bin/xmlwf</amin:param>
+		<amin:param name='target'>xmlwf</amin:param>
+		<amin:shell name='dir'>/System/Library/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+</amin:chroot>
+</amin:profile>

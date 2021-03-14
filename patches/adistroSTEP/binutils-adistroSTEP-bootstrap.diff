@@ -1,0 +1,84 @@
+diff -urN binutils-2.15.94.0.2/bfd/po/Make-in binutils-2.15.94.0.2-adistroSTEP/bfd/po/Make-in
+--- binutils-2.15.94.0.2/bfd/po/Make-in	2004-01-15 10:07:44.000000000 +1300
++++ binutils-2.15.94.0.2-adistroSTEP/bfd/po/Make-in	2005-02-02 18:45:47.125743960 +1300
+@@ -20,8 +20,8 @@
+ exec_prefix = @exec_prefix@
+ datadir = $(prefix)/@DATADIRNAME@
+ localedir = $(datadir)/locale
+-gnulocaledir = $(prefix)/share/locale
+-gettextsrcdir = $(prefix)/share/gettext/po
++gnulocaledir = $(datadir)/locale
++gettextsrcdir = $(datadir)/gettext/po
+ subdir = po
+ 
+ DESTDIR =
+diff -urN binutils-2.15.94.0.2/binutils/po/Make-in binutils-2.15.94.0.2-adistroSTEP/binutils/po/Make-in
+--- binutils-2.15.94.0.2/binutils/po/Make-in	2004-01-15 10:07:44.000000000 +1300
++++ binutils-2.15.94.0.2-adistroSTEP/binutils/po/Make-in	2005-02-02 18:46:46.765677312 +1300
+@@ -20,8 +20,8 @@
+ exec_prefix = @exec_prefix@
+ datadir = $(prefix)/@DATADIRNAME@
+ localedir = $(datadir)/locale
+-gnulocaledir = $(prefix)/share/locale
+-gettextsrcdir = $(prefix)/share/gettext/po
++gnulocaledir = $(datadir)/locale
++gettextsrcdir = $(datadir)/gettext/po
+ subdir = po
+ 
+ DESTDIR =
+diff -urN binutils-2.15.94.0.2/gas/po/Make-in binutils-2.15.94.0.2-adistroSTEP/gas/po/Make-in
+--- binutils-2.15.94.0.2/gas/po/Make-in	2004-01-15 10:07:46.000000000 +1300
++++ binutils-2.15.94.0.2-adistroSTEP/gas/po/Make-in	2005-02-02 18:47:21.527392728 +1300
+@@ -20,8 +20,8 @@
+ exec_prefix = @exec_prefix@
+ datadir = $(prefix)/@DATADIRNAME@
+ localedir = $(datadir)/locale
+-gnulocaledir = $(prefix)/share/locale
+-gettextsrcdir = $(prefix)/share/gettext/po
++gnulocaledir = $(datadir)/locale
++gettextsrcdir = $(datadir)/gettext/po
+ subdir = po
+ 
+ DESTDIR =
+diff -urN binutils-2.15.94.0.2/gprof/po/Make-in binutils-2.15.94.0.2-adistroSTEP/gprof/po/Make-in
+--- binutils-2.15.94.0.2/gprof/po/Make-in	2004-01-15 10:07:51.000000000 +1300
++++ binutils-2.15.94.0.2-adistroSTEP/gprof/po/Make-in	2005-02-02 18:47:47.265479944 +1300
+@@ -20,8 +20,8 @@
+ exec_prefix = @exec_prefix@
+ datadir = $(prefix)/@DATADIRNAME@
+ localedir = $(datadir)/locale
+-gnulocaledir = $(prefix)/share/locale
+-gettextsrcdir = $(prefix)/share/gettext/po
++gnulocaledir = $(datadir)/locale
++gettextsrcdir = $(datadir)/gettext/po
+ subdir = po
+ 
+ DESTDIR =
+diff -urN binutils-2.15.94.0.2/ld/po/Make-in binutils-2.15.94.0.2-adistroSTEP/ld/po/Make-in
+--- binutils-2.15.94.0.2/ld/po/Make-in	2004-01-15 10:07:53.000000000 +1300
++++ binutils-2.15.94.0.2-adistroSTEP/ld/po/Make-in	2005-02-02 18:48:10.395963576 +1300
+@@ -20,8 +20,8 @@
+ exec_prefix = @exec_prefix@
+ datadir = $(prefix)/@DATADIRNAME@
+ localedir = $(datadir)/locale
+-gnulocaledir = $(prefix)/share/locale
+-gettextsrcdir = $(prefix)/share/gettext/po
++gnulocaledir = $(datadir)/locale
++gettextsrcdir = $(datadir)/gettext/po
+ subdir = po
+ 
+ DESTDIR =
+diff -urN binutils-2.15.94.0.2/opcodes/po/Make-in binutils-2.15.94.0.2-adistroSTEP/opcodes/po/Make-in
+--- binutils-2.15.94.0.2/opcodes/po/Make-in	2004-01-15 10:07:55.000000000 +1300
++++ binutils-2.15.94.0.2-adistroSTEP/opcodes/po/Make-in	2005-02-02 18:48:34.302329256 +1300
+@@ -20,8 +20,8 @@
+ exec_prefix = @exec_prefix@
+ datadir = $(prefix)/@DATADIRNAME@
+ localedir = $(datadir)/locale
+-gnulocaledir = $(prefix)/share/locale
+-gettextsrcdir = $(prefix)/share/gettext/po
++gnulocaledir = $(datadir)/locale
++gettextsrcdir = $(datadir)/gettext/po
+ subdir = po
+ 
+ DESTDIR =

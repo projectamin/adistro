@@ -1,0 +1,62 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Expect-->
+
+<!--retreiveing package-->
+
+	<amin:download>
+		<amin:param name='uri'>http://freshmeat.net/redir/expect/2476/url_tgz/expect.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/expect.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:download>
+		<amin:param name="uri">http://www.linuxfromscratch.org/patches/lfs/cvs/unstable/expect-5.41.0-spawn-1.patch</amin:param>
+		<amin:param name="file">/opt/adistro-uclibc/packages/expect-5.41.0-spawn-1.patch</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/expect.tar.gz</amin:param>
+	</amin:command>
+
+	<amin:command name="patch">
+		<amin:flag>Np1</amin:flag>
+		<amin:param name="input">../../packages/expect-5.41.0-spawn-1.patch</amin:param>
+		<amin:shell name="dir">/opt/adistro-uclibc/build/expect-5.41</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/bootstrap
+		with-tcl=/bootstrap/lib
+		with-x=no
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/expect-5.41</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/expect-5.41</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>SCRIPTS=""</amin:param>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/expect-5.41</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>tcl8.4.6</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>expect-5.41</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+	</amin:command>
+</amin:profile>

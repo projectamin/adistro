@@ -1,0 +1,47 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--gnu Mach Headers-->
+
+<!--grabbing packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.st8vrt.com/files/gnumach-041105.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gnumach-041105.tar.gz</amin:param>
+        </amin:download>
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/gnumach-041105.tar.gz</amin:param>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gnumach-build</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../gnumach/configure</amin:param>
+		<amin:flag>
+		build=i686-pc-linux-gnu
+		host=i686-pc-gnu
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gnumach-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>LD_LIBRARY_PATH=/bootstrap/crosstools/lib</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:flag>k</amin:flag>
+		<amin:param>install-headers prefix=/bootstrap/crosstools/i686-pc-gnu</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gnumach-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>LD_LIBRARY_PATH=/bootstrap/crosstools/lib</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>/opt/adistro/build/gnumach-build</amin:param>
+		<amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>/opt/adistro/build/gnumach</amin:param>
+                <amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+        </amin:command>
+
+</amin:profile>

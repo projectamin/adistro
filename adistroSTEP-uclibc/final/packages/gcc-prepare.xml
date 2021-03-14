@@ -1,0 +1,38 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--grabbing packages-->
+
+        <amin:download>
+                <amin:param name='uri'>ftp://mirror.aarnet.edu.au/pub/gcc/releases/gcc-3.4.5/gcc-core-3.4.5.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-core-3.4.5.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://mirror.aarnet.edu.au/pub/gcc/releases/gcc-3.4.5/gcc-g++-3.4.5.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-g++-3.4.5.tar.bz2</amin:param>
+        </amin:download>
+
+<!--grabbing patches -->
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/gcc-3.4.5-STEP-uclibc.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-3.4.5-STEP-uclibc.patch</amin:param>
+        </amin:download>
+
+<!--running install-->
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/gcc-core-3.4.5.tar.bz2</amin:param>
+        </amin:command>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/gcc-g++-3.4.5.tar.bz2</amin:param>
+        </amin:command>
+	
+	<amin:command name="patch">
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/opt/adistro/packages/gcc-3.4.5-STEP-uclibc.patch</amin:flag>
+		<amin:shell name="dir">/opt/adistro/build/gcc-3.4.5/</amin:shell>
+        </amin:command>
+</amin:profile>

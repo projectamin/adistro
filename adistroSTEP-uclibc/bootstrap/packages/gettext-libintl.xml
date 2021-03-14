@@ -1,0 +1,65 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gettext-libintl-->
+
+<!--retreiving package-->
+
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/gettext/gettext-0.14.1.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gettext-0.14.1.tar.gz</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/gettext-0.14.1-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gettext-0.14.1-STEP.patch</amin:param>
+        </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gettext-0.14.1.tar.gz</amin:param>
+	</amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/gettext-0.14.1-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gettext-0.14.1</amin:shell>
+        </amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/bootstrap/System/Library/Libraries/uClibc-0.9.27/
+		disable-libasprintf
+		disable-csharp
+                with-included-gettext
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gettext-0.14.1/gettext-runtime/</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>CC=i686-tools-linux-uclibc-gcc</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>-C intl/</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gettext-0.14.1/gettext-runtime/</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>-C intl/</amin:param>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gettext-0.14.1/gettext-runtime/</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='copy'>
+		<amin:param name='source'>/bootstrap/Library/Libraries/uClibc-0.9.27/include/libintl.h</amin:param>
+		<amin:param name='target'>/bootstrap/Library/Headers/include/</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>gettext-0.14.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+</amin:profile>

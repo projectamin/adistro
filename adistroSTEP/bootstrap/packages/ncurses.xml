@@ -1,0 +1,146 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--ncurses-->
+
+<!--retreiving package-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.4.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/ncurses-5.4.tar.gz</amin:param>
+	</amin:download>
+	
+	<amin:download>
+		<amin:param name='alt'>http://adistroSTEP.st8vrt.com/patches/ncurses-5.4-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/ncurses-5.4-STEP.patch</amin:param>
+        </amin:download>	
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/ncurses-5.4.tar.gz</amin:param>
+	</amin:command>
+	
+	<amin:command name='textdump'>
+		<amin:param name='target'>/bootstrap/System/Settings/ld.so.conf</amin:param>
+		<amin:param name='content'>
+/bootstrap/System/Applications/Ncurses-5.4/lib
+/bootstrap/System/Library/Libraries/Glibc-2.3.4/lib
+		</amin:param>	
+	</amin:command>
+	
+	<amin:command name='system_command'>
+		<amin:param name='basename'>/bootstrap/System/Library/Tools/ldconfig</amin:param>
+	</amin:command>
+	
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:param name='input'>/opt/adistro/packages/ncurses-5.4-STEP.patch</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/ncurses-5.4</amin:shell>
+        </amin:command>	
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/bootstrap/System/Applications/Ncurses-5.4/
+		sysconfdir=/bootstrap/System/Settings/
+		with-termpath=/bootstrap/System/Settings/termcap
+		without-ada 
+		enable-overwrite 
+		with-shared
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/ncurses-5.4</amin:shell>
+		<amin:shell name='env'>LDCONFIG=/bootstrap/System/Library/Tools/ldconfig</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/ncurses-5.4/</amin:shell>
+		<amin:shell name='env'>LDCONFIG=/bootstrap/System/Library/Tools/ldconfig</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='env'>LDCONFIG=/bootstrap/System/Library/Tools/ldconfig</amin:shell>
+		<amin:shell name='dir'>/opt/adistro/build/ncurses-5.4</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>ncurses-5.4</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	  
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/captoinfo</amin:param>
+		<amin:param name='target'>captoinfo</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/clear</amin:param>
+		<amin:param name='target'>clear</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/infocmp</amin:param>
+		<amin:param name='target'>infocmp</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/infotocap</amin:param>
+		<amin:param name='target'>infotocap</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/reset</amin:param>
+		<amin:param name='target'>reset</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/tack</amin:param>
+		<amin:param name='target'>tack</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/tic</amin:param>
+		<amin:param name='target'>tic</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/toe</amin:param>
+		<amin:param name='target'>toe</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/tput</amin:param>
+		<amin:param name='target'>tput</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Ncurses-5.4/bin/tset</amin:param>
+		<amin:param name='target'>tset</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+</amin:profile>

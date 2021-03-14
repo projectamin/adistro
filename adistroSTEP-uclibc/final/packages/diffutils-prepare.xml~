@@ -1,0 +1,20 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Diffutils-->
+
+<!--retrieving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/pub/gnu/diffutils/diffutils-2.8.1.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/diffutils-2.8.1.tar.gz</amin:param>
+	</amin:download>
+	
+	<amin:download>
+		<amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/diffutils-2.8.1-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/diffutils-2.8.1-STEP.patch</amin:param>
+	</amin:download>	
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/diffutils-2.8.1.tar.gz</amin:param>
+	</amin:command>
+</amin:profile>

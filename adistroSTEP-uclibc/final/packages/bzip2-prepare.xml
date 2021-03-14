@@ -1,0 +1,26 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Bzip2-->
+
+<!--retrieving package-->
+
+	<amin:download>
+		<amin:param name='uri'>ftp://sources.redhat.com/pub/bzip2/v102/bzip2-1.0.2.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/bzip2-1.0.2.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches//bzip2-1.0.2-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/bzip2-1.0.2-STEP.patch</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/bzip2-1.0.2.tar.gz</amin:param>
+	</amin:command>
+
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name='input'>/opt/adistro/packages/bzip2-1.0.2-STEP.patch</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/bzip2-1.0.2</amin:shell>
+	</amin:command>
+</amin:profile>

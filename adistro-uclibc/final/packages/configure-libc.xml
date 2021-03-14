@@ -1,0 +1,25 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--configure-libc-->
+
+<amin:chroot dir="/opt/adistro-uclibc">
+
+	<amin:command name='textdump'>
+		<amin:param name='target'>ld.so.conf</amin:param>
+		<amin:param name='content'>
+/usr/local/lib
+		</amin:param>
+		<amin:shell name='dir'>/etc</amin:shell>
+	</amin:command>
+
+        <amin:command name='textdump'>
+                <amin:param name='target'>TZ</amin:param>
+                <amin:param name='content'>
+NZT
+                </amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+
+</amin:profile>

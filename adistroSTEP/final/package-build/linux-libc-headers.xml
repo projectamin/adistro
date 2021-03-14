@@ -1,0 +1,74 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--linux-libc-headers-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ep09.pld-linux.org/~mmazur/linux-libc-headers/linux-libc-headers-2.6.12.0.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/linux-libc-headers-2.6.12.0.tar.bz2</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/linux-libc-headers-2.6.12.0.tar.bz2</amin:param> 
+	</amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='copy'>
+		<amin:flag>R</amin:flag>
+		<amin:param name="source">/build/linux-libc-headers-2.6.12.0/include/asm-i386</amin:param>
+		<amin:param name="target">/System/Library/Headers/asm</amin:param>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/System/AdminTools:/bootstrap/System/Tools</amin:shell>
+		<amin:shell name='dir'>/</amin:shell>
+	</amin:command>
+
+        <amin:command name='copy'>
+                <amin:flag>R</amin:flag>
+                <amin:param name="source">/build/linux-libc-headers-2.6.12.0/include/linux</amin:param>
+                <amin:param name="target">/System/Library/Headers/linux</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/System/AdminTools:/bootstrap/System/Tools</amin:shell>
+        </amin:command>
+
+<!--making sure lusers can read the "so fresh and so clean" headers -->
+
+<!-- htf do I do this bdumm ? ;-) 
+	<amin:command name="system_command">
+		<amin:param name="basename">find</amin:param>
+		<amin:param>/System/Library/Headers/{asm,linux}</amin:param>
+		<amin:flag>type</amin:flag>
+		<amin:param>d</amin:param>
+		<amin:flag>exec</amin:flag>
+		<amin:param>chmod 755 {} \;</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/System/AdminTools:/bootstrap/System/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name="system_command">
+                <amin:param name="basename">find</amin:param>
+                <amin:param>/System/Library/Headers/{asm,linux}</amin:param>
+                <amin:flag>type</amin:flag>
+                <amin:param>f</amin:param>
+                <amin:flag>exec</amin:flag>
+                <amin:param>chmod 644 {} \;</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/System/AdminTools:/bootstrap/System/Tools</amin:shell>
+        </amin:command>
+
+-->
+
+<!--no furthur voodoo required here -->
+
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>linux-libc-headers-2.6.12.0</amin:param>
+		<amin:shell name="dir">/build</amin:shell>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/System/AdminTools:/bootstrap/System/Tools</amin:shell>
+	</amin:command>
+
+</amin:chroot>
+	
+</amin:profile>

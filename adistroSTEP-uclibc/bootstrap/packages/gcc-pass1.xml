@@ -1,0 +1,105 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gcc-->
+
+<!--grabbing packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/pub/gnu/gcc/gcc-3.4.5/gcc-core-3.4.5.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-core-3.4.5.tar.bz2</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.linuxfromscratch.org/patches/hlfs/svn/gcc-3.4.4-uClibc_conf-1.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-3.4.4-uClibc_conf-1.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.linuxfromscratch.org/patches/hlfs/svn/gcc-3.4.4-specs_x86-1.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-3.4.4-specs_x86-1.patch</amin:param>
+        </amin:download>
+	
+<!-- no patches in inital build phase -->
+        
+<!--running install-->
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gcc-core-3.4.5.tar.bz2</amin:param>
+	</amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/gcc-3.4.4-uClibc_conf-1.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gcc-3.4.5</amin:shell>
+        </amin:command>
+
+	<amin:command name="search_replace">
+		<amin:param name='target'>gcc/Makefile.in</amin:param>
+		<amin:flag name='find'>CROSS_SYSTEM_HEADER_DIR = @CROSS_SYSTEM_HEADER_DIR@</amin:flag>
+		<amin:flag name='replace'>CROSS_SYSTEM_HEADER_DIR = /bootstrap/System/Library/Headers/include</amin:flag>
+		<amin:shell name="dir">/opt/adistro/build/gcc-3.4.5</amin:shell>
+	</amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/gcc-3.4.4-specs_x86-1.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gcc-3.4.5</amin:shell>
+        </amin:command>
+
+	<amin:command name='textdump'>
+		<amin:param name='target'>/opt/adistro/build/gcc-3.4.5/gcc/config/linux.h</amin:param>
+		<amin:param name='content'>
+#undef STARTFILE_PREFIX_SPEC
+#define STARTFILE_PREFIX_SPEC "/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib/"
+		</amin:param>
+		<!--<amin:shell name='dir'>/opt/adistro/build/gcc-3.4.5/gcc/config/</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/bootstrap/System/Library/Libraries/uClibc-0.9.27/</amin:param>
+	</amin:command>
+
+        <amin:command name='mkdir'>
+                <amin:flag>p</amin:flag>
+                <amin:param name='target'>/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib</amin:param>
+        </amin:command>
+
+	<amin:command name="system_command">
+		<amin:param name='basename'>touch</amin:param>
+		<amin:param>/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib/ld-uClibc.so.0</amin:param>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-3.4.5/configure</amin:param>
+		<amin:flag> 
+			prefix=/bootstrap/System/Applications/GCC-3.4.5 
+			disable-nls  
+			enable-languages=c
+			target=i686-tools-linux-uclibc
+			with-local-prefix=/bootstrap/System/Applications/GCC-3.4.5
+			with-dynamic-linker=/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib/ld-uClibc.so.0
+			with-nostdinc
+			disable-shared
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+	</amin:command>
+
+</amin:profile>

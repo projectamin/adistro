@@ -1,0 +1,97 @@
+<amin:profile xmlns:amin="http://projectamin.org/ns/">
+
+
+<!--Make new Filesystem-->
+	<amin:command name="mkdir">
+		<amin:param name="target">/opt/adistro/bootstrap</amin:param>
+		<amin:flag>p</amin:flag>
+	</amin:command>
+	<amin:command name="mkdir">
+		<amin:param name="target">bin boot dev/pts etc/opt home lib mnt proc root sbin tmp var opt usr include</amin:param>
+                <amin:flag>p</amin:flag>
+		<amin:shell name="dir">/opt/adistro/bootstrap</amin:shell>
+	</amin:command>
+	
+	<amin:command name="mkdir">
+		<amin:flag>p</amin:flag>
+		<amin:param name="target">bin etc include lib sbin share src local</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr</amin:shell>
+	</amin:command>
+	<amin:command name="link">
+		<amin:param name="source">share/man</amin:param>
+                <amin:param name="target">man</amin:param>
+                <amin:flag>s</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr</amin:shell>
+	</amin:command>
+	<amin:command name="link">
+		<amin:param name="source">share/doc</amin:param>
+                <amin:param name="target">doc</amin:param>
+                <amin:flag>s</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr</amin:shell>
+	</amin:command>
+	<amin:command name="link">
+		<amin:param name="source">share/info</amin:param>
+                <amin:param name="target">info</amin:param>
+                <amin:flag>s</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr</amin:shell>
+	</amin:command>
+	<amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+		<amin:param name="target">dict doc info locale man nls misc terminfo zoneinfo</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/share</amin:shell>
+	</amin:command>
+	<amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+		<amin:param name="target">man1 man2 man3 man4 man5 man6 man7 man8</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/share/man/</amin:shell>
+	</amin:command>
+	<amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+		<amin:param name="target">bin etc include lib sbin share src</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/local</amin:shell>
+	</amin:command>
+	<amin:command name="link">
+		<amin:param name="source">share/man</amin:param>
+                <amin:param name="target">man</amin:param>
+                <amin:flag>s</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/local</amin:shell>
+	</amin:command>
+	<amin:command name="link">
+		<amin:param name="source">share/doc</amin:param>
+                <amin:param name="target">doc</amin:param>
+                <amin:flag>s</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/local</amin:shell>
+	</amin:command>
+	<amin:command name="link">
+		<amin:param name="source">share/info</amin:param>
+                <amin:param name="target">info</amin:param>
+                <amin:flag>s</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/local</amin:shell>
+	</amin:command>
+	<amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+		<amin:param name="target">dict doc info locale man nls misc terminfo zoneinfo</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/local/share</amin:shell>
+	</amin:command>
+	<amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+		<amin:param name="target">man1 man2 man3 man4 man5 man6 man7 man8</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr/local/share/man/</amin:shell>
+	</amin:command>
+	<amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+		<amin:param name="target">lock log mail run spool spool/atjobs tmp opt cache lib lib/misc local</amin:param>                
+		<amin:shell name="dir">/opt/adistro/bootstrap/var</amin:shell>	
+	</amin:command>
+	<amin:command name="link">
+		<amin:param name="source">../var/tmp</amin:param>
+                <amin:param name="target">tmp</amin:param>
+                <amin:flag>s</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap/usr</amin:shell>
+	</amin:command>
+	<amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+		<amin:param name="target">bin doc include info lib man</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/opt</amin:shell>
+	</amin:command>
+</amin:profile>

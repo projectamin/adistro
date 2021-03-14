@@ -1,0 +1,173 @@
+diff -urN ncurses-5.4/configure ncurses-5.4-adistroSTEP/configure
+--- ncurses-5.4/configure	2004-02-01 14:03:42.000000000 +1300
++++ ncurses-5.4-adistroSTEP/configure	2005-05-17 15:32:35.518320368 +1200
+@@ -2463,7 +2463,7 @@
+ else
+ case "$cf_cv_system_name" in #(vi
+ freebsd*) #(vi
+-  test -z "$LDCONFIG" && LDCONFIG="/sbin/ldconfig -R"
++  test -z "$LDCONFIG" && LDCONFIG="/bootstrap/System/Tools/ldconfig -R"
+   ;;
+ *) LDPATH=$PATH:/sbin:/usr/sbin
+   # Extract the first word of "ldconfig", so it can be a program name with args.
+diff -urN ncurses-5.4/misc/Makefile.in ncurses-5.4-adistroSTEP/misc/Makefile.in
+--- ncurses-5.4/misc/Makefile.in	2002-01-13 12:54:39.000000000 +1300
++++ ncurses-5.4-adistroSTEP/misc/Makefile.in	2005-05-17 15:13:29.000000000 +1200
+@@ -42,7 +42,7 @@
+ # turn off _all_ suffix rules; we'll generate our own
+ .SUFFIXES :
+ 
+-SHELL		= /bin/sh
++SHELL		= /System/Tools/sh
+ THIS		= Makefile
+ 
+ CF_MFLAGS 	= @cf_cv_makeflags@
+diff -urN ncurses-5.4/misc/run_tic.in ncurses-5.4-adistroSTEP/misc/run_tic.in
+--- ncurses-5.4/misc/run_tic.in	2003-09-07 10:31:44.000000000 +1200
++++ ncurses-5.4-adistroSTEP/misc/run_tic.in	2005-05-17 15:13:29.000000000 +1200
+@@ -91,14 +91,14 @@
+ # would generate a lot of confusing error messages if we tried to overwrite it.
+ # We explicitly remove its contents rather than the directory itself, in case
+ # the directory is actually a symbolic link.
+-( cd $TERMINFO && rm -fr ? 2>/dev/null )
++( cd $TERMINFO && rm -fr ? 2>/System/Devices/null )
+ 
+ # If we're not installing into /usr/share/, we'll have to adjust the location
+ # of the tabset files in terminfo.src (which are in a parallel directory).
+ TABSET=`echo $ticdir | sed -e 's%/terminfo$%/tabset%'`
+ if test "x$TABSET" != "x/usr/share/tabset" ; then
+ 	echo '** adjusting tabset paths'
+-	TMP=${TMPDIR-/tmp}/$$
++	TMP=${TMPDIR-/System/TemporaryFiles}/$$
+ 	sed -e s%/usr/share/tabset%$TABSET%g $source >$TMP
+ 	trap "rm -f $TMP" 0 1 2 5 15
+ 	source=$TMP
+@@ -128,8 +128,8 @@
+ # all systems support symbolic links, and those that do provide a variety
+ # of options for 'test'.
+ if test "$TICDIR" != "$TERMINFO" ; then
+-	( rm -f $TICDIR 2>/dev/null )
+-	if ( cd $TICDIR 2>/dev/null )
++	( rm -f $TICDIR 2>/System/Devices/null )
++	if ( cd $TICDIR 2>/System/Devices/null )
+ 	then
+ 		cd $TICDIR
+ 		TICDIR=`pwd`
+diff -urN ncurses-5.4/ncurses/base/lib_initscr.c ncurses-5.4-adistroSTEP/ncurses/base/lib_initscr.c
+--- ncurses-5.4/ncurses/base/lib_initscr.c	2003-12-28 08:13:51.000000000 +1300
++++ ncurses-5.4-adistroSTEP/ncurses/base/lib_initscr.c	2005-05-17 15:14:28.000000000 +1200
+@@ -68,11 +68,11 @@
+ 	 * 2002/9/21
+ 	 * Work around a bug in Cygwin.  Full-screen subprocesses run from
+ 	 * bash, in turn spawned from another full-screen process, will dump
+-	 * core when attempting to write to stdout.  Opening /dev/tty
++	 * core when attempting to write to stdout.  Opening /System/Devices/tty
+ 	 * explicitly seems to fix the problem.
+ 	 */
+ 	if (isatty(fileno(stdout))) {
+-	    FILE *fp = fopen("/dev/tty", "w");
++	    FILE *fp = fopen("/System/Devices/tty", "w");
+ 	    if (fp != 0 && isatty(fileno(fp))) {
+ 		fclose(stdout);
+ 		dup2(fileno(fp), STDOUT_FILENO);
+diff -urN ncurses-5.4/ncurses/base/lib_mouse.c ncurses-5.4-adistroSTEP/ncurses/base/lib_mouse.c
+--- ncurses-5.4/ncurses/base/lib_mouse.c	2003-11-09 10:50:50.000000000 +1300
++++ ncurses-5.4-adistroSTEP/ncurses/base/lib_mouse.c	2005-05-17 15:14:28.000000000 +1200
+@@ -405,7 +405,7 @@
+ 	if (isatty(SP->_ifd))
+ 	    the_device = ttyname(SP->_ifd);
+ 	if (the_device == 0)
+-	    the_device = "/dev/tty";
++	    the_device = "/System/Devices/tty";
+ 
+ 	SP->_mouse_fd = open(the_device, O_RDWR);
+ 
+diff -urN ncurses-5.4/progs/tic.c ncurses-5.4-adistroSTEP/progs/tic.c
+--- ncurses-5.4/progs/tic.c	2003-12-07 06:36:57.000000000 +1300
++++ ncurses-5.4-adistroSTEP/progs/tic.c	2005-05-17 15:24:21.000000000 +1200
+@@ -602,7 +602,7 @@
+     } else {
+ 	if (infodump == TRUE) {
+ 	    /* captoinfo's no-argument case */
+-	    source_file = "/etc/termcap";
++	    source_file = "/System/Settings/termcap";
+ 	    if ((termcap = getenv("TERMCAP")) != 0
+ 		&& (namelst = make_namelist(getenv("TERM"))) != 0) {
+ 		if (access(termcap, F_OK) == 0) {
+diff -urN ncurses-5.4/progs/tset.c ncurses-5.4-adistroSTEP/progs/tset.c
+--- ncurses-5.4/progs/tset.c	2003-12-07 06:21:01.000000000 +1300
++++ ncurses-5.4-adistroSTEP/progs/tset.c	2005-05-17 15:24:21.000000000 +1200
+@@ -531,7 +531,7 @@
+ #if HAVE_GETTTYNAM
+ 	/*
+ 	 * We have the 4.3BSD library call getttynam(3); that means
+-	 * there's an /etc/ttys to look up device-to-type mappings in.
++	 * there's an /System/Settings/ttys to look up device-to-type mappings in.
+ 	 * Try ttyname(3); check for dialup or other mapping.
+ 	 */
+ 	if ((t = getttynam(p))) {
+@@ -539,8 +539,8 @@
+ 	    goto map;
+ 	}
+ #else
+-	if ((fp = fopen("/etc/ttytype", "r")) != 0
+-	    || (fp = fopen("/etc/ttys", "r")) != 0) {
++	if ((fp = fopen("/System/Settings/ttytype", "r")) != 0
++	    || (fp = fopen("/System/Settings/ttys", "r")) != 0) {
+ 	    char buffer[BUFSIZ];
+ 	    char *s, *t, *d;
+ 
+@@ -571,7 +571,7 @@
+ 
+     /*
+      * If not a path, remove TERMCAP from the environment so we get a
+-     * real entry from /etc/termcap.  This prevents us from being fooled
++     * real entry from /System/Settings/termcap.  This prevents us from being fooled
+      * by out of date stuff in the environment.
+      */
+   found:if ((p = getenv("TERMCAP")) != 0 && *p != '/') {
+diff -urN ncurses-5.4/tack/ansi.c ncurses-5.4-adistroSTEP/tack/ansi.c
+--- ncurses-5.4/tack/ansi.c	2001-06-19 06:44:17.000000000 +1200
++++ ncurses-5.4-adistroSTEP/tack/ansi.c	2005-05-17 15:16:16.000000000 +1200
+@@ -497,7 +497,7 @@
+ #ifdef TEDANSI
+ 			fp = fopen("ted.ansi", "w");
+ #else
+-			fp = fopen("/dev/console", "w");
++			fp = fopen("/System/Devices/console", "w");
+ #endif
+ #endif
+ 			for (i = j = 0; j < modes_found; j = ++i >> 1) {
+diff -urN ncurses-5.4/test/ditto.c ncurses-5.4-adistroSTEP/test/ditto.c
+--- ncurses-5.4/test/ditto.c	2001-09-16 09:53:37.000000000 +1200
++++ ncurses-5.4-adistroSTEP/test/ditto.c	2005-05-17 15:12:28.000000000 +1200
+@@ -34,7 +34,7 @@
+  * The program illustrates how to set up multiple screens from a single
+  * program.  Invoke the program by specifying another terminal on the same
+  * machine by specifying its device, e.g.,
+- *	ditto /dev/ttyp1
++ *	ditto /System/Devices/ttyp1
+  */
+ #include <test.priv.h>
+ #include <sys/stat.h>
+diff -urN ncurses-5.4/test/gdc.c ncurses-5.4-adistroSTEP/test/gdc.c
+--- ncurses-5.4/test/gdc.c	2002-08-11 07:20:14.000000000 +1200
++++ ncurses-5.4-adistroSTEP/test/gdc.c	2005-05-17 15:12:28.000000000 +1200
+@@ -110,7 +110,7 @@
+ 	"Usage: gdc [options] [count]"
+ 	,""
+ 	,"Options:"
+-	,"  -n  redirect input to /dev/null"
++	,"  -n  redirect input to /System/Devices/null"
+ 	,"  -s  scroll each number into place, rather than flipping"
+ 	,""
+ 	,"If you specify a count, gdc runs for that number of seconds"
+@@ -144,7 +144,7 @@
+ 	    scrol = TRUE;
+ 	    break;
+ 	case 'n':
+-	    ifp = fopen("/dev/null", "r");
++	    ifp = fopen("/System/Devices/null", "r");
+ 	    redirected = TRUE;
+ 	    break;
+ 	default:

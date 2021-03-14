@@ -1,0 +1,2722 @@
+diff -urN sed-4.0.9/ChangeLog sed-4.0.9-STEP/ChangeLog
+--- sed-4.0.9/ChangeLog	2004-01-07 23:55:56.000000000 +1300
++++ sed-4.0.9-STEP/ChangeLog	2006-04-04 14:03:20.702976312 +1200
+@@ -330,7 +330,7 @@
+ 2001-09-25  Paolo Bonzini  <bonzini@gnu.org>
+ 
+ 	* sed/compile.c (get_writefile) [!POSIXLY_CORRECT]:
+-	support /dev/stdout
++	support /System/Devices/stdout
+ 	* sed/execute.c (open_next_file, closedown): support
+ 	in-place editing
+ 	* sed/execute.c (backup_file_name): new function to
+@@ -2102,7 +2102,7 @@
+ Thu May  6 12:37:18 1993  Tom Lord  (lord@unix10.andrew.cmu.edu)
+ 
+ 	* sed.c (compile_filename, execute_program): don't use
+-	`access' or `/dev/null'.
++	`access' or `/System/Devices/null'.
+ 
+ 	* sed.c (execute_program): 'N' at EOF should delete the pat buf.
+ 
+@@ -2216,7 +2216,7 @@
+ 	* Version 1.08.
+ 
+ 	* sed.c (compile_filename): If reading a file fails, read
+-	/dev/null instead.  It's what Unix and POSIX do, effectively.
++	/System/Devices/null instead.  It's what Unix and POSIX do, effectively.
+ 
+ 	* sed.c (compile_regex): The 'slash' character doesn't
+ 	terminate the regex if it's in a character class.
+diff -urN sed-4.0.9/INSTALL sed-4.0.9-STEP/INSTALL
+--- sed-4.0.9/INSTALL	2003-12-13 22:13:24.000000000 +1300
++++ sed-4.0.9-STEP/INSTALL	2006-04-04 14:03:20.703976160 +1200
+@@ -171,7 +171,7 @@
+ you can create a site shell script called `config.site' that gives
+ default values for variables like `CC', `cache_file', and `prefix'.
+ `configure' looks for `PREFIX/share/config.site' if it exists, then
+-`PREFIX/etc/config.site' if it exists.  Or, you can set the
++`PREFIX/System/Settings/config.site' if it exists.  Or, you can set the
+ `CONFIG_SITE' environment variable to the location of the site script.
+ A warning: not all `configure' scripts look for a site script.
+ 
+@@ -206,7 +206,7 @@
+ 
+ `--cache-file=FILE'
+      Enable the cache: use and save the results of the tests in FILE,
+-     traditionally `config.cache'.  FILE defaults to `/dev/null' to
++     traditionally `config.cache'.  FILE defaults to `/System/Devices/null' to
+      disable caching.
+ 
+ `--config-cache'
+@@ -217,7 +217,7 @@
+ `--silent'
+ `-q'
+      Do not print messages saying which checks are being made.  To
+-     suppress all normal output, redirect it to `/dev/null' (any error
++     suppress all normal output, redirect it to `/System/Devices/null' (any error
+      messages will still be shown).
+ 
+ `--srcdir=DIR'
+diff -urN sed-4.0.9/Makefile.in sed-4.0.9-STEP/Makefile.in
+--- sed-4.0.9/Makefile.in	2004-01-10 08:07:08.000000000 +1300
++++ sed-4.0.9-STEP/Makefile.in	2006-04-04 14:03:20.705975856 +1200
+@@ -340,7 +340,7 @@
+ 		$(TAGS_FILES) $(LISP)
+ 	tags=; \
+ 	here=`pwd`; \
+-	if (etags --etags-include --version) >/dev/null 2>&1; then \
++	if (etags --etags-include --version) >/System/Devices/null 2>&1; then \
+ 	  include_option=--etags-include; \
+ 	else \
+ 	  include_option=--include; \
+@@ -483,7 +483,7 @@
+ 	mkdir $(distdir)/_inst
+ 	chmod a-w $(distdir)
+ 	dc_install_base=`$(am__cd) $(distdir)/_inst && pwd | sed -e 's,^[^:\\/]:[\\/],/,'` \
+-	  && dc_destdir="$${TMPDIR-/tmp}/am-dc-$$$$/" \
++	  && dc_destdir="$${TMPDIR-/System/TemporaryFiles}/am-dc-$$$$/" \
+ 	  && cd $(distdir)/_build \
+ 	  && ../configure --srcdir=.. --prefix="$$dc_install_base" \
+ 	    --with-included-gettext \
+diff -urN sed-4.0.9/NEWS sed-4.0.9-STEP/NEWS
+--- sed-4.0.9/NEWS	2004-01-10 08:11:13.000000000 +1300
++++ sed-4.0.9-STEP/NEWS	2006-04-04 14:03:20.706975704 +1200
+@@ -193,8 +193,8 @@
+     Use extended regexps -- e.g. (abc+) instead of \(abc\+\)
+ 
+ * Added feature to the `w' command and to the `w' option of the `s'
+-command: if the file name is /dev/stderr, it means the standard
+-error (inspired by awk); and similarly for /dev/stdout.  This is
++command: if the file name is /System/Devices/stderr, it means the standard
++error (inspired by awk); and similarly for /System/Devices/stdout.  This is
+ disabled if POSIXLY_CORRECT is set.
+ 
+ * Added `m' and `M' modifiers to `s' command for multi-line
+diff -urN sed-4.0.9/aclocal.m4 sed-4.0.9-STEP/aclocal.m4
+--- sed-4.0.9/aclocal.m4	2004-01-10 08:06:48.000000000 +1300
++++ sed-4.0.9-STEP/aclocal.m4	2006-04-04 14:03:20.708975400 +1200
+@@ -258,14 +258,14 @@
+        source=sub/conftest.c object=sub/conftest.${OBJEXT-o} \
+        depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
+        $SHELL ./depcomp $depcc -c -o sub/conftest.${OBJEXT-o} sub/conftest.c \
+-         >/dev/null 2>conftest.err &&
+-       grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
+-       grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /dev/null 2>&1 &&
+-       ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
++         >/System/Devices/null 2>conftest.err &&
++       grep sub/conftst6.h sub/conftest.Po > /System/Devices/null 2>&1 &&
++       grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /System/Devices/null 2>&1 &&
++       ${MAKE-make} -s -f confmf > /System/Devices/null 2>&1; then
+       # icc doesn't choke on unknown options, it will just issue warnings
+       # (even with -Werror).  So we grep stderr for any message
+       # that says an option was ignored.
+-      if grep 'ignoring option' conftest.err >/dev/null 2>&1; then :; else
++      if grep 'ignoring option' conftest.err >/System/Devices/null 2>&1; then :; else
+         am_cv_$1_dependencies_compiler_type=$depmode
+         break
+       fi
+@@ -342,12 +342,12 @@
+   # Grep'ing the first line is not enough: some people post-process
+   # each Makefile.in and add a new line on top of each file to say so.
+   # So let's grep whole file.
+-  if grep '^#.*generated by automake' $mf > /dev/null 2>&1; then
++  if grep '^#.*generated by automake' $mf > /System/Devices/null 2>&1; then
+     dirpart=`AS_DIRNAME("$mf")`
+   else
+     continue
+   fi
+-  grep '^DEP_FILES *= *[[^ @%:@]]' < "$mf" > /dev/null || continue
++  grep '^DEP_FILES *= *[[^ @%:@]]' < "$mf" > /System/Devices/null || continue
+   # Extract the definition of DEP_FILES from the Makefile without
+   # running `make'.
+   DEPDIR=`sed -n -e '/^DEPDIR = / s///p' < "$mf"`
+@@ -468,7 +468,7 @@
+ 
+ # test whether we have cygpath
+ if test -z "$CYGPATH_W"; then
+-  if (cygpath --version) >/dev/null 2>/dev/null; then
++  if (cygpath --version) >/System/Devices/null 2>/System/Devices/null; then
+     CYGPATH_W='cygpath -w'
+   else
+     CYGPATH_W=echo
+@@ -590,14 +590,14 @@
+ # Check whether the underlying file-system supports filenames
+ # with a leading dot.  For instance MS-DOS doesn't.
+ AC_DEFUN([AM_SET_LEADING_DOT],
+-[rm -rf .tst 2>/dev/null
+-mkdir .tst 2>/dev/null
++[rm -rf .tst 2>/System/Devices/null
++mkdir .tst 2>/System/Devices/null
+ if test -d .tst; then
+   am__leading_dot=.
+ else
+   am__leading_dot=_
+ fi
+-rmdir .tst 2>/dev/null
++rmdir .tst 2>/System/Devices/null
+ AC_SUBST([am__leading_dot])])
+ 
+ # Check to see how 'make' treats includes.	-*- Autoconf -*-
+@@ -643,7 +643,7 @@
+ # In particular we don't look at `^make:' because GNU make might
+ # be invoked under some other name (usually "gmake"), in which
+ # case it prints its new name instead of `make'.
+-if test "`$am_make -s -f confmf 2> /dev/null | grep -v 'ing directory'`" = "done"; then
++if test "`$am_make -s -f confmf 2> /System/Devices/null | grep -v 'ing directory'`" = "done"; then
+    am__include=include
+    am__quote=
+    _am_result=GNU
+@@ -651,7 +651,7 @@
+ # Now try BSD make style include.
+ if test "$am__include" = "#"; then
+    echo '.include "confinc"' > confmf
+-   if test "`$am_make -s -f confmf 2> /dev/null`" = "done"; then
++   if test "`$am_make -s -f confmf 2> /System/Devices/null`" = "done"; then
+       am__include=.include
+       am__quote="\""
+       _am_result=BSD
+@@ -731,7 +731,7 @@
+ # 02111-1307, USA.
+ 
+ AC_DEFUN([AM_PROG_MKDIR_P],
+-[if mkdir -m 0755 -p -- . 2>/dev/null; then
++[if mkdir -m 0755 -p -- . 2>/System/Devices/null; then
+   mkdir_p='mkdir -m 0755 -p --'
+ else
+   # On NextStep and OpenStep, the `mkdir' command does not
+@@ -831,7 +831,7 @@
+ # (eg FreeBSD returns the mod time of the symlink's containing
+ # directory).
+ if (
+-   set X `ls -Lt $srcdir/configure conftest.file 2> /dev/null`
++   set X `ls -Lt $srcdir/configure conftest.file 2> /System/Devices/null`
+    if test "$[*]" = "X"; then
+       # -L didn't work.
+       set X `ls -t $srcdir/configure conftest.file`
+diff -urN sed-4.0.9/bootstrap.sh sed-4.0.9-STEP/bootstrap.sh
+--- sed-4.0.9/bootstrap.sh	2004-01-10 08:08:21.000000000 +1300
++++ sed-4.0.9-STEP/bootstrap.sh	2006-04-04 14:03:20.709975248 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ # edit this to taste; note that you can also override via the environment:
+ case "$CC" in
+diff -urN sed-4.0.9/bootstrap.sh.in sed-4.0.9-STEP/bootstrap.sh.in
+--- sed-4.0.9/bootstrap.sh.in	2004-01-08 03:20:15.000000000 +1300
++++ sed-4.0.9-STEP/bootstrap.sh.in	2006-04-04 14:03:20.710975096 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ # edit this to taste; note that you can also override via the environment:
+ case "$CC" in
+diff -urN sed-4.0.9/config/config.guess sed-4.0.9-STEP/config/config.guess
+--- sed-4.0.9/config/config.guess	2003-12-13 22:13:24.000000000 +1300
++++ sed-4.0.9-STEP/config/config.guess	2006-04-04 14:03:20.713974640 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Attempt to guess a canonical system name.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+ #   2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+@@ -101,10 +101,10 @@
+ # Portable tmp directory creation inspired by the Autoconf team.
+ 
+ set_cc_for_build='
+-trap "exitcode=\$?; (rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null) && exit \$exitcode" 0 ;
+-trap "rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null; exit 1" 1 2 13 15 ;
+-: ${TMPDIR=/tmp} ;
+- { tmp=`(umask 077 && mktemp -d -q "$TMPDIR/cgXXXXXX") 2>/dev/null` && test -n "$tmp" && test -d "$tmp" ; } ||
++trap "exitcode=\$?; (rm -f \$tmpfiles 2>/System/Devices/null; rmdir \$tmp 2>/System/Devices/null) && exit \$exitcode" 0 ;
++trap "rm -f \$tmpfiles 2>/System/Devices/null; rmdir \$tmp 2>/System/Devices/null; exit 1" 1 2 13 15 ;
++: ${TMPDIR=/System/TemporaryFiles} ;
++ { tmp=`(umask 077 && mktemp -d -q "$TMPDIR/cgXXXXXX") 2>/System/Devices/null` && test -n "$tmp" && test -d "$tmp" ; } ||
+  { test -n "$RANDOM" && tmp=$TMPDIR/cg$$-$RANDOM && (umask 077 && mkdir $tmp) ; } ||
+  { tmp=$TMPDIR/cg-$$ && (umask 077 && mkdir $tmp) && echo "Warning: creating insecure temp directory" >&2 ; } ||
+  { echo "$me: cannot create a temporary directory in $TMPDIR" >&2 ; exit 1 ; } ;
+@@ -113,7 +113,7 @@
+ case $CC_FOR_BUILD,$HOST_CC,$CC in
+  ,,)    echo "int x;" > $dummy.c ;
+ 	for c in cc gcc c89 c99 ; do
+-	  if ($c -c -o $dummy.o $dummy.c) >/dev/null 2>&1 ; then
++	  if ($c -c -o $dummy.o $dummy.c) >/System/Devices/null 2>&1 ; then
+ 	     CC_FOR_BUILD="$c"; break ;
+ 	  fi ;
+ 	done ;
+@@ -127,14 +127,14 @@
+ 
+ # This is needed to find uname on a Pyramid OSx when run in the BSD universe.
+ # (ghazi@noc.rutgers.edu 1994-08-24)
+-if (test -f /.attbin/uname) >/dev/null 2>&1 ; then
++if (test -f /.attbin/uname) >/System/Devices/null 2>&1 ; then
+ 	PATH=$PATH:/.attbin ; export PATH
+ fi
+ 
+-UNAME_MACHINE=`(uname -m) 2>/dev/null` || UNAME_MACHINE=unknown
+-UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+-UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
+-UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
++UNAME_MACHINE=`(uname -m) 2>/System/Devices/null` || UNAME_MACHINE=unknown
++UNAME_RELEASE=`(uname -r) 2>/System/Devices/null` || UNAME_RELEASE=unknown
++UNAME_SYSTEM=`(uname -s) 2>/System/Devices/null`  || UNAME_SYSTEM=unknown
++UNAME_VERSION=`(uname -v) 2>/System/Devices/null` || UNAME_VERSION=unknown
+ 
+ # Note: order is significant - the case branches are not exclusive.
+ 
+@@ -151,8 +151,8 @@
+ 	# Note: NetBSD doesn't particularly care about the vendor
+ 	# portion of the name.  We always set it to "unknown".
+ 	sysctl="sysctl -n hw.machine_arch"
+-	UNAME_MACHINE_ARCH=`(/sbin/$sysctl 2>/dev/null || \
+-	    /usr/sbin/$sysctl 2>/dev/null || echo unknown)`
++	UNAME_MACHINE_ARCH=`(/sbin/$sysctl 2>/System/Devices/null || \
++	    /usr/sbin/$sysctl 2>/System/Devices/null || echo unknown)`
+ 	case "${UNAME_MACHINE_ARCH}" in
+ 	    armeb) machine=armeb-unknown ;;
+ 	    arm*) machine=arm-unknown ;;
+@@ -165,8 +165,8 @@
+ 	case "${UNAME_MACHINE_ARCH}" in
+ 	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
+ 		eval $set_cc_for_build
+-		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
+-			| grep __ELF__ >/dev/null
++		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/System/Devices/null \
++			| grep __ELF__ >/System/Devices/null
+ 		then
+ 		    # Once all utilities can be ECOFF (netbsdecoff) or a.out (netbsdaout).
+ 		    # Return netbsd for either.  FIX?
+@@ -321,7 +321,7 @@
+ 	exit 0;;
+     Pyramid*:OSx*:*:* | MIS*:OSx*:*:* | MIS*:SMP_DC-OSx*:*:*)
+ 	# akee@wpdis03.wpafb.af.mil (Earle F. Ake) contributed MIS and NILE.
+-	if test "`(/bin/universe) 2>/dev/null`" = att ; then
++	if test "`(/System/Tools/universe) 2>/System/Devices/null`" = att ; then
+ 		echo pyramid-pyramid-sysv3
+ 	else
+ 		echo pyramid-pyramid-bsd
+@@ -334,7 +334,7 @@
+ 	echo sparc-icl-nx6
+ 	exit 0 ;;
+     DRS?6000:UNIX_SV:4.2*:7*)
+-	case `/usr/bin/uname -p` in
++	case `/System/Tools/uname -p` in
+ 	    sparc) echo sparc-icl-nx7 && exit 0 ;;
+ 	esac ;;
+     sun4H:SunOS:5.*:*)
+@@ -353,7 +353,7 @@
+ 	echo sparc-sun-solaris3`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+ 	exit 0 ;;
+     sun4*:SunOS:*:*)
+-	case "`/usr/bin/arch -k`" in
++	case "`/System/Tools/arch -k`" in
+ 	    Series*|S4*)
+ 		UNAME_RELEASE=`uname -v`
+ 		;;
+@@ -365,9 +365,9 @@
+ 	echo m68k-sun-sunos${UNAME_RELEASE}
+ 	exit 0 ;;
+     sun*:*:4.2BSD:*)
+-	UNAME_RELEASE=`(sed 1q /etc/motd | awk '{print substr($5,1,3)}') 2>/dev/null`
++	UNAME_RELEASE=`(sed 1q /System/Settings/motd | awk '{print substr($5,1,3)}') 2>/System/Devices/null`
+ 	test "x${UNAME_RELEASE}" = "x" && UNAME_RELEASE=3
+-	case "`/bin/arch`" in
++	case "`/System/Tools/arch`" in
+ 	    sun3)
+ 		echo m68k-sun-sunos${UNAME_RELEASE}
+ 		;;
+@@ -471,7 +471,7 @@
+ 	exit 0 ;;
+     AViiON:dgux:*:*)
+         # DG/UX returns AViiON for all architectures
+-        UNAME_PROCESSOR=`/usr/bin/uname -p`
++        UNAME_PROCESSOR=`/System/Tools/uname -p`
+ 	if [ $UNAME_PROCESSOR = mc88100 ] || [ $UNAME_PROCESSOR = mc88110 ]
+ 	then
+ 	    if [ ${TARGET_BINARY_INTERFACE}x = m88kdguxelfx ] || \
+@@ -508,15 +508,15 @@
+ 	echo i386-ibm-aix
+ 	exit 0 ;;
+     ia64:AIX:*:*)
+-	if [ -x /usr/bin/oslevel ] ; then
+-		IBM_REV=`/usr/bin/oslevel`
++	if [ -x /System/Tools/oslevel ] ; then
++		IBM_REV=`/System/Tools/oslevel`
+ 	else
+ 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
+ 	fi
+ 	echo ${UNAME_MACHINE}-ibm-aix${IBM_REV}
+ 	exit 0 ;;
+     *:AIX:2:3)
+-	if grep bos325 /usr/include/stdio.h >/dev/null 2>&1; then
++	if grep bos325 /usr/include/stdio.h >/System/Devices/null 2>&1; then
+ 		eval $set_cc_for_build
+ 		sed 's/^		//' << EOF >$dummy.c
+ 		#include <sys/systemcfg.h>
+@@ -531,7 +531,7 @@
+ EOF
+ 		$CC_FOR_BUILD -o $dummy $dummy.c && $dummy && exit 0
+ 		echo rs6000-ibm-aix3.2.5
+-	elif grep bos324 /usr/include/stdio.h >/dev/null 2>&1; then
++	elif grep bos324 /usr/include/stdio.h >/System/Devices/null 2>&1; then
+ 		echo rs6000-ibm-aix3.2.4
+ 	else
+ 		echo rs6000-ibm-aix3.2
+@@ -539,13 +539,13 @@
+ 	exit 0 ;;
+     *:AIX:*:[45])
+ 	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | sed 1q | awk '{ print $1 }'`
+-	if /usr/sbin/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/dev/null 2>&1; then
++	if /usr/sbin/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/System/Devices/null 2>&1; then
+ 		IBM_ARCH=rs6000
+ 	else
+ 		IBM_ARCH=powerpc
+ 	fi
+-	if [ -x /usr/bin/oslevel ] ; then
+-		IBM_REV=`/usr/bin/oslevel`
++	if [ -x /System/Tools/oslevel ] ; then
++		IBM_REV=`/System/Tools/oslevel`
+ 	else
+ 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
+ 	fi
+@@ -578,9 +578,9 @@
+ 	    9000/31? )            HP_ARCH=m68000 ;;
+ 	    9000/[34]?? )         HP_ARCH=m68k ;;
+ 	    9000/[678][0-9][0-9])
+-		if [ -x /usr/bin/getconf ]; then
+-		    sc_cpu_version=`/usr/bin/getconf SC_CPU_VERSION 2>/dev/null`
+-                    sc_kernel_bits=`/usr/bin/getconf SC_KERNEL_BITS 2>/dev/null`
++		if [ -x /System/Tools/getconf ]; then
++		    sc_cpu_version=`/System/Tools/getconf SC_CPU_VERSION 2>/System/Devices/null`
++                    sc_kernel_bits=`/System/Tools/getconf SC_KERNEL_BITS 2>/System/Devices/null`
+                     case "${sc_cpu_version}" in
+                       523) HP_ARCH="hppa1.0" ;; # CPU_PA_RISC1_0
+                       528) HP_ARCH="hppa1.1" ;; # CPU_PA_RISC1_1
+@@ -627,7 +627,7 @@
+                   exit (0);
+               }
+ EOF
+-		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
++		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/System/Devices/null) && HP_ARCH=`$dummy`
+ 		    test -z "$HP_ARCH" && HP_ARCH=hppa
+ 		fi ;;
+ 	esac
+@@ -635,7 +635,7 @@
+ 	then
+ 	    # avoid double evaluation of $set_cc_for_build
+ 	    test -n "$CC_FOR_BUILD" || eval $set_cc_for_build
+-	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E -) | grep __LP64__ >/dev/null
++	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E -) | grep __LP64__ >/System/Devices/null
+ 	    then
+ 		HP_ARCH="hppa2.0w"
+ 	    else
+@@ -773,7 +773,7 @@
+ 	LIBC=
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^LIBC=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^LIBC=`
+ 	# GNU/KFreeBSD systems have a "k" prefix to indicate we are using
+ 	# FreeBSD's kernel, but not the complete OS.
+ 	case ${LIBC} in gnu) kernel_only='k' ;; esac
+@@ -848,7 +848,7 @@
+ 	#endif
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^CPU=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^CPU=`
+ 	test x"${CPU}" != x && echo "${CPU}-unknown-linux-gnu" && exit 0
+ 	;;
+     mips64:Linux:*:*)
+@@ -867,7 +867,7 @@
+ 	#endif
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^CPU=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^CPU=`
+ 	test x"${CPU}" != x && echo "${CPU}-unknown-linux-gnu" && exit 0
+ 	;;
+     ppc:Linux:*:*)
+@@ -877,7 +877,7 @@
+ 	echo powerpc64-unknown-linux-gnu
+ 	exit 0 ;;
+     alpha:Linux:*:*)
+-	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
++	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /System/Processes/cpuinfo` in
+ 	  EV5)   UNAME_MACHINE=alphaev5 ;;
+ 	  EV56)  UNAME_MACHINE=alphaev56 ;;
+ 	  PCA56) UNAME_MACHINE=alphapca56 ;;
+@@ -886,13 +886,13 @@
+ 	  EV67)  UNAME_MACHINE=alphaev67 ;;
+ 	  EV68*) UNAME_MACHINE=alphaev68 ;;
+         esac
+-	objdump --private-headers /bin/sh | grep ld.so.1 >/dev/null
++	objdump --private-headers /System/Tools/sh | grep ld.so.1 >/System/Devices/null
+ 	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
+ 	exit 0 ;;
+     parisc:Linux:*:* | hppa:Linux:*:*)
+ 	# Look for CPU level
+-	case `grep '^cpu[^a-z]*:' /proc/cpuinfo 2>/dev/null | cut -d' ' -f2` in
++	case `grep '^cpu[^a-z]*:' /System/Processes/cpuinfo 2>/System/Devices/null | cut -d' ' -f2` in
+ 	  PA7*) echo hppa1.1-unknown-linux-gnu ;;
+ 	  PA8*) echo hppa2.0-unknown-linux-gnu ;;
+ 	  *)    echo hppa-unknown-linux-gnu ;;
+@@ -968,7 +968,7 @@
+ 	LIBC=dietlibc
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^LIBC=`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/System/Devices/null | grep ^LIBC=`
+ 	test x"${LIBC}" != x && echo "${UNAME_MACHINE}-pc-linux-${LIBC}" && exit 0
+ 	test x"${TENTATIVE}" != x && echo "${TENTATIVE}" && exit 0
+ 	;;
+@@ -1008,14 +1008,14 @@
+ 	exit 0 ;;
+     i*86:*:4.*:* | i*86:SYSTEM_V:4.*:*)
+ 	UNAME_REL=`echo ${UNAME_RELEASE} | sed 's/\/MP$//'`
+-	if grep Novell /usr/include/link.h >/dev/null 2>/dev/null; then
++	if grep Novell /usr/include/link.h >/System/Devices/null 2>/System/Devices/null; then
+ 		echo ${UNAME_MACHINE}-univel-sysv${UNAME_REL}
+ 	else
+ 		echo ${UNAME_MACHINE}-pc-sysv${UNAME_REL}
+ 	fi
+ 	exit 0 ;;
+     i*86:*:5:[78]*)
+-	case `/bin/uname -X | grep "^Machine"` in
++	case `/System/Tools/uname -X | grep "^Machine"` in
+ 	    *486*)	     UNAME_MACHINE=i486 ;;
+ 	    *Pentium)	     UNAME_MACHINE=i586 ;;
+ 	    *Pent*|*Celeron) UNAME_MACHINE=i686 ;;
+@@ -1026,14 +1026,14 @@
+ 	if test -f /usr/options/cb.name; then
+ 		UNAME_REL=`sed -n 's/.*Version //p' </usr/options/cb.name`
+ 		echo ${UNAME_MACHINE}-pc-isc$UNAME_REL
+-	elif /bin/uname -X 2>/dev/null >/dev/null ; then
+-		UNAME_REL=`(/bin/uname -X|grep Release|sed -e 's/.*= //')`
+-		(/bin/uname -X|grep i80486 >/dev/null) && UNAME_MACHINE=i486
+-		(/bin/uname -X|grep '^Machine.*Pentium' >/dev/null) \
++	elif /System/Tools/uname -X 2>/System/Devices/null >/System/Devices/null ; then
++		UNAME_REL=`(/System/Tools/uname -X|grep Release|sed -e 's/.*= //')`
++		(/System/Tools/uname -X|grep i80486 >/System/Devices/null) && UNAME_MACHINE=i486
++		(/System/Tools/uname -X|grep '^Machine.*Pentium' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i586
+-		(/bin/uname -X|grep '^Machine.*Pent *II' >/dev/null) \
++		(/System/Tools/uname -X|grep '^Machine.*Pent *II' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i686
+-		(/bin/uname -X|grep '^Machine.*Pentium Pro' >/dev/null) \
++		(/System/Tools/uname -X|grep '^Machine.*Pentium Pro' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i686
+ 		echo ${UNAME_MACHINE}-pc-sco$UNAME_REL
+ 	else
+@@ -1053,7 +1053,7 @@
+ 	echo i860-intel-osf1
+ 	exit 0 ;;
+     i860:*:4.*:*) # i860-SVR4
+-	if grep Stardent /usr/include/sys/uadmin.h >/dev/null 2>&1 ; then
++	if grep Stardent /usr/include/System/SystemFS/uadmin.h >/System/Devices/null 2>&1 ; then
+ 	  echo i860-stardent-sysv${UNAME_RELEASE} # Stardent Vistra i860-SVR4
+ 	else # Add other i860-SVR4 vendors below as they are discovered.
+ 	  echo i860-unknown-sysv${UNAME_RELEASE}  # Unknown i860-SVR4
+@@ -1073,14 +1073,14 @@
+ 	test -r /sysV68 && echo 'm68k-motorola-sysv' && exit 0 ;;
+     3[345]??:*:4.0:3.0 | 3[34]??A:*:4.0:3.0 | 3[34]??,*:*:4.0:3.0 | 3[34]??/*:*:4.0:3.0 | 4400:*:4.0:3.0 | 4850:*:4.0:3.0 | SKA40:*:4.0:3.0 | SDS2:*:4.0:3.0 | SHG2:*:4.0:3.0)
+ 	OS_REL=''
+-	test -r /etc/.relid \
+-	&& OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
+-	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++	test -r /System/Settings/.relid \
++	&& OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /System/Settings/.relid`
++	/System/Tools/uname -p 2>/System/Devices/null | grep 86 >/System/Devices/null \
+ 	  && echo i486-ncr-sysv4.3${OS_REL} && exit 0
+-	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
++	/System/Tools/uname -p 2>/System/Devices/null | /System/Tools/grep entium >/System/Devices/null \
+ 	  && echo i586-ncr-sysv4.3${OS_REL} && exit 0 ;;
+     3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
+-        /bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++        /System/Tools/uname -p 2>/System/Devices/null | grep 86 >/System/Devices/null \
+           && echo i486-ncr-sysv4 && exit 0 ;;
+     m68*:LynxOS:2.*:* | m68*:LynxOS:3.0*:*)
+ 	echo m68k-unknown-lynxos${UNAME_RELEASE}
+@@ -1107,8 +1107,8 @@
+ 	echo mips-sni-sysv4
+ 	exit 0 ;;
+     *:SINIX-*:*:*)
+-	if uname -p 2>/dev/null >/dev/null ; then
+-		UNAME_MACHINE=`(uname -p) 2>/dev/null`
++	if uname -p 2>/System/Devices/null >/System/Devices/null ; then
++		UNAME_MACHINE=`(uname -p) 2>/System/Devices/null`
+ 		echo ${UNAME_MACHINE}-sni-sysv4
+ 	else
+ 		echo ns32k-sni-sysv
+@@ -1276,7 +1276,7 @@
+ #define __ARCHITECTURE__ "m68k"
+ #endif
+   int version;
+-  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/dev/null`;
++  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/System/Devices/null`;
+   if (version < 4)
+     printf ("%s-next-nextstep%d\n", __ARCHITECTURE__, version);
+   else
+@@ -1353,7 +1353,7 @@
+ }
+ EOF
+ 
+-$CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null && $dummy && exit 0
++$CC_FOR_BUILD -o $dummy $dummy.c 2>/System/Devices/null && $dummy && exit 0
+ 
+ # Apollos put the system type in the environment.
+ 
+@@ -1401,20 +1401,20 @@
+ 
+ config.guess timestamp = $timestamp
+ 
+-uname -m = `(uname -m) 2>/dev/null || echo unknown`
+-uname -r = `(uname -r) 2>/dev/null || echo unknown`
+-uname -s = `(uname -s) 2>/dev/null || echo unknown`
+-uname -v = `(uname -v) 2>/dev/null || echo unknown`
+-
+-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
+-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
+-
+-hostinfo               = `(hostinfo) 2>/dev/null`
+-/bin/universe          = `(/bin/universe) 2>/dev/null`
+-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
+-/bin/arch              = `(/bin/arch) 2>/dev/null`
+-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
+-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
++uname -m = `(uname -m) 2>/System/Devices/null || echo unknown`
++uname -r = `(uname -r) 2>/System/Devices/null || echo unknown`
++uname -s = `(uname -s) 2>/System/Devices/null || echo unknown`
++uname -v = `(uname -v) 2>/System/Devices/null || echo unknown`
++
++/System/Tools/uname -p = `(/System/Tools/uname -p) 2>/System/Devices/null`
++/System/Tools/uname -X     = `(/System/Tools/uname -X) 2>/System/Devices/null`
++
++hostinfo               = `(hostinfo) 2>/System/Devices/null`
++/System/Tools/universe          = `(/System/Tools/universe) 2>/System/Devices/null`
++/System/Tools/arch -k       = `(/System/Tools/arch -k) 2>/System/Devices/null`
++/System/Tools/arch              = `(/System/Tools/arch) 2>/System/Devices/null`
++/System/Tools/oslevel       = `(/System/Tools/oslevel) 2>/System/Devices/null`
++/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/System/Devices/null`
+ 
+ UNAME_MACHINE = ${UNAME_MACHINE}
+ UNAME_RELEASE = ${UNAME_RELEASE}
+diff -urN sed-4.0.9/config/config.rpath sed-4.0.9-STEP/config/config.rpath
+--- sed-4.0.9/config/config.rpath	2003-11-15 08:12:17.000000000 +1300
++++ sed-4.0.9-STEP/config/config.rpath	2006-04-04 14:03:20.714974488 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Output a system dependent set of variables, describing how to set the
+ # run time search path of shared libraries in an executable.
+ #
+@@ -143,7 +143,7 @@
+       ld_shlibs=no
+       ;;
+     beos*)
+-      if $LD --help 2>&1 | egrep ': supported targets:.* elf' > /dev/null; then
++      if $LD --help 2>&1 | egrep ': supported targets:.* elf' > /System/Devices/null; then
+         :
+       else
+         ld_shlibs=no
+@@ -153,7 +153,7 @@
+       # hardcode_libdir_flag_spec is actually meaningless, as there is
+       # no search path for DLLs.
+       hardcode_libdir_flag_spec='-L$libdir'
+-      if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
++      if $LD --help 2>&1 | grep 'auto-import' > /System/Devices/null; then
+         :
+       else
+         ld_shlibs=no
+@@ -162,9 +162,9 @@
+     netbsd*)
+       ;;
+     solaris* | sysv5*)
+-      if $LD -v 2>&1 | egrep 'BFD 2\.8' > /dev/null; then
++      if $LD -v 2>&1 | egrep 'BFD 2\.8' > /System/Devices/null; then
+         ld_shlibs=no
+-      elif $LD --help 2>&1 | egrep ': supported targets:.* elf' > /dev/null; then
++      elif $LD --help 2>&1 | egrep ': supported targets:.* elf' > /System/Devices/null; then
+         :
+       else
+         ld_shlibs=no
+@@ -174,7 +174,7 @@
+       hardcode_direct=yes
+       ;;
+     *)
+-      if $LD --help 2>&1 | egrep ': supported targets:.* elf' > /dev/null; then
++      if $LD --help 2>&1 | egrep ': supported targets:.* elf' > /System/Devices/null; then
+         :
+       else
+         ld_shlibs=no
+@@ -223,7 +223,7 @@
+         case $host_os in aix4.[012]|aix4.[012].*)
+           collect2name=`${CC} -print-prog-name=collect2`
+           if test -f "$collect2name" && \
+-            strings "$collect2name" | grep resolve_lib_name >/dev/null
++            strings "$collect2name" | grep resolve_lib_name >/System/Devices/null
+           then
+             # We have reworked collect2
+             hardcode_direct=yes
+@@ -239,10 +239,10 @@
+       # Begin _LT_AC_SYS_LIBPATH_AIX.
+       echo 'int main () { return 0; }' > conftest.c
+       ${CC} ${LDFLAGS} conftest.c -o conftest
+-      aix_libpath=`dump -H conftest 2>/dev/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
++      aix_libpath=`dump -H conftest 2>/System/Devices/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
+ }'`
+       if test -z "$aix_libpath"; then
+-        aix_libpath=`dump -HX64 conftest 2>/dev/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
++        aix_libpath=`dump -HX64 conftest 2>/System/Devices/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
+ }'`
+       fi
+       if test -z "$aix_libpath"; then
+@@ -277,7 +277,7 @@
+       libext=lib
+       ;;
+     darwin* | rhapsody*)
+-      if $CC -v 2>&1 | grep 'Apple' >/dev/null ; then
++      if $CC -v 2>&1 | grep 'Apple' >/System/Devices/null ; then
+         hardcode_direct=no
+       fi
+       ;;
+diff -urN sed-4.0.9/config/config.sub sed-4.0.9-STEP/config/config.sub
+--- sed-4.0.9/config/config.sub	2003-12-13 22:13:24.000000000 +1300
++++ sed-4.0.9-STEP/config/config.sub	2006-04-04 14:03:20.716974184 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Configuration validation subroutine script.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+ #   2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+diff -urN sed-4.0.9/config/depcomp sed-4.0.9-STEP/config/depcomp
+--- sed-4.0.9/config/depcomp	2003-12-13 22:13:24.000000000 +1300
++++ sed-4.0.9-STEP/config/depcomp	2006-04-04 14:03:20.718973880 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # depcomp - compile a program generating dependencies as side-effects
+ 
+ scriptversion=2003-11-08.23
+diff -urN sed-4.0.9/config/gettext.m4 sed-4.0.9-STEP/config/gettext.m4
+--- sed-4.0.9/config/gettext.m4	2001-12-17 01:29:55.000000000 +1300
++++ sed-4.0.9-STEP/config/gettext.m4	2006-04-04 14:03:20.719973728 +1200
+@@ -123,12 +123,12 @@
+ 
+ 	     dnl Search for GNU msgfmt in the PATH.
+ 	     AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
+-	       [$ac_dir/$ac_word --statistics /dev/null >/dev/null 2>&1], :)
++	       [$ac_dir/$ac_word --statistics /System/Devices/null >/System/Devices/null 2>&1], :)
+ 	     AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+ 
+ 	     dnl Search for GNU xgettext in the PATH.
+ 	     AM_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
+-	       [$ac_dir/$ac_word --omit-header /dev/null >/dev/null 2>&1], :)
++	       [$ac_dir/$ac_word --omit-header /System/Devices/null >/System/Devices/null 2>&1], :)
+ 
+ 	     CATOBJEXT=.gmo
+ 	   fi
+@@ -145,10 +145,10 @@
+         dnl Mark actions used to generate GNU NLS library.
+         INTLOBJS="\$(GETTOBJS)"
+         AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
+-	  [$ac_dir/$ac_word --statistics /dev/null >/dev/null 2>&1], :)
++	  [$ac_dir/$ac_word --statistics /System/Devices/null >/System/Devices/null 2>&1], :)
+         AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+         AM_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
+-	  [$ac_dir/$ac_word --omit-header /dev/null >/dev/null 2>&1], :)
++	  [$ac_dir/$ac_word --omit-header /System/Devices/null >/System/Devices/null 2>&1], :)
+         AC_SUBST(MSGFMT)
+ 	BUILD_INCLUDED_LIBINTL=yes
+ 	USE_INCLUDED_LIBINTL=yes
+@@ -162,7 +162,7 @@
+       if test "$GMSGFMT" != ":"; then
+ 	dnl If it is no GNU msgfmt we define it as : so that the
+ 	dnl Makefiles still can work.
+-	if $GMSGFMT --statistics /dev/null >/dev/null 2>&1; then
++	if $GMSGFMT --statistics /System/Devices/null >/System/Devices/null 2>&1; then
+ 	  : ;
+ 	else
+ 	  AC_MSG_RESULT(
+@@ -176,7 +176,7 @@
+       if test "$XGETTEXT" != ":"; then
+ 	dnl If it is no GNU xgettext we define it as : so that the
+ 	dnl Makefiles still can work.
+-	if $XGETTEXT --omit-header /dev/null >/dev/null 2>&1; then
++	if $XGETTEXT --omit-header /System/Devices/null >/System/Devices/null 2>&1; then
+ 	  : ;
+ 	else
+ 	  AC_MSG_RESULT(
+diff -urN sed-4.0.9/config/help2man sed-4.0.9-STEP/config/help2man
+--- sed-4.0.9/config/help2man	2002-10-26 07:06:18.000000000 +1300
++++ sed-4.0.9-STEP/config/help2man	2006-04-04 14:03:54.341862424 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/System/Tools/env perl
+ 
+ # Generate a short man page from --help and --version output.
+ # Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Free Software
+@@ -190,7 +190,7 @@
+ 
+ # Grab help and version info from executable.
+ my ($help_text, $version_text) = map {
+-    join '', map { s/ +$//; expand $_ } `$ARGV[0] $_ 2>/dev/null`
++    join '', map { s/ +$//; expand $_ } `$ARGV[0] $_ 2>/System/Devices/null`
+ 	or die "$this_program: can't get `$_' info from $ARGV[0]\n"
+ } $help_option, $version_option;
+ 
+diff -urN sed-4.0.9/config/install-sh sed-4.0.9-STEP/config/install-sh
+--- sed-4.0.9/config/install-sh	2003-12-13 22:13:24.000000000 +1300
++++ sed-4.0.9-STEP/config/install-sh	2006-04-04 14:03:20.722973272 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # install - install a program, script, or datafile
+ 
+ scriptversion=2003-09-24.23
+@@ -137,7 +137,7 @@
+     *)  if test -z "$src"; then
+           src=$1
+         else
+-          # this colon is to work around a 386BSD /bin/sh bug
++          # this colon is to work around a 386BSD /System/Tools/sh bug
+           :
+           dst=$1
+         fi
+@@ -267,8 +267,8 @@
+   # successfully.
+   {
+     if test -f "$dstdir/$dstfile"; then
+-      $doit $rmcmd -f "$dstdir/$dstfile" 2>/dev/null \
+-      || $doit $mvcmd -f "$dstdir/$dstfile" "$rmtmp" 2>/dev/null \
++      $doit $rmcmd -f "$dstdir/$dstfile" 2>/System/Devices/null \
++      || $doit $mvcmd -f "$dstdir/$dstfile" "$rmtmp" 2>/System/Devices/null \
+       || {
+ 	  echo "$0: cannot unlink or rename $dstdir/$dstfile" >&2
+ 	  (exit 1); exit
+diff -urN sed-4.0.9/config/mdate-sh sed-4.0.9-STEP/config/mdate-sh
+--- sed-4.0.9/config/mdate-sh	2003-12-13 22:13:24.000000000 +1300
++++ sed-4.0.9-STEP/config/mdate-sh	2006-04-04 14:03:20.723973120 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # Get modification time of a file or directory and pretty-print it.
+ 
+ scriptversion=2003-11-09.00
+@@ -61,7 +61,7 @@
+ save_arg1="$1"
+ 
+ # Find out how to get the extended ls output of a file or directory.
+-if ls -L /dev/null 1>/dev/null 2>&1; then
++if ls -L /System/Devices/null 1>/System/Devices/null 2>&1; then
+   ls_command='ls -L -l -d'
+ else
+   ls_command='ls -l -d'
+@@ -79,7 +79,7 @@
+ # the extended ls output of the root directory to decide how many
+ # words should be skipped to get the date.
+ 
+-# On HPUX /bin/sh, "set" interprets "-rw-r--r--" as options, so the "x" below.
++# On HPUX /System/Tools/sh, "set" interprets "-rw-r--r--" as options, so the "x" below.
+ set - x`$ls_command /`
+ 
+ # Find which argument is the month.
+@@ -150,7 +150,7 @@
+        esac
+        # For the first six month of the year the time notation can also
+        # be used for files modified in the last year.
+-       if (expr $nummonth \> $nummonthtod) > /dev/null;
++       if (expr $nummonth \> $nummonthtod) > /System/Devices/null;
+        then
+ 	 year=`expr $year - 1`
+        fi;;
+diff -urN sed-4.0.9/config/missing sed-4.0.9-STEP/config/missing
+--- sed-4.0.9/config/missing	2003-12-13 22:13:24.000000000 +1300
++++ sed-4.0.9-STEP/config/missing	2006-04-04 14:03:20.724972968 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Common stub for a few missing GNU programs while installing.
+ 
+ scriptversion=2003-09-02.23
+@@ -105,7 +105,7 @@
+     ;;
+ 
+   aclocal*)
+-    if test -z "$run" && ($1 --version) > /dev/null 2>&1; then
++    if test -z "$run" && ($1 --version) > /System/Devices/null 2>&1; then
+        # We have it, but it failed.
+        exit 1
+     fi
+@@ -119,7 +119,7 @@
+     ;;
+ 
+   autoconf)
+-    if test -z "$run" && ($1 --version) > /dev/null 2>&1; then
++    if test -z "$run" && ($1 --version) > /System/Devices/null 2>&1; then
+        # We have it, but it failed.
+        exit 1
+     fi
+@@ -133,7 +133,7 @@
+     ;;
+ 
+   autoheader)
+-    if test -z "$run" && ($1 --version) > /dev/null 2>&1; then
++    if test -z "$run" && ($1 --version) > /System/Devices/null 2>&1; then
+        # We have it, but it failed.
+        exit 1
+     fi
+@@ -157,7 +157,7 @@
+     ;;
+ 
+   automake*)
+-    if test -z "$run" && ($1 --version) > /dev/null 2>&1; then
++    if test -z "$run" && ($1 --version) > /System/Devices/null 2>&1; then
+        # We have it, but it failed.
+        exit 1
+     fi
+@@ -173,7 +173,7 @@
+     ;;
+ 
+   autom4te)
+-    if test -z "$run" && ($1 --version) > /dev/null 2>&1; then
++    if test -z "$run" && ($1 --version) > /System/Devices/null 2>&1; then
+        # We have it, but it failed.
+        exit 1
+     fi
+@@ -191,7 +191,7 @@
+ 	touch $file
+     else
+ 	test -z "$file" || exec >$file
+-	echo "#! /bin/sh"
++	echo "#! /System/Tools/sh"
+ 	echo "# Created by GNU Automake missing as a replacement of"
+ 	echo "#  $ $@"
+ 	echo "exit 0"
+@@ -254,7 +254,7 @@
+     ;;
+ 
+   help2man)
+-    if test -z "$run" && ($1 --version) > /dev/null 2>&1; then
++    if test -z "$run" && ($1 --version) > /System/Devices/null 2>&1; then
+        # We have it, but it failed.
+        exit 1
+     fi
+@@ -279,7 +279,7 @@
+     ;;
+ 
+   makeinfo)
+-    if test -z "$run" && (makeinfo --version) > /dev/null 2>&1; then
++    if test -z "$run" && (makeinfo --version) > /System/Devices/null 2>&1; then
+        # We have makeinfo, but it failed.
+        exit 1
+     fi
+@@ -309,10 +309,10 @@
+     # We have already tried tar in the generic part.
+     # Look for gnutar/gtar before invocation to avoid ugly error
+     # messages.
+-    if (gnutar --version > /dev/null 2>&1); then
++    if (gnutar --version > /System/Devices/null 2>&1); then
+        gnutar "$@" && exit 0
+     fi
+-    if (gtar --version > /dev/null 2>&1); then
++    if (gtar --version > /System/Devices/null 2>&1); then
+        gtar "$@" && exit 0
+     fi
+     firstarg="$1"
+diff -urN sed-4.0.9/config/texi2dvi sed-4.0.9-STEP/config/texi2dvi
+--- sed-4.0.9/config/texi2dvi	2002-05-30 07:04:13.000000000 +1200
++++ sed-4.0.9-STEP/config/texi2dvi	2006-04-04 14:03:20.726972664 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # texi2dvi --- produce DVI (or PDF) files from Texinfo (or LaTeX) sources.
+ # $Id: texi2dvi,v 0.51 2002/04/01 14:20:59 karl Exp $
+ #
+@@ -90,7 +90,7 @@
+ quiet=          # by default let the tools' message be displayed
+ set_language=
+ textra=
+-tmpdir=${TMPDIR:-/tmp}/t2d$$  # avoid collisions on 8.3 filesystems.
++tmpdir=${TMPDIR:-/System/TemporaryFiles}/t2d$$  # avoid collisions on 8.3 filesystems.
+ txincludes=     # TEXINPUTS extensions
+ txiprereq=19990129 # minimum texinfo.tex version to have macro expansion
+ verbose=false   # echo for verbose mode
+@@ -257,7 +257,7 @@
+ # files as argument.  The index files must be reported last.
+ get_xref_files=$utildir/get_xref.sh
+ cat <<\EOF >$get_xref_files
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ # Get list of xref files (indexes, tables and lists).
+ # Find all files having root filename with a two-letter extension,
+@@ -283,13 +283,13 @@
+ # 0 standard input
+ # 1 standard output (--verbose messages)
+ # 2 standard error
+-# 3 some systems may open it to /dev/tty
++# 3 some systems may open it to /System/Devices/tty
+ # 4 used on the Kubota Titan
+ # 5 tools output (turned off by --quiet)
+ 
+ # Tools' output.  If quiet, discard, else redirect to the message flow.
+ if test "$quiet" = t; then
+-  exec 5>/dev/null
++  exec 5>/System/Devices/null
+ else
+   exec 5>&1
+ fi
+@@ -305,7 +305,7 @@
+ 
+   # If the COMMAND_LINE_FILENAME is not absolute (e.g., --debug.tex),
+   # prepend `./' in order to avoid that the tools take it as an option.
+-  echo "$command_line_filename" | egrep '^(/|[A-z]:/)' >/dev/null \
++  echo "$command_line_filename" | egrep '^(/|[A-z]:/)' >/System/Devices/null \
+   || command_line_filename="./$command_line_filename"
+ 
+   # See if the file exists.  If it doesn't we're in trouble since, even
+@@ -321,7 +321,7 @@
+   # because in clean mode we are in tmp, in which case a relative
+   # path has no meaning.
+   filename_dir=`echo $command_line_filename | sed 's!/[^/]*$!!;s!^$!.!'`
+-  filename_dir=`cd "$filename_dir" >/dev/null && pwd`
++  filename_dir=`cd "$filename_dir" >/System/Devices/null && pwd`
+ 
+   # Strip directory part but leave extension.
+   filename_ext=`basename "$command_line_filename"`
+@@ -361,7 +361,7 @@
+   # Otherwise, guess from the file extension.
+   if test -n "$set_language"; then
+     language=$set_language
+-  elif sed 1q "$command_line_filename" | fgrep 'input texinfo' >/dev/null; then
++  elif sed 1q "$command_line_filename" | fgrep 'input texinfo' >/System/Devices/null; then
+     language=texinfo
+   else
+     language=
+@@ -405,11 +405,11 @@
+         txiversion_tex=txiversion.tex
+         echo '\input texinfo.tex @bye' >$tmpdir/$txiversion_tex
+         # Run in the tmpdir to avoid leaving files.
+-        eval `cd $tmpdir >/dev/null &&
+-              $tex $txiversion_tex 2>/dev/null |
++        eval `cd $tmpdir >/System/Devices/null &&
++              $tex $txiversion_tex 2>/System/Devices/null |
+               sed -n 's/^.*\[\(.*\)version \(....\)-\(..\)-\(..\).*$/txiformat=\1 txiversion="\2\3\4"/p'`
+         $verbose "texinfo.tex preloaded as \`$txiformat', version is \`$txiversion' ..."
+-        if test "$txiprereq" -le "$txiversion" >/dev/null 2>&1; then
++        if test "$txiprereq" -le "$txiversion" >/System/Devices/null 2>&1; then
+           makeinfo=
+         else
+           makeinfo=${MAKEINFO:-makeinfo}
+@@ -430,7 +430,7 @@
+     $verbose "Macro-expanding $command_line_filename to $filename_src ..."
+     sed -f $comment_iftex_sed "$command_line_filename" \
+       | $makeinfo --footnote-style=end -I "$filename_dir" $miincludes \
+-        -o /dev/null --macro-expand=- \
++        -o /System/Devices/null --macro-expand=- \
+       | sed -f $uncomment_iftex_sed >"$filename_src"
+     filename_input=$filename_src
+   fi
+@@ -488,7 +488,7 @@
+            && grep '^\\bibstyle[{]' "$filename_noext.aux" \
+            && (grep 'Warning:.*Citation.*undefined' "$filename_noext.log" \
+                || grep 'No file .*\.bbl\.' "$filename_noext.log")) \
+-          >/dev/null 2>&1; \
++          >/System/Devices/null 2>&1; \
+     then
+       $verbose "Running $bibtex $filename_noext ..."
+       if $bibtex "$filename_noext" >&5; then :; else
+@@ -540,7 +540,7 @@
+     # subdirs, since texi2dvi does not try to compare xref files in
+     # subdirs.  Performing xref files test is still good since LaTeX
+     # does not report changes in xref files.
+-    if fgrep "Rerun to get" "$filename_noext.log" >/dev/null 2>&1; then
++    if fgrep "Rerun to get" "$filename_noext.log" >/System/Devices/null 2>&1; then
+       finished=
+     fi
+ 
+diff -urN sed-4.0.9/configure sed-4.0.9-STEP/configure
+--- sed-4.0.9/configure	2004-01-10 08:07:20.000000000 +1300
++++ sed-4.0.9-STEP/configure	2006-04-04 14:03:20.736971144 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Guess values for system-dependent variables and create Makefiles.
+ # Generated by GNU Autoconf 2.59 for sed 4.0.9.
+ #
+@@ -12,19 +12,19 @@
+ ## --------------------- ##
+ 
+ # Be Bourne compatible
+-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
++if test -n "${ZSH_VERSION+set}" && (emulate sh) >/System/Devices/null 2>&1; then
+   emulate sh
+   NULLCMD=:
+   # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+   # is contrary to our usage.  Disable this feature.
+   alias -g '${1+"$@"}'='"$@"'
+-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
++elif test -n "${BASH_VERSION+set}" && (set -o posix) >/System/Devices/null 2>&1; then
+   set -o posix
+ fi
+ DUALCASE=1; export DUALCASE # for MKS sh
+ 
+ # Support unset when possible.
+-if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
++if ( (MAIL=60; unset MAIL) || exit) >/System/Devices/null 2>&1; then
+   as_unset=unset
+ else
+   as_unset=false
+@@ -51,13 +51,13 @@
+ done
+ 
+ # Required to use basename.
+-if expr a : '\(a\)' >/dev/null 2>&1; then
++if expr a : '\(a\)' >/System/Devices/null 2>&1; then
+   as_expr=expr
+ else
+   as_expr=false
+ fi
+ 
+-if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
++if (basename /) >/System/Devices/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
+   as_basename=basename
+ else
+   as_basename=false
+@@ -69,7 +69,7 @@
+ $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+ 	 X"$0" : 'X\(//\)$' \| \
+ 	 X"$0" : 'X\(/\)$' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X/"$0" |
+     sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
+   	  /^X\/\(\/\/\)$/{ s//\1/; q; }
+@@ -87,10 +87,10 @@
+ 
+ # The user is always right.
+ if test "${PATH_SEPARATOR+set}" != set; then
+-  echo "#! /bin/sh" >conf$$.sh
++  echo "#! /System/Tools/sh" >conf$$.sh
+   echo  "exit 0"   >>conf$$.sh
+   chmod +x conf$$.sh
+-  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
++  if (PATH="/nonexistent;."; conf$$.sh) >/System/Devices/null 2>&1; then
+     PATH_SEPARATOR=';'
+   else
+     PATH_SEPARATOR=:
+@@ -101,7 +101,7 @@
+ 
+   as_lineno_1=$LINENO
+   as_lineno_2=$LINENO
+-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
++  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/System/Devices/null`
+   test "x$as_lineno_1" != "x$as_lineno_2" &&
+   test "x$as_lineno_3"  = "x$as_lineno_2"  || {
+   # Find who we are.  Look in the path if we contain no path at all
+@@ -130,7 +130,7 @@
+   case $CONFIG_SHELL in
+   '')
+     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
++for as_dir in /System/Tools$PATH_SEPARATOR/System/AdminTools$PATH_SEPARATOR$PATH
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+@@ -140,9 +140,9 @@
+ 	   if ("$as_dir/$as_base" -c '
+   as_lineno_1=$LINENO
+   as_lineno_2=$LINENO
+-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
++  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/System/Devices/null`
+   test "x$as_lineno_1" != "x$as_lineno_2" &&
+-  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
++  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/System/Devices/null; then
+ 	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
+ 	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
+ 	     CONFIG_SHELL=$as_dir/$as_base
+@@ -193,7 +193,7 @@
+   *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
+ esac
+ 
+-if expr a : '\(a\)' >/dev/null 2>&1; then
++if expr a : '\(a\)' >/System/Devices/null 2>&1; then
+   as_expr=expr
+ else
+   as_expr=false
+@@ -201,7 +201,7 @@
+ 
+ rm -f conf$$ conf$$.exe conf$$.file
+ echo >conf$$.file
+-if ln -s conf$$.file conf$$ 2>/dev/null; then
++if ln -s conf$$.file conf$$ 2>/System/Devices/null; then
+   # We could just check for DJGPP; but this test a) works b) is more generic
+   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
+   if test -f conf$$.exe; then
+@@ -210,14 +210,14 @@
+   else
+     as_ln_s='ln -s'
+   fi
+-elif ln conf$$.file conf$$ 2>/dev/null; then
++elif ln conf$$.file conf$$ 2>/System/Devices/null; then
+   as_ln_s=ln
+ else
+   as_ln_s='cp -p'
+ fi
+ rm -f conf$$ conf$$.exe conf$$.file
+ 
+-if mkdir -p . 2>/dev/null; then
++if mkdir -p . 2>/System/Devices/null; then
+   as_mkdir_p=:
+ else
+   test -d ./-p && rmdir ./-p
+@@ -246,7 +246,7 @@
+ # Name of the host.
+ # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
+ # so uname gets run too.
+-ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
++ac_hostname=`(hostname || uname -n) 2>/System/Devices/null | sed 1q`
+ 
+ exec 6>&1
+ 
+@@ -259,7 +259,7 @@
+ subdirs=
+ MFLAGS=
+ MAKEFLAGS=
+-SHELL=${CONFIG_SHELL-/bin/sh}
++SHELL=${CONFIG_SHELL-/System/Tools/sh}
+ 
+ # Maximum number of lines to put in a shell here document.
+ # This variable seems obsolete.  It should probably be removed, and
+@@ -319,7 +319,7 @@
+ ac_init_version=false
+ # The variables have the same names as the options, with
+ # dashes changed to underlines.
+-cache_file=/dev/null
++cache_file=/System/Devices/null
+ exec_prefix=NONE
+ no_create=
+ no_recursion=
+@@ -397,7 +397,7 @@
+   -disable-* | --disable-*)
+     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid feature name: $ac_feature" >&2
+    { (exit 1); exit 1; }; }
+     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
+@@ -406,7 +406,7 @@
+   -enable-* | --enable-*)
+     ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid feature name: $ac_feature" >&2
+    { (exit 1); exit 1; }; }
+     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
+@@ -588,7 +588,7 @@
+   -with-* | --with-*)
+     ac_package=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid package name: $ac_package" >&2
+    { (exit 1); exit 1; }; }
+     ac_package=`echo $ac_package| sed 's/-/_/g'`
+@@ -601,7 +601,7 @@
+   -without-* | --without-*)
+     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid package name: $ac_package" >&2
+    { (exit 1); exit 1; }; }
+     ac_package=`echo $ac_package | sed 's/-/_/g'`
+@@ -633,7 +633,7 @@
+   *=*)
+     ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
+     # Reject names that are not valid shell variable names.
+-    expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/System/Devices/null &&
+       { echo "$as_me: error: invalid variable name: $ac_envvar" >&2
+    { (exit 1); exit 1; }; }
+     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
+@@ -643,7 +643,7 @@
+   *)
+     # FIXME: should be removed in autoconf 3.0.
+     echo "$as_me: WARNING: you should use --build, --host, --target" >&2
+-    expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/dev/null &&
++    expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/System/Devices/null &&
+       echo "$as_me: WARNING: invalid host type: $ac_option" >&2
+     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
+     ;;
+@@ -701,19 +701,19 @@
+ ac_tool_prefix=
+ test -n "$host_alias" && ac_tool_prefix=$host_alias-
+ 
+-test "$silent" = yes && exec 6>/dev/null
++test "$silent" = yes && exec 6>/System/Devices/null
+ 
+ 
+ # Find the source files, if location was not specified.
+ if test -z "$srcdir"; then
+   ac_srcdir_defaulted=yes
+   # Try the directory containing this script, then its parent.
+-  ac_confdir=`(dirname "$0") 2>/dev/null ||
++  ac_confdir=`(dirname "$0") 2>/System/Devices/null ||
+ $as_expr X"$0" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$0" : 'X\(//\)[^/]' \| \
+ 	 X"$0" : 'X\(//\)$' \| \
+ 	 X"$0" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$0" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -736,7 +736,7 @@
+    { (exit 1); exit 1; }; }
+   fi
+ fi
+-(cd $srcdir && test -r ./$ac_unique_file) 2>/dev/null ||
++(cd $srcdir && test -r ./$ac_unique_file) 2>/System/Devices/null ||
+   { echo "$as_me: error: sources are in $srcdir, but \`cd $srcdir' does not work" >&2
+    { (exit 1); exit 1; }; }
+ srcdir=`echo "$srcdir" | sed 's%\([^\\/]\)[\\/]*$%\1%'`
+@@ -998,22 +998,22 @@
+ ## Platform. ##
+ ## --------- ##
+ 
+-hostname = `(hostname || uname -n) 2>/dev/null | sed 1q`
+-uname -m = `(uname -m) 2>/dev/null || echo unknown`
+-uname -r = `(uname -r) 2>/dev/null || echo unknown`
+-uname -s = `(uname -s) 2>/dev/null || echo unknown`
+-uname -v = `(uname -v) 2>/dev/null || echo unknown`
+-
+-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null || echo unknown`
+-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null     || echo unknown`
+-
+-/bin/arch              = `(/bin/arch) 2>/dev/null              || echo unknown`
+-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null       || echo unknown`
+-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null || echo unknown`
+-hostinfo               = `(hostinfo) 2>/dev/null               || echo unknown`
+-/bin/machine           = `(/bin/machine) 2>/dev/null           || echo unknown`
+-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null       || echo unknown`
+-/bin/universe          = `(/bin/universe) 2>/dev/null          || echo unknown`
++hostname = `(hostname || uname -n) 2>/System/Devices/null | sed 1q`
++uname -m = `(uname -m) 2>/System/Devices/null || echo unknown`
++uname -r = `(uname -r) 2>/System/Devices/null || echo unknown`
++uname -s = `(uname -s) 2>/System/Devices/null || echo unknown`
++uname -v = `(uname -v) 2>/System/Devices/null || echo unknown`
++
++/System/Tools/uname -p = `(/System/Tools/uname -p) 2>/System/Devices/null || echo unknown`
++/System/Tools/uname -X     = `(/System/Tools/uname -X) 2>/System/Devices/null     || echo unknown`
++
++/System/Tools/arch              = `(/System/Tools/arch) 2>/System/Devices/null              || echo unknown`
++/System/Tools/arch -k       = `(/System/Tools/arch -k) 2>/System/Devices/null       || echo unknown`
++/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/System/Devices/null || echo unknown`
++hostinfo               = `(hostinfo) 2>/System/Devices/null               || echo unknown`
++/System/Tools/machine           = `(/System/Tools/machine) 2>/System/Devices/null           || echo unknown`
++/System/Tools/oslevel       = `(/System/Tools/oslevel) 2>/System/Devices/null       || echo unknown`
++/System/Tools/universe          = `(/System/Tools/universe) 2>/System/Devices/null          || echo unknown`
+ 
+ _ASUNAME
+ 
+@@ -1208,9 +1208,9 @@
+ # Prefer explicitly selected file to automatically selected ones.
+ if test -z "$CONFIG_SITE"; then
+   if test "x$prefix" != xNONE; then
+-    CONFIG_SITE="$prefix/share/config.site $prefix/etc/config.site"
++    CONFIG_SITE="$prefix/share/config.site $prefix/System/Settings/config.site"
+   else
+-    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/etc/config.site"
++    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/System/Settings/config.site"
+   fi
+ fi
+ for ac_site_file in $CONFIG_SITE; do
+@@ -1223,7 +1223,7 @@
+ done
+ 
+ if test -r "$cache_file"; then
+-  # Some versions of bash will fail to source /dev/null (special
++  # Some versions of bash will fail to source /System/Devices/null (special
+   # files actually), so we avoid doing that.
+   if test -f "$cache_file"; then
+     { echo "$as_me:$LINENO: loading cache $cache_file" >&5
+@@ -1355,12 +1355,12 @@
+ # Find a good install program.  We prefer a C program (faster),
+ # so one script is as good as another.  But avoid the broken or
+ # incompatible versions:
+-# SysV /etc/install, /usr/sbin/install
+-# SunOS /usr/etc/install
++# SysV /System/Settings/install, /usr/sbin/install
++# SunOS /usr/System/Settings/install
+ # IRIX /sbin/install
+ # AIX /bin/install
+ # AmigaOS /C/install, which installs bootblocks on floppy discs
+-# AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
++# AIX 4 /System/Tools/installbsd, which doesn't work without a -g flag
+ # AFS /usr/afsws/bin/install, which mishandles nonexistent args
+ # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+ # OS/2's system install, which has a completely different semantic
+@@ -1379,7 +1379,7 @@
+   # Account for people who put trailing slashes in PATH elements.
+ case $as_dir/ in
+   ./ | .// | /cC/* | \
+-  /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
++  /System/Settings/* | /System/AdminTools/* | /usr/afsws/bin/* | \
+   ?:\\/os2\\/install\\/* | ?:\\/OS2\\/INSTALL\\/* | \
+   /usr/ucb/* ) ;;
+   *)
+@@ -1390,11 +1390,11 @@
+       for ac_exec_ext in '' $ac_executable_extensions; do
+ 	if $as_executable_p "$as_dir/$ac_prog$ac_exec_ext"; then
+ 	  if test $ac_prog = install &&
+-	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
++	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/System/Devices/null 2>&1; then
+ 	    # AIX install.  It has an incompatible calling convention.
+ 	    :
+ 	  elif test $ac_prog = install &&
+-	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
++	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/System/Devices/null 2>&1; then
+ 	    # program-specific install script used by HP pwplus--don't use.
+ 	    :
+ 	  else
+@@ -1442,7 +1442,7 @@
+ # (eg FreeBSD returns the mod time of the symlink's containing
+ # directory).
+ if (
+-   set X `ls -Lt $srcdir/configure conftest.file 2> /dev/null`
++   set X `ls -Lt $srcdir/configure conftest.file 2> /System/Devices/null`
+    if test "$*" = "X"; then
+       # -L didn't work.
+       set X `ls -t $srcdir/configure conftest.file`
+@@ -1502,7 +1502,7 @@
+ echo "$as_me: WARNING: \`missing' script is too old or missing" >&2;}
+ fi
+ 
+-if mkdir -m 0755 -p -- . 2>/dev/null; then
++if mkdir -m 0755 -p -- . 2>/System/Devices/null; then
+   mkdir_p='mkdir -m 0755 -p --'
+ else
+   # On NextStep and OpenStep, the `mkdir' command does not
+@@ -1572,7 +1572,7 @@
+ 	@echo 'ac_maketemp="$(MAKE)"'
+ _ACEOF
+ # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+-eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
++eval `${MAKE-make} -f conftest.make 2>/System/Devices/null | grep temp=`
+ if test -n "$ac_maketemp"; then
+   eval ac_cv_prog_make_${ac_make}_set=yes
+ else
+@@ -1590,14 +1590,14 @@
+   SET_MAKE="MAKE=${MAKE-make}"
+ fi
+ 
+-rm -rf .tst 2>/dev/null
+-mkdir .tst 2>/dev/null
++rm -rf .tst 2>/System/Devices/null
++mkdir .tst 2>/System/Devices/null
+ if test -d .tst; then
+   am__leading_dot=.
+ else
+   am__leading_dot=_
+ fi
+-rmdir .tst 2>/dev/null
++rmdir .tst 2>/System/Devices/null
+ 
+ # test to see if srcdir already configured
+ if test "`cd $srcdir && pwd`" != "`pwd`" &&
+@@ -1609,7 +1609,7 @@
+ 
+ # test whether we have cygpath
+ if test -z "$CYGPATH_W"; then
+-  if (cygpath --version) >/dev/null 2>/dev/null; then
++  if (cygpath --version) >/System/Devices/null 2>/System/Devices/null; then
+     CYGPATH_W='cygpath -w'
+   else
+     CYGPATH_W=echo
+@@ -2073,18 +2073,18 @@
+ echo "$as_me:$LINENO:" \
+      "checking for C compiler version" >&5
+ ac_compiler=`set X $ac_compile; echo $2`
+-{ (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
+-  (eval $ac_compiler --version </dev/null >&5) 2>&5
++{ (eval echo "$as_me:$LINENO: \"$ac_compiler --version </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler --version </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }
+-{ (eval echo "$as_me:$LINENO: \"$ac_compiler -v </dev/null >&5\"") >&5
+-  (eval $ac_compiler -v </dev/null >&5) 2>&5
++{ (eval echo "$as_me:$LINENO: \"$ac_compiler -v </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler -v </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }
+-{ (eval echo "$as_me:$LINENO: \"$ac_compiler -V </dev/null >&5\"") >&5
+-  (eval $ac_compiler -V </dev/null >&5) 2>&5
++{ (eval echo "$as_me:$LINENO: \"$ac_compiler -V </System/Devices/null >&5\"") >&5
++  (eval $ac_compiler -V </System/Devices/null >&5) 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }
+@@ -2266,7 +2266,7 @@
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; then
+-  for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/dev/null`; do
++  for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/System/Devices/null`; do
+   case $ac_file in
+     *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg ) ;;
+     *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
+@@ -2707,7 +2707,7 @@
+ # In particular we don't look at `^make:' because GNU make might
+ # be invoked under some other name (usually "gmake"), in which
+ # case it prints its new name instead of `make'.
+-if test "`$am_make -s -f confmf 2> /dev/null | grep -v 'ing directory'`" = "done"; then
++if test "`$am_make -s -f confmf 2> /System/Devices/null | grep -v 'ing directory'`" = "done"; then
+    am__include=include
+    am__quote=
+    _am_result=GNU
+@@ -2715,7 +2715,7 @@
+ # Now try BSD make style include.
+ if test "$am__include" = "#"; then
+    echo '.include "confinc"' > confmf
+-   if test "`$am_make -s -f confmf 2> /dev/null`" = "done"; then
++   if test "`$am_make -s -f confmf 2> /System/Devices/null`" = "done"; then
+       am__include=.include
+       am__quote="\""
+       _am_result=BSD
+@@ -2813,14 +2813,14 @@
+        source=sub/conftest.c object=sub/conftest.${OBJEXT-o} \
+        depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
+        $SHELL ./depcomp $depcc -c -o sub/conftest.${OBJEXT-o} sub/conftest.c \
+-         >/dev/null 2>conftest.err &&
+-       grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
+-       grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /dev/null 2>&1 &&
+-       ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
++         >/System/Devices/null 2>conftest.err &&
++       grep sub/conftst6.h sub/conftest.Po > /System/Devices/null 2>&1 &&
++       grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /System/Devices/null 2>&1 &&
++       ${MAKE-make} -s -f confmf > /System/Devices/null 2>&1; then
+       # icc doesn't choke on unknown options, it will just issue warnings
+       # (even with -Werror).  So we grep stderr for any message
+       # that says an option was ignored.
+-      if grep 'ignoring option' conftest.err >/dev/null 2>&1; then :; else
++      if grep 'ignoring option' conftest.err >/System/Devices/null 2>&1; then :; else
+         am_cv_CC_dependencies_compiler_type=$depmode
+         break
+       fi
+@@ -2985,7 +2985,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -3023,7 +3023,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -3092,7 +3092,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -3130,7 +3130,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -3178,7 +3178,7 @@
+ if test "${ac_cv_prog_egrep+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+-  if echo a | (grep -E '(a|b)') >/dev/null 2>&1
++  if echo a | (grep -E '(a|b)') >/System/Devices/null 2>&1
+     then ac_cv_prog_egrep='grep -E'
+     else ac_cv_prog_egrep='egrep'
+     fi
+@@ -3203,7 +3203,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "yes" >/dev/null 2>&1; then
++  $EGREP "yes" >/System/Devices/null 2>&1; then
+   echo "$as_me:$LINENO: result: yes" >&5
+ echo "${ECHO_T}yes" >&6
+ cat >>confdefs.h <<\_ACEOF
+@@ -3284,7 +3284,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "memchr" >/dev/null 2>&1; then
++  $EGREP "memchr" >/System/Devices/null 2>&1; then
+   :
+ else
+   ac_cv_header_stdc=no
+@@ -3305,7 +3305,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "free" >/dev/null 2>&1; then
++  $EGREP "free" >/System/Devices/null 2>&1; then
+   :
+ else
+   ac_cv_header_stdc=no
+@@ -3527,7 +3527,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -4230,7 +4230,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "memchr" >/dev/null 2>&1; then
++  $EGREP "memchr" >/System/Devices/null 2>&1; then
+   :
+ else
+   ac_cv_header_stdc=no
+@@ -4251,7 +4251,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "free" >/dev/null 2>&1; then
++  $EGREP "free" >/System/Devices/null 2>&1; then
+   :
+ else
+   ac_cv_header_stdc=no
+@@ -4420,7 +4420,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -4911,7 +4911,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "webecray" >/dev/null 2>&1; then
++  $EGREP "webecray" >/System/Devices/null 2>&1; then
+   ac_cv_os_cray=yes
+ else
+   ac_cv_os_cray=no
+@@ -6111,7 +6111,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -6408,12 +6408,12 @@
+ 
+ echo "$as_me:$LINENO: checking how to build HTML documentation" >&5
+ echo $ECHO_N "checking how to build HTML documentation... $ECHO_C" >&6
+-if eval $am_missing_run makeinfo --help 2>&1 | grep .-html > /dev/null; then
++if eval $am_missing_run makeinfo --help 2>&1 | grep .-html > /System/Devices/null; then
+   echo "$as_me:$LINENO: result: with makeinfo" >&5
+ echo "${ECHO_T}with makeinfo" >&6
+   enable_html=makeinfo
+ else
+-  if $TEXI2HTML --help 2>&1 | grep monolithic > /dev/null; then
++  if $TEXI2HTML --help 2>&1 | grep monolithic > /System/Devices/null; then
+     echo "$as_me:$LINENO: result: with texi2html" >&5
+ echo "${ECHO_T}with texi2html" >&6
+     enable_html=texi2html
+@@ -6454,7 +6454,7 @@
+ ALL_LINGUAS="ca cs da de el eo es et fi fr ga gl he hr hu id it ja ko nl pl pt_BR ro ru sk sl sr sv tr zh_CN"
+ 
+ # Make sure we can run config.sub.
+-$ac_config_sub sun4 >/dev/null 2>&1 ||
++$ac_config_sub sun4 >/System/Devices/null 2>&1 ||
+   { { echo "$as_me:$LINENO: error: cannot run $ac_config_sub" >&5
+ echo "$as_me: error: cannot run $ac_config_sub" >&2;}
+    { (exit 1); exit 1; }; }
+@@ -6721,7 +6721,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -7094,7 +7094,7 @@
+ 
+ _ACEOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "Lucky GNU user" >/dev/null 2>&1; then
++  $EGREP "Lucky GNU user" >/System/Devices/null 2>&1; then
+   ac_cv_gnu_library_2_1=yes
+ else
+   ac_cv_gnu_library_2_1=no
+@@ -7197,7 +7197,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -7855,7 +7855,7 @@
+   rm -f conftest.er1
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } >/dev/null; then
++  (exit $ac_status); } >/System/Devices/null; then
+   if test -s conftest.err; then
+     ac_cpp_err=$ac_c_preproc_warn_flag
+     ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+@@ -8175,7 +8175,7 @@
+   for ac_dir in $PATH; do
+     test -z "$ac_dir" && ac_dir=.
+     if test -f $ac_dir/$ac_word; then
+-      if $ac_dir/$ac_word --statistics /dev/null >/dev/null 2>&1; then
++      if $ac_dir/$ac_word --statistics /System/Devices/null >/System/Devices/null 2>&1; then
+ 	ac_cv_path_MSGFMT="$ac_dir/$ac_word"
+ 	break
+       fi
+@@ -8252,7 +8252,7 @@
+   for ac_dir in $PATH; do
+     test -z "$ac_dir" && ac_dir=.
+     if test -f $ac_dir/$ac_word; then
+-      if $ac_dir/$ac_word --omit-header /dev/null >/dev/null 2>&1; then
++      if $ac_dir/$ac_word --omit-header /System/Devices/null >/System/Devices/null 2>&1; then
+ 	ac_cv_path_XGETTEXT="$ac_dir/$ac_word"
+ 	break
+       fi
+@@ -8303,7 +8303,7 @@
+   for ac_dir in $PATH; do
+     test -z "$ac_dir" && ac_dir=.
+     if test -f $ac_dir/$ac_word; then
+-      if $ac_dir/$ac_word --statistics /dev/null >/dev/null 2>&1; then
++      if $ac_dir/$ac_word --statistics /System/Devices/null >/System/Devices/null 2>&1; then
+ 	ac_cv_path_MSGFMT="$ac_dir/$ac_word"
+ 	break
+       fi
+@@ -8379,7 +8379,7 @@
+   for ac_dir in $PATH; do
+     test -z "$ac_dir" && ac_dir=.
+     if test -f $ac_dir/$ac_word; then
+-      if $ac_dir/$ac_word --omit-header /dev/null >/dev/null 2>&1; then
++      if $ac_dir/$ac_word --omit-header /System/Devices/null >/System/Devices/null 2>&1; then
+ 	ac_cv_path_XGETTEXT="$ac_dir/$ac_word"
+ 	break
+       fi
+@@ -8408,7 +8408,7 @@
+       fi
+ 
+                   if test "$GMSGFMT" != ":"; then
+-			if $GMSGFMT --statistics /dev/null >/dev/null 2>&1; then
++			if $GMSGFMT --statistics /System/Devices/null >/System/Devices/null 2>&1; then
+ 	  : ;
+ 	else
+ 	  echo "$as_me:$LINENO: result: found msgfmt program is not GNU msgfmt; ignore it" >&5
+@@ -8418,7 +8418,7 @@
+       fi
+ 
+                   if test "$XGETTEXT" != ":"; then
+-			if $XGETTEXT --omit-header /dev/null >/dev/null 2>&1; then
++			if $XGETTEXT --omit-header /System/Devices/null >/System/Devices/null 2>&1; then
+ 	  : ;
+ 	else
+ 	  echo "$as_me:$LINENO: result: found xgettext program is not GNU xgettext; ignore it" >&5
+@@ -8619,9 +8619,9 @@
+      t end
+      /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
+      : end' >>confcache
+-if diff $cache_file confcache >/dev/null 2>&1; then :; else
++if diff $cache_file confcache >/System/Devices/null 2>&1; then :; else
+   if test -w $cache_file; then
+-    test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
++    test "x$cache_file" != "x/System/Devices/null" && echo "updating cache $cache_file"
+     cat confcache >$cache_file
+   else
+     echo "not updating unwritable cache $cache_file"
+@@ -8732,19 +8732,19 @@
+ ## --------------------- ##
+ 
+ # Be Bourne compatible
+-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
++if test -n "${ZSH_VERSION+set}" && (emulate sh) >/System/Devices/null 2>&1; then
+   emulate sh
+   NULLCMD=:
+   # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+   # is contrary to our usage.  Disable this feature.
+   alias -g '${1+"$@"}'='"$@"'
+-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
++elif test -n "${BASH_VERSION+set}" && (set -o posix) >/System/Devices/null 2>&1; then
+   set -o posix
+ fi
+ DUALCASE=1; export DUALCASE # for MKS sh
+ 
+ # Support unset when possible.
+-if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
++if ( (MAIL=60; unset MAIL) || exit) >/System/Devices/null 2>&1; then
+   as_unset=unset
+ else
+   as_unset=false
+@@ -8771,13 +8771,13 @@
+ done
+ 
+ # Required to use basename.
+-if expr a : '\(a\)' >/dev/null 2>&1; then
++if expr a : '\(a\)' >/System/Devices/null 2>&1; then
+   as_expr=expr
+ else
+   as_expr=false
+ fi
+ 
+-if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
++if (basename /) >/System/Devices/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
+   as_basename=basename
+ else
+   as_basename=false
+@@ -8789,7 +8789,7 @@
+ $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+ 	 X"$0" : 'X\(//\)$' \| \
+ 	 X"$0" : 'X\(/\)$' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X/"$0" |
+     sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
+   	  /^X\/\(\/\/\)$/{ s//\1/; q; }
+@@ -8807,10 +8807,10 @@
+ 
+ # The user is always right.
+ if test "${PATH_SEPARATOR+set}" != set; then
+-  echo "#! /bin/sh" >conf$$.sh
++  echo "#! /System/Tools/sh" >conf$$.sh
+   echo  "exit 0"   >>conf$$.sh
+   chmod +x conf$$.sh
+-  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
++  if (PATH="/nonexistent;."; conf$$.sh) >/System/Devices/null 2>&1; then
+     PATH_SEPARATOR=';'
+   else
+     PATH_SEPARATOR=:
+@@ -8821,7 +8821,7 @@
+ 
+   as_lineno_1=$LINENO
+   as_lineno_2=$LINENO
+-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
++  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/System/Devices/null`
+   test "x$as_lineno_1" != "x$as_lineno_2" &&
+   test "x$as_lineno_3"  = "x$as_lineno_2"  || {
+   # Find who we are.  Look in the path if we contain no path at all
+@@ -8851,7 +8851,7 @@
+   case $CONFIG_SHELL in
+   '')
+     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
++for as_dir in /System/Tools$PATH_SEPARATOR/System/AdminTools$PATH_SEPARATOR$PATH
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+@@ -8861,9 +8861,9 @@
+ 	   if ("$as_dir/$as_base" -c '
+   as_lineno_1=$LINENO
+   as_lineno_2=$LINENO
+-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
++  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/System/Devices/null`
+   test "x$as_lineno_1" != "x$as_lineno_2" &&
+-  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
++  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/System/Devices/null; then
+ 	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
+ 	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
+ 	     CONFIG_SHELL=$as_dir/$as_base
+@@ -8915,7 +8915,7 @@
+   *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
+ esac
+ 
+-if expr a : '\(a\)' >/dev/null 2>&1; then
++if expr a : '\(a\)' >/System/Devices/null 2>&1; then
+   as_expr=expr
+ else
+   as_expr=false
+@@ -8923,7 +8923,7 @@
+ 
+ rm -f conf$$ conf$$.exe conf$$.file
+ echo >conf$$.file
+-if ln -s conf$$.file conf$$ 2>/dev/null; then
++if ln -s conf$$.file conf$$ 2>/System/Devices/null; then
+   # We could just check for DJGPP; but this test a) works b) is more generic
+   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
+   if test -f conf$$.exe; then
+@@ -8932,14 +8932,14 @@
+   else
+     as_ln_s='ln -s'
+   fi
+-elif ln conf$$.file conf$$ 2>/dev/null; then
++elif ln conf$$.file conf$$ 2>/System/Devices/null; then
+   as_ln_s=ln
+ else
+   as_ln_s='cp -p'
+ fi
+ rm -f conf$$ conf$$.exe conf$$.file
+ 
+-if mkdir -p . 2>/dev/null; then
++if mkdir -p . 2>/System/Devices/null; then
+   as_mkdir_p=:
+ else
+   test -d ./-p && rmdir ./-p
+@@ -8988,7 +8988,7 @@
+   $ $0 $@
+ 
+ _CSEOF
+-echo "on `(hostname || uname -n) 2>/dev/null | sed 1q`" >&5
++echo "on `(hostname || uname -n) 2>/System/Devices/null | sed 1q`" >&5
+ echo >&5
+ _ACEOF
+ 
+@@ -9125,7 +9125,7 @@
+ ac_configure_extra_args=
+ 
+ if $ac_cs_silent; then
+-  exec 6>/dev/null
++  exec 6>/System/Devices/null
+   ac_configure_extra_args="$ac_configure_extra_args --silent"
+ fi
+ 
+@@ -9186,7 +9186,7 @@
+ 
+ # Have a temporary directory for convenience.  Make it in the build tree
+ # simply because there is no reason to put it here, and in addition,
+-# creating and moving files from /tmp can sometimes cause problems.
++# creating and moving files from /System/TemporaryFiles can sometimes cause problems.
+ # Create a temporary directory, and hook for its removal unless debugging.
+ $debug ||
+ {
+@@ -9197,7 +9197,7 @@
+ # Create a (secure) tmp directory for tmp files.
+ 
+ {
+-  tmp=`(umask 077 && mktemp -d -q "./confstatXXXXXX") 2>/dev/null` &&
++  tmp=`(umask 077 && mktemp -d -q "./confstatXXXXXX") 2>/System/Devices/null` &&
+   test -n "$tmp" && test -d "$tmp"
+ }  ||
+ {
+@@ -9393,12 +9393,12 @@
+   esac
+ 
+   # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
+-  ac_dir=`(dirname "$ac_file") 2>/dev/null ||
++  ac_dir=`(dirname "$ac_file") 2>/System/Devices/null ||
+ $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$ac_file" : 'X\(//\)[^/]' \| \
+ 	 X"$ac_file" : 'X\(//\)$' \| \
+ 	 X"$ac_file" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$ac_file" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9412,12 +9412,12 @@
+     as_dirs=
+     while test ! -d "$as_dir"; do
+       as_dirs="$as_dir $as_dirs"
+-      as_dir=`(dirname "$as_dir") 2>/dev/null ||
++      as_dir=`(dirname "$as_dir") 2>/System/Devices/null ||
+ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
+ 	 X"$as_dir" : 'X\(//\)$' \| \
+ 	 X"$as_dir" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$as_dir" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9534,7 +9534,7 @@
+ 	   # Source tree
+ 	   echo "$srcdir/$f"
+ 	 else
+-	   # /dev/null tree
++	   # /System/Devices/null tree
+ 	   { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
+ echo "$as_me: error: cannot find input file: $f" >&2;}
+    { (exit 1); exit 1; }; }
+@@ -9630,7 +9630,7 @@
+ 	   # Source tree
+ 	   echo "$srcdir/$f"
+ 	 else
+-	   # /dev/null tree
++	   # /System/Devices/null tree
+ 	   { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
+ echo "$as_me: error: cannot find input file: $f" >&2;}
+    { (exit 1); exit 1; }; }
+@@ -9683,11 +9683,11 @@
+ # Break up conftest.defines because some shells have a limit on the size
+ # of here documents, and old seds have small limits too (100 cmds).
+ echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
+-echo '  if grep "^[	 ]*#[	 ]*define" $tmp/in >/dev/null; then' >>$CONFIG_STATUS
++echo '  if grep "^[	 ]*#[	 ]*define" $tmp/in >/System/Devices/null; then' >>$CONFIG_STATUS
+ echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
+ echo '  :' >>$CONFIG_STATUS
+ rm -f conftest.tail
+-while grep . conftest.defines >/dev/null
++while grep . conftest.defines >/System/Devices/null
+ do
+   # Write a limited-size here document to $tmp/defines.sed.
+   echo '  cat >$tmp/defines.sed <<CEOF' >>$CONFIG_STATUS
+@@ -9714,7 +9714,7 @@
+ # of here documents, and old seds have small limits too (100 cmds).
+ echo '  # Handle all the #undef templates' >>$CONFIG_STATUS
+ rm -f conftest.tail
+-while grep . conftest.undefs >/dev/null
++while grep . conftest.undefs >/System/Devices/null
+ do
+   # Write a limited-size here document to $tmp/undefs.sed.
+   echo '  cat >$tmp/undefs.sed <<CEOF' >>$CONFIG_STATUS
+@@ -9747,16 +9747,16 @@
+   cat $tmp/in >>$tmp/config.h
+   rm -f $tmp/in
+   if test x"$ac_file" != x-; then
+-    if diff $ac_file $tmp/config.h >/dev/null 2>&1; then
++    if diff $ac_file $tmp/config.h >/System/Devices/null 2>&1; then
+       { echo "$as_me:$LINENO: $ac_file is unchanged" >&5
+ echo "$as_me: $ac_file is unchanged" >&6;}
+     else
+-      ac_dir=`(dirname "$ac_file") 2>/dev/null ||
++      ac_dir=`(dirname "$ac_file") 2>/System/Devices/null ||
+ $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$ac_file" : 'X\(//\)[^/]' \| \
+ 	 X"$ac_file" : 'X\(//\)$' \| \
+ 	 X"$ac_file" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$ac_file" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9770,12 +9770,12 @@
+     as_dirs=
+     while test ! -d "$as_dir"; do
+       as_dirs="$as_dir $as_dirs"
+-      as_dir=`(dirname "$as_dir") 2>/dev/null ||
++      as_dir=`(dirname "$as_dir") 2>/System/Devices/null ||
+ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
+ 	 X"$as_dir" : 'X\(//\)$' \| \
+ 	 X"$as_dir" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$as_dir" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9805,12 +9805,12 @@
+       _am_stamp_count=`expr $_am_stamp_count + 1` ;;
+   esac
+ done
+-echo "timestamp for $ac_file" >`(dirname $ac_file) 2>/dev/null ||
++echo "timestamp for $ac_file" >`(dirname $ac_file) 2>/System/Devices/null ||
+ $as_expr X$ac_file : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X$ac_file : 'X\(//\)[^/]' \| \
+ 	 X$ac_file : 'X\(//\)$' \| \
+ 	 X$ac_file : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X$ac_file |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9840,12 +9840,12 @@
+   rm -f $ac_dest
+ 
+   # Make relative symlinks.
+-  ac_dest_dir=`(dirname "$ac_dest") 2>/dev/null ||
++  ac_dest_dir=`(dirname "$ac_dest") 2>/System/Devices/null ||
+ $as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$ac_dest" : 'X\(//\)[^/]' \| \
+ 	 X"$ac_dest" : 'X\(//\)$' \| \
+ 	 X"$ac_dest" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$ac_dest" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9859,12 +9859,12 @@
+     as_dirs=
+     while test ! -d "$as_dir"; do
+       as_dirs="$as_dir $as_dirs"
+-      as_dir=`(dirname "$as_dir") 2>/dev/null ||
++      as_dir=`(dirname "$as_dir") 2>/System/Devices/null ||
+ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
+ 	 X"$as_dir" : 'X\(//\)$' \| \
+ 	 X"$as_dir" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$as_dir" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9946,8 +9946,8 @@
+   esac
+ 
+   # Try a symlink, then a hard link, then a copy.
+-  ln -s $ac_rel_source $ac_dest 2>/dev/null ||
+-    ln $srcdir/$ac_source $ac_dest 2>/dev/null ||
++  ln -s $ac_rel_source $ac_dest 2>/System/Devices/null ||
++    ln $srcdir/$ac_source $ac_dest 2>/System/Devices/null ||
+     cp -p $srcdir/$ac_source $ac_dest ||
+     { { echo "$as_me:$LINENO: error: cannot link or copy $srcdir/$ac_source to $ac_dest" >&5
+ echo "$as_me: error: cannot link or copy $srcdir/$ac_source to $ac_dest" >&2;}
+@@ -9962,12 +9962,12 @@
+ for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
+   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
+   ac_source=`echo "$ac_file" | sed 's,[^:]*:,,'`
+-  ac_dir=`(dirname "$ac_dest") 2>/dev/null ||
++  ac_dir=`(dirname "$ac_dest") 2>/System/Devices/null ||
+ $as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$ac_dest" : 'X\(//\)[^/]' \| \
+ 	 X"$ac_dest" : 'X\(//\)$' \| \
+ 	 X"$ac_dest" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$ac_dest" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -9981,12 +9981,12 @@
+     as_dirs=
+     while test ! -d "$as_dir"; do
+       as_dirs="$as_dir $as_dirs"
+-      as_dir=`(dirname "$as_dir") 2>/dev/null ||
++      as_dir=`(dirname "$as_dir") 2>/System/Devices/null ||
+ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
+ 	 X"$as_dir" : 'X\(//\)$' \| \
+ 	 X"$as_dir" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$as_dir" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -10074,13 +10074,13 @@
+   # Grep'ing the first line is not enough: some people post-process
+   # each Makefile.in and add a new line on top of each file to say so.
+   # So let's grep whole file.
+-  if grep '^#.*generated by automake' $mf > /dev/null 2>&1; then
+-    dirpart=`(dirname "$mf") 2>/dev/null ||
++  if grep '^#.*generated by automake' $mf > /System/Devices/null 2>&1; then
++    dirpart=`(dirname "$mf") 2>/System/Devices/null ||
+ $as_expr X"$mf" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$mf" : 'X\(//\)[^/]' \| \
+ 	 X"$mf" : 'X\(//\)$' \| \
+ 	 X"$mf" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$mf" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -10090,7 +10090,7 @@
+   else
+     continue
+   fi
+-  grep '^DEP_FILES *= *[^ #]' < "$mf" > /dev/null || continue
++  grep '^DEP_FILES *= *[^ #]' < "$mf" > /System/Devices/null || continue
+   # Extract the definition of DEP_FILES from the Makefile without
+   # running `make'.
+   DEPDIR=`sed -n -e '/^DEPDIR = / s///p' < "$mf"`
+@@ -10114,12 +10114,12 @@
+        sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
+     # Make sure the directory exists.
+     test -f "$dirpart/$file" && continue
+-    fdir=`(dirname "$file") 2>/dev/null ||
++    fdir=`(dirname "$file") 2>/System/Devices/null ||
+ $as_expr X"$file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$file" : 'X\(//\)[^/]' \| \
+ 	 X"$file" : 'X\(//\)$' \| \
+ 	 X"$file" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$file" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -10133,12 +10133,12 @@
+     as_dirs=
+     while test ! -d "$as_dir"; do
+       as_dirs="$as_dir $as_dirs"
+-      as_dir=`(dirname "$as_dir") 2>/dev/null ||
++      as_dir=`(dirname "$as_dir") 2>/System/Devices/null ||
+ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
+ 	 X"$as_dir" : 'X\(//\)$' \| \
+ 	 X"$as_dir" : 'X\(/\)' \| \
+-	 .     : '\(.\)' 2>/dev/null ||
++	 .     : '\(.\)' 2>/System/Devices/null ||
+ echo X"$as_dir" |
+     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+@@ -10201,7 +10201,7 @@
+ # config.status does its own redirection, appending to config.log.
+ # Unfortunately, on DOS this fails, as config.log is still kept open
+ # by configure, so config.status won't be able to write to it; its
+-# output is simply discarded.  So we exec the FD to /dev/null,
++# output is simply discarded.  So we exec the FD to /System/Devices/null,
+ # effectively closing config.log, so it can be properly (re)opened and
+ # appended to by config.status.  When coming back to configure, we
+ # need to make the FD available again.
+@@ -10210,7 +10210,7 @@
+   ac_config_status_args=
+   test "$silent" = yes &&
+     ac_config_status_args="$ac_config_status_args --quiet"
+-  exec 5>/dev/null
++  exec 5>/System/Devices/null
+   $SHELL $CONFIG_STATUS $ac_config_status_args || ac_cs_success=false
+   exec 5>>config.log
+   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
+diff -urN sed-4.0.9/configure.ac sed-4.0.9-STEP/configure.ac
+--- sed-4.0.9/configure.ac	2004-01-10 07:48:54.000000000 +1300
++++ sed-4.0.9-STEP/configure.ac	2006-04-04 14:03:20.737970992 +1200
+@@ -97,11 +97,11 @@
+ AC_SUBST(TEXI2HTML)
+ 
+ AC_MSG_CHECKING(how to build HTML documentation)
+-if eval $am_missing_run makeinfo --help 2>&1 | grep .-html > /dev/null; then
++if eval $am_missing_run makeinfo --help 2>&1 | grep .-html > /System/Devices/null; then
+   AC_MSG_RESULT(with makeinfo)
+   enable_html=makeinfo
+ else
+-  if $TEXI2HTML --help 2>&1 | grep monolithic > /dev/null; then
++  if $TEXI2HTML --help 2>&1 | grep monolithic > /System/Devices/null; then
+     AC_MSG_RESULT(with texi2html)
+     enable_html=texi2html
+   else
+diff -urN sed-4.0.9/doc/Makefile.in sed-4.0.9-STEP/doc/Makefile.in
+--- sed-4.0.9/doc/Makefile.in	2004-01-10 08:07:10.000000000 +1300
++++ sed-4.0.9-STEP/doc/Makefile.in	2006-04-04 14:03:20.738970840 +1200
+@@ -299,7 +299,7 @@
+ uninstall-info-am:
+ 	$(PRE_UNINSTALL)
+ 	@if (install-info --version && \
+-	     install-info --version 2>&1 | sed 1q | grep -i -v debian) >/dev/null 2>&1; then \
++	     install-info --version 2>&1 | sed 1q | grep -i -v debian) >/System/Devices/null 2>&1; then \
+ 	  list='$(INFO_DEPS)'; \
+ 	  for file in $$list; do \
+ 	    relfile=`echo "$$file" | sed 's|^.*/||'`; \
+@@ -504,7 +504,7 @@
+ 	done
+ 	@$(POST_INSTALL)
+ 	@if (install-info --version && \
+-	     install-info --version 2>&1 | sed 1q | grep -i -v debian) >/dev/null 2>&1; then \
++	     install-info --version 2>&1 | sed 1q | grep -i -v debian) >/System/Devices/null 2>&1; then \
+ 	  list='$(INFO_DEPS)'; \
+ 	  for file in $$list; do \
+ 	    relfile=`echo "$$file" | sed 's|^.*/||'`; \
+diff -urN sed-4.0.9/doc/sed-in.texi sed-4.0.9-STEP/doc/sed-in.texi
+--- sed-4.0.9/doc/sed-in.texi	2004-01-08 00:35:49.000000000 +1300
++++ sed-4.0.9-STEP/doc/sed-in.texi	2006-04-04 14:03:20.741970384 +1200
+@@ -211,8 +211,8 @@
+ output.@footnote{This applies to commands such as @code{=},
+ @code{a}, @code{c}, @code{i}, @code{l}, @code{p}.  You can
+ still write to the standard output by using the @code{w}
+-@cindex @value{SSEDEXT}, @file{/dev/stdout} file
+-or @code{W} commands together with the @file{/dev/stdout}
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdout} file
++or @code{W} commands together with the @file{/System/Devices/stdout}
+ special file}
+ 
+ When the end of the file is reached, the temporary file is
+@@ -986,12 +986,12 @@
+ 
+ @item w @var{file-name}
+ @cindex Text, writing to a file after substitution
+-@cindex @value{SSEDEXT}, @file{/dev/stdout} file
+-@cindex @value{SSEDEXT}, @file{/dev/stderr} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdout} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stderr} file
+ If the substitution was made, then write out the result to the named file.
+ As a @value{SSED} extension, two special values of @var{file-name} are
+-supported: @file{/dev/stderr}, which writes the result to the standard
+-error, and @file{/dev/stdout}, which writes to the standard
++supported: @file{/System/Devices/stderr}, which writes the result to the standard
++error, and @file{/System/Devices/stdout}, which writes to the standard
+ output.@footnote{This is equivalent to @code{p} unless the @option{-i}
+ option is being used.}
+ 
+@@ -1171,26 +1171,26 @@
+ 
+ @findex r (read file) command
+ @cindex Read text from a file
+-@cindex @value{SSEDEXT}, @file{/dev/stdin} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdin} file
+ Queue the contents of @var{filename} to be read and
+ inserted into the output stream at the end of the current cycle,
+ or when the next input line is read.
+ Note that if @var{filename} cannot be read, it is treated as
+ if it were an empty file, without any error indication.
+ 
+-As a @value{SSED} extension, the special value @file{/dev/stdin}
++As a @value{SSED} extension, the special value @file{/System/Devices/stdin}
+ is supported for the file name, which reads the contents of the
+ standard input.
+ 
+ @item w @var{filename}
+ @findex w (write file) command
+ @cindex Write to a file
+-@cindex @value{SSEDEXT}, @file{/dev/stdout} file
+-@cindex @value{SSEDEXT}, @file{/dev/stderr} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdout} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stderr} file
+ Write the pattern space to @var{filename}.
+ As a @value{SSED} extension, two special values of @var{file-name} are
+-supported: @file{/dev/stderr}, which writes the result to the standard
+-error, and @file{/dev/stdout}, which writes to the standard
++supported: @file{/System/Devices/stderr}, which writes the result to the standard
++error, and @file{/System/Devices/stdout}, which writes to the standard
+ output.@footnote{This is equivalent to @code{p} unless the @option{-i}
+ option is being used.}
+ 
+@@ -1382,14 +1382,14 @@
+ @cindex Read text from a file
+ @cindex @value{SSEDEXT}, reading a file a line at a time
+ @cindex @value{SSEDEXT}, @code{R} command
+-@cindex @value{SSEDEXT}, @file{/dev/stdin} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdin} file
+ Queue a line of @var{filename} to be read and
+ inserted into the output stream at the end of the current cycle,
+ or when the next input line is read.
+ Note that if @var{filename} cannot be read, or if its end is
+ reached, no line is appended, without any error indication.
+ 
+-As with the @code{r} command, the special value @file{/dev/stdin}
++As with the @code{r} command, the special value @file{/System/Devices/stdin}
+ is supported for the file name, which reads a line from the
+ standard input.
+ 
+@@ -1669,7 +1669,7 @@
+ 
+ @c start-------------------------------------------
+ @example
+-#! /bin/sh
++#! /System/Tools/sh
+ # rename files to lower/upper case... 
+ #
+ # usage: 
+@@ -1772,7 +1772,7 @@
+ 
+ @c start-------------------------------------------
+ @example
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ set | sed -n '
+ :x
+@@ -1820,7 +1820,7 @@
+ another script to pad the output of banner; for example
+ 
+ @example
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ banner -w $1 $2 $3 $4 |
+   sed -e :a -e '/^.\@{0,'$1'\@}$/ @{ s/$/ /; ba; @}' |
+@@ -1895,7 +1895,7 @@
+ 
+ @c start-------------------------------------------
+ @example
+-#! /bin/sh
++#! /System/Tools/sh
+ sed -e "=" $@@ | sed -e '
+   s/^/      /
+   N
+diff -urN sed-4.0.9/doc/sed.info-1 sed-4.0.9-STEP/doc/sed.info-1
+--- sed-4.0.9/doc/sed.info-1	2004-01-08 02:45:43.000000000 +1300
++++ sed-4.0.9-STEP/doc/sed.info-1	2006-04-04 14:03:20.743970080 +1200
+@@ -207,7 +207,7 @@
+ 
+    (1) This applies to commands such as `=', `a', `c', `i', `l', `p'.
+ You can still write to the standard output by using the `w' or `W'
+-commands together with the `/dev/stdout' special file
++commands together with the `/System/Devices/stdout' special file
+ 
+    (2) Note that GNU `sed'     creates the backup file whether     or
+ not any output is actually changed.
+@@ -694,8 +694,8 @@
+ `w FILE-NAME'
+      If the substitution was made, then write out the result to the
+      named file.  As a GNU `sed' extension, two special values of
+-     FILE-NAME are supported: `/dev/stderr', which writes the result to
+-     the standard error, and `/dev/stdout', which writes to the standard
++     FILE-NAME are supported: `/System/Devices/stderr', which writes the result to
++     the standard error, and `/System/Devices/stdout', which writes to the standard
+      output.(1)
+ 
+ `e'
+@@ -808,14 +808,14 @@
+      input line is read.  Note that if FILENAME cannot be read, it is
+      treated as if it were an empty file, without any error indication.
+ 
+-     As a GNU `sed' extension, the special value `/dev/stdin' is
++     As a GNU `sed' extension, the special value `/System/Devices/stdin' is
+      supported for the file name, which reads the contents of the
+      standard input.
+ 
+ `w FILENAME'
+      Write the pattern space to FILENAME.  As a GNU `sed' extension,
+-     two special values of FILE-NAME are supported: `/dev/stderr',
+-     which writes the result to the standard error, and `/dev/stdout',
++     two special values of FILE-NAME are supported: `/System/Devices/stderr',
++     which writes the result to the standard error, and `/System/Devices/stdout',
+      which writes to the standard output.(1)
+ 
+      The file will be created (or truncated) before the first input
+@@ -957,7 +957,7 @@
+      line is read.  Note that if FILENAME cannot be read, or if its end
+      is reached, no line is appended, without any error indication.
+ 
+-     As with the `r' command, the special value `/dev/stdin' is
++     As with the `r' command, the special value `/System/Devices/stdin' is
+      supported for the file name, which reads a line from the standard
+      input.
+ 
+@@ -1218,7 +1218,7 @@
+ name is the same as the original name.  Note how the script is
+ parameterized using shell variables and proper quoting.
+ 
+-     #! /bin/sh
++     #! /System/Tools/sh
+      # rename files to lower/upper case...
+      #
+      # usage:
+@@ -1320,7 +1320,7 @@
+    This script strips the definition of the shell functions from the
+ output of the `set' Bourne-shell command.
+ 
+-     #!/bin/sh
++     #!/System/Tools/sh
+      
+      set | sed -n '
+      :x
+diff -urN sed-4.0.9/doc/sed.info-2 sed-4.0.9-STEP/doc/sed.info-2
+--- sed-4.0.9/doc/sed.info-2	2004-01-08 02:45:43.000000000 +1300
++++ sed-4.0.9-STEP/doc/sed.info-2	2006-04-04 14:03:20.745969776 +1200
+@@ -46,7 +46,7 @@
+    (1) This requires another script to pad the output of banner; for
+ example
+ 
+-     #! /bin/sh
++     #! /System/Tools/sh
+      
+      banner -w $1 $2 $3 $4 |
+        sed -e :a -e '/^.\{0,'$1'\}$/ { s/$/ /; ba; }' |
+@@ -93,7 +93,7 @@
+ Bourne-shell script could be used for the same purpose and would be
+ much faster:
+ 
+-     #! /bin/sh
++     #! /System/Tools/sh
+      sed -e "=" $@ | sed -e '
+        s/^/      /
+        N
+@@ -804,13 +804,13 @@
+ * Files to be processed as input:        Invoking sed.
+ * Flow of control in scripts:            Programming Commands.
+ * Global substitution:                   The "s" Command.
+-* GNU extensions, /dev/stderr file <1>:  Other Commands.
+-* GNU extensions, /dev/stderr file:      The "s" Command.
+-* GNU extensions, /dev/stdin file <1>:   Extended Commands.
+-* GNU extensions, /dev/stdin file:       Other Commands.
+-* GNU extensions, /dev/stdout file <1>:  Other Commands.
+-* GNU extensions, /dev/stdout file <2>:  The "s" Command.
+-* GNU extensions, /dev/stdout file:      Invoking sed.
++* GNU extensions, /System/Devices/stderr file <1>:  Other Commands.
++* GNU extensions, /System/Devices/stderr file:      The "s" Command.
++* GNU extensions, /System/Devices/stdin file <1>:   Extended Commands.
++* GNU extensions, /System/Devices/stdin file:       Other Commands.
++* GNU extensions, /System/Devices/stdout file <1>:  Other Commands.
++* GNU extensions, /System/Devices/stdout file <2>:  The "s" Command.
++* GNU extensions, /System/Devices/stdout file:      Invoking sed.
+ * GNU extensions, 0 address:             Addresses.
+ * GNU extensions, 0,ADDR2 addressing:    Addresses.
+ * GNU extensions, ADDR1,+N addressing:   Addresses.
+diff -urN sed-4.0.9/doc/sed.texi sed-4.0.9-STEP/doc/sed.texi
+--- sed-4.0.9/doc/sed.texi	2004-01-08 02:45:42.000000000 +1300
++++ sed-4.0.9-STEP/doc/sed.texi	2006-04-04 14:03:20.749969168 +1200
+@@ -212,8 +212,8 @@
+ output.@footnote{This applies to commands such as @code{=},
+ @code{a}, @code{c}, @code{i}, @code{l}, @code{p}.  You can
+ still write to the standard output by using the @code{w}
+-@cindex @value{SSEDEXT}, @file{/dev/stdout} file
+-or @code{W} commands together with the @file{/dev/stdout}
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdout} file
++or @code{W} commands together with the @file{/System/Devices/stdout}
+ special file}
+ 
+ When the end of the file is reached, the temporary file is
+@@ -987,12 +987,12 @@
+ 
+ @item w @var{file-name}
+ @cindex Text, writing to a file after substitution
+-@cindex @value{SSEDEXT}, @file{/dev/stdout} file
+-@cindex @value{SSEDEXT}, @file{/dev/stderr} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdout} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stderr} file
+ If the substitution was made, then write out the result to the named file.
+ As a @value{SSED} extension, two special values of @var{file-name} are
+-supported: @file{/dev/stderr}, which writes the result to the standard
+-error, and @file{/dev/stdout}, which writes to the standard
++supported: @file{/System/Devices/stderr}, which writes the result to the standard
++error, and @file{/System/Devices/stdout}, which writes to the standard
+ output.@footnote{This is equivalent to @code{p} unless the @option{-i}
+ option is being used.}
+ 
+@@ -1172,26 +1172,26 @@
+ 
+ @findex r (read file) command
+ @cindex Read text from a file
+-@cindex @value{SSEDEXT}, @file{/dev/stdin} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdin} file
+ Queue the contents of @var{filename} to be read and
+ inserted into the output stream at the end of the current cycle,
+ or when the next input line is read.
+ Note that if @var{filename} cannot be read, it is treated as
+ if it were an empty file, without any error indication.
+ 
+-As a @value{SSED} extension, the special value @file{/dev/stdin}
++As a @value{SSED} extension, the special value @file{/System/Devices/stdin}
+ is supported for the file name, which reads the contents of the
+ standard input.
+ 
+ @item w @var{filename}
+ @findex w (write file) command
+ @cindex Write to a file
+-@cindex @value{SSEDEXT}, @file{/dev/stdout} file
+-@cindex @value{SSEDEXT}, @file{/dev/stderr} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdout} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stderr} file
+ Write the pattern space to @var{filename}.
+ As a @value{SSED} extension, two special values of @var{file-name} are
+-supported: @file{/dev/stderr}, which writes the result to the standard
+-error, and @file{/dev/stdout}, which writes to the standard
++supported: @file{/System/Devices/stderr}, which writes the result to the standard
++error, and @file{/System/Devices/stdout}, which writes to the standard
+ output.@footnote{This is equivalent to @code{p} unless the @option{-i}
+ option is being used.}
+ 
+@@ -1383,14 +1383,14 @@
+ @cindex Read text from a file
+ @cindex @value{SSEDEXT}, reading a file a line at a time
+ @cindex @value{SSEDEXT}, @code{R} command
+-@cindex @value{SSEDEXT}, @file{/dev/stdin} file
++@cindex @value{SSEDEXT}, @file{/System/Devices/stdin} file
+ Queue a line of @var{filename} to be read and
+ inserted into the output stream at the end of the current cycle,
+ or when the next input line is read.
+ Note that if @var{filename} cannot be read, or if its end is
+ reached, no line is appended, without any error indication.
+ 
+-As with the @code{r} command, the special value @file{/dev/stdin}
++As with the @code{r} command, the special value @file{/System/Devices/stdin}
+ is supported for the file name, which reads a line from the
+ standard input.
+ 
+@@ -1689,7 +1689,7 @@
+ @c start-------------------------------------------
+ @example
+ @group
+-#! /bin/sh
++#! /System/Tools/sh
+ # rename files to lower/upper case... 
+ #
+ # usage: 
+@@ -1829,7 +1829,7 @@
+ 
+ @c start-------------------------------------------
+ @example
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ @group
+ set | sed -n '
+@@ -1889,7 +1889,7 @@
+ another script to pad the output of banner; for example
+ 
+ @example
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ banner -w $1 $2 $3 $4 |
+   sed -e :a -e '/^.\@{0,'$1'\@}$/ @{ s/$/ /; ba; @}' |
+@@ -1977,7 +1977,7 @@
+ @c start-------------------------------------------
+ @example
+ @group
+-#! /bin/sh
++#! /System/Tools/sh
+ sed -e "=" $@@ | sed -e '
+   s/^/      /
+   N
+diff -urN sed-4.0.9/intl/Makefile.in sed-4.0.9-STEP/intl/Makefile.in
+--- sed-4.0.9/intl/Makefile.in	2004-01-08 02:57:18.000000000 +1300
++++ sed-4.0.9-STEP/intl/Makefile.in	2006-04-04 14:03:20.750969016 +1200
+@@ -19,7 +19,7 @@
+ PACKAGE = @PACKAGE@
+ VERSION = @VERSION@
+ 
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ 
+ srcdir = @srcdir@
+ top_srcdir = @top_srcdir@
+@@ -222,7 +222,7 @@
+ 	    temp=$(DESTDIR)$(libdir)/t-charset.alias; \
+ 	    dest=$(DESTDIR)$(libdir)/charset.alias; \
+ 	    sed -f ref-del.sed $$dest > $$temp; \
+-	    if grep '^# Packages using this file: $$' $$temp > /dev/null; then \
++	    if grep '^# Packages using this file: $$' $$temp > /System/Devices/null; then \
+ 	      rm -f $$dest; \
+ 	    else \
+ 	      $(INSTALL_DATA) $$temp $$dest; \
+@@ -233,7 +233,7 @@
+ 	    temp=$(DESTDIR)$(localedir)/t-locale.alias; \
+ 	    dest=$(DESTDIR)$(localedir)/locale.alias; \
+ 	    sed -f ref-del.sed $$dest > $$temp; \
+-	    if grep '^# Packages using this file: $$' $$temp > /dev/null; then \
++	    if grep '^# Packages using this file: $$' $$temp > /System/Devices/null; then \
+ 	      rm -f $$dest; \
+ 	    else \
+ 	      $(INSTALL_DATA) $$temp $$dest; \
+@@ -300,7 +300,7 @@
+ 	$(MAKE) $(DISTFILES.common) $(DISTFILES.generated) $$additional; \
+ 	for file in ChangeLog $(DISTFILES.common) $(DISTFILES.generated) $$additional; do \
+ 	  if test -f $$file; then dir=.; else dir=$(srcdir); fi; \
+-	  ln $$dir/$$file $(distdir) 2> /dev/null \
++	  ln $$dir/$$file $(distdir) 2> /System/Devices/null \
+ 	    || cp -p $$dir/$$file $(distdir); \
+ 	done
+ 
+diff -urN sed-4.0.9/intl/config.charset sed-4.0.9-STEP/intl/config.charset
+--- sed-4.0.9/intl/config.charset	2001-12-17 01:29:55.000000000 +1300
++++ sed-4.0.9-STEP/intl/config.charset	2006-04-04 14:03:20.751968864 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Output a system dependent table of character encoding aliases.
+ #
+ #   Copyright (C) 2000-2001 Free Software Foundation, Inc.
+diff -urN sed-4.0.9/lib/utils.c sed-4.0.9-STEP/lib/utils.c
+--- sed-4.0.9/lib/utils.c	2004-01-10 07:37:09.000000000 +1300
++++ sed-4.0.9-STEP/lib/utils.c	2006-04-04 14:03:20.752968712 +1200
+@@ -252,7 +252,7 @@
+ #ifdef P_tmpdir
+ 	tmpdir = P_tmpdir;
+ #else
+-	tmpdir = "/tmp";
++	tmpdir = "/System/TemporaryFiles";
+ #endif
+     }
+ 
+diff -urN sed-4.0.9/po/Makefile.in.in sed-4.0.9-STEP/po/Makefile.in.in
+--- sed-4.0.9/po/Makefile.in.in	2004-01-08 02:57:54.000000000 +1300
++++ sed-4.0.9-STEP/po/Makefile.in.in	2006-04-04 14:03:20.754968408 +1200
+@@ -13,7 +13,7 @@
+ subdir = po
+ top_builddir = ..
+ 
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ @SET_MAKE@
+ 
+ srcdir = @srcdir@
+diff -urN sed-4.0.9/sed/compile.c sed-4.0.9-STEP/sed/compile.c
+--- sed-4.0.9/sed/compile.c	2004-01-08 02:35:49.000000000 +1300
++++ sed-4.0.9-STEP/sed/compile.c	2006-04-04 14:03:20.755968256 +1200
+@@ -102,9 +102,9 @@
+ 
+ FILE *my_stdin, *my_stdout, *my_stderr;
+ struct special_files special_files[] = {
+-  { "/dev/stdin", &my_stdin },
+-  { "/dev/stdout", &my_stdout },
+-  { "/dev/stderr", &my_stderr },
++  { "/System/Devices/stdin", &my_stdin },
++  { "/System/Devices/stdout", &my_stdout },
++  { "/System/Devices/stderr", &my_stderr },
+   { NULL, NULL }
+ };
+ 
+diff -urN sed-4.0.9/testsuite/Makefile.tests sed-4.0.9-STEP/testsuite/Makefile.tests
+--- sed-4.0.9/testsuite/Makefile.tests	2003-12-28 14:52:08.000000000 +1300
++++ sed-4.0.9-STEP/testsuite/Makefile.tests	2006-04-04 14:03:20.756968104 +1200
+@@ -1,6 +1,6 @@
+ # Testsuite makefile for GNU sed
+ 
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ 
+ # These are only fallback values. They are usually overridden by runtest.
+ srcdir = .
+diff -urN sed-4.0.9/testsuite/bug-regex9.c sed-4.0.9-STEP/testsuite/bug-regex9.c
+--- sed-4.0.9/testsuite/bug-regex9.c	2003-12-16 00:16:48.000000000 +1300
++++ sed-4.0.9-STEP/testsuite/bug-regex9.c	2006-04-04 14:03:20.757967952 +1200
+@@ -25,7 +25,7 @@
+ #include <stdlib.h>
+ 
+ 
+-static const char text[] = "#! /bin/sh";
++static const char text[] = "#! /System/Tools/sh";
+ 
+ int
+ main (void)
+diff -urN sed-4.0.9/testsuite/distrib.sh sed-4.0.9-STEP/testsuite/distrib.sh
+--- sed-4.0.9/testsuite/distrib.sh	2001-12-17 01:29:55.000000000 +1300
++++ sed-4.0.9-STEP/testsuite/distrib.sh	2006-04-04 14:03:20.758967800 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ #
+ #   This is stolen from C News
+ # 
+diff -urN sed-4.0.9/testsuite/runtest sed-4.0.9-STEP/testsuite/runtest
+--- sed-4.0.9/testsuite/runtest	2002-11-20 08:28:39.000000000 +1300
++++ sed-4.0.9-STEP/testsuite/runtest	2006-04-04 14:03:20.759967648 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ : ${MAKE=make}
+ : ${srcdir=.}
+diff -urN sed-4.0.9/testsuite/spencer.sh sed-4.0.9-STEP/testsuite/spencer.sh
+--- sed-4.0.9/testsuite/spencer.sh	2001-12-17 01:29:55.000000000 +1300
++++ sed-4.0.9-STEP/testsuite/spencer.sh	2006-04-04 14:03:20.761967344 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ sed=${1-sed}
+ 
+@@ -32,7 +32,7 @@
+   /^#/d
+   s,^0:\(.*\):\(.*\),echo '\2' | $sed -re '/\1/d' 2>\&1 | sed,
+   s,^1:\(.*\):\(.*\),echo '\2' | $sed -re '/\1/!d' 2>\&1 | sed,
+-  s,^2:\(.*\):\(.*\),echo '\2' | $sed -re '/\1/h' 2>/dev/null | sed,
++  s,^2:\(.*\):\(.*\),echo '\2' | $sed -re '/\1/h' 2>/System/Devices/null | sed,
+   p
+   =
+   d"

@@ -1,0 +1,26 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Grep-->
+
+<!--retreiving package-->
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/grep/grep-2.5.1.tar.bz2</amin:param>
+                <amin:param name='file'>/packages/grep-2.5.1.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='alt'>http://adistroSTEP.st8vrt.com/patches/grep-2.5.1-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/grep-2.5.1-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/grep-2.5.1.tar.bz2</amin:param>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>/opt/adistro/packages/grep-2.5.1-STEP.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/grep-2.5.1</amin:shell>
+        </amin:command>
+</amin:profile>

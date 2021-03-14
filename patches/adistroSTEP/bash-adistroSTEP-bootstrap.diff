@@ -1,0 +1,424 @@
+diff -urN bash-3.0/command.h bash-3.0-adistroSTEP/command.h
+--- bash-3.0/command.h	2003-09-13 07:13:04.000000000 +1200
++++ bash-3.0-adistroSTEP/command.h	2005-05-18 10:52:47.557681824 +1200
+@@ -144,7 +144,7 @@
+ #define CMD_TIME_PIPELINE  0x80 /* Time a pipeline */
+ #define CMD_TIME_POSIX	   0x100 /* time -p; use POSIX.2 time output spec. */
+ #define CMD_AMPERSAND	   0x200 /* command & */
+-#define CMD_STDIN_REDIR	   0x400 /* async command needs implicit </dev/null */
++#define CMD_STDIN_REDIR	   0x400 /* async command needs implicit </System/Devices/null */
+ #define CMD_COMMAND_BUILTIN 0x0800 /* command executed by `command' builtin */
+ 
+ /* What a command looks like. */
+diff -urN bash-3.0/config-top.h bash-3.0-adistroSTEP/config-top.h
+--- bash-3.0/config-top.h	2003-08-06 02:36:12.000000000 +1200
++++ bash-3.0-adistroSTEP/config-top.h	2005-05-18 10:52:47.558681672 +1200
+@@ -52,14 +52,14 @@
+ /* The default value of the PATH variable. */
+ #ifndef DEFAULT_PATH_VALUE
+ #define DEFAULT_PATH_VALUE \
+-  "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."
++  "/usr/gnu/System/Tools:/usr/local/bin:/bin:/usr/bin:."
+ #endif
+ 
+ /* The value for PATH when invoking `command -p'.  This is only used when
+    the Posix.2 confstr () function, or CS_PATH define are not present. */
+ #ifndef STANDARD_UTILS_PATH
+ #define STANDARD_UTILS_PATH \
+-  "/bin:/usr/bin:/sbin:/usr/sbin:/etc:/usr/etc"
++  "/System/Tools:/usr/bin:/sbin:/usr/sbin:/etc:/usr/etc"
+ #endif
+ 
+ /* Default primary and secondary prompt strings. */
+diff -urN bash-3.0/error.c bash-3.0-adistroSTEP/error.c
+--- bash-3.0/error.c	2003-12-19 17:44:01.000000000 +1300
++++ bash-3.0-adistroSTEP/error.c	2005-05-18 10:52:45.777952384 +1200
+@@ -373,7 +373,7 @@
+   static FILE *tracefp = (FILE *)NULL;
+ 
+   if (tracefp == NULL)
+-    tracefp = fopen("/tmp/bash-trace.log", "a+");
++    tracefp = fopen("/System/TemporaryFiles/bash-trace.log", "a+");
+ 
+   if (tracefp == NULL)
+     tracefp = stderr;
+diff -urN bash-3.0/execute_cmd.c bash-3.0-adistroSTEP/execute_cmd.c
+--- bash-3.0/execute_cmd.c	2004-07-05 06:12:58.000000000 +1200
++++ bash-3.0-adistroSTEP/execute_cmd.c	2005-05-18 10:52:45.784951320 +1200
+@@ -457,14 +457,14 @@
+ {
+   int fd;
+ 
+-  fd = open ("/dev/null", O_RDONLY);
++  fd = open ("/System/Devices/null", O_RDONLY);
+   if (fd > 0)
+     {
+       dup2 (fd, 0);
+       close (fd);
+     }
+   else if (fd < 0)
+-    internal_error (_("cannot redirect standard input from /dev/null: %s"), strerror (errno));
++    internal_error (_("cannot redirect standard input from /System/Devices/null: %s"), strerror (errno));
+ }
+ 
+ #define DESCRIBE_PID(pid) do { if (interactive) describe_pid (pid); } while (0)
+@@ -1248,7 +1248,7 @@
+ 
+   /* If this is a user subshell, set a flag if stdin was redirected.
+      This is used later to decide whether to redirect fd 0 to
+-     /dev/null for async commands in the subshell.  This adds more
++     /System/Devices/null for async commands in the subshell.  This adds more
+      sh compatibility, but I'm not sure it's the right thing to do. */
+   if (user_subshell)
+     {
+@@ -1257,7 +1257,7 @@
+     }
+ 
+   /* If this is an asynchronous command (command &), we want to
+-     redirect the standard input from /dev/null in the absence of
++     redirect the standard input from /System/Devices/null in the absence of
+      any specific redirection involving stdin. */
+   if (should_redir_stdin && stdin_redir == 0)
+     async_redirect_stdin ();
+@@ -1466,7 +1466,7 @@
+       /* If this shell was compiled without job control support,
+ 	 if we are currently in a subshell via `( xxx )', or if job
+ 	 control is not active then the standard input for an
+-	 asynchronous command is forced to /dev/null. */
++	 asynchronous command is forced to /System/Devices/null. */
+ #if defined (JOB_CONTROL)
+       if ((subshell_environment || !job_control) && !stdin_redir)
+ #else
+diff -urN bash-3.0/externs.h bash-3.0-adistroSTEP/externs.h
+--- bash-3.0/externs.h	2004-04-13 15:30:08.000000000 +1200
++++ bash-3.0-adistroSTEP/externs.h	2005-05-18 10:52:47.559681520 +1200
+@@ -349,7 +349,7 @@
+ extern void timeval_to_secs ();
+ extern void print_timeval ();
+ 
+-/* declarations for functions defined in lib/sh/tmpfile.c */
++/* declarations for functions defined in lib/sh/System/TemporaryFilesfile.c */
+ #define MT_USETMPDIR		0x0001
+ #define MT_READWRITE		0x0002
+ #define MT_USERANDOM		0x0004
+diff -urN bash-3.0/general.c bash-3.0-adistroSTEP/general.c
+--- bash-3.0/general.c	2004-04-15 15:20:13.000000000 +1200
++++ bash-3.0-adistroSTEP/general.c	2005-05-18 10:52:45.791950256 +1200
+@@ -356,7 +356,7 @@
+ }
+ 
+ /* There is a bug in the NeXT 2.1 rlogind that causes opens
+-   of /dev/tty to fail. */
++   of /System/Devices/tty to fail. */
+ 
+ #if defined (__BEOS__)
+ /* On BeOS, opening in non-blocking mode exposes a bug in BeOS, so turn it
+@@ -371,7 +371,7 @@
+   int tty_fd;
+   char *tty;
+ 
+-  tty_fd = open ("/dev/tty", O_RDWR|O_NONBLOCK);
++  tty_fd = open ("/System/Devices/tty", O_RDWR|O_NONBLOCK);
+ 
+   if (tty_fd < 0)
+     {
+diff -urN bash-3.0/include/chartypes.h bash-3.0-adistroSTEP/include/chartypes.h
+--- bash-3.0/include/chartypes.h	2002-04-04 01:32:22.000000000 +1200
++++ bash-3.0-adistroSTEP/include/chartypes.h	2005-05-18 10:55:37.512844712 +1200
+@@ -27,7 +27,7 @@
+ 
+    "... Some ctype macros are valid only for character codes that
+    isascii says are ASCII (SGI's IRIX-4.0.5 is one such system --when
+-   using /bin/cc or gcc but without giving an ansi option).  So, all
++   using /System/Tools/cc or gcc but without giving an ansi option).  So, all
+    ctype uses should be through macros like ISPRINT...  If
+    STDC_HEADERS is defined, then autoconf has verified that the ctype
+    macros don't need to be guarded with references to isascii. ...
+diff -urN bash-3.0/input.c bash-3.0-adistroSTEP/input.c
+--- bash-3.0/input.c	2003-12-19 18:09:03.000000000 +1300
++++ bash-3.0-adistroSTEP/input.c	2005-05-18 10:52:45.793949952 +1200
+@@ -578,7 +578,7 @@
+ 
+ struct stat dsb;		/* can be used from gdb */
+ 
+-/* imitate /bin/cat */
++/* imitate /System/Tools/cat */
+ main(argc, argv)
+ int	argc;
+ char	**argv;
+diff -urN bash-3.0/jobs.c bash-3.0-adistroSTEP/jobs.c
+--- bash-3.0/jobs.c	2004-04-24 08:28:25.000000000 +1200
++++ bash-3.0-adistroSTEP/jobs.c	2005-05-18 10:52:45.798949192 +1200
+@@ -1295,7 +1295,7 @@
+ 
+ #if defined (BUFFERED_INPUT)
+   /* If default_buffered_input is active, we are reading a script.  If
+-     the command is asynchronous, we have already duplicated /dev/null
++     the command is asynchronous, we have already duplicated /System/Devices/null
+      as fd 0, but have not changed the buffered stream corresponding to
+      the old fd 0.  We don't want to sync the stream in this case. */
+   if (default_buffered_input != -1 &&
+diff -urN bash-3.0/lib/malloc/stats.c bash-3.0-adistroSTEP/lib/malloc/stats.c
+--- bash-3.0/lib/malloc/stats.c	2003-11-30 10:01:44.000000000 +1300
++++ bash-3.0-adistroSTEP/lib/malloc/stats.c	2005-05-18 10:54:17.942941176 +1200
+@@ -131,7 +131,7 @@
+   _print_malloc_stats (s, fp);
+ }
+ 
+-#define TRACEROOT "/var/tmp/maltrace/stats."
++#define TRACEROOT "/var/System/TemporaryFiles/maltrace/stats."
+ 
+ void
+ trace_malloc_stats (s, fn)
+diff -urN bash-3.0/lib/malloc/trace.c bash-3.0-adistroSTEP/lib/malloc/trace.c
+--- bash-3.0/lib/malloc/trace.c	2003-11-30 10:02:26.000000000 +1300
++++ bash-3.0-adistroSTEP/lib/malloc/trace.c	2005-05-18 10:54:17.943941024 +1200
+@@ -104,7 +104,7 @@
+ #endif
+ }
+ 
+-#define TRACEROOT "/var/tmp/maltrace/trace."
++#define TRACEROOT "/var/System/TemporaryFiles/maltrace/trace."
+ 
+ void
+ malloc_set_tracefn (s, fn)
+diff -urN bash-3.0/lib/sh/mailstat.c bash-3.0-adistroSTEP/lib/sh/mailstat.c
+--- bash-3.0/lib/sh/mailstat.c	2003-03-23 12:20:21.000000000 +1200
++++ bash-3.0-adistroSTEP/lib/sh/mailstat.c	2005-05-18 10:54:54.348406704 +1200
+@@ -98,7 +98,7 @@
+   st_ret.st_atime = st_tmp.st_atime;
+ 
+   /* See if tmp/ is present */
+-  sprintf(dir, "%s/tmp", path);
++  sprintf(dir, "%s/System/TemporaryFiles", path);
+   if (stat(dir, &st_tmp) || S_ISDIR(st_tmp.st_mode) == 0)
+     return 0;
+   st_ret.st_mtime = st_tmp.st_mtime;
+diff -urN bash-3.0/lib/sh/netopen.c bash-3.0-adistroSTEP/lib/sh/netopen.c
+--- bash-3.0/lib/sh/netopen.c	2003-12-20 13:10:24.000000000 +1300
++++ bash-3.0-adistroSTEP/lib/sh/netopen.c	2005-05-18 10:54:54.350406400 +1200
+@@ -276,7 +276,7 @@
+ }
+ 
+ /*
+- * Open a TCP or UDP connection given a path like `/dev/tcp/host/port' to
++ * Open a TCP or UDP connection given a path like `/System/Devices/tcp/host/port' to
+  * host `host' on port `port' and return the connected socket.
+  */
+ int
+diff -urN bash-3.0/lib/sh/tmpfile.c bash-3.0-adistroSTEP/lib/sh/tmpfile.c
+--- bash-3.0/lib/sh/tmpfile.c	2004-02-13 05:33:36.000000000 +1300
++++ bash-3.0-adistroSTEP/lib/sh/tmpfile.c	2005-05-18 10:54:54.363404424 +1200
+@@ -66,15 +66,15 @@
+     return sys_tmpdir;
+ #endif
+ 
+-  sys_tmpdir = "/tmp";
++  sys_tmpdir = "/System/TemporaryFiles";
+   if (file_iswdir (sys_tmpdir))
+     return sys_tmpdir;
+ 
+-  sys_tmpdir = "/var/tmp";
++  sys_tmpdir = "/var/System/TemporaryFiles";
+   if (file_iswdir (sys_tmpdir))
+     return sys_tmpdir;
+ 
+-  sys_tmpdir = "/usr/tmp";
++  sys_tmpdir = "/usr/System/TemporaryFiles";
+   if (file_iswdir (sys_tmpdir))
+     return sys_tmpdir;
+ 
+diff -urN bash-3.0/make_cmd.c bash-3.0-adistroSTEP/make_cmd.c
+--- bash-3.0/make_cmd.c	2003-12-20 09:46:56.000000000 +1300
++++ bash-3.0-adistroSTEP/make_cmd.c	2005-05-18 10:52:45.801948736 +1200
+@@ -803,7 +803,7 @@
+    list followed by an ampersand (`&') and do a simple command connection,
+    making the entire list effectively asynchronous, instead of just
+    the last command.  This means that when the list is executed, all
+-   the commands have stdin set to /dev/null when job control is not
++   the commands have stdin set to /System/Devices/null when job control is not
+    active, instead of just the last.  This is wrong, and needs fixing
+    up.  This function takes the `&' and applies it to the last command
+    in the list.  This is done only for lists connected by `;'; it makes
+diff -urN bash-3.0/nojobs.c bash-3.0-adistroSTEP/nojobs.c
+--- bash-3.0/nojobs.c	2003-12-20 09:42:28.000000000 +1300
++++ bash-3.0-adistroSTEP/nojobs.c	2005-05-18 10:52:45.803948432 +1200
+@@ -550,7 +550,7 @@
+ 
+ #if defined (BUFFERED_INPUT)
+   /* If default_buffered_input is active, we are reading a script.  If
+-     the command is asynchronous, we have already duplicated /dev/null
++     the command is asynchronous, we have already duplicated /System/Devices/null
+      as fd 0, but have not changed the buffered stream corresponding to
+      the old fd 0.  We don't want to sync the stream in this case. */
+   if (default_buffered_input != -1 && (!async_p || default_buffered_input > 0))
+diff -urN bash-3.0/redir.c bash-3.0-adistroSTEP/redir.c
+--- bash-3.0/redir.c	2003-12-20 10:01:29.000000000 +1300
++++ bash-3.0-adistroSTEP/redir.c	2005-05-18 10:52:45.810947368 +1200
+@@ -447,16 +447,16 @@
+    code handles specially. */
+ static STRING_INT_ALIST _redir_special_filenames[] = {
+ #if !defined (HAVE_DEV_FD)
+-  { "/dev/fd/[0-9]*", RF_DEVFD },
++  { "/System/Devices/fd/[0-9]*", RF_DEVFD },
+ #endif
+ #if !defined (HAVE_DEV_STDIN)
+-  { "/dev/stderr", RF_DEVSTDERR },
+-  { "/dev/stdin", RF_DEVSTDIN },
+-  { "/dev/stdout", RF_DEVSTDOUT },
++  { "/System/Devices/stderr", RF_DEVSTDERR },
++  { "/System/Devices/stdin", RF_DEVSTDIN },
++  { "/System/Devices/stdout", RF_DEVSTDOUT },
+ #endif
+ #if defined (NETWORK_REDIRECTIONS)
+-  { "/dev/tcp/*/*", RF_DEVTCP },
+-  { "/dev/udp/*/*", RF_DEVUDP },
++  { "/System/Devices/tcp/*/*", RF_DEVTCP },
++  { "/System/Devices/udp/*/*", RF_DEVUDP },
+ #endif
+   { (char *)NULL, -1 }
+ };
+@@ -506,7 +506,7 @@
+ #if defined (HAVE_NETWORK)
+       fd = netopen (filename);
+ #else
+-      internal_warning (_("/dev/(tcp|udp)/host/port not supported without networking"));
++      internal_warning (_("/System/Devices/(tcp|udp)/host/port not supported without networking"));
+       fd = open (filename, flags, mode);
+ #endif
+       break;
+@@ -765,7 +765,7 @@
+ 
+ #if defined (BUFFERED_INPUT)
+ 	  /* Do not change the buffered stream for an implicit redirection
+-	     of /dev/null to fd 0 for asynchronous commands without job
++	     of /System/Devices/null to fd 0 for asynchronous commands without job
+ 	     control (r_inputa_direction). */
+ 	  if (ri == r_input_direction || ri == r_input_output)
+ 	    duplicate_buffered_stream (fd, redirector);
+diff -urN bash-3.0/shell.c bash-3.0-adistroSTEP/shell.c
+--- bash-3.0/shell.c	2004-06-27 06:27:07.000000000 +1200
++++ bash-3.0-adistroSTEP/shell.c	2005-05-18 10:52:45.813946912 +1200
+@@ -298,12 +298,12 @@
+ {
+   struct stat sb;
+ 
+-  if (stat ("/tmp", &sb) < 0)
+-    internal_warning (_("could not find /tmp, please create!"));
++  if (stat ("/System/TemporaryFiles", &sb) < 0)
++    internal_warning (_("could not find /System/TemporaryFiles, please create!"));
+   else
+     {
+       if (S_ISDIR (sb.st_mode) == 0)
+-	internal_warning (_("/tmp must be a valid directory name"));
++	internal_warning (_("/System/TemporaryFiles must be a valid directory name"));
+     }
+ }
+ #endif /* __CYGWIN__ */
+@@ -911,7 +911,7 @@
+ 
+    If the executable file "/usr/gnu/src/bash/foo" contains:
+ 
+-   #!/usr/gnu/bin/bash
++   #!/usr/gnu/System/Tools/bash
+    echo hello
+ 
+    then:
+@@ -1437,7 +1437,7 @@
+ #endif /* !BUFFERED_INPUT */
+ 
+   /* Just about the only way for this code to be executed is if something
+-     like `bash -i /dev/stdin' is executed. */
++     like `bash -i /System/Devices/stdin' is executed. */
+   if (interactive_shell && fd_is_tty)
+     {
+       dup2 (fd, 0);
+@@ -1523,7 +1523,7 @@
+      char *argv0;
+ {
+   /* Here's a hack.  If the name of this shell is "sh", then don't do
+-     any startup files; just try to be more like /bin/sh. */
++     any startup files; just try to be more like /System/Tools/sh. */
+   shell_name = base_pathname (argv0);
+ 
+   if (*shell_name == '-')
+@@ -1542,7 +1542,7 @@
+   dollar_vars[0] = savestring (shell_name);
+ 
+   /* A program may start an interactive shell with
+-	  "execl ("/bin/bash", "-", NULL)".
++	  "execl ("/System/Tools/bash", "-", NULL)".
+      If so, default the name of this shell to our name. */
+   if (!shell_name || !*shell_name || (shell_name[0] == '-' && !shell_name[1]))
+     shell_name = PROGRAM;
+@@ -1583,14 +1583,14 @@
+ 	  current_user.user_name = savestring (entry->pw_name);
+ 	  current_user.shell = (entry->pw_shell && entry->pw_shell[0])
+ 				? savestring (entry->pw_shell)
+-				: savestring ("/bin/sh");
++				: savestring ("/System/Tools/sh");
+ 	  current_user.home_dir = savestring (entry->pw_dir);
+ 	}
+       else
+ 	{
+ 	  current_user.user_name = _("I have no name!");
+ 	  current_user.user_name = savestring (current_user.user_name);
+-	  current_user.shell = savestring ("/bin/sh");
++	  current_user.shell = savestring ("/System/Tools/sh");
+ 	  current_user.home_dir = savestring ("/");
+ 	}
+       endpwent ();
+diff -urN bash-3.0/subst.c bash-3.0-adistroSTEP/subst.c
+--- bash-3.0/subst.c	2004-07-05 05:56:13.000000000 +1200
++++ bash-3.0-adistroSTEP/subst.c	2005-05-18 10:52:45.826944936 +1200
+@@ -3843,9 +3843,9 @@
+ 
+ /* Return a filename that will open a connection to the process defined by
+    executing STRING.  HAVE_DEV_FD, if defined, means open a pipe and return
+-   a filename in /dev/fd corresponding to a descriptor that is one of the
++   a filename in /System/Devices/fd corresponding to a descriptor that is one of the
+    ends of the pipe.  If not defined, we use named pipes on systems that have
+-   them.  Systems without /dev/fd and named pipes are out of luck.
++   them.  Systems without /System/Devices/fd and named pipes are out of luck.
+ 
+    OPEN_FOR_READ_IN_CHILD, if 1, means open the named pipe for reading or
+    use the read end of the pipe and dup that file descriptor to fd 0 in
+diff -urN bash-3.0/test.c bash-3.0-adistroSTEP/test.c
+--- bash-3.0/test.c	2003-12-20 10:27:28.000000000 +1300
++++ bash-3.0-adistroSTEP/test.c	2005-05-18 10:52:45.827944784 +1200
+@@ -164,7 +164,7 @@
+ }
+ 
+ /* A wrapper for stat () which disallows pathnames that are empty strings
+-   and handles /dev/fd emulation on systems that don't have it. */
++   and handles /System/Devices/fd emulation on systems that don't have it. */
+ static int
+ test_stat (path, finfo)
+      char *path;
+@@ -175,7 +175,7 @@
+       errno = ENOENT;
+       return (-1);
+     }
+-  if (path[0] == '/' && path[1] == 'd' && strncmp (path, "/dev/fd/", 8) == 0)
++  if (path[0] == '/' && path[1] == 'd' && strncmp (path, "/System/Devices/fd/", 8) == 0)
+     {
+ #if !defined (HAVE_DEV_FD)
+       intmax_t fd;
+@@ -191,7 +191,7 @@
+       return (-1);
+ #else
+   /* If HAVE_DEV_FD is defined, DEV_FD_PREFIX is defined also, and has a
+-     trailing slash.  Make sure /dev/fd/xx really uses DEV_FD_PREFIX/xx.
++     trailing slash.  Make sure /System/Devices/fd/xx really uses DEV_FD_PREFIX/xx.
+      On most systems, with the notable exception of linux, this is
+      effectively a no-op. */
+       char pbuf[32];
+@@ -201,7 +201,7 @@
+ #endif /* !HAVE_DEV_FD */
+     }
+ #if !defined (HAVE_DEV_STDIN)
+-  else if (STREQN (path, "/dev/std", 8))
++  else if (STREQN (path, "/System/Devices/std", 8))
+     {
+       if (STREQ (path+8, "in"))
+ 	return (fstat (0, finfo));

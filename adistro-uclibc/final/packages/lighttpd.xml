@@ -1,0 +1,54 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--lighttpd-->
+
+<!--grabbing packages-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/lighttpd-1.4.18.tar.bz2</amin:param>
+		 <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/packages/lighttpd-1.4.x_mod_fastcgi_overrun.patch</amin:flag>
+                <amin:shell name="dir">/build/lighttpd-1.4.18</amin:shell>
+		 <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/usr
+		</amin:flag>
+		<amin:shell name='dir'>/build/lighttpd-1.4.18</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CONFIG_SITE=/etc/config.site</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/build/lighttpd-1.4.18</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/lighttpd-1.4.18</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>lighttpd-1.4.18</amin:param>
+		<amin:shell name='dir'>/build/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>lighttpd-1.4.18</amin:param>
+                <amin:shell name='dir'>/build/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+
+</amin:profile>

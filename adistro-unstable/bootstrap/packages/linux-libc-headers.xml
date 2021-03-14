@@ -1,0 +1,42 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--linux-libc-headers-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.25.10.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/linux-2.6.25.10.tar.bz2</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/linux-2.6.25.10.tar.bz2</amin:param>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>mrproper</amin:param>
+		<amin:shell name="dir">/opt/adistro/build/linux-2.6.25.10/</amin:shell>
+	</amin:command>
+        <amin:command name='make'>
+                <amin:param>INSTALL_HDR_PATH=dest headers_install</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/linux-2.6.25.10/</amin:shell>
+        </amin:command>
+        <amin:command name='make'>
+                <amin:param>INSTALL_HDR_PATH=dest headers_check</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/linux-2.6.25.10/</amin:shell>
+        </amin:command>
+        <amin:command name='copy'>
+                <amin:flag>Rv</amin:flag>
+                <amin:param name="source">/opt/adistro/build/linux-2.6.25.10/dest/include/*</amin:param>
+                <amin:param name="target">/bootstrap/include/</amin:param>
+        </amin:command>
+
+<!--no furthur voodoo required here -->
+
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>linux-2.6.25.10</amin:param>
+		<amin:shell name="dir">/opt/adistro/build</amin:shell>
+	</amin:command>
+	
+</amin:profile>

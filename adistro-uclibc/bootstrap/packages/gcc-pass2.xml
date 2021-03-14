@@ -1,0 +1,98 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gcc-->
+
+<!--grabbing packages-->
+	<amin:download>
+		<amin:param name='uri'>ftp://gcc.gnu.org/pub/gcc/snapshots/4.4-20080926/gcc-4.4-20080926.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/gcc-4.4-20080926.tar.bz2</amin:param>
+	</amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://www.st8vrt.com/patches/adistro-uclibc/gcc-4.2.1-adistro-Makefile.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/gcc-4.2.1-adistro-Makefile.patch</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://ftp.lfs-matrix.net/pub/clfs/conglomeration/gcc/gcc-4.2.1-cross_search_paths-1.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/gcc-4.2.1-cross_search_paths-1.patch</amin:param>
+        </amin:download>        
+        <amin:download>
+                <amin:param name='uri'>http://repo.or.cz/w/buildroot.git?a=blob_plain;f=toolchain/gcc/4.4.0/100-uclibc-conf.patch;hb=HEAD</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/100-uclibc-conf.patch</amin:param>
+        </amin:download>
+<!--running install-->
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/gcc-4.4-20080926.tar.bz2</amin:param>
+	</amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro-uclibc/packages/gcc-4.2.1-adistro-Makefile.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/gcc-4.4-20080926</amin:shell>
+        </amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro-uclibc/packages/gcc-4.2.1-cross_search_paths-1.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/gcc-4.4-20080926</amin:shell>
+        </amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro-uclibc/packages/100-uclibc-conf.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/gcc-4.4-20080926</amin:shell>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-4.4-20080926/configure</amin:param>
+		<amin:flag> 
+			prefix=/adistro-uclibc-bootstrap 
+			enable-languages=c,c++
+			host=i686-adistro-linux-uclibc
+			build=i686-adistro-linux-uclibc
+			target=i686-adistro-linux-uclibc
+			with-local-prefix=/adistro-uclibc-bootstrap
+			libexecdir=/adistro-uclibc-bootstrap/lib
+			enable-threads=posix
+			enable-__cxa_atexit
+			disable-libstdcxx-pch
+			enable-clocale
+			with-nostdinc
+			enable-shared
+			enable-multilib=no
+			with-gmp=/adistro-uclibc-bootstrap
+                        with-mpfr=/adistro-uclibc-bootstrap
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/adistro-uclibc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>CC=gcc</amin:shell>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>gcc</amin:param>
+		<amin:param name='target'>cc</amin:param>
+		<amin:shell name='dir'>/adistro-uclibc-bootstrap/bin</amin:shell>
+	</amin:command>
+        <amin:command name='remove'>
+                <amin:param name='target'>gcc-build</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+        </amin:command>
+        <amin:command name='remove'>
+                <amin:param name='target'>gcc-4.4-20080926</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+        </amin:command>
+
+</amin:profile>
+

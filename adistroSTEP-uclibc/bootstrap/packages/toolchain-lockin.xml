@@ -1,0 +1,41 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--toolchain-lockin -->
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>install</amin:param>
+		<amin:param>ld/ld-new /bootstrap/System/Applications/Binutils-2.16.1/bin/i686-tools-linux-uclibc-ld </amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>-f</amin:flag>
+		<amin:param name='source'>/bootstrap/System/Applications/Binutils-2.16.1/bin/i686-tools-linux-uclibc-ld</amin:param>
+		<amin:param name='target'>/bootstrap/System/Applications/Binutils-2.16.1/i686-tools-linux-uclibc/bin/ld</amin:param>
+	</amin:command>
+	
+	<amin:command name='remove'>
+		<amin:param name='target'>binutils-2.16.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>binutils-build</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+		
+	<amin:command name='remove'>
+		<amin:param name='target'>gcc-build</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>gcc-3.4.5</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+
+</amin:profile>

@@ -1,0 +1,67 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Setting up initial chroot bindings from host-->
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>proc sys</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc</amin:shell>
+	</amin:command>
+
+<!--Mount Proc-->
+
+        <amin:command name='mount'>
+                <amin:flag name='type'>proc</amin:flag>
+                <amin:param name='device'>proc</amin:param>
+                <amin:param name='target'>/opt/adistro-uclibc/proc</amin:param>
+        </amin:command>
+
+<!--Mount SysFS-->
+
+        <amin:command name='mount'>
+                <amin:flag name='type'>sysfs</amin:flag>
+                <amin:param name='device'>sysfs</amin:param>
+                <amin:param name='target'>/opt/adistro-uclibc/sys/</amin:param>
+        </amin:command>
+
+<!--Creating a few more bindings before directory structure is created in chroot-->
+
+        <amin:command name='mount'>
+                <amin:flag>f</amin:flag>
+                <amin:flag name='type'>tmpfs</amin:flag>
+                <amin:param name='device'>tmpfs</amin:param>
+                <amin:param name='target'>/opt/adistro-uclibc/dev/shm</amin:param>
+        </amin:command>
+
+        <amin:command name='mount'>
+                <amin:flag>f</amin:flag>
+		<amin:flag name="type">devpts</amin:flag>
+                <amin:param>-o gid=4,mode=620</amin:param>
+		<amin:param name="device">devpts</amin:param>
+                <amin:param name='target'>/opt/adistro-uclibc/dev/pts</amin:param>
+        </amin:command>
+
+	<amin:command name="mkdir">
+		<amin:flag>p</amin:flag>
+		<amin:param name="target">usr usr/lib</amin:param>
+		<amin:shell name="dir">/opt/adistro-uclibc</amin:shell>
+	</amin:command>
+
+<!-- Taking ownership of the bootstrap directory to prevent invalid 
+     ownership at a later date -->	
+
+<!-- <amin:chroot dir='/opt/adistro'> broken due to amin atm dumping 0:0 incorrectly as 0 0
+
+        <amin:command name='system_command'>
+                <amin:param name='basename'>chown</amin:param>
+                <amin:flag>R</amin:flag>
+                <amin:param>0:0</amin:param>
+		<amin:param>bootstrap</amin:param>
+                <amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+-->
+
+</amin:profile>

@@ -1,0 +1,113 @@
+diff -urN patch-2.5.4/common.h patch-2.5.4-adistroSTEP/common.h
+--- patch-2.5.4/common.h	1999-08-30 18:20:08.000000000 +1200
++++ patch-2.5.4-adistroSTEP/common.h	2005-05-18 09:29:30.048418712 +1200
+@@ -320,9 +320,9 @@
+ #endif
+ 
+ #ifndef NULL_DEVICE
+-#define NULL_DEVICE "/dev/null"
++#define NULL_DEVICE "/System/Devices/null"
+ #endif
+ 
+ #ifndef TTY_DEVICE
+-#define TTY_DEVICE "/dev/tty"
++#define TTY_DEVICE "/System/Devices/tty"
+ #endif
+diff -urN patch-2.5.4/mkdir.c patch-2.5.4-adistroSTEP/mkdir.c
+--- patch-2.5.4/mkdir.c	1999-04-27 00:16:14.000000000 +1200
++++ patch-2.5.4-adistroSTEP/mkdir.c	2005-05-18 09:29:28.190701128 +1200
+@@ -89,7 +89,7 @@
+       mode = umask (0);	/* Get current umask.  */
+       /* Set for mkdir.  */
+       umask (mode | ((S_IRWXU | S_IRWXG | S_IRWXO) & ~dmode));
+-      execl ("/bin/mkdir", "mkdir", dpath, (char *) 0);
++      execl ("/System/Tools/mkdir", "mkdir", dpath, (char *) 0);
+       _exit (1);
+ 
+     default:			/* Parent process.  */
+@@ -99,7 +99,7 @@
+ 
+       if (status)
+ 	{
+-	  /* /bin/mkdir failed.  */
++	  /* /System/Tools/mkdir failed.  */
+ 	  errno = EIO;
+ 	  return -1;
+ 	}
+diff -urN patch-2.5.4/patch.c patch-2.5.4-adistroSTEP/patch.c
+--- patch-2.5.4/patch.c	1999-08-30 18:20:08.000000000 +1200
++++ patch-2.5.4-adistroSTEP/patch.c	2005-05-18 09:29:28.193700672 +1200
+@@ -1308,7 +1308,7 @@
+ #endif
+ 
+ #ifndef TMPDIR
+-#define TMPDIR "/tmp"
++#define TMPDIR "/System/TemporaryFiles"
+ #endif
+ 
+ static char const *
+diff -urN patch-2.5.4/quotearg.c patch-2.5.4-adistroSTEP/quotearg.c
+--- patch-2.5.4/quotearg.c	1999-08-23 21:55:55.000000000 +1200
++++ patch-2.5.4-adistroSTEP/quotearg.c	2005-05-18 09:29:28.197700064 +1200
+@@ -200,7 +200,7 @@
+ 		    case '"': case '$': case '&': case '\'':
+ 		    case '(': case ')': case '*': case ';':
+ 		    case '<': case '>': case '?': case '[': case '\\':
+-		    case '^': /* special in old /bin/sh, e.g. SunOS 4.1.4 */
++		    case '^': /* special in old /System/Tools/sh, e.g. SunOS 4.1.4 */
+ 		    case '`': case '|':
+ 		      goto needs_quoting;
+ 		    }
+diff -urN patch-2.5.4/rmdir.c patch-2.5.4-adistroSTEP/rmdir.c
+--- patch-2.5.4/rmdir.c	1999-03-30 16:43:36.000000000 +1200
++++ patch-2.5.4-adistroSTEP/rmdir.c	2005-05-18 09:29:28.198699912 +1200
+@@ -64,7 +64,7 @@
+       return -1;		/* errno already set */
+ 
+     case 0:			/* child process */
+-      execl ("/bin/rmdir", "rmdir", dpath, (char *) 0);
++      execl ("/System/Tools/rmdir", "rmdir", dpath, (char *) 0);
+       _exit (1);
+ 
+     default:			/* parent process */
+@@ -77,7 +77,7 @@
+       if (status)
+ 	{
+ 
+-	  /* /bin/rmdir failed.  */
++	  /* /System/Tools/rmdir failed.  */
+ 
+ 	  errno = EIO;
+ 	  return -1;
+diff -urN patch-2.5.4/util.c patch-2.5.4-adistroSTEP/util.c
+--- patch-2.5.4/util.c	1999-08-30 18:20:08.000000000 +1200
++++ patch-2.5.4-adistroSTEP/util.c	2005-05-18 09:29:28.199699760 +1200
+@@ -562,11 +562,11 @@
+ 
+   if (ttyfd == -2)
+     {
+-      /* If standard output is not a tty, don't bother opening /dev/tty,
++      /* If standard output is not a tty, don't bother opening /System/Devices/tty,
+ 	 since it's unlikely that stdout will be seen by the tty user.
+ 	 The isatty test also works around a bug in GNU Emacs 19.34 under Linux
+-	 which makes a call-process `patch' hang when it reads from /dev/tty.
+-	 POSIX.2 requires that we read /dev/tty, though.  */
++	 which makes a call-process `patch' hang when it reads from /System/Devices/tty.
++	 POSIX.2 requires that we read /System/Devices/tty, though.  */
+       ttyfd = (posixly_correct || isatty (STDOUT_FILENO)
+ 	       ? open (TTY_DEVICE, O_RDONLY)
+ 	       : -1);
+@@ -968,10 +968,10 @@
+     if (!*name)
+       return 0;
+ 
+-    /* If the name is "/dev/null", ignore the name and mark the file
+-       as being nonexistent.  The name "/dev/null" appears in patches
++    /* If the name is "/System/Devices/null", ignore the name and mark the file
++       as being nonexistent.  The name "/System/Devices/null" appears in patches
+        regardless of how NULL_DEVICE is spelled.  */
+-    if (strcmp (at, "/dev/null") == 0)
++    if (strcmp (at, "/System/Devices/null") == 0)
+       {
+ 	if (pstamp)
+ 	  *pstamp = 0;

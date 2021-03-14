@@ -1,0 +1,81 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--zlib-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/zlib-1.2.3.tar.gz</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+                <amin:flag>
+                prefix=/usr
+		shared
+                </amin:flag>
+                <amin:shell name='dir'>/build/zlib-1.2.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/zlib-1.2.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/zlib-1.2.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:param>clean</amin:param>
+                <amin:shell name='dir'>/build/zlib-1.2.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+                <amin:flag>
+                prefix=/usr
+                </amin:flag>
+                <amin:shell name='dir'>/build/zlib-1.2.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/zlib-1.2.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/zlib-1.2.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='move'>
+                <amin:param name='source'>/usr/lib/libz.so.*</amin:param>
+                <amin:param name='target'>/lib</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>                          
+                <amin:flag>sf</amin:flag>
+		<amin:param name='source'>/lib/libz.so.1</amin:param>
+                <amin:param name='target'>/usr/lib/libz.so</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>zlib-1.2.3</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/build/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+</amin:chroot>
+</amin:profile>
+

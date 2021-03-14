@@ -1,0 +1,66 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Libnointl-->
+
+<!--retreiving package-->
+
+
+	<!--<amin:download>
+		<amin:param name='uri'></amin:param>
+		<amin:param name='file'>/opt/adistro/packages/libnointl-20070701.tar.gz<amin:param>
+	</amin:download>-->	
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/libnointl-20070701.tar.gz</amin:param>
+	</amin:command>
+	
+	<!--<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name='input'></amin:flag>
+		<amin:shell name='dir'></amin:shell>
+        </amin:command>	-->
+
+	<amin:command name='system_command'>
+		<!--<amin:param name='basename'>$CC</amin:param>-->
+		<amin:param name='basename'>i686-tools-linux-uclibc-gcc</amin:param>
+		<amin:param>-I. -L/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib -O2 -shared -fPIC -o libintl.so.8.0.1 nointl.c</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/libnointl</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='copy'>
+		<amin:param name='source'>libintl.so.8.0.1</amin:param>
+		<amin:param name='target'>/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib/libintl.so.8.0.1</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/libnointl</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+        <amin:command name='copy'>
+                <amin:param name='source'>libintl.h</amin:param>
+                <amin:param name='target'>/bootstrap/System/Library/Headers/include/libintl.h</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/libnointl</amin:shell>
+                <amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+                <!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>libnointl</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>libintl.so.8.0.1</amin:param>
+		<amin:param name='target'>libintl.so.8</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib/</amin:shell>
+        </amin:command>	
+	
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>libintl.so.8.0.1</amin:param>
+                <amin:param name='target'>libintl.so</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Libraries/uClibc-0.9.27/lib/</amin:shell>
+        </amin:command>
+</amin:profile>

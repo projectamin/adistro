@@ -1,0 +1,3869 @@
+diff -urN openssl-0.9.7g/CHANGES openssl-0.9.7g-STEP/CHANGES
+--- openssl-0.9.7g/CHANGES	2005-04-12 03:10:05.000000000 +1200
++++ openssl-0.9.7g-STEP/CHANGES	2006-04-26 01:50:09.445719152 +1200
+@@ -1723,10 +1723,10 @@
+      [Geoff Thorpe]
+ 
+   *) Add automatic query of EGD sockets in RAND_poll() for the unix variant.
+-     If /dev/[u]random devices are not available or do not return enough
++     If /System/Devices/[u]random devices are not available or do not return enough
+      entropy, EGD style sockets (served by EGD or PRNGD) will automatically
+      be queried.
+-     The locations /var/run/egd-pool, /dev/egd-pool, /etc/egd-pool, and
++     The locations /System/ApplicationData/RuntimeData/egd-pool, /System/Devices/egd-pool, /etc/egd-pool, and
+      /etc/entropy will be queried once each in this sequence, quering stops
+      when enough entropy was collected without querying more sockets.
+      [Lutz Jaenicke]
+@@ -1735,8 +1735,8 @@
+      random devices, as specified by DEVRANDOM, until a sufficient amount
+      of data has been collected.   We spend at most 10 ms on each file
+      (select timeout) and read in non-blocking mode.  DEVRANDOM now
+-     defaults to the list "/dev/urandom", "/dev/random", "/dev/srandom"
+-     (previously it was just the string "/dev/urandom"), so on typical
++     defaults to the list "/System/Devices/urandom", "/System/Devices/random", "/System/Devices/srandom"
++     (previously it was just the string "/System/Devices/urandom"), so on typical
+      platforms the 10 ms delay will never occur.
+      Also separate out the Unix variant to its own file, rand_unix.c.
+      For VMS, there's a currently-empty rand_vms.c.
+@@ -2857,7 +2857,7 @@
+      [This change does not apply to 0.9.7.]
+ 
+   *) Change bctest to avoid here-documents inside command substitution
+-     (workaround for FreeBSD /bin/sh bug).
++     (workaround for FreeBSD /System/Tools/sh bug).
+      For compatibility with Ultrix, avoid shell functions (introduced
+      in the bctest version that searches along $PATH).
+      [Bodo Moeller]
+@@ -4776,7 +4776,7 @@
+           s_client,
+           s_server,
+           x509 (when signing).
+-     Except on systems with /dev/urandom, it is crucial to have a random
++     Except on systems with /System/Devices/urandom, it is crucial to have a random
+      seed file at least for key creation, DSA signing, and for DH exchanges;
+      for RSA signatures we could do without one.
+ 
+@@ -5593,8 +5593,8 @@
+      [Bodo Moeller]
+ 
+   *) Install various scripts to $(OPENSSLDIR)/misc, not to
+-     $(INSTALLTOP)/bin -- they shouldn't clutter directories
+-     such as /usr/local/bin.
++     $(INSTALLTOP)/System/Tools -- they shouldn't clutter directories
++     such as /usr/local/System/Tools.
+      [Bodo Moeller]
+ 
+   *) "make linux-shared" to build shared libraries.
+@@ -5861,7 +5861,7 @@
+      [Steve Henson]
+ 
+   *) Be less restrictive and allow also `perl util/perlpath.pl
+-     /path/to/bin/perl' in addition to `perl util/perlpath.pl /path/to/bin',
++     /path/to/System/Tools/perl' in addition to `perl util/perlpath.pl /path/to/System/Tools',
+      because this way one can also use an interpreter named `perl5' (which is
+      usually the name of Perl 5.xxx on platforms where an Perl 4.x is still
+      installed as `perl').
+@@ -5955,7 +5955,7 @@
+      [Ralf S. Engelschall]
+ 
+   *) General source tree makefile cleanups: Made `making xxx in yyy...'
+-     display consistent in the source tree and replaced `/bin/rm' by `rm'.
++     display consistent in the source tree and replaced `/System/Tools/rm' by `rm'.
+      Additonally cleaned up the `make links' target: Remove unnecessary
+      semicolons, subsequent redundant removes, inline point.sh into mklink.sh
+      to speed processing and no longer clutter the display with confusing
+diff -urN openssl-0.9.7g/Configure openssl-0.9.7g-STEP/Configure
+--- openssl-0.9.7g/Configure	2005-04-08 04:06:01.000000000 +1200
++++ openssl-0.9.7g-STEP/Configure	2006-04-26 01:50:20.151091688 +1200
+@@ -166,7 +166,7 @@
+ # -DOPENSSL_NO_INLINE_ASM switches off inline assembler. We have to do it
+ # here because whenever GNU C instantiates an assembler template it
+ # surrounds it with #APP #NO_APP comment pair which (at least Solaris
+-# 7_x86) /usr/ccs/bin/as fails to assemble with "Illegal mnemonic"
++# 7_x86) /usr/ccs/System/Tools/as fails to assemble with "Illegal mnemonic"
+ # error message.
+ "solaris-x86-gcc","gcc:-O3 -fomit-frame-pointer -m486 -Wall -DL_ENDIAN -DOPENSSL_NO_INLINE_ASM::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:solaris-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ # -shared -static-libgcc might appear controversial, but modules taken
+@@ -207,7 +207,7 @@
+ "solaris-sparcv7-cc","cc:-xO5 -xstrconst -xdepend -Xa -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_RISC1 DES_UNROLL BF_PTR::::::::::dlfcn:solaris-shared:-KPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "solaris-sparcv8-cc","cc:-xarch=v8 -xO5 -xstrconst -xdepend -Xa -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_RISC1 DES_UNROLL BF_PTR:asm/sparcv8.o:::::::::dlfcn:solaris-shared:-KPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "solaris-sparcv9-cc","cc:-xtarget=ultra -xarch=v8plus -xO5 -xstrconst -xdepend -Xa -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT:ULTRASPARC:-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK_LL DES_PTR DES_RISC1 DES_UNROLL BF_PTR:asm/sparcv8plus.o:::asm/md5-sparcv8plus.o::::::dlfcn:solaris-shared:-KPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"solaris64-sparcv9-cc","cc:-xtarget=ultra -xarch=v9 -xO5 -xstrconst -xdepend -Xa -DB_ENDIAN::-D_REENTRANT:ULTRASPARC:-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHAR RC4_CHUNK DES_INT DES_PTR DES_RISC1 DES_UNROLL BF_PTR::::asm/md5-sparcv9.o::::::dlfcn:solaris-shared:-KPIC:-xarch=v9:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):/usr/ccs/bin/ar rs",
++"solaris64-sparcv9-cc","cc:-xtarget=ultra -xarch=v9 -xO5 -xstrconst -xdepend -Xa -DB_ENDIAN::-D_REENTRANT:ULTRASPARC:-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHAR RC4_CHUNK DES_INT DES_PTR DES_RISC1 DES_UNROLL BF_PTR::::asm/md5-sparcv9.o::::::dlfcn:solaris-shared:-KPIC:-xarch=v9:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):/usr/ccs/System/Tools/ar rs",
+ ####
+ "debug-solaris-sparcv8-cc","cc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DBN_CTX_DEBUG -DCRYPTO_MDEBUG_ALL -xarch=v8 -g -O -xstrconst -Xa -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_RISC1 DES_UNROLL BF_PTR:asm/sparcv8.o:::::::::dlfcn:solaris-shared:-KPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "debug-solaris-sparcv9-cc","cc:-DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DBN_CTX_DEBUG -DCRYPTO_MDEBUG_ALL -xtarget=ultra -xarch=v8plus -g -O -xstrconst -Xa -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT:ULTRASPARC:-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK_LL DES_PTR DES_RISC1 DES_UNROLL BF_PTR:asm/sparcv8plus.o:::asm/md5-sparcv8plus.o::::::dlfcn:solaris-shared:-KPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+@@ -540,7 +540,7 @@
+ "Cygwin", "gcc:-DTERMIOS -DL_ENDIAN -fomit-frame-pointer -O3 -march=i486 -Wall:::CYGWIN32::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_out_asm}:dlfcn:cygwin-shared:-D_WINDLL::.dll",
+ 
+ # DJGPP
+-"DJGPP", "gcc:-I/dev/env/WATT_ROOT/inc -DTERMIOS -DL_ENDIAN -fomit-frame-pointer -O2 -Wall -DDEVRANDOM=\"/dev/urandom\\x24\":::MSDOS:-L/dev/env/WATT_ROOT/lib -lwatt:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}::::::::::",
++"DJGPP", "gcc:-I/System/Devices/env/WATT_ROOT/inc -DTERMIOS -DL_ENDIAN -fomit-frame-pointer -O2 -Wall -DDEVRANDOM=\"/System/Devices/urandom\\x24\":::MSDOS:-L/System/Devices/env/WATT_ROOT/lib -lwatt:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}::::::::::",
+ 
+ # Ultrix from Bernhard Simon <simon@zid.tuwien.ac.at>
+ "ultrix-cc","cc:-std1 -O -Olimit 2500 -DL_ENDIAN::(unknown):::::::",
+@@ -1546,8 +1546,8 @@
+ 	    &dofile("apps/CA.pl",$perl,'^#!/', '#!%s');
+ 	} else {
+ 	    # No path for Perl known ...
+-	    &dofile("tools/c_rehash",'/usr/local/bin/perl','^#!/', '#!%s','^my \$dir;$', 'my $dir = "' . $openssldir . '";');
+-	    &dofile("apps/CA.pl",'/usr/local/bin/perl','^#!/', '#!%s');
++	    &dofile("tools/c_rehash",'/usr/local/System/Tools/perl','^#!/', '#!%s','^my \$dir;$', 'my $dir = "' . $openssldir . '";');
++	    &dofile("apps/CA.pl",'/usr/local/System/Tools/perl','^#!/', '#!%s');
+ 	}
+ 	if ($depflags ne "" && !$make_depend) {
+ 		print <<EOF;
+diff -urN openssl-0.9.7g/FAQ openssl-0.9.7g-STEP/FAQ
+--- openssl-0.9.7g/FAQ	2005-04-12 03:10:06.000000000 +1200
++++ openssl-0.9.7g-STEP/FAQ	2006-04-26 01:50:25.457285024 +1200
+@@ -119,7 +119,7 @@
+ * Where can I get a compiled version of OpenSSL?
+ 
+ You can finder pointers to binary distributions in
+-http://www.openssl.org/related/binaries.html .
++http://www.openssl.org/related/System/Toolsaries.html .
+ 
+ Some applications that use OpenSSL are distributed in binary form.
+ When using such an application, you don't need to install OpenSSL
+@@ -194,9 +194,9 @@
+ 
+ Cryptographic software needs a source of unpredictable data to work
+ correctly.  Many open source operating systems provide a "randomness
+-device" (/dev/urandom or /dev/random) that serves this purpose.
+-All OpenSSL versions try to use /dev/urandom by default; starting with
+-version 0.9.7, OpenSSL also tries /dev/random if /dev/urandom is not
++device" (/System/Devices/urandom or /System/Devices/random) that serves this purpose.
++All OpenSSL versions try to use /System/Devices/urandom by default; starting with
++version 0.9.7, OpenSSL also tries /System/Devices/random if /System/Devices/urandom is not
+ available.
+ 
+ On other systems, applications have to call the RAND_add() or
+@@ -211,18 +211,18 @@
+ that it never worked correctly.  OpenSSL 0.9.5 and later make the
+ error visible by refusing to perform potentially insecure encryption.
+ 
+-If you are using Solaris 8, you can add /dev/urandom and /dev/random
++If you are using Solaris 8, you can add /System/Devices/urandom and /System/Devices/random
+ devices by installing patch 112438 (Sparc) or 112439 (x86), which are
+ available via the Patchfinder at <URL: http://sunsolve.sun.com>
+-(Solaris 9 includes these devices by default). For /dev/random support
++(Solaris 9 includes these devices by default). For /System/Devices/random support
+ for earlier Solaris versions, see Sun's statement at
+ <URL: http://sunsolve.sun.com/pub-cgi/retrieve.pl?doc=fsrdb/27606&zone_32=SUNWski>
+ (the SUNWski package is available in patch 105710).
+ 
+-On systems without /dev/urandom and /dev/random, it is a good idea to
++On systems without /System/Devices/urandom and /System/Devices/random, it is a good idea to
+ use the Entropy Gathering Demon (EGD); see the RAND_egd() manpage for
+ details.  Starting with version 0.9.7, OpenSSL will automatically look
+-for an EGD socket at /var/run/egd-pool, /dev/egd-pool, /etc/egd-pool and
++for an EGD socket at /System/ApplicationData/RuntimeData/egd-pool, /System/Devices/egd-pool, /etc/egd-pool and
+ /etc/entropy.
+ 
+ Most components of the openssl command line utility automatically try
+@@ -481,16 +481,16 @@
+ 
+ Getting this message is quite usual on Solaris 2, because Sun has hidden
+ away 'ar' and other development commands in directories that aren't in
+-$PATH by default.  One of those directories is '/usr/ccs/bin'.  The
++$PATH by default.  One of those directories is '/usr/ccs/System/Tools'.  The
+ quickest way to fix this is to do the following (it assumes you use sh
+ or any sh-compatible shell):
+ 
+ ----- snip:start -----
+-  PATH=${PATH}:/usr/ccs/bin; export PATH
++  PATH=${PATH}:/usr/ccs/System/Tools; export PATH
+ ----- snip:end -----
+ 
+ and then redo the compilation.  What you should really do is make sure
+-'/usr/ccs/bin' is permanently in your $PATH, for example through your
++'/usr/ccs/System/Tools' is permanently in your $PATH, for example through your
+ '.profile' (again, assuming you use a sh-compatible shell).
+ 
+ 
+@@ -516,8 +516,8 @@
+ Users may therefore wish to install more or all of the features left out.
+ 
+ To do this you MUST ensure that you do not overwrite the openssl that is in
+-/usr/bin on your Red Hat machine. Several packages depend on this file,
+-including sendmail and ssh. /usr/local/bin is a good alternative choice. The
++/System/Tools on your Red Hat machine. Several packages depend on this file,
++including sendmail and ssh. /usr/local/System/Tools is a good alternative choice. The
+ libraries that come with Red Hat 7.0 onwards have different names and so are
+ not affected. (eg For Red Hat 7.2 they are /lib/libssl.so.0.9.6b and
+ /lib/libcrypto.so.0.9.6b with symlinks /lib/libssl.so.2 and
+@@ -546,7 +546,7 @@
+ If the failure happens when trying to build the "openssl" binary, with
+ a large number of undefined symbols, it's very probable that you have
+ OpenSSL 0.9.6b delivered with the operating system (you can find out by
+-running '/usr/bin/openssl version') and that you were trying to build
++running '/System/Tools/openssl version') and that you were trying to build
+ OpenSSL 0.9.7 or newer.  The problem is that the loader ('ld') in
+ MacOS X has a misfeature that's quite difficult to go around.
+ Look in the file PROBLEMS for a more detailed explanation and for possible
+@@ -557,7 +557,7 @@
+ 
+ If the failure happens when running 'make test' and the RC4 test fails,
+ it's very probable that you have OpenSSL 0.9.6b delivered with the
+-operating system (you can find out by running '/usr/bin/openssl version')
++operating system (you can find out by running '/System/Tools/openssl version')
+ and that you were trying to build OpenSSL 0.9.6d.  The problem is that
+ the loader ('ld') in MacOS X has a misfeature that's quite difficult to
+ go around and has linked the programs "openssl" and the test programs
+diff -urN openssl-0.9.7g/INSTALL openssl-0.9.7g-STEP/INSTALL
+--- openssl-0.9.7g/INSTALL	2004-05-12 00:44:52.000000000 +1200
++++ openssl-0.9.7g-STEP/INSTALL	2006-04-26 01:50:25.461284416 +1200
+@@ -41,7 +41,7 @@
+  There are several options to ./config (or ./Configure) to customize
+  the build:
+ 
+-  --prefix=DIR  Install in DIR/bin, DIR/lib, DIR/include/openssl.
++  --prefix=DIR  Install in DIR/System/Tools, DIR/lib, DIR/include/openssl.
+ 	        Configuration files used by OpenSSL will be in DIR/ssl
+                 or the directory specified by --openssldir.
+ 
+@@ -192,9 +192,9 @@
+      locations, but have the package installed somewhere else so that
+      it can easily be packaged, can use
+ 
+-       $ make INSTALL_PREFIX=/tmp/package-root install
++       $ make INSTALL_PREFIX=/System/TemporaryFiles/package-root install
+ 
+-     (or specify "--install_prefix=/tmp/package-root" as a configure
++     (or specify "--install_prefix=/System/TemporaryFiles/package-root" as a configure
+      option).  The specified prefix will be prepended to all
+      installation target filenames.
+ 
+@@ -304,7 +304,7 @@
+  secret key generation. OpenSSL provides several options to seed the
+  internal PRNG. If not properly seeded, the internal PRNG will refuse
+  to deliver random bytes and a "PRNG not seeded error" will occur.
+- On systems without /dev/urandom (or similar) device, it may be necessary
++ On systems without /System/Devices/urandom (or similar) device, it may be necessary
+  to install additional support software to obtain random seed.
+  Please check out the manual pages for RAND_add(), RAND_bytes(), RAND_egd(),
+  and the FAQ for more information.
+diff -urN openssl-0.9.7g/INSTALL.DJGPP openssl-0.9.7g-STEP/INSTALL.DJGPP
+--- openssl-0.9.7g/INSTALL.DJGPP	2005-01-15 05:24:45.000000000 +1300
++++ openssl-0.9.7g-STEP/INSTALL.DJGPP	2006-04-26 01:50:25.464283960 +1200
+@@ -22,12 +22,12 @@
+  The Makefile assumes that the WATT-32 code is in the directory
+  specified by the environment variable WATT_ROOT. If you have watt-32
+  in directory "watt32" under your main DJGPP directory, specify
+- WATT_ROOT="/dev/env/DJDIR/watt32".
++ WATT_ROOT="/System/Devices/env/DJDIR/watt32".
+ 
+  To compile OpenSSL, start your BASH shell, then configure for DJGPP by
+  running "./Configure" with appropriate arguments:
+ 
+-	./Configure no-threads --prefix=/dev/env/DJDIR DJGPP
++	./Configure no-threads --prefix=/System/Devices/env/DJDIR DJGPP
+  
+  And finally fire up "make". You may run out of DPMI selectors when
+  running in a DOS box under Windows. If so, just close the BASH
+@@ -40,8 +40,8 @@
+ 
+   "Cryptographic software needs a source of unpredictable data to work
+    correctly.  Many open source operating systems provide a "randomness
+-   device" (/dev/urandom or /dev/random) that serves this purpose."
++   device" (/System/Devices/urandom or /System/Devices/random) that serves this purpose."
+ 
+- As of version 0.9.7f DJGPP port checks upon /dev/urandom$ for a 3rd
++ As of version 0.9.7f DJGPP port checks upon /System/Devices/urandom$ for a 3rd
+  party "randomness" DOS driver. One such driver, NOISE.SYS, can be
+  obtained from "http://www.rahul.net/dkaufman/index.html".
+diff -urN openssl-0.9.7g/INSTALL.W32 openssl-0.9.7g-STEP/INSTALL.W32
+--- openssl-0.9.7g/INSTALL.W32	2004-05-12 00:44:52.000000000 +1200
++++ openssl-0.9.7g-STEP/INSTALL.W32	2006-04-26 01:50:25.468283352 +1200
+@@ -43,7 +43,7 @@
+ 
+  NASM is freely available. Version 0.98 was used during testing: other versions
+  may also work. It is available from many places, see for example:
+- http://www.kernel.org/pub/software/devel/nasm/binaries/win32/
++ http://www.kernel.org/pub/software/System/Devicesel/nasm/System/Toolsaries/win32/
+  The NASM binary nasmw.exe needs to be installed anywhere on your PATH.
+ 
+  Firstly you should run Configure (to build a FIPS-certified variant of
+@@ -115,7 +115,7 @@
+  Borland C++ builder 3 and 4
+  ---------------------------
+ 
+- * Setup PATH. First must be GNU make then bcb4/bin 
++ * Setup PATH. First must be GNU make then bcb4/System/Tools 
+ 
+  * Run ms\bcb4.bat
+ 
+diff -urN openssl-0.9.7g/MacOS/Randomizer.cpp openssl-0.9.7g-STEP/MacOS/Randomizer.cpp
+--- openssl-0.9.7g/MacOS/Randomizer.cpp	2000-03-01 04:18:32.000000000 +1300
++++ openssl-0.9.7g-STEP/MacOS/Randomizer.cpp	2006-04-26 02:11:11.120915368 +1200
+@@ -85,7 +85,7 @@
+ 	
+ 	For 68K Macs, the Microseconds() call may be used. See Develop
+ 	issue 29 on the Apple developer site
+-	(developer.apple.com/dev/techsupport/develop/issue29/minow.html)
++	(developer.apple.com/System/Devices/techsupport/System/Deviceselop/issue29/minow.html)
+ 	for information on its accuracy and resolution. The code below
+ 	has been tested only on PowerPC based machines.
+ 
+diff -urN openssl-0.9.7g/Makefile openssl-0.9.7g-STEP/Makefile
+--- openssl-0.9.7g/Makefile	2005-04-12 03:17:45.000000000 +1200
++++ openssl-0.9.7g-STEP/Makefile	2006-04-26 01:50:31.657342472 +1200
+@@ -23,7 +23,7 @@
+ HERE=.
+ 
+ # INSTALL_PREFIX is for package builders so that they can configure
+-# for, say, /usr/ and yet have everything installed to /tmp/somedir/usr/.
++# for, say, /usr/ and yet have everything installed to /System/TemporaryFiles/somedir/usr/.
+ # Normally it is left empty.
+ INSTALL_PREFIX=
+ INSTALLTOP=/usr/local/ssl
+@@ -68,8 +68,8 @@
+ EXE_EXT= 
+ ARFLAGS= 
+ AR=ar $(ARFLAGS) r
+-RANLIB= /usr/bin/ranlib
+-PERL= /usr/bin/perl
++RANLIB= /System/Tools/ranlib
++PERL= /System/Tools/perl
+ TAR= tar
+ TARFLAGS= --no-recursion
+ MAKEDEPPROG=makedepend
+@@ -200,7 +200,7 @@
+ MAN1=1
+ MAN3=3
+ MANSUFFIX=
+-SHELL=/bin/sh
++SHELL=/System/Tools/sh
+ 
+ TOP=    .
+ ONEDIRS=out tmp
+@@ -229,7 +229,7 @@
+ 
+ sigs:	$(SIGS)
+ libcrypto.a.sha1: libcrypto.a
+-	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 		$(RANLIB) libcrypto.a; \
+ 		fips/sha1/fips_standalone_sha1 libcrypto.a > libcrypto.a.sha1; \
+ 	fi
+@@ -315,7 +315,7 @@
+ 	libs="-l$$i $$libs"; \
+ 	done
+ 
+-DETECT_GNU_LD=(${CC} -Wl,-V /dev/null 2>&1 | grep '^GNU ld' )>/dev/null
++DETECT_GNU_LD=(${CC} -Wl,-V /System/Devices/null 2>&1 | grep '^GNU ld' )>/System/Devices/null
+ 
+ # For Darwin AKA Mac OS/X (dyld)
+ do_darwin-shared: 
+@@ -417,9 +417,9 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  MINUSZ='-z '; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && MINUSZ='-Wl,-z,'; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && MINUSZ='-Wl,-z,'; \
+ 		  set -x; ${CC} ${SHARED_LDFLAGS} -G -dy -z text \
+ 			-o lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+ 			-h lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+@@ -439,7 +439,7 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  find . -name "*.o" -print > allobjs ; \
+ 		  OBJS= ; export OBJS ; \
+ 		  for obj in `ar t lib$$i.a` ; do \
+@@ -462,9 +462,9 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  SHARE_FLAG='-G'; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && SHARE_FLAG='-shared'; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && SHARE_FLAG='-shared'; \
+ 		  find . -name "*.o" -print > allobjs ; \
+ 		  OBJS= ; export OBJS ; \
+ 		  for obj in `ar t lib$$i.a` ; do \
+@@ -489,7 +489,7 @@
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+ 		( WHOLELIB="-all lib$$i.a -none"; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && WHOLELIB="-Wl,-all,lib$$i.a,-none"; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && WHOLELIB="-Wl,-all,lib$$i.a,-none"; \
+ 		  set -x; ${CC} ${SHARED_LDFLAGS} \
+ 			-shared -o lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+ 			-Wl,-soname,lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+@@ -514,13 +514,13 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
++	if expr $(PLATFORM) : '.*ia64' > /System/Devices/null; then \
+ 		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	else \
+ 		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	fi; \
+ 	[ -f $$shlib ] && rm -f $$shlib; \
+-	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
++	( set -x; /usr/ccs/System/Tools/ld ${SHARED_LDFLAGS} \
+ 		+vnocompatwarnings \
+ 		-b -z +s \
+ 		-o $$shlib +h $$shlib \
+@@ -542,13 +542,13 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
++	if expr $(PLATFORM) : '.*ia64' > /System/Devices/null; then \
+ 		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	else \
+ 		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	fi; \
+ 	[ -f $$shlib ] && rm -f $$shlib; \
+-	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
++	( set -x; /usr/ccs/System/Tools/ld ${SHARED_LDFLAGS} \
+ 		-b -z \
+ 		-o $$shlib +h $$shlib \
+ 		+forceload lib$$i.a -ldl -lc ) || exit 1; \
+@@ -581,8 +581,8 @@
+ #  Tru64 Unix:  $(CC)
+ #  Solaris:     $(CC)
+ #  Irix:        $(CC)
+-#  HP/UX-32bit: /usr/ccs/bin/ld
+-#  HP/UX-64bit: /usr/ccs/bin/ld
++#  HP/UX-32bit: /usr/ccs/System/Tools/ld
++#  HP/UX-64bit: /usr/ccs/System/Tools/ld
+ #  AIX:		$(CC)
+ ALLSYMSFLAG=-bnogc
+ SHAREDFLAGS=${SHARED_LDFLAGS} -G -bE:lib$$i.exp -bM:SRE
+@@ -609,7 +609,7 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	tmpdir=/tmp/openssl.$$$$ ; rm -rf $$tmpdir ; \
++	tmpdir=/System/TemporaryFiles/openssl.$$$$ ; rm -rf $$tmpdir ; \
+ 	( set -x; \
+ 	  ( Opwd=`pwd` ; mkdir $$tmpdir || exit 1; \
+ 	    cd $$tmpdir || exit 1 ; ar x $$Opwd/lib$$i.a ; \
+@@ -803,7 +803,7 @@
+ install: all install_docs install_sw
+ 
+ install_sw:
+-	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
++	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/lib \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/lib/pkgconfig \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl \
+@@ -827,7 +827,7 @@
+ 		if [ -f "$$i" ]; then \
+ 		(       echo installing $$i; \
+ 			cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new; \
+-			if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++			if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 				: ; \
+ 			else \
+ 				$(RANLIB) $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new; \
+@@ -848,9 +848,9 @@
+ 					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i; \
+ 				else \
+ 					c=`echo $$i | sed 's/^lib\(.*\)\.dll/cyg\1-$(SHLIB_VERSION_NUMBER).dll/'`; \
+-					cp $$c $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new; \
+-					chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new; \
+-					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c; \
++					cp $$c $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new; \
++					chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new; \
++					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c; \
+ 					cp $$i.a $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new; \
+ 					chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new; \
+ 					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a; \
+diff -urN openssl-0.9.7g/Makefile.bak openssl-0.9.7g-STEP/Makefile.bak
+--- openssl-0.9.7g/Makefile.bak	2005-04-12 03:17:39.000000000 +1200
++++ openssl-0.9.7g-STEP/Makefile.bak	2006-04-26 01:50:37.800408584 +1200
+@@ -23,7 +23,7 @@
+ HERE=.
+ 
+ # INSTALL_PREFIX is for package builders so that they can configure
+-# for, say, /usr/ and yet have everything installed to /tmp/somedir/usr/.
++# for, say, /usr/ and yet have everything installed to /System/TemporaryFiles/somedir/usr/.
+ # Normally it is left empty.
+ INSTALL_PREFIX=
+ INSTALLTOP=/usr/local/ssl
+@@ -68,8 +68,8 @@
+ EXE_EXT= 
+ ARFLAGS= 
+ AR=ar $(ARFLAGS) r
+-RANLIB= /usr/bin/ranlib
+-PERL= /usr/bin/perl
++RANLIB= /System/Tools/ranlib
++PERL= /System/Tools/perl
+ TAR= tar
+ TARFLAGS= --no-recursion
+ MAKEDEPPROG=makedepend
+@@ -200,7 +200,7 @@
+ MAN1=1
+ MAN3=3
+ MANSUFFIX=
+-SHELL=/bin/sh
++SHELL=/System/Tools/sh
+ 
+ TOP=    .
+ ONEDIRS=out tmp
+@@ -229,7 +229,7 @@
+ 
+ sigs:	$(SIGS)
+ libcrypto.a.sha1: libcrypto.a
+-	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 		$(RANLIB) libcrypto.a; \
+ 		fips/sha1/fips_standalone_sha1 libcrypto.a > libcrypto.a.sha1; \
+ 	fi
+@@ -315,7 +315,7 @@
+ 	libs="-l$$i $$libs"; \
+ 	done
+ 
+-DETECT_GNU_LD=(${CC} -Wl,-V /dev/null 2>&1 | grep '^GNU ld' )>/dev/null
++DETECT_GNU_LD=(${CC} -Wl,-V /System/Devices/null 2>&1 | grep '^GNU ld' )>/System/Devices/null
+ 
+ # For Darwin AKA Mac OS/X (dyld)
+ do_darwin-shared: 
+@@ -417,9 +417,9 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  MINUSZ='-z '; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && MINUSZ='-Wl,-z,'; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && MINUSZ='-Wl,-z,'; \
+ 		  set -x; ${CC} ${SHARED_LDFLAGS} -G -dy -z text \
+ 			-o lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+ 			-h lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+@@ -439,7 +439,7 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  find . -name "*.o" -print > allobjs ; \
+ 		  OBJS= ; export OBJS ; \
+ 		  for obj in `ar t lib$$i.a` ; do \
+@@ -462,9 +462,9 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  SHARE_FLAG='-G'; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && SHARE_FLAG='-shared'; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && SHARE_FLAG='-shared'; \
+ 		  find . -name "*.o" -print > allobjs ; \
+ 		  OBJS= ; export OBJS ; \
+ 		  for obj in `ar t lib$$i.a` ; do \
+@@ -489,7 +489,7 @@
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+ 		( WHOLELIB="-all lib$$i.a -none"; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && WHOLELIB="-Wl,-all,lib$$i.a,-none"; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && WHOLELIB="-Wl,-all,lib$$i.a,-none"; \
+ 		  set -x; ${CC} ${SHARED_LDFLAGS} \
+ 			-shared -o lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+ 			-Wl,-soname,lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+@@ -514,13 +514,13 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
++	if expr $(PLATFORM) : '.*ia64' > /System/Devices/null; then \
+ 		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	else \
+ 		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	fi; \
+ 	[ -f $$shlib ] && rm -f $$shlib; \
+-	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
++	( set -x; /usr/ccs/System/Tools/ld ${SHARED_LDFLAGS} \
+ 		+vnocompatwarnings \
+ 		-b -z +s \
+ 		-o $$shlib +h $$shlib \
+@@ -542,13 +542,13 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
++	if expr $(PLATFORM) : '.*ia64' > /System/Devices/null; then \
+ 		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	else \
+ 		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	fi; \
+ 	[ -f $$shlib ] && rm -f $$shlib; \
+-	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
++	( set -x; /usr/ccs/System/Tools/ld ${SHARED_LDFLAGS} \
+ 		-b -z \
+ 		-o $$shlib +h $$shlib \
+ 		+forceload lib$$i.a -ldl -lc ) || exit 1; \
+@@ -581,8 +581,8 @@
+ #  Tru64 Unix:  $(CC)
+ #  Solaris:     $(CC)
+ #  Irix:        $(CC)
+-#  HP/UX-32bit: /usr/ccs/bin/ld
+-#  HP/UX-64bit: /usr/ccs/bin/ld
++#  HP/UX-32bit: /usr/ccs/System/Tools/ld
++#  HP/UX-64bit: /usr/ccs/System/Tools/ld
+ #  AIX:		$(CC)
+ ALLSYMSFLAG=-bnogc
+ SHAREDFLAGS=${SHARED_LDFLAGS} -G -bE:lib$$i.exp -bM:SRE
+@@ -609,7 +609,7 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	tmpdir=/tmp/openssl.$$$$ ; rm -rf $$tmpdir ; \
++	tmpdir=/System/TemporaryFiles/openssl.$$$$ ; rm -rf $$tmpdir ; \
+ 	( set -x; \
+ 	  ( Opwd=`pwd` ; mkdir $$tmpdir || exit 1; \
+ 	    cd $$tmpdir || exit 1 ; ar x $$Opwd/lib$$i.a ; \
+@@ -803,7 +803,7 @@
+ install: all install_docs install_sw
+ 
+ install_sw:
+-	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
++	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/lib \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/lib/pkgconfig \
+ 		$(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl \
+@@ -827,7 +827,7 @@
+ 		if [ -f "$$i" ]; then \
+ 		(       echo installing $$i; \
+ 			cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new; \
+-			if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++			if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 				: ; \
+ 			else \
+ 				$(RANLIB) $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new; \
+@@ -848,9 +848,9 @@
+ 					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i; \
+ 				else \
+ 					c=`echo $$i | sed 's/^lib\(.*\)\.dll/cyg\1-$(SHLIB_VERSION_NUMBER).dll/'`; \
+-					cp $$c $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new; \
+-					chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new; \
+-					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c; \
++					cp $$c $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new; \
++					chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new; \
++					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c; \
+ 					cp $$i.a $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new; \
+ 					chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new; \
+ 					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a; \
+diff -urN openssl-0.9.7g/Makefile.org openssl-0.9.7g-STEP/Makefile.org
+--- openssl-0.9.7g/Makefile.org	2005-03-15 22:46:13.000000000 +1300
++++ openssl-0.9.7g-STEP/Makefile.org	2006-04-26 03:32:49.195294880 +1200
+@@ -21,7 +21,7 @@
+ HERE=.
+ 
+ # INSTALL_PREFIX is for package builders so that they can configure
+-# for, say, /usr/ and yet have everything installed to /tmp/somedir/usr/.
++# for, say, /usr/ and yet have everything installed to /System/TemporaryFiles/somedir/usr/.
+ # Normally it is left empty.
+ INSTALL_PREFIX=
+ INSTALLTOP=/usr/local/ssl
+@@ -198,7 +198,7 @@
+ MAN1=1
+ MAN3=3
+ MANSUFFIX=
+-SHELL=/bin/sh
++SHELL=/System/Tools/sh
+ 
+ TOP=    .
+ ONEDIRS=out tmp
+@@ -227,7 +227,7 @@
+ 
+ sigs:	$(SIGS)
+ libcrypto.a.sha1: libcrypto.a
+-	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 		$(RANLIB) libcrypto.a; \
+ 		fips/sha1/fips_standalone_sha1 libcrypto.a > libcrypto.a.sha1; \
+ 	fi
+@@ -313,7 +313,7 @@
+ 	libs="-l$$i $$libs"; \
+ 	done
+ 
+-DETECT_GNU_LD=(${CC} -Wl,-V /dev/null 2>&1 | grep '^GNU ld' )>/dev/null
++DETECT_GNU_LD=(${CC} -Wl,-V /System/Devices/null 2>&1 | grep '^GNU ld' )>/System/Devices/null
+ 
+ # For Darwin AKA Mac OS/X (dyld)
+ do_darwin-shared: 
+@@ -415,9 +415,9 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  MINUSZ='-z '; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && MINUSZ='-Wl,-z,'; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && MINUSZ='-Wl,-z,'; \
+ 		  set -x; ${CC} ${SHARED_LDFLAGS} -G -dy -z text \
+ 			-o lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+ 			-h lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+@@ -437,7 +437,7 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  find . -name "*.o" -print > allobjs ; \
+ 		  OBJS= ; export OBJS ; \
+ 		  for obj in `ar t lib$$i.a` ; do \
+@@ -460,9 +460,9 @@
+ 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+-		( PATH=/usr/ccs/bin:$$PATH ; export PATH; \
++		( PATH=/usr/ccs/System/Tools:$$PATH ; export PATH; \
+ 		  SHARE_FLAG='-G'; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && SHARE_FLAG='-shared'; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && SHARE_FLAG='-shared'; \
+ 		  find . -name "*.o" -print > allobjs ; \
+ 		  OBJS= ; export OBJS ; \
+ 		  for obj in `ar t lib$$i.a` ; do \
+@@ -487,7 +487,7 @@
+ 			libs="$(LIBKRB5) $$libs"; \
+ 		fi; \
+ 		( WHOLELIB="-all lib$$i.a -none"; \
+-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && WHOLELIB="-Wl,-all,lib$$i.a,-none"; \
++		  (${CC} -v 2>&1 | grep gcc) > /System/Devices/null && WHOLELIB="-Wl,-all,lib$$i.a,-none"; \
+ 		  set -x; ${CC} ${SHARED_LDFLAGS} \
+ 			-shared -o lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+ 			-Wl,-soname,lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+@@ -512,13 +512,13 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
++	if expr $(PLATFORM) : '.*ia64' > /System/Devices/null; then \
+ 		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	else \
+ 		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	fi; \
+ 	[ -f $$shlib ] && rm -f $$shlib; \
+-	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
++	( set -x; /usr/ccs/System/Tools/ld ${SHARED_LDFLAGS} \
+ 		+vnocompatwarnings \
+ 		-b -z +s \
+ 		-o $$shlib +h $$shlib \
+@@ -540,13 +540,13 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
++	if expr $(PLATFORM) : '.*ia64' > /System/Devices/null; then \
+ 		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	else \
+ 		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+ 	fi; \
+ 	[ -f $$shlib ] && rm -f $$shlib; \
+-	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
++	( set -x; /usr/ccs/System/Tools/ld ${SHARED_LDFLAGS} \
+ 		-b -z \
+ 		-o $$shlib +h $$shlib \
+ 		+forceload lib$$i.a -ldl -lc ) || exit 1; \
+@@ -579,8 +579,8 @@
+ #  Tru64 Unix:  $(CC)
+ #  Solaris:     $(CC)
+ #  Irix:        $(CC)
+-#  HP/UX-32bit: /usr/ccs/bin/ld
+-#  HP/UX-64bit: /usr/ccs/bin/ld
++#  HP/UX-32bit: /usr/ccs/System/Tools/ld
++#  HP/UX-64bit: /usr/ccs/System/Tools/ld
+ #  AIX:		$(CC)
+ ALLSYMSFLAG=-bnogc
+ SHAREDFLAGS=${SHARED_LDFLAGS} -G -bE:lib$$i.exp -bM:SRE
+@@ -607,7 +607,7 @@
+ 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
+ 		libs="$(LIBKRB5) $$libs"; \
+ 	fi; \
+-	tmpdir=/tmp/openssl.$$$$ ; rm -rf $$tmpdir ; \
++	tmpdir=/System/TemporaryFiles/openssl.$$$$ ; rm -rf $$tmpdir ; \
+ 	( set -x; \
+ 	  ( Opwd=`pwd` ; mkdir $$tmpdir || exit 1; \
+ 	    cd $$tmpdir || exit 1 ; ar x $$Opwd/lib$$i.a ; \
+@@ -825,7 +825,7 @@
+ 		if [ -f "$$i" ]; then \
+ 		(       echo installing $$i; \
+ 			cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new; \
+-			if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++			if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 				: ; \
+ 			else \
+ 				$(RANLIB) $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new; \
+@@ -846,9 +846,9 @@
+ 					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.new $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i; \
+ 				else \
+ 					c=`echo $$i | sed 's/^lib\(.*\)\.dll/cyg\1-$(SHLIB_VERSION_NUMBER).dll/'`; \
+-					cp $$c $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new; \
+-					chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new; \
+-					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c.new $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$c; \
++					cp $$c $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new; \
++					chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new; \
++					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c.new $(INSTALL_PREFIX)$(INSTALLTOP)/System/Tools/$$c; \
+ 					cp $$i.a $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new; \
+ 					chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new; \
+ 					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a.new $(INSTALL_PREFIX)$(INSTALLTOP)/lib/$$i.a; \
+diff -urN openssl-0.9.7g/README openssl-0.9.7g-STEP/README
+--- openssl-0.9.7g/README	2005-04-12 03:10:06.000000000 +1200
++++ openssl-0.9.7g-STEP/README	2006-04-26 01:50:43.702511328 +1200
+@@ -38,7 +38,7 @@
+      Ciphers
+         libdes - EAY's libdes DES encryption package which has been floating
+                  around the net for a few years.  It includes 15
+-                 'modes/variations' of DES (1, 2 and 3 key versions of ecb,
++                 'modes/System/ApplicationDataiations' of DES (1, 2 and 3 key versions of ecb,
+                  cbc, cfb and ofb; pcbc and a more general form of cfb and
+                  ofb) including desx in cbc mode, a fast crypt(3), and
+                  routines to read passwords from the keyboard.
+diff -urN openssl-0.9.7g/VMS/VMSify-conf.pl openssl-0.9.7g-STEP/VMS/VMSify-conf.pl
+--- openssl-0.9.7g/VMS/VMSify-conf.pl	2004-05-14 09:38:23.000000000 +1200
++++ openssl-0.9.7g-STEP/VMS/VMSify-conf.pl	2006-04-26 02:15:11.673345840 +1200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/perl
++#! /System/Tools/perl
+ 
+ use strict;
+ use warnings;
+diff -urN openssl-0.9.7g/apps/CA.pl openssl-0.9.7g-STEP/apps/CA.pl
+--- openssl-0.9.7g/apps/CA.pl	2005-04-12 03:17:49.000000000 +1200
++++ openssl-0.9.7g-STEP/apps/CA.pl	2006-04-26 01:51:03.404516168 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/System/Tools/perl
+ #
+ # CA - wrapper around ca to make it easier to use ... basically ca requires
+ #      some setup stuff to be done before you can use it and this makes
+diff -urN openssl-0.9.7g/apps/CA.pl.in openssl-0.9.7g-STEP/apps/CA.pl.in
+--- openssl-0.9.7g/apps/CA.pl.in	2005-02-02 12:45:38.000000000 +1300
++++ openssl-0.9.7g-STEP/apps/CA.pl.in	2006-04-26 01:51:03.406515864 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # CA - wrapper around ca to make it easier to use ... basically ca requires
+ #      some setup stuff to be done before you can use it and this makes
+diff -urN openssl-0.9.7g/apps/CA.sh openssl-0.9.7g-STEP/apps/CA.sh
+--- openssl-0.9.7g/apps/CA.sh	2005-02-02 12:45:38.000000000 +1300
++++ openssl-0.9.7g-STEP/apps/CA.sh	2006-04-26 01:51:03.408515560 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # CA - wrapper around ca to make it easier to use ... basically ca requires
+ #      some setup stuff to be done before you can use it and this makes
+diff -urN openssl-0.9.7g/apps/Makefile openssl-0.9.7g-STEP/apps/Makefile
+--- openssl-0.9.7g/apps/Makefile	2005-03-13 01:15:19.000000000 +1300
++++ openssl-0.9.7g-STEP/apps/Makefile	2006-04-26 03:29:51.308337808 +1200
+@@ -151,7 +151,7 @@
+ 	  set -x; LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
+ 	  $(CC) -o $(EXE) $(CFLAGS) $(PROGRAM).o $(E_OBJ) $(PEX_LIBS) $(LIBSSL) $(LIBKRB5) $(LIBCRYPTO) $(EX_LIBS) ; \
+ 	fi
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 		TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(EXE); \
+ 	fi
+ 	-(cd ..; \
+diff -urN openssl-0.9.7g/apps/progs.pl openssl-0.9.7g-STEP/apps/progs.pl
+--- openssl-0.9.7g/apps/progs.pl	2001-09-11 05:18:56.000000000 +1200
++++ openssl-0.9.7g-STEP/apps/progs.pl	2006-04-26 01:51:45.161168192 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ print "/* apps/progs.h */\n";
+ print "/* automatically generated by progs.pl for openssl.c */\n\n";
+diff -urN openssl-0.9.7g/config openssl-0.9.7g-STEP/config
+--- openssl-0.9.7g/config	2005-04-08 08:26:10.000000000 +1200
++++ openssl-0.9.7g-STEP/config	2006-04-26 01:50:14.800905040 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # OpenSSL config: determine the operating system and run ./Configure
+ #
+@@ -48,17 +48,17 @@
+ 
+ # First get uname entries that we use below
+ 
+-MACHINE=`(uname -m) 2>/dev/null` || MACHINE="unknown"
+-RELEASE=`(uname -r) 2>/dev/null` || RELEASE="unknown"
+-SYSTEM=`(uname -s) 2>/dev/null`  || SYSTEM="unknown"
+-VERSION=`(uname -v) 2>/dev/null` || VERSION="unknown"
++MACHINE=`(uname -m) 2>/System/Devices/null` || MACHINE="unknown"
++RELEASE=`(uname -r) 2>/System/Devices/null` || RELEASE="unknown"
++SYSTEM=`(uname -s) 2>/System/Devices/null`  || SYSTEM="unknown"
++VERSION=`(uname -v) 2>/System/Devices/null` || VERSION="unknown"
+ 
+ 
+ # Now test for ISC and SCO, since it is has a braindamaged uname.
+ #
+ # We need to work around FreeBSD 1.1.5.1 
+ (
+-XREL=`uname -X 2>/dev/null | grep "^Release" | awk '{print $3}'`
++XREL=`uname -X 2>/System/Devices/null | grep "^Release" | awk '{print $3}'`
+ if [ "x$XREL" != "x" ]; then
+     if [ -f /etc/kconfig ]; then
+ 	case "$XREL" in
+@@ -176,7 +176,7 @@
+ 	;;
+ 
+     BSD/386:*:*:*486*|BSD/OS:*:*:*:*486*)
+-        case `/sbin/sysctl -n hw.model` in
++        case `/System/AdminTools/sysctl -n hw.model` in
+ 	    Pentium*)
+                 echo "i586-whatever-bsdi"; exit 0
+                 ;;
+@@ -212,7 +212,7 @@
+ 	;;
+ 
+     NetBSD:*:*:*386*)
+-        echo "`(/usr/sbin/sysctl -n hw.model || /sbin/sysctl -n hw.model) | sed 's,.*\(.\)86-class.*,i\186,'`-whatever-netbsd"; exit 0
++        echo "`(/System/AdminTools/sysctl -n hw.model || /System/AdminTools/sysctl -n hw.model) | sed 's,.*\(.\)86-class.*,i\186,'`-whatever-netbsd"; exit 0
+ 	;;
+ 
+     NetBSD:*)
+@@ -379,7 +379,7 @@
+ fi
+ 
+ # Now NeXT
+-ISNEXT=`hostinfo 2>/dev/null`
++ISNEXT=`hostinfo 2>/System/Devices/null`
+ case "$ISNEXT" in
+     *'NeXT Mach 3.3'*)
+ 	echo "whatever-next-nextstep3.3"; exit 0
+@@ -394,7 +394,7 @@
+ 
+ echo "${MACHINE}-whatever-${SYSTEM}" 
+ exit 0
+-) 2>/dev/null | (
++) 2>/System/Devices/null | (
+ 
+ # ---------------------------------------------------------------------------
+ # this is where the translation occurs into SSLeay terms
+@@ -402,7 +402,7 @@
+ 
+ # figure out if gcc is available and if so we use it otherwise
+ # we fallback to whatever cc does on the system
+-GCCVER=`(gcc -dumpversion) 2>/dev/null`
++GCCVER=`(gcc -dumpversion) 2>/System/Devices/null`
+ if [ "$GCCVER" != "" ]; then
+   CC=gcc
+   # then strip off whatever prefix egcs prepends the number with...
+@@ -423,7 +423,7 @@
+   if [ $GCCVER -ge 30 ]; then
+     # PA64 support only came in with gcc 3.0.x.
+     # We check if the preprocessor symbol __LP64__ is defined...
+-    if echo "__LP64__" | gcc -v -E -x c - 2>/dev/null | grep "^__LP64__" 2>&1 > /dev/null; then
++    if echo "__LP64__" | gcc -v -E -x c - 2>/System/Devices/null | grep "^__LP64__" 2>&1 > /System/Devices/null; then
+       : # __LP64__ has slipped through, it therefore is not defined
+     else
+       GCC_BITS="64"
+@@ -434,14 +434,14 @@
+   if [ $GCCVER -ge 30 ]; then
+     # 64-bit ABI isn't officially supported in gcc 3.0, but it appears
+     # to be working, at the very least 'make test' passes...
+-    if gcc -v -E -x c /dev/null 2>&1 | grep __arch64__ > /dev/null; then
++    if gcc -v -E -x c /System/Devices/null 2>&1 | grep __arch64__ > /System/Devices/null; then
+       GCC_ARCH="-m64"
+     else
+       GCC_ARCH="-m32"
+     fi
+   fi
+   # check for WorkShop C, expected output is "cc: blah-blah C x.x"
+-  CCVER=`(cc -V 2>&1) 2>/dev/null | \
++  CCVER=`(cc -V 2>&1) 2>/System/Devices/null | \
+   	egrep -e '^cc: .* C [0-9]\.[0-9]' | \
+ 	sed 's/.* C \([0-9]\)\.\([0-9]\).*/\1\2/'`
+   CCVER=${CCVER:-0}
+@@ -459,7 +459,7 @@
+ 
+ if [ "${SYSTEM}-${MACHINE}" = "Linux-alpha" ]; then
+   # check for Compaq C, expected output is "blah-blah C Vx.x"
+-  CCCVER=`(ccc -V 2>&1) 2>/dev/null | \
++  CCCVER=`(ccc -V 2>&1) 2>/System/Devices/null | \
+ 	egrep -e '.* C V[0-9]\.[0-9]' | \
+ 	sed 's/.* C V\([0-9]\)\.\([0-9]\).*/\1\2/'`
+   CCCVER=${CCCVER:-0}
+@@ -471,7 +471,7 @@
+ fi
+ 
+ if [ "${SYSTEM}" = "AIX" ]; then	# favor vendor cc over gcc
+-    (cc) 2>&1 | grep -iv "not found" > /dev/null && CC=cc
++    (cc) 2>&1 | grep -iv "not found" > /System/Devices/null && CC=cc
+ fi
+ 
+ CCVER=${CCVER:-0}
+@@ -486,7 +486,7 @@
+ # more time that I want to waste at the moment
+ case "$GUESSOS" in
+   mips2-sgi-irix)
+-	CPU=`(hinv -t cpu) 2>/dev/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
++	CPU=`(hinv -t cpu) 2>/System/Devices/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
+ 	CPU=${CPU:-0}
+ 	if [ $CPU -ge 4000 ]; then
+ 		options="$options -mips2"
+@@ -494,7 +494,7 @@
+ 	OUT="irix-$CC"
+ 	;;
+   mips3-sgi-irix)
+-	#CPU=`(hinv -t cpu) 2>/dev/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
++	#CPU=`(hinv -t cpu) 2>/System/Devices/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
+ 	#CPU=${CPU:-0}
+ 	#if [ $CPU -ge 5000 ]; then
+ 	#	options="$options -mips4"
+@@ -510,7 +510,7 @@
+ 	  echo "         You have about 5 seconds to press Ctrl-C to abort."
+ 	  (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
+ 	fi
+-        #CPU=`(hinv -t cpu) 2>/dev/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
++        #CPU=`(hinv -t cpu) 2>/System/Devices/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
+         #CPU=${CPU:-0}
+         #if [ $CPU -ge 5000 ]; then
+         #        options="$options -mips4"
+@@ -520,7 +520,7 @@
+ 	OUT="irix-mips3-$CC"
+ 	;;
+   alpha-*-linux2)
+-        ISA=`awk '/cpu model/{print$4}' /proc/cpuinfo`
++        ISA=`awk '/cpu model/{print$4}' /System/Processes/cpuinfo`
+ 	case ${ISA:-generic} in
+ 	*[67])	OUT="linux-alpha+bwx-$CC" ;;
+ 	*)	OUT="linux-alpha-$CC" ;;
+@@ -574,7 +574,7 @@
+ 	fi
+ 	OUT="linux-sparcv9" ;;
+   sparc-*-linux2)
+-	KARCH=`awk '/^type/{print$3}' /proc/cpuinfo`
++	KARCH=`awk '/^type/{print$3}' /System/Processes/cpuinfo`
+ 	case ${KARCH:-sun4} in
+ 	sun4u*)	OUT="linux-sparcv9" ;;
+ 	sun4m)	OUT="linux-sparcv8" ;;
+@@ -582,8 +582,8 @@
+ 	*)	OUT="linux-sparcv7" ;;
+ 	esac ;;
+   parisc-*-linux2)
+-        CPUARCH=`awk '/cpu family/{print substr($5,1,3)}' /proc/cpuinfo`
+-	CPUSCHEDULE=`awk '/^cpu.[ 	]: PA/{print substr($3,3)}' /proc/cpuinfo`
++        CPUARCH=`awk '/cpu family/{print substr($5,1,3)}' /System/Processes/cpuinfo`
++	CPUSCHEDULE=`awk '/^cpu.[ 	]: PA/{print substr($3,3)}' /System/Processes/cpuinfo`
+ 
+ 	# ??TODO ??  Model transformations
+ 	# 0. CPU Architecture for the 1.1 processor has letter suffixes. We strip that off
+@@ -609,20 +609,20 @@
+   x86_64-*-linux?) OUT="linux-x86_64" ;;
+   *-*-linux2) OUT="linux-elf"
+ 	if [ "$GCCVER" -gt 28 ]; then
+-          if grep '^model.*Pentium' /proc/cpuinfo >/dev/null ; then
++          if grep '^model.*Pentium' /System/Processes/cpuinfo >/System/Devices/null ; then
+             OUT="linux-pentium"
+           fi
+-          if grep '^model.*Pentium Pro' /proc/cpuinfo >/dev/null ; then
++          if grep '^model.*Pentium Pro' /System/Processes/cpuinfo >/System/Devices/null ; then
+             OUT="linux-ppro"
+           fi
+-          if grep '^model.*K6' /proc/cpuinfo >/dev/null ; then
++          if grep '^model.*K6' /System/Processes/cpuinfo >/System/Devices/null ; then
+             OUT="linux-k6"
+           fi
+         fi ;;
+   *-*-linux1) OUT="linux-aout" ;;
+   sun4u*-*-solaris2)
+ 	OUT="solaris-sparcv9-$CC"
+-	ISA64=`(isalist) 2>/dev/null | grep sparcv9`
++	ISA64=`(isalist) 2>/System/Devices/null | grep sparcv9`
+ 	if [ "$ISA64" != "" ]; then
+ 	    if [ "$CC" = "cc" -a $CCVER -ge 50 ]; then
+ 		echo "WARNING! If you wish to build 64-bit library, then you have to"
+@@ -658,7 +658,7 @@
+   sun4d-*-solaris2)	OUT="solaris-sparcv8-$CC" ;;
+   sun4*-*-solaris2)	OUT="solaris-sparcv7-$CC" ;;
+   *86*-*-solaris2)
+-	ISA64=`(isalist) 2>/dev/null | grep amd64`
++	ISA64=`(isalist) 2>/System/Devices/null | grep amd64`
+ 	if [ "$ISA64" != "" ]; then
+ 	    OUT="solaris64-x86_64-$CC"
+ 	else
+@@ -723,9 +723,9 @@
+ 	else
+ 	  OUT="hpux-parisc-$CC"
+ 	fi
+-	KERNEL_BITS=`(getconf KERNEL_BITS) 2>/dev/null`
++	KERNEL_BITS=`(getconf KERNEL_BITS) 2>/System/Devices/null`
+ 	KERNEL_BITS=${KERNEL_BITS:-32}
+-	CPU_VERSION=`(getconf CPU_VERSION) 2>/dev/null`
++	CPU_VERSION=`(getconf CPU_VERSION) 2>/System/Devices/null`
+ 	CPU_VERSION=${CPU_VERSION:-0}
+ 	# See <sys/unistd.h> for further info on CPU_VERSION.
+ 	if   [ $CPU_VERSION -ge 768 ]; then	# IA-64 CPU
+@@ -759,7 +759,7 @@
+ 	options="$options -D_REENTRANT" ;;
+   *-hpux)	OUT="hpux-parisc-$CC" ;;
+   *-aix)
+-	KERNEL_BITS=`(getconf KERNEL_BITMODE) 2>/dev/null`
++	KERNEL_BITS=`(getconf KERNEL_BITMODE) 2>/System/Devices/null`
+ 	KERNEL_BITS=${KERNEL_BITS:-32}
+ 	OBJECT_MODE=${OBJECT_MODE:-32}
+ 	if [ "$CC" = "gcc" ]; then
+@@ -883,14 +883,14 @@
+ # compiler for the platform ... in which case we add it on
+ # the end ... otherwise we leave it off
+ 
+-$PERL ./Configure LIST | grep "$OUT-$CC" > /dev/null
++$PERL ./Configure LIST | grep "$OUT-$CC" > /System/Devices/null
+ if [ $? = "0" ]; then
+   OUT="$OUT-$CC"
+ fi
+ 
+ OUT="$PREFIX$OUT"
+ 
+-$PERL ./Configure LIST | grep "$OUT" > /dev/null
++$PERL ./Configure LIST | grep "$OUT" > /System/Devices/null
+ if [ $? = "0" ]; then
+   echo Configuring for $OUT
+ 
+diff -urN openssl-0.9.7g/crypto/Makefile openssl-0.9.7g-STEP/crypto/Makefile
+--- openssl-0.9.7g/crypto/Makefile	2005-03-15 22:46:14.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/Makefile	2006-04-26 01:52:43.151352344 +1200
+@@ -95,7 +95,7 @@
+ 
+ shared: buildinf.h lib subdirs
+ 	@if [ -n "$(SHARED_LIBS)" ]; then \
+-		egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null || \
++		egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null || \
+ 		(cd ..; $(MAKE) $(SHARED_LIB)); \
+ 	fi
+ 
+diff -urN openssl-0.9.7g/crypto/asn1/charmap.pl openssl-0.9.7g-STEP/crypto/asn1/charmap.pl
+--- openssl-0.9.7g/crypto/asn1/charmap.pl	2000-07-28 13:58:11.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/asn1/charmap.pl	2006-04-26 01:53:28.325484832 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl -w
++#!/usr/local/System/Tools/perl -w
+ 
+ use strict;
+ 
+diff -urN openssl-0.9.7g/crypto/bf/asm/bf-586.pl openssl-0.9.7g-STEP/crypto/bf/asm/bf-586.pl
+--- openssl-0.9.7g/crypto/bf/asm/bf-586.pl	1999-04-01 00:38:22.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/bf/asm/bf-586.pl	2006-04-26 01:54:14.768424432 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ push(@INC,"perlasm","../../perlasm");
+ require "x86asm.pl";
+diff -urN openssl-0.9.7g/crypto/bf/asm/bf-686.pl openssl-0.9.7g-STEP/crypto/bf/asm/bf-686.pl
+--- openssl-0.9.7g/crypto/bf/asm/bf-686.pl	1999-06-02 10:47:40.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/bf/asm/bf-686.pl	2006-04-26 01:54:14.770424128 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ push(@INC,"perlasm","../../perlasm");
+ require "x86asm.pl";
+diff -urN openssl-0.9.7g/crypto/bio/bss_file.c openssl-0.9.7g-STEP/crypto/bio/bss_file.c
+--- openssl-0.9.7g/crypto/bio/bss_file.c	2004-12-28 10:26:10.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bio/bss_file.c	2006-04-26 01:54:30.962962488 +1200
+@@ -222,7 +222,7 @@
+ 			_setmode(fd,_O_BINARY);
+ #elif defined(OPENSSL_SYS_MSDOS)
+ 		int fd = fileno((FILE*)ptr);
+-		/* Set correct text/binary mode */
++		/* Set correct text/System/Toolsary mode */
+ 		if (num & BIO_FP_TEXT)
+ 			_setmode(fd,_O_TEXT);
+ 		/* Dangerous to set stdin/stdout to raw (unless redirected) */
+diff -urN openssl-0.9.7g/crypto/bn/Makefile openssl-0.9.7g-STEP/crypto/bn/Makefile
+--- openssl-0.9.7g/crypto/bn/Makefile	2005-04-04 07:16:58.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/bn/Makefile	2006-04-26 01:55:06.418572416 +1200
+@@ -96,14 +96,14 @@
+ asm/sparcv8plus.o: asm/sparcv8plus.S
+ 
+ # Old GNU assembler doesn't understand V9 instructions, so we
+-# hire /usr/ccs/bin/as to do the job. Note that option is called
++# hire /usr/ccs/System/Tools/as to do the job. Note that option is called
+ # *-gcc27, but even gcc 2>=8 users may experience similar problem
+ # if they didn't bother to upgrade GNU assembler. Such users should
+ # not choose this option, but be adviced to *remove* GNU assembler
+ # or upgrade it.
+ asm/sparcv8plus-gcc27.o: asm/sparcv8plus.S
+ 	$(CC) $(ASFLAGS) -E asm/sparcv8plus.S | \
+-		/usr/ccs/bin/as -xarch=v8plus - -o asm/sparcv8plus-gcc27.o
++		/usr/ccs/System/Tools/as -xarch=v8plus - -o asm/sparcv8plus-gcc27.o
+ 
+ 
+ asm/ia64.o:	asm/ia64.S
+@@ -113,15 +113,15 @@
+ # but it's too compiler driver/ABI dependent to cover with a single
+ # rule...	<appro@fy.chalmers.se>
+ asm/ia64-cpp.o:	asm/ia64.S
+-	$(CC) $(ASFLAGS) -E asm/ia64.S > /tmp/ia64.$$$$.s &&	\
+-	$(CC) $(ASFLAGS) -c -o asm/ia64-cpp.o /tmp/ia64.$$$$.s;	\
+-	rm -f /tmp/ia64.$$$$.s
++	$(CC) $(ASFLAGS) -E asm/ia64.S > /System/TemporaryFiles/ia64.$$$$.s &&	\
++	$(CC) $(ASFLAGS) -c -o asm/ia64-cpp.o /System/TemporaryFiles/ia64.$$$$.s;	\
++	rm -f /System/TemporaryFiles/ia64.$$$$.s
+ 
+ asm/x86_64-gcc.o: asm/x86_64-gcc.c
+ 	$(CC) $(ASFLAGS) -c -o $@ $<
+ 
+ asm/pa-risc2W.o: asm/pa-risc2W.s
+-	/usr/ccs/bin/as -o asm/pa-risc2W.o asm/pa-risc2W.s
++	/usr/ccs/System/Tools/as -o asm/pa-risc2W.o asm/pa-risc2W.s
+ 
+ asm/linux_ppc32.s: asm/ppc.pl;	$(PERL) $< $@
+ asm/linux_ppc64.s: asm/ppc.pl;	$(PERL) $< $@
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/add.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/add.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/add.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/add.pl	2006-04-26 01:56:07.447294640 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_add_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/div.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/div.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/div.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/div.pl	2006-04-26 01:56:07.448294488 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ sub bn_div_words
+ 	{
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/mul.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/mul.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul.pl	2006-04-26 01:56:07.458292968 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_mul_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/mul_add.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_add.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/mul_add.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_add.pl	2006-04-26 01:56:07.450294184 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_mul_add_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/mul_c4.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_c4.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/mul_c4.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_c4.pl	2006-04-26 01:56:07.452293880 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ # upto
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/mul_c4.works.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_c4.works.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/mul_c4.works.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_c4.works.pl	2006-04-26 01:56:07.453293728 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub mul_add_c
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/mul_c8.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_c8.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/mul_c8.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/mul_c8.pl	2006-04-26 01:56:07.456293272 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_mul_comba8
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/sqr.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sqr.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/sqr.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sqr.pl	2006-04-26 01:56:07.462292360 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_sqr_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/sqr_c4.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sqr_c4.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/sqr_c4.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sqr_c4.pl	2006-04-26 01:56:07.459292816 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub sqr_add_c
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/sqr_c8.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sqr_c8.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/sqr_c8.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sqr_c8.pl	2006-04-26 01:56:07.461292512 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_sqr_comba8
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha/sub.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sub.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha/sub.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha/sub.pl	2006-04-26 01:56:07.463292208 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember
+ 
+ sub bn_sub_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/add.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/add.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/add.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/add.pl	2006-04-26 01:56:07.464292056 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_add_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/div.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/div.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/div.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/div.pl	2006-04-26 01:56:07.467291600 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ sub bn_div64
+ 	{
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/mul.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/mul.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul.pl	2006-04-26 01:56:14.929157224 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_mul_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_add.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_add.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_add.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_add.pl	2006-04-26 01:56:07.468291448 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_mul_add_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_c4.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_c4.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_c4.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_c4.pl	2006-04-26 01:56:14.924157984 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub mul_add_c
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_c4.works.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_c4.works.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_c4.works.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_c4.works.pl	2006-04-26 01:56:14.925157832 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub mul_add_c
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_c8.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_c8.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/mul_c8.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/mul_c8.pl	2006-04-26 01:56:14.927157528 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_mul_comba8
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/sqr.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sqr.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/sqr.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sqr.pl	2006-04-26 01:56:14.933156616 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_sqr_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/sqr_c4.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sqr_c4.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/sqr_c4.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sqr_c4.pl	2006-04-26 01:56:14.930157072 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub sqr_add_c
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/sqr_c8.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sqr_c8.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/sqr_c8.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sqr_c8.pl	2006-04-26 01:56:14.932156768 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember 
+ 
+ sub bn_sqr_comba8
+diff -urN openssl-0.9.7g/crypto/bn/asm/alpha.works/sub.pl openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sub.pl
+--- openssl-0.9.7g/crypto/bn/asm/alpha.works/sub.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/alpha.works/sub.pl	2006-04-26 01:56:14.935156312 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # alpha assember
+ 
+ sub bn_sub_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/bn-586.pl openssl-0.9.7g-STEP/crypto/bn/asm/bn-586.pl
+--- openssl-0.9.7g/crypto/bn/asm/bn-586.pl	2003-11-22 23:42:33.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/bn-586.pl	2006-04-26 01:55:18.758696432 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ push(@INC,"perlasm","../../perlasm");
+ require "x86asm.pl";
+diff -urN openssl-0.9.7g/crypto/bn/asm/bn-alpha.pl openssl-0.9.7g-STEP/crypto/bn/asm/bn-alpha.pl
+--- openssl-0.9.7g/crypto/bn/asm/bn-alpha.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/bn-alpha.pl	2006-04-26 01:55:18.764695520 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # I have this in perl so I can use more usefull register names and then convert
+ # them into alpha registers.
+ #
+diff -urN openssl-0.9.7g/crypto/bn/asm/ca.pl openssl-0.9.7g-STEP/crypto/bn/asm/ca.pl
+--- openssl-0.9.7g/crypto/bn/asm/ca.pl	1999-02-13 08:05:09.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/ca.pl	2006-04-26 01:55:18.764695520 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # I have this in perl so I can use more usefull register names and then convert
+ # them into alpha registers.
+ #
+diff -urN openssl-0.9.7g/crypto/bn/asm/co-586.pl openssl-0.9.7g-STEP/crypto/bn/asm/co-586.pl
+--- openssl-0.9.7g/crypto/bn/asm/co-586.pl	1999-02-13 08:05:09.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/co-586.pl	2006-04-26 01:55:18.768694912 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ push(@INC,"perlasm","../../perlasm");
+ require "x86asm.pl";
+diff -urN openssl-0.9.7g/crypto/bn/asm/co-alpha.pl openssl-0.9.7g-STEP/crypto/bn/asm/co-alpha.pl
+--- openssl-0.9.7g/crypto/bn/asm/co-alpha.pl	1999-02-13 08:05:09.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/co-alpha.pl	2006-04-26 01:55:18.769694760 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # I have this in perl so I can use more usefull register names and then convert
+ # them into alpha registers.
+ #
+diff -urN openssl-0.9.7g/crypto/bn/asm/mips3.s openssl-0.9.7g-STEP/crypto/bn/asm/mips3.s
+--- openssl-0.9.7g/crypto/bn/asm/mips3.s	2001-06-23 07:17:42.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/bn/asm/mips3.s	2006-04-26 01:55:25.823622400 +1200
+@@ -30,7 +30,7 @@
+  * compiler driver (either as or cc) and therefore (probably?) can't be
+  * compiled by the GNU assembler. GNU C driver manages fine though...
+  * I mean as long as -mmips-as is specified or is the default option,
+- * because then it simply invokes /usr/bin/as which in turn takes
++ * because then it simply invokes /System/Tools/as which in turn takes
+  * perfect care of the preprocessor definitions. Another neat feature
+  * offered by the MIPSpro assembler is an optimization pass. This gave
+  * me the opportunity to have the code looking more regular as all those
+diff -urN openssl-0.9.7g/crypto/bn/asm/pa-risc2.s openssl-0.9.7g-STEP/crypto/bn/asm/pa-risc2.s
+--- openssl-0.9.7g/crypto/bn/asm/pa-risc2.s	2003-01-03 23:50:38.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/pa-risc2.s	2006-04-26 01:55:32.452614640 +1200
+@@ -10,7 +10,7 @@
+ ; This code is approximately 2x faster than the C version
+ ; for RSA/DSA.
+ ;
+-; See http://devresource.hp.com/  for more details on the PA-RISC
++; See http://System/Devicesresource.hp.com/  for more details on the PA-RISC
+ ; architecture.  Also see the book "PA-RISC 2.0 Architecture"
+ ; by Gerry Kane for information on the instruction set architecture.
+ ;
+diff -urN openssl-0.9.7g/crypto/bn/asm/pa-risc2W.s openssl-0.9.7g-STEP/crypto/bn/asm/pa-risc2W.s
+--- openssl-0.9.7g/crypto/bn/asm/pa-risc2W.s	2000-09-28 01:54:27.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/bn/asm/pa-risc2W.s	2006-04-26 01:55:39.141597760 +1200
+@@ -4,7 +4,7 @@
+ ; This code is approximately 2x faster than the C version
+ ; for RSA/DSA.
+ ;
+-; See http://devresource.hp.com/  for more details on the PA-RISC
++; See http://System/Devicesresource.hp.com/  for more details on the PA-RISC
+ ; architecture.  Also see the book "PA-RISC 2.0 Architecture"
+ ; by Gerry Kane for information on the instruction set architecture.
+ ;
+diff -urN openssl-0.9.7g/crypto/bn/asm/ppc.pl openssl-0.9.7g-STEP/crypto/bn/asm/ppc.pl
+--- openssl-0.9.7g/crypto/bn/asm/ppc.pl	2004-12-21 02:15:51.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/ppc.pl	2006-04-26 01:55:45.905569480 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/System/Tools/env perl
+ #
+ # Implemented as a Perl wrapper as we want to support several different
+ # architectures with single file. We pick up the target based on the
+diff -urN openssl-0.9.7g/crypto/bn/asm/sparcv8plus.S openssl-0.9.7g-STEP/crypto/bn/asm/sparcv8plus.S
+--- openssl-0.9.7g/crypto/bn/asm/sparcv8plus.S	1999-07-26 00:34:30.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/bn/asm/sparcv8plus.S	2006-04-26 01:55:45.932565376 +1200
+@@ -31,7 +31,7 @@
+  *
+  *    or if above fails (it does if you have gas installed):
+  *
+- *	gcc -E bn_asm.sparc.v8plus.S | as -xarch=v8plus /dev/fd/0 -o bn_asm.o
++ *	gcc -E bn_asm.sparc.v8plus.S | as -xarch=v8plus /System/Devices/fd/0 -o bn_asm.o
+  *
+  *    Quick-n-dirty way to fuse the module into the library.
+  *    Provided that the library is already configured and built
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/add.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86/add.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86/add.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/add.pl	2006-04-26 01:56:14.936156160 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+ sub bn_add_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/comba.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86/comba.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86/comba.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/comba.pl	2006-04-26 01:56:14.939155704 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+ sub mul_add_c
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/div.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86/div.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86/div.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/div.pl	2006-04-26 01:56:14.940155552 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+ sub bn_div_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/f openssl-0.9.7g-STEP/crypto/bn/asm/x86/f
+--- openssl-0.9.7g/crypto/bn/asm/x86/f	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/f	2006-04-26 01:56:14.940155552 +1200
+@@ -1,3 +1,3 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/mul.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86/mul.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86/mul.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/mul.pl	2006-04-26 01:56:14.942155248 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+ sub bn_mul_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/mul_add.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86/mul_add.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86/mul_add.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/mul_add.pl	2006-04-26 01:56:14.941155400 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+ sub bn_mul_add_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/sqr.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86/sqr.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86/sqr.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/sqr.pl	2006-04-26 01:56:14.943155096 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+ sub bn_sqr_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86/sub.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86/sub.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86/sub.pl	1998-12-21 23:59:05.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86/sub.pl	2006-04-26 01:56:14.944154944 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # x86 assember
+ 
+ sub bn_sub_words
+diff -urN openssl-0.9.7g/crypto/bn/asm/x86.pl openssl-0.9.7g-STEP/crypto/bn/asm/x86.pl
+--- openssl-0.9.7g/crypto/bn/asm/x86.pl	1999-02-13 08:05:10.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/asm/x86.pl	2006-04-26 01:56:07.445294944 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ push(@INC,"perlasm","../../perlasm");
+ require "x86asm.pl";
+diff -urN openssl-0.9.7g/crypto/bn/bn_prime.pl openssl-0.9.7g-STEP/crypto/bn/bn_prime.pl
+--- openssl-0.9.7g/crypto/bn/bn_prime.pl	2000-02-17 02:24:06.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/bn/bn_prime.pl	2006-04-26 01:54:53.972464512 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # bn_prime.pl
+ 
+ $num=2048;
+diff -urN openssl-0.9.7g/crypto/cast/asm/cast-586.pl openssl-0.9.7g-STEP/crypto/cast/asm/cast-586.pl
+--- openssl-0.9.7g/crypto/cast/asm/cast-586.pl	1999-04-01 00:38:24.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/cast/asm/cast-586.pl	2006-04-26 01:56:29.650919176 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # define for pentium pro friendly version
+ $ppro=1;
+diff -urN openssl-0.9.7g/crypto/conf/keysets.pl openssl-0.9.7g-STEP/crypto/conf/keysets.pl
+--- openssl-0.9.7g/crypto/conf/keysets.pl	2002-01-03 00:06:02.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/conf/keysets.pl	2006-04-26 01:56:40.775228024 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ $NUMBER=0x01;
+ $UPPER=0x02;
+diff -urN openssl-0.9.7g/crypto/conf/ssleay.cnf openssl-0.9.7g-STEP/crypto/conf/ssleay.cnf
+--- openssl-0.9.7g/crypto/conf/ssleay.cnf	1998-12-21 23:52:29.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/conf/ssleay.cnf	2006-04-26 01:56:40.780227264 +1200
+@@ -28,7 +28,7 @@
+ [ default ]
+ cert_dir	= $ENV::HOME/.ca_certs
+ 
+-HOME		= /tmp/eay
++HOME		= /System/TemporaryFiles/eay
+ 
+ tmp_cert_dir	= $HOME/.ca_certs
+ tmp2_cert_dir	= thisis$(HOME)stuff
+diff -urN openssl-0.9.7g/crypto/des/INSTALL openssl-0.9.7g-STEP/crypto/des/INSTALL
+--- openssl-0.9.7g/crypto/des/INSTALL	1998-12-21 23:54:58.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/des/INSTALL	2006-04-26 01:57:10.142763480 +1200
+@@ -40,7 +40,7 @@
+ 
+ A make install will by default install
+ libdes.a      in /usr/local/lib/libdes.a
+-des           in /usr/local/bin/des
++des           in /usr/local/System/Tools/des
+ des_crypt.man in /usr/local/man/man3/des_crypt.3
+ des.man       in /usr/local/man/man1/des.1
+ des.h         in /usr/include/des.h
+diff -urN openssl-0.9.7g/crypto/des/KERBEROS openssl-0.9.7g-STEP/crypto/des/KERBEROS
+--- openssl-0.9.7g/crypto/des/KERBEROS	1998-12-21 23:52:29.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/des/KERBEROS	2006-04-26 01:57:10.143763328 +1200
+@@ -26,16 +26,16 @@
+ *** 98,104 ****
+        if (!rename(o_file, z_file)) {
+   	  if (!vfork()) {
+-  	       chdir("/tmp");
+-! 	       execl("/bin/ld", "ld", "-o", o_file+5, "-s", "-r", "-n",
++  	       chdir("/System/TemporaryFiles");
++! 	       execl("/System/Tools/ld", "ld", "-o", o_file+5, "-s", "-r", "-n",
+   		     z_file+5, 0);
+-  	       perror("/bin/ld");
++  	       perror("/System/Tools/ld");
+   	       _exit(1);
+ --- 98,104 ----
+        if (!rename(o_file, z_file)) {
+   	  if (!vfork()) {
+-  	       chdir("/tmp");
+-! 	       execl("/bin/ld", "ld", "-o", o_file+5, "-s", "-r",
++  	       chdir("/System/TemporaryFiles");
++! 	       execl("/System/Tools/ld", "ld", "-o", o_file+5, "-s", "-r",
+   		     z_file+5, 0);
+-  	       perror("/bin/ld");
++  	       perror("/System/Tools/ld");
+   	       _exit(1);
+diff -urN openssl-0.9.7g/crypto/des/asm/crypt586.pl openssl-0.9.7g-STEP/crypto/des/asm/crypt586.pl
+--- openssl-0.9.7g/crypto/des/asm/crypt586.pl	2003-01-13 11:40:09.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/des/asm/crypt586.pl	2006-04-26 01:57:28.521969416 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # The inner loop instruction sequence and the IP/FP modifications are from
+ # Svend Olaf Mikkelsen <svolaf@inet.uni-c.dk>
+diff -urN openssl-0.9.7g/crypto/des/asm/des-586.pl openssl-0.9.7g-STEP/crypto/des/asm/des-586.pl
+--- openssl-0.9.7g/crypto/des/asm/des-586.pl	2003-01-13 11:40:09.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/des/asm/des-586.pl	2006-04-26 01:57:28.523969112 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # The inner loop instruction sequence and the IP/FP modifications are from
+ # Svend Olaf Mikkelsen <svolaf@inet.uni-c.dk>
+diff -urN openssl-0.9.7g/crypto/des/asm/des686.pl openssl-0.9.7g-STEP/crypto/des/asm/des686.pl
+--- openssl-0.9.7g/crypto/des/asm/des686.pl	2002-03-05 05:08:53.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/des/asm/des686.pl	2006-04-26 01:57:28.526968656 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ $prog="des686.pl";
+ 
+diff -urN openssl-0.9.7g/crypto/des/asm/desboth.pl openssl-0.9.7g-STEP/crypto/des/asm/desboth.pl
+--- openssl-0.9.7g/crypto/des/asm/desboth.pl	2001-10-25 10:20:56.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/des/asm/desboth.pl	2006-04-26 01:57:28.528968352 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ $L="edi";
+ $R="esi";
+diff -urN openssl-0.9.7g/crypto/des/read_pwd.c openssl-0.9.7g-STEP/crypto/des/read_pwd.c
+--- openssl-0.9.7g/crypto/des/read_pwd.c	2002-11-28 21:08:03.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/des/read_pwd.c	2006-04-26 01:57:17.591631080 +1200
+@@ -298,7 +298,7 @@
+ 	tty=stdin;
+ #else
+ #ifndef OPENSSL_SYS_MPE
+-	if ((tty=fopen("/dev/tty","r")) == NULL)
++	if ((tty=fopen("/System/Devices/tty","r")) == NULL)
+ #endif
+ 		tty=stdin;
+ #endif
+diff -urN openssl-0.9.7g/crypto/engine/hw_cryptodev.c openssl-0.9.7g-STEP/crypto/engine/hw_cryptodev.c
+--- openssl-0.9.7g/crypto/engine/hw_cryptodev.c	2004-06-15 23:46:06.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/engine/hw_cryptodev.c	2006-04-26 01:58:23.925546792 +1200
+@@ -45,7 +45,7 @@
+ void
+ ENGINE_load_cryptodev(void)
+ {
+-	/* This is a NOP on platforms without /dev/crypto */
++	/* This is a NOP on platforms without /System/Devices/crypto */
+ 	return;
+ }
+ 
+@@ -153,7 +153,7 @@
+ #endif
+ 
+ /*
+- * Return a fd if /dev/crypto seems usable, 0 otherwise.
++ * Return a fd if /System/Devices/crypto seems usable, 0 otherwise.
+  */
+ static int
+ open_dev_crypto(void)
+@@ -161,7 +161,7 @@
+ 	static int fd = -1;
+ 
+ 	if (fd == -1) {
+-		if ((fd = open("/dev/crypto", O_RDWR, 0)) == -1)
++		if ((fd = open("/System/Devices/crypto", O_RDWR, 0)) == -1)
+ 			return (-1);
+ 		/* close on exec */
+ 		if (fcntl(fd, F_SETFD, 1) == -1) {
+@@ -247,7 +247,7 @@
+ }
+ 
+ /*
+- * Find out what ciphers /dev/crypto will let us have a session for.
++ * Find out what ciphers /System/Devices/crypto will let us have a session for.
+  * XXX note, that some of these openssl doesn't deal with yet!
+  * returning them here is harmless, as long as we return NULL
+  * when asked for a handler in the cryptodev_engine_ciphers routine
+@@ -286,7 +286,7 @@
+ }
+ 
+ /*
+- * Find out what digests /dev/crypto will let us have a session for.
++ * Find out what digests /System/Devices/crypto will let us have a session for.
+  * XXX note, that some of these openssl doesn't deal with yet!
+  * returning them here is harmless, as long as we return NULL
+  * when asked for a handler in the cryptodev_engine_digests routine
+@@ -334,7 +334,7 @@
+  * which forces everything to be done is software. By putting
+  * the initalization of the device in here, we ensure we can
+  * use this engine as the default, and if for whatever reason
+- * /dev/crypto won't do what we want it will just be done in
++ * /System/Devices/crypto won't do what we want it will just be done in
+  * software
+  *
+  * This can (should) be greatly expanded to perhaps take into
+@@ -342,7 +342,7 @@
+  * (although the disabling of particular alg's could be controlled
+  * by the device driver with sysctl's.) - this is where we
+  * want most of the decisions made about what we actually want
+- * to use from /dev/crypto.
++ * to use from /System/Devices/crypto.
+  */
+ static int
+ cryptodev_usable_ciphers(const int **nids)
+@@ -619,7 +619,7 @@
+ }
+ 
+ /*
+- * Convert a BIGNUM to the representation that /dev/crypto needs.
++ * Convert a BIGNUM to the representation that /System/Devices/crypto needs.
+  * Upon completion of use, the caller is responsible for freeing
+  * crp->crp_p.
+  */
+@@ -654,7 +654,7 @@
+ 	return (0);
+ }
+ 
+-/* Convert a /dev/crypto parameter to a BIGNUM */
++/* Convert a /System/Devices/crypto parameter to a BIGNUM */
+ static int
+ crparam2bn(struct crparam *crp, BIGNUM *a)
+ {
+diff -urN openssl-0.9.7g/crypto/engine/vendor_defns/hw_ubsec.h openssl-0.9.7g-STEP/crypto/engine/vendor_defns/hw_ubsec.h
+--- openssl-0.9.7g/crypto/engine/vendor_defns/hw_ubsec.h	2001-12-13 01:53:12.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/engine/vendor_defns/hw_ubsec.h	2006-04-26 01:58:55.742709848 +1200
+@@ -24,8 +24,8 @@
+ #define SHA_BIT_SIZE  (160)
+ #define MAX_CRYPTO_KEY_LENGTH 24
+ #define MAX_MAC_KEY_LENGTH 64
+-#define UBSEC_CRYPTO_DEVICE_NAME ((unsigned char *)"/dev/ubscrypt")
+-#define UBSEC_KEY_DEVICE_NAME ((unsigned char *)"/dev/ubskey")
++#define UBSEC_CRYPTO_DEVICE_NAME ((unsigned char *)"/System/Devices/ubscrypt")
++#define UBSEC_KEY_DEVICE_NAME ((unsigned char *)"/System/Devices/ubskey")
+ 
+ /* Math command types. */
+ #define UBSEC_MATH_MODADD 0x0001
+diff -urN openssl-0.9.7g/crypto/evp/openbsd_hw.c openssl-0.9.7g-STEP/crypto/evp/openbsd_hw.c
+--- openssl-0.9.7g/crypto/evp/openbsd_hw.c	2001-09-26 09:37:02.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/evp/openbsd_hw.c	2006-04-26 01:59:44.100358368 +1200
+@@ -96,9 +96,9 @@
+ 	{
+ 	int cryptodev_fd;
+ 
+-        if ((cryptodev_fd=open("/dev/crypto",O_RDWR,0)) < 0)
++        if ((cryptodev_fd=open("/System/Devices/crypto",O_RDWR,0)) < 0)
+ 	    {
+-	    err("/dev/crypto");
++	    err("/System/Devices/crypto");
+ 	    dev_failed=1;
+ 	    return 0;
+ 	    }
+diff -urN openssl-0.9.7g/crypto/lhash/num.pl openssl-0.9.7g-STEP/crypto/lhash/num.pl
+--- openssl-0.9.7g/crypto/lhash/num.pl	1998-12-21 23:52:31.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/lhash/num.pl	2006-04-26 02:00:00.389881984 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ #node     10 ->   4
+ 
+diff -urN openssl-0.9.7g/crypto/md5/Makefile openssl-0.9.7g-STEP/crypto/md5/Makefile
+--- openssl-0.9.7g/crypto/md5/Makefile	2004-11-03 12:52:58.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/md5/Makefile	2006-04-26 02:00:07.578789104 +1200
+@@ -66,14 +66,14 @@
+ 		-o asm/md5-sparcv8plus.o asm/md5-sparcv9.S
+ 
+ # Old GNU assembler doesn't understand V9 instructions, so we
+-# hire /usr/ccs/bin/as to do the job. Note that option is called
++# hire /usr/ccs/System/Tools/as to do the job. Note that option is called
+ # *-gcc27, but even gcc 2>=8 users may experience similar problem
+ # if they didn't bother to upgrade GNU assembler. Such users should
+ # not choose this option, but be adviced to *remove* GNU assembler
+ # or upgrade it.
+ asm/md5-sparcv8plus-gcc27.o: asm/md5-sparcv9.S
+ 	$(CC) $(ASFLAGS) -DMD5_BLOCK_DATA_ORDER -E asm/md5-sparcv9.S | \
+-		/usr/ccs/bin/as -xarch=v8plus - -o asm/md5-sparcv8plus-gcc27.o
++		/usr/ccs/System/Tools/as -xarch=v8plus - -o asm/md5-sparcv8plus-gcc27.o
+ 
+ asm/md5-sparcv9.o: asm/md5-sparcv9.S
+ 	$(CC) $(ASFLAGS) -DMD5_BLOCK_DATA_ORDER -c \
+diff -urN openssl-0.9.7g/crypto/md5/asm/md5-586.pl openssl-0.9.7g-STEP/crypto/md5/asm/md5-586.pl
+--- openssl-0.9.7g/crypto/md5/asm/md5-586.pl	2003-09-28 10:14:46.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/md5/asm/md5-586.pl	2006-04-26 02:00:15.026656856 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # Normal is the
+ # md5_block_x86(MD5_CTX *c, ULONG *X);
+diff -urN openssl-0.9.7g/crypto/md5/asm/md5-sparcv9.S openssl-0.9.7g-STEP/crypto/md5/asm/md5-sparcv9.S
+--- openssl-0.9.7g/crypto/md5/asm/md5-sparcv9.S	2003-05-30 10:22:34.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/md5/asm/md5-sparcv9.S	2006-04-26 02:00:15.041654576 +1200
+@@ -35,7 +35,7 @@
+  * or if above fails (it does if you have gas):
+  *
+  *	gcc -E -DOPENSSL_SYSNAMEULTRASPARC -DMD5_BLOCK_DATA_ORDER md5_block.sparc.S | \
+- *		as -xarch=v8plus /dev/fd/0 -o md5-sparcv9.o
++ *		as -xarch=v8plus /System/Devices/fd/0 -o md5-sparcv9.o
+  */
+ 
+ #include <openssl/e_os2.h>
+diff -urN openssl-0.9.7g/crypto/objects/obj_dat.pl openssl-0.9.7g-STEP/crypto/objects/obj_dat.pl
+--- openssl-0.9.7g/crypto/objects/obj_dat.pl	2003-12-28 05:13:16.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/objects/obj_dat.pl	2006-04-26 02:00:44.647153856 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # fixes bug in floating point emulation on sparc64 when
+ # this script produces off-by-one output on sparc64
+diff -urN openssl-0.9.7g/crypto/objects/objects.pl openssl-0.9.7g-STEP/crypto/objects/objects.pl
+--- openssl-0.9.7g/crypto/objects/objects.pl	2002-04-05 05:49:39.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/objects/objects.pl	2006-04-26 02:00:52.542953512 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ open (NUMIN,"$ARGV[1]") || die "Can't open number file $ARGV[1]";
+ $max_nid=0;
+diff -urN openssl-0.9.7g/crypto/perlasm/alpha.pl openssl-0.9.7g-STEP/crypto/perlasm/alpha.pl
+--- openssl-0.9.7g/crypto/perlasm/alpha.pl	1998-12-21 23:59:40.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/perlasm/alpha.pl	2006-04-26 02:01:29.064401408 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ package alpha;
+ use Carp qw(croak cluck);
+diff -urN openssl-0.9.7g/crypto/perlasm/cbc.pl openssl-0.9.7g-STEP/crypto/perlasm/cbc.pl
+--- openssl-0.9.7g/crypto/perlasm/cbc.pl	2002-12-14 06:31:01.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/perlasm/cbc.pl	2006-04-26 02:01:29.068400800 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # void des_ncbc_encrypt(input, output, length, schedule, ivec, enc)
+ # des_cblock (*input);
+diff -urN openssl-0.9.7g/crypto/perlasm/x86asm.pl openssl-0.9.7g-STEP/crypto/perlasm/x86asm.pl
+--- openssl-0.9.7g/crypto/perlasm/x86asm.pl	2004-12-02 04:45:34.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/perlasm/x86asm.pl	2006-04-26 02:01:29.071400344 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # require 'x86asm.pl';
+ # &asm_init("cpp","des-586.pl");
+diff -urN openssl-0.9.7g/crypto/perlasm/x86ms.pl openssl-0.9.7g-STEP/crypto/perlasm/x86ms.pl
+--- openssl-0.9.7g/crypto/perlasm/x86ms.pl	2004-12-02 04:45:34.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/perlasm/x86ms.pl	2006-04-26 02:01:29.075399736 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ package x86ms;
+ 
+diff -urN openssl-0.9.7g/crypto/perlasm/x86nasm.pl openssl-0.9.7g-STEP/crypto/perlasm/x86nasm.pl
+--- openssl-0.9.7g/crypto/perlasm/x86nasm.pl	2005-03-27 07:32:31.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/perlasm/x86nasm.pl	2006-04-26 02:01:29.078399280 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ package x86nasm;
+ 
+diff -urN openssl-0.9.7g/crypto/perlasm/x86unix.pl openssl-0.9.7g-STEP/crypto/perlasm/x86unix.pl
+--- openssl-0.9.7g/crypto/perlasm/x86unix.pl	2004-12-11 00:27:09.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/perlasm/x86unix.pl	2006-04-26 02:01:34.613557808 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ package x86unix;
+ 
+diff -urN openssl-0.9.7g/crypto/rand/rand_unix.c openssl-0.9.7g-STEP/crypto/rand/rand_unix.c
+--- openssl-0.9.7g/crypto/rand/rand_unix.c	2005-01-15 05:19:47.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/rand/rand_unix.c	2006-04-26 02:02:13.387663248 +1200
+@@ -164,7 +164,7 @@
+ #ifdef DEVRANDOM
+ 	memset(randomstats,0,sizeof(randomstats));
+ 	/* Use a random entropy pool device. Linux, FreeBSD and OpenBSD
+-	 * have this. Use /dev/urandom if you can as /dev/random may block
++	 * have this. Use /System/Devices/urandom if you can as /System/Devices/random may block
+ 	 * if it runs out of random entries.  */
+ 
+ 	for (i=0; i<sizeof(randomfiles)/sizeof(randomfiles[0]) && n < ENTROPY_NEEDED; i++)
+diff -urN openssl-0.9.7g/crypto/rand/rand_win.c openssl-0.9.7g-STEP/crypto/rand/rand_win.c
+--- openssl-0.9.7g/crypto/rand/rand_win.c	2005-03-24 10:01:56.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/rand/rand_win.c	2006-04-26 02:02:13.401661120 +1200
+@@ -122,7 +122,7 @@
+ #include <tlhelp32.h>
+ 
+ /* Intel hardware RNG CSP -- available from
+- * http://developer.intel.com/design/security/rng/redist_license.htm
++ * http://System/Deviceseloper.intel.com/design/security/rng/redist_license.htm
+  */
+ #define PROV_INTEL_SEC 22
+ #define INTEL_DEF_PROV L"Intel Hardware Cryptographic Service Provider"
+@@ -439,7 +439,7 @@
+ 	 *
+ 	 * This seeding method was proposed in Peter Gutmann, Software
+ 	 * Generation of Practically Strong Random Numbers,
+-	 * http://www.usenix.org/publications/library/proceedings/sec98/gutmann.html
++	 * http://www.usenix.org/publications/library/System/Processeseedings/sec98/gutmann.html
+ 	 * revised version at http://www.cryptoengines.com/~peter/06_random.pdf
+ 	 * (The assignment of entropy estimates below is arbitrary, but based
+ 	 * on Peter's analysis the full poll appears to be safe. Additional
+diff -urN openssl-0.9.7g/crypto/rand/randfile.c openssl-0.9.7g-STEP/crypto/rand/randfile.c
+--- openssl-0.9.7g/crypto/rand/randfile.c	2004-03-26 08:01:08.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/rand/randfile.c	2006-04-26 02:02:06.045779384 +1200
+@@ -266,17 +266,17 @@
+ #ifdef __OpenBSD__
+ 	/* given that all random loads just fail if the file can't be 
+ 	 * seen on a stat, we stat the file we're returning, if it
+-	 * fails, use /dev/arandom instead. this allows the user to 
++	 * fails, use /System/Devices/arandom instead. this allows the user to 
+ 	 * use their own source for good random data, but defaults
+ 	 * to something hopefully decent if that isn't available. 
+ 	 */
+ 
+ 	if (!ok)
+-		if (BUF_strlcpy(buf,"/dev/arandom",size) >= size) {
++		if (BUF_strlcpy(buf,"/System/Devices/arandom",size) >= size) {
+ 			return(NULL);
+ 		}	
+ 	if (stat(buf,&sb) == -1)
+-		if (BUF_strlcpy(buf,"/dev/arandom",size) >= size) {
++		if (BUF_strlcpy(buf,"/System/Devices/arandom",size) >= size) {
+ 			return(NULL);
+ 		}	
+ 
+diff -urN openssl-0.9.7g/crypto/rc4/asm/rc4-586.pl openssl-0.9.7g-STEP/crypto/rc4/asm/rc4-586.pl
+--- openssl-0.9.7g/crypto/rc4/asm/rc4-586.pl	2004-12-02 04:30:50.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/rc4/asm/rc4-586.pl	2006-04-26 02:02:28.017439184 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # At some point it became apparent that the original SSLeay RC4
+ # assembler implementation performs suboptimaly on latest IA-32
+diff -urN openssl-0.9.7g/crypto/rc4/asm/rc4-amd64.pl openssl-0.9.7g-STEP/crypto/rc4/asm/rc4-amd64.pl
+--- openssl-0.9.7g/crypto/rc4/asm/rc4-amd64.pl	2004-12-01 06:53:44.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/rc4/asm/rc4-amd64.pl	2006-04-26 02:02:28.020438728 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/System/Tools/env perl
+ #
+ # ====================================================================
+ # Written by Andy Polyakov <appro@fy.chalmers.se> for the OpenSSL
+diff -urN openssl-0.9.7g/crypto/rc5/asm/rc5-586.pl openssl-0.9.7g-STEP/crypto/rc5/asm/rc5-586.pl
+--- openssl-0.9.7g/crypto/rc5/asm/rc5-586.pl	1998-12-21 23:55:45.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/rc5/asm/rc5-586.pl	2006-04-26 02:02:33.999529768 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ push(@INC,"perlasm","../../perlasm");
+ require "x86asm.pl";
+diff -urN openssl-0.9.7g/crypto/ripemd/asm/rmd-586.pl openssl-0.9.7g-STEP/crypto/ripemd/asm/rmd-586.pl
+--- openssl-0.9.7g/crypto/ripemd/asm/rmd-586.pl	1999-08-29 01:07:51.000000000 +1200
++++ openssl-0.9.7g-STEP/crypto/ripemd/asm/rmd-586.pl	2006-04-26 02:02:40.621523072 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # Normal is the
+ # ripemd160_block_asm_host_order(RIPEMD160_CTX *c, ULONG *X,int blocks);
+diff -urN openssl-0.9.7g/crypto/sha/asm/sha1-586.pl openssl-0.9.7g-STEP/crypto/sha/asm/sha1-586.pl
+--- openssl-0.9.7g/crypto/sha/asm/sha1-586.pl	2004-12-03 06:05:36.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/sha/asm/sha1-586.pl	2006-04-26 02:03:01.297379864 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # It was noted that Intel IA-32 C compiler generates code which
+ # performs ~30% *faster* on P4 CPU than original *hand-coded*
+diff -urN openssl-0.9.7g/crypto/sha/asm/sha1-ia64.pl openssl-0.9.7g-STEP/crypto/sha/asm/sha1-ia64.pl
+--- openssl-0.9.7g/crypto/sha/asm/sha1-ia64.pl	2004-12-10 09:55:52.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/sha/asm/sha1-ia64.pl	2006-04-26 02:03:01.303378952 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/System/Tools/env perl
+ #
+ # ====================================================================
+ # Written by Andy Polyakov <appro@fy.chalmers.se> for the OpenSSL
+diff -urN openssl-0.9.7g/crypto/threads/mttest.c openssl-0.9.7g-STEP/crypto/threads/mttest.c
+--- openssl-0.9.7g/crypto/threads/mttest.c	2003-12-28 05:07:18.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/threads/mttest.c	2006-04-26 02:03:15.264256576 +1200
+@@ -905,7 +905,7 @@
+ 	int i;
+ 	char filename[20];
+ 
+-	strcpy(filename,"/tmp/mttest.XXXXXX");
++	strcpy(filename,"/System/TemporaryFiles/mttest.XXXXXX");
+ 	mktemp(filename);
+ 
+ 	usconfig(CONF_STHREADIOOFF);
+diff -urN openssl-0.9.7g/crypto/threads/profile.sh openssl-0.9.7g-STEP/crypto/threads/profile.sh
+--- openssl-0.9.7g/crypto/threads/profile.sh	2000-02-26 12:18:27.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/threads/profile.sh	2006-04-26 02:03:15.264256576 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
+-/bin/rm -f mttest
++#!/System/Tools/sh
++/System/Tools/rm -f mttest
+ cc -p -DSOLARIS -I../../include -g mttest.c -o mttest -L/usr/lib/libc -ldl -L../.. -lthread  -lssl -lcrypto -lnsl -lsocket
+ 
+diff -urN openssl-0.9.7g/crypto/threads/pthread.sh openssl-0.9.7g-STEP/crypto/threads/pthread.sh
+--- openssl-0.9.7g/crypto/threads/pthread.sh	2000-02-26 12:18:26.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/threads/pthread.sh	2006-04-26 02:03:15.265256424 +1200
+@@ -1,9 +1,9 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # build using pthreads
+ #
+ # http://www.mit.edu:8001/people/proven/pthreads.html
+ #
+-/bin/rm -f mttest
++/System/Tools/rm -f mttest
+ pgcc -DPTHREADS -I../../include -g mttest.c -o mttest -L../.. -lssl -lcrypto 
+ 
+diff -urN openssl-0.9.7g/crypto/threads/pthread2.sh openssl-0.9.7g-STEP/crypto/threads/pthread2.sh
+--- openssl-0.9.7g/crypto/threads/pthread2.sh	2000-02-26 12:17:46.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/threads/pthread2.sh	2006-04-26 02:03:15.265256424 +1200
+@@ -1,7 +1,7 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # build using pthreads where it's already built into the system
+ #
+-/bin/rm -f mttest
++/System/Tools/rm -f mttest
+ gcc -DPTHREADS -I../../include -g mttest.c -o mttest -L../.. -lssl -lcrypto -lpthread
+ 
+diff -urN openssl-0.9.7g/crypto/threads/purify.sh openssl-0.9.7g-STEP/crypto/threads/purify.sh
+--- openssl-0.9.7g/crypto/threads/purify.sh	2000-02-26 12:18:26.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/threads/purify.sh	2006-04-26 02:03:22.524152904 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
+-/bin/rm -f mttest
++#!/System/Tools/sh
++/System/Tools/rm -f mttest
+ purify cc -DSOLARIS -I../../include -g mttest.c -o mttest -L../.. -lthread  -lssl -lcrypto -lnsl -lsocket
+ 
+diff -urN openssl-0.9.7g/crypto/threads/solaris.sh openssl-0.9.7g-STEP/crypto/threads/solaris.sh
+--- openssl-0.9.7g/crypto/threads/solaris.sh	2000-02-26 12:18:26.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/threads/solaris.sh	2006-04-26 02:03:22.525152752 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
+-/bin/rm -f mttest
++#!/System/Tools/sh
++/System/Tools/rm -f mttest
+ cc -DSOLARIS -I../../include -g mttest.c -o mttest -L../.. -lthread  -lssl -lcrypto -lnsl -lsocket
+ 
+diff -urN openssl-0.9.7g/crypto/threads/th-lock.c openssl-0.9.7g-STEP/crypto/threads/th-lock.c
+--- openssl-0.9.7g/crypto/threads/th-lock.c	2001-02-20 21:12:21.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/threads/th-lock.c	2006-04-26 02:03:22.533151536 +1200
+@@ -257,7 +257,7 @@
+ 	int i;
+ 	char filename[20];
+ 
+-	strcpy(filename,"/tmp/mttest.XXXXXX");
++	strcpy(filename,"/System/TemporaryFiles/mttest.XXXXXX");
+ 	mktemp(filename);
+ 
+ 	usconfig(CONF_STHREADIOOFF);
+diff -urN openssl-0.9.7g/crypto/ui/ui_openssl.c openssl-0.9.7g-STEP/crypto/ui/ui_openssl.c
+--- openssl-0.9.7g/crypto/ui/ui_openssl.c	2003-01-14 02:15:19.000000000 +1300
++++ openssl-0.9.7g-STEP/crypto/ui/ui_openssl.c	2006-04-26 02:03:29.633072184 +1200
+@@ -467,7 +467,7 @@
+ #  ifdef OPENSSL_SYS_MSDOS
+ #    define DEV_TTY "con"
+ #  else
+-#    define DEV_TTY "/dev/tty"
++#    define DEV_TTY "/System/Devices/tty"
+ #  endif
+ 	if ((tty_in=fopen(DEV_TTY,"r")) == NULL)
+ 		tty_in=stdin;
+diff -urN openssl-0.9.7g/demos/b64.pl openssl-0.9.7g-STEP/demos/b64.pl
+--- openssl-0.9.7g/demos/b64.pl	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/demos/b64.pl	2006-04-26 02:04:35.545052040 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ #
+ # Make PEM encoded data have lines of 64 bytes of data
+diff -urN openssl-0.9.7g/demos/engines/cluster_labs/Makefile openssl-0.9.7g-STEP/demos/engines/cluster_labs/Makefile
+--- openssl-0.9.7g/demos/engines/cluster_labs/Makefile	2002-08-14 00:26:27.000000000 +1200
++++ openssl-0.9.7g-STEP/demos/engines/cluster_labs/Makefile	2006-04-26 02:04:47.294265888 +1200
+@@ -73,13 +73,13 @@
+ $(SHLIB).hpux32:	$(LIB)
+ 		ALLSYMSFLAGS='-Fl' \
+ 		SHAREDFLAGS='+vnocompatwarnings -b -z +s +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux32
+ $(SHLIB).hpux64:	$(LIB)
+ 		ALLSYMSFLAGS='+forceload' \
+ 		SHAREDFLAGS='-b -z +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux64
+ $(SHLIB).aix:	$(LIB)
+diff -urN openssl-0.9.7g/demos/engines/ibmca/Makefile openssl-0.9.7g-STEP/demos/engines/ibmca/Makefile
+--- openssl-0.9.7g/demos/engines/ibmca/Makefile	2002-08-14 00:26:32.000000000 +1200
++++ openssl-0.9.7g-STEP/demos/engines/ibmca/Makefile	2006-04-26 02:04:54.443179088 +1200
+@@ -73,13 +73,13 @@
+ $(SHLIB).hpux32:	$(LIB)
+ 		ALLSYMSFLAGS='-Fl' \
+ 		SHAREDFLAGS='+vnocompatwarnings -b -z +s +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux32
+ $(SHLIB).hpux64:	$(LIB)
+ 		ALLSYMSFLAGS='+forceload' \
+ 		SHAREDFLAGS='-b -z +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux64
+ $(SHLIB).aix:	$(LIB)
+diff -urN openssl-0.9.7g/demos/engines/rsaref/Makefile openssl-0.9.7g-STEP/demos/engines/rsaref/Makefile
+--- openssl-0.9.7g/demos/engines/rsaref/Makefile	2002-11-14 03:31:01.000000000 +1300
++++ openssl-0.9.7g-STEP/demos/engines/rsaref/Makefile	2006-04-26 02:04:54.446178632 +1200
+@@ -94,13 +94,13 @@
+ $(SHLIB).hpux32:	$(LIB) install/librsaref.a
+ 		ALLSYMSFLAGS='-Fl' \
+ 		SHAREDFLAGS='+vnocompatwarnings -b -z +s +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux32
+ $(SHLIB).hpux64:	$(LIB) install/librsaref.a
+ 		ALLSYMSFLAGS='+forceload' \
+ 		SHAREDFLAGS='-b -z +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux64
+ $(SHLIB).aix:	$(LIB) install/librsaref.a
+diff -urN openssl-0.9.7g/demos/engines/zencod/Makefile openssl-0.9.7g-STEP/demos/engines/zencod/Makefile
+--- openssl-0.9.7g/demos/engines/zencod/Makefile	2002-08-14 00:26:39.000000000 +1200
++++ openssl-0.9.7g-STEP/demos/engines/zencod/Makefile	2006-04-26 02:05:05.331523808 +1200
+@@ -73,13 +73,13 @@
+ $(SHLIB).hpux32:	$(LIB)
+ 		ALLSYMSFLAGS='-Fl' \
+ 		SHAREDFLAGS='+vnocompatwarnings -b -z +s +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux32
+ $(SHLIB).hpux64:	$(LIB)
+ 		ALLSYMSFLAGS='+forceload' \
+ 		SHAREDFLAGS='-b -z +h $(SHLIB)' \
+-		SHAREDCMD='/usr/ccs/bin/ld'; \
++		SHAREDCMD='/usr/ccs/System/Tools/ld'; \
+ 		$(LINK_SO)
+ 		touch $(SHLIB).hpux64
+ $(SHLIB).aix:	$(LIB)
+diff -urN openssl-0.9.7g/demos/ssl/inetdsrv.cpp openssl-0.9.7g-STEP/demos/ssl/inetdsrv.cpp
+--- openssl-0.9.7g/demos/ssl/inetdsrv.cpp	2000-10-19 08:36:26.000000000 +1300
++++ openssl-0.9.7g-STEP/demos/ssl/inetdsrv.cpp	2006-04-26 02:05:12.445442328 +1200
+@@ -33,7 +33,7 @@
+   char     buf [4096];
+   FILE* log;
+   
+-  log = fopen ("/dev/console", "a");                     CHK_NULL(log);
++  log = fopen ("/System/Devices/console", "a");                     CHK_NULL(log);
+   fprintf (log, "inetdserv %ld\n", (long)getpid());
+   
+   SSL_load_error_strings();
+diff -urN openssl-0.9.7g/demos/tunala/README openssl-0.9.7g-STEP/demos/tunala/README
+--- openssl-0.9.7g/demos/tunala/README	2001-07-24 07:03:45.000000000 +1200
++++ openssl-0.9.7g-STEP/demos/tunala/README	2006-04-26 02:05:19.645347776 +1200
+@@ -157,7 +157,7 @@
+ 
+ This approach could hopefully also allow you to run the SSL protocol in very
+ different environments. As an example, you could support encrypted event-driven
+-IPC where threads/processes pass messages to each other inside an SSL layer;
++IPC where threads/System/Processesesses pass messages to each other inside an SSL layer;
+ each IPC-message's payload would be in fact the "dirty" content, and the "clean"
+ payload coming out of the tunnel at each end would be the real intended message.
+ Likewise, this could *easily* be made to work across unix domain sockets, or
+diff -urN openssl-0.9.7g/demos/tunala/autogunk.sh openssl-0.9.7g-STEP/demos/tunala/autogunk.sh
+--- openssl-0.9.7g/demos/tunala/autogunk.sh	2001-07-24 07:03:45.000000000 +1200
++++ openssl-0.9.7g-STEP/demos/tunala/autogunk.sh	2006-04-26 02:05:12.456440656 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # This script tries to follow the "GNU way" w.r.t. the autobits.
+ # This does of course generate a number of irritating files.
+@@ -17,7 +17,7 @@
+ autoheader
+ libtoolize --copy --force
+ automake --foreign --add-missing --copy
+-autoconf) 1> /dev/null 2>&1
++autoconf) 1> /System/Devices/null 2>&1
+ 
+ # Move the "no-autotools" Makefile out of the way
+ if test ! -f Makefile.plain; then
+diff -urN openssl-0.9.7g/demos/tunala/autoungunk.sh openssl-0.9.7g-STEP/demos/tunala/autoungunk.sh
+--- openssl-0.9.7g/demos/tunala/autoungunk.sh	2001-07-24 07:03:46.000000000 +1200
++++ openssl-0.9.7g-STEP/demos/tunala/autoungunk.sh	2006-04-26 02:05:12.461439896 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # This script tries to clean up as much as is possible from whatever diabolical
+ # mess has been left in the directory thanks to autoconf, automake, and their
+diff -urN openssl-0.9.7g/doc/apps/config.pod openssl-0.9.7g-STEP/doc/apps/config.pod
+--- openssl-0.9.7g/doc/apps/config.pod	2004-03-02 08:15:54.000000000 +1300
++++ openssl-0.9.7g-STEP/doc/apps/config.pod	2006-04-26 02:06:02.850779552 +1200
+@@ -244,13 +244,13 @@
+ names and the variable doesn't exist then this will cause an error when
+ an attempt is made to load the configuration file. By making use of the
+ default section both values can be looked up with B<TEMP> taking 
+-priority and B</tmp> used if neither is defined:
++priority and B</System/TemporaryFiles> used if neither is defined:
+ 
+- TMP=/tmp
++ TMP=/System/TemporaryFiles
+  # The above value is used if TMP isn't in the environment
+  TEMP=$ENV::TMP
+  # The above value is used if TEMP isn't in the environment
+- tmpfile=${ENV::TEMP}/tmp.filename
++ tmpfile=${ENV::TEMP}/System/TemporaryFiles.filename
+ 
+ =head1 BUGS
+ 
+diff -urN openssl-0.9.7g/doc/crypto/BIO_s_null.pod openssl-0.9.7g-STEP/doc/crypto/BIO_s_null.pod
+--- openssl-0.9.7g/doc/crypto/BIO_s_null.pod	2000-09-15 00:14:39.000000000 +1200
++++ openssl-0.9.7g-STEP/doc/crypto/BIO_s_null.pod	2006-04-26 02:06:34.848915096 +1200
+@@ -17,7 +17,7 @@
+ 
+ =head1 NOTES
+ 
+-A null sink BIO behaves in a similar manner to the Unix /dev/null
++A null sink BIO behaves in a similar manner to the Unix /System/Devices/null
+ device.
+ 
+ A null bio can be placed on the end of a chain to discard any data
+diff -urN openssl-0.9.7g/doc/crypto/RAND_add.pod openssl-0.9.7g-STEP/doc/crypto/RAND_add.pod
+--- openssl-0.9.7g/doc/crypto/RAND_add.pod	2000-03-23 03:30:03.000000000 +1200
++++ openssl-0.9.7g-STEP/doc/crypto/RAND_add.pod	2006-04-26 02:07:04.402422280 +1200
+@@ -34,7 +34,7 @@
+ passwords. The seed values cannot be recovered from the PRNG output.
+ 
+ OpenSSL makes sure that the PRNG state is unique for each thread. On
+-systems that provide C</dev/urandom>, the randomness device is used
++systems that provide C</System/Devices/urandom>, the randomness device is used
+ to seed the PRNG transparently. However, on all other systems, the
+ application is responsible for seeding the PRNG by calling RAND_add(),
+ L<RAND_egd(3)|RAND_egd(3)>
+diff -urN openssl-0.9.7g/doc/crypto/RAND_egd.pod openssl-0.9.7g-STEP/doc/crypto/RAND_egd.pod
+--- openssl-0.9.7g/doc/crypto/RAND_egd.pod	2001-02-11 08:10:36.000000000 +1300
++++ openssl-0.9.7g-STEP/doc/crypto/RAND_egd.pod	2006-04-26 02:07:04.404421976 +1200
+@@ -36,7 +36,7 @@
+ 
+ =head1 NOTES
+ 
+-On systems without /dev/*random devices providing entropy from the kernel,
++On systems without /System/Devices/*random devices providing entropy from the kernel,
+ the EGD entropy gathering daemon can be used to collect entropy. It provides
+ a socket interface through which entropy can be gathered in chunks up to
+ 255 bytes. Several chunks can be queried during one connection.
+@@ -56,7 +56,7 @@
+ 
+ OpenSSL automatically queries EGD when entropy is requested via RAND_bytes()
+ or the status is checked via RAND_status() for the first time, if the socket
+-is located at /var/run/egd-pool, /dev/egd-pool or /etc/egd-pool.
++is located at /System/ApplicationData/RuntimeData/egd-pool, /System/Devices/egd-pool or /etc/egd-pool.
+ 
+ =head1 RETURN VALUE
+ 
+@@ -80,6 +80,6 @@
+ 
+ RAND_query_egd_bytes() is available since OpenSSL 0.9.7.
+ 
+-The automatic query of /var/run/egd-pool et al was added in OpenSSL 0.9.7.
++The automatic query of /System/ApplicationData/RuntimeData/egd-pool et al was added in OpenSSL 0.9.7.
+ 
+ =cut
+diff -urN openssl-0.9.7g/doc/ssl/SSL_CTX_load_verify_locations.pod openssl-0.9.7g-STEP/doc/ssl/SSL_CTX_load_verify_locations.pod
+--- openssl-0.9.7g/doc/ssl/SSL_CTX_load_verify_locations.pod	2001-09-07 18:13:39.000000000 +1200
++++ openssl-0.9.7g-STEP/doc/ssl/SSL_CTX_load_verify_locations.pod	2006-04-26 02:07:17.753392624 +1200
+@@ -82,7 +82,7 @@
+ Generate a CA certificate file with descriptive text from the CA certificates
+ ca1.pem ca2.pem ca3.pem:
+ 
+- #!/bin/sh
++ #!/System/Tools/sh
+  rm CAfile.pem
+  for i in ca1.pem ca2.pem ca3.pem ; do
+    openssl x509 -in $i -text >> CAfile.pem
+diff -urN openssl-0.9.7g/doc/ssleay.txt openssl-0.9.7g-STEP/doc/ssleay.txt
+--- openssl-0.9.7g/doc/ssleay.txt	2003-12-28 04:05:25.000000000 +1300
++++ openssl-0.9.7g-STEP/doc/ssleay.txt	2006-04-26 02:05:58.550433304 +1200
+@@ -2733,7 +2733,7 @@
+ Now why do we bother with sections?  So we can have multiple programs using
+ the same configuration file, or multiple instances of the same program
+ using different variables.  It also provides a nice mechanism to override
+-the processes environment variables (eg ENV::HOME=/tmp).  If there is a
++the processes environment variables (eg ENV::HOME=/System/TemporaryFiles).  If there is a
+ program specific variable missing, we can have default values.
+ Multiple configuration files can be loaded, with each new value clearing
+ any predefined values.  A system config file can provide 'default' values,
+@@ -2743,7 +2743,7 @@
+ 
+ # This is a simple example
+ SSLEAY_HOME	= /usr/local/ssl
+-ENV::PATH	= $SSLEAY_HOME/bin:$PATH	# override my path
++ENV::PATH	= $SSLEAY_HOME/System/Tools:$PATH	# override my path
+ 
+ [X509]
+ cert_dir	= $SSLEAY_HOME/certs	# /usr/local/ssl/certs
+@@ -3559,10 +3559,10 @@
+ 
+ Each 'thread' has an 'ERR_STATE' state associated with it.
+ ERR_STATE *ERR_get_state(void ) will return the 'state' for the calling
+-thread/process.
++thread/System/Processesess.
+ 
+ ERR_remove_state(unsigned long pid); will 'free()' this state.  If pid == 0
+-the current 'thread/process' will have it's error state removed.
++the current 'thread/System/Processesess' will have it's error state removed.
+ If you do not remove the error state of a thread, this could be considered a
+ form of memory leak, so just after 'reaping' a thread that has died,
+ call ERR_remove_state(pid).
+@@ -4421,7 +4421,7 @@
+ sessionID. 
+ 
+ -----BEGIN ms-enroll.cgi-----
+-#!/bin/sh
++#!/System/Tools/sh
+ SESSION_ID=`date '+%y%m%d%H%M%S'`$$
+ echo Content-type: text/html
+ echo
+@@ -4545,8 +4545,8 @@
+ line in ssleay.cnf...
+ 
+ ------BEGIN ms-gencert.cgi-----
+-#!/bin/sh
+-FILE="/tmp/"`date '+%y%m%d%H%M%S'-`$$
++#!/System/Tools/sh
++FILE="/System/TemporaryFiles/"`date '+%y%m%d%H%M%S'-`$$
+ rm -f "$FILE".*
+ 
+ HOME=`pwd`; export HOME  # as ssleay.cnf insists on having such an env var
+@@ -4586,7 +4586,7 @@
+ ssleay crl2pkcs7 -certfile "$FILE".out -out "$FILE".pkcs7 -in demoCA/crl.pem
+ 
+ sed s/template_for_sessId/$SESSION_ID/ <ms-enroll2a.html >"$FILE".cert
+-/usr/local/bin/gawk \
++/usr/local/System/Tools/gawk \
+ 	'BEGIN	{ \
+ 		OFS = ""; \
+ 		dq = sprintf("%c",34); \
+@@ -4777,9 +4777,9 @@
+ 
+ -	You execute the ca command (either from a CGI program run out of
+ 	the web server, or as a later manual task) giving it the above
+-	file as input.  For example, if the file were named /tmp/cert.req,
++	file as input.  For example, if the file were named /System/TemporaryFiles/cert.req,
+ 	you'd run:
+-	$SSLDIR/bin/ca -spkac /tmp/cert.req -out /tmp/cert
++	$SSLDIR/System/Tools/ca -spkac /System/TemporaryFiles/cert.req -out /System/TemporaryFiles/cert
+ 
+ 	The output is in DER format (binary) if a -out argument is 
+ 	provided, as above; otherwise, it's in the PEM format (base-64
+@@ -4799,12 +4799,12 @@
+ 	something is marked as required in the ssleay.conf file and it
+ 	isn't found in the -spkac file, the certificate won't be issued.
+ 
+--	Now, you pick up the output from /tmp/cert and pass it back to
++-	Now, you pick up the output from /System/TemporaryFiles/cert and pass it back to
+ 	the Navigator prepending the Content-type string described earlier.
+ 
+ -	In order to run the ca command out of a CGI program, you must
+ 	provide a password to decrypt the CA's private key.  You can
+-	do this by using "echo MyKeyPassword | $SSLDIR/bin/ca ..."
++	do this by using "echo MyKeyPassword | $SSLDIR/System/Tools/ca ..."
+ 	I think there's a way to not encrypt the key file in the first
+ 	place, but I didn't see how to do that, so I made a small change
+ 	to the library that allows the password to be accepted from a pipe.
+diff -urN openssl-0.9.7g/e_os.h openssl-0.9.7g-STEP/e_os.h
+--- openssl-0.9.7g/e_os.h	2005-01-15 05:22:01.000000000 +1300
++++ openssl-0.9.7g-STEP/e_os.h	2006-04-26 01:50:20.160090320 +1200
+@@ -79,13 +79,13 @@
+ #ifndef DEVRANDOM
+ /* set this to a comma-separated list of 'random' device files to try out.
+  * My default, we will try to read at least one of these files */
+-#define DEVRANDOM "/dev/urandom","/dev/random","/dev/srandom"
++#define DEVRANDOM "/System/Devices/urandom","/System/Devices/random","/System/Devices/srandom"
+ #endif
+ #ifndef DEVRANDOM_EGD
+ /* set this to a comma-seperated list of 'egd' sockets to try out. These
+  * sockets will be tried in the order listed in case accessing the device files
+  * listed in DEVRANDOM did not return enough entropy. */
+-#define DEVRANDOM_EGD "/var/run/egd-pool","/dev/egd-pool","/etc/egd-pool","/etc/entropy"
++#define DEVRANDOM_EGD "/System/ApplicationData/RuntimeData/egd-pool","/System/Devices/egd-pool","/etc/egd-pool","/etc/entropy"
+ #endif
+ 
+ #if defined(OPENSSL_SYS_VXWORKS)
+@@ -351,7 +351,7 @@
+ #    define SSLEAY_CONF		OPENSSL_CONF
+ #    define RFILE		".rnd"
+ #    define LIST_SEPARATOR_CHAR ':'
+-#    define NUL_DEV		"/dev/null"
++#    define NUL_DEV		"/System/Devices/null"
+ #    define EXIT(n)		exit(n)
+ #  endif
+ 
+diff -urN openssl-0.9.7g/fips/Makefile openssl-0.9.7g-STEP/fips/Makefile
+--- openssl-0.9.7g/fips/Makefile	2005-03-15 22:46:14.000000000 +1300
++++ openssl-0.9.7g-STEP/fips/Makefile	2006-04-26 03:33:42.180239944 +1200
+@@ -46,7 +46,7 @@
+ 	@(cd ..; $(MAKE) DIRS=$(DIR) all)
+ 
+ all:
+-	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 		$(MAKE) -e subdirs check lib shared; \
+ 	fi
+ 
+diff -urN openssl-0.9.7g/fips/fips_check_sha1 openssl-0.9.7g-STEP/fips/fips_check_sha1
+--- openssl-0.9.7g/fips/fips_check_sha1	2004-12-11 05:30:33.000000000 +1300
++++ openssl-0.9.7g-STEP/fips/fips_check_sha1	2006-04-26 02:07:37.669364936 +1200
+@@ -1,8 +1,8 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ FP=$1
+ shift
+ 
+-egrep 'define OPENSSL_FIPS' $TOP/include/openssl/opensslconf.h > /dev/null || exit 0
++egrep 'define OPENSSL_FIPS' $TOP/include/openssl/opensslconf.h > /System/Devices/null || exit 0
+ 
+ $TOP/fips/sha1/fips_standalone_sha1 $@ | diff -w $FP - || { echo; echo "*** Your source code does not match the FIPS validated source ***"; echo; exit 1; }
+diff -urN openssl-0.9.7g/fips/fips_make_sha1 openssl-0.9.7g-STEP/fips/fips_make_sha1
+--- openssl-0.9.7g/fips/fips_make_sha1	2004-06-20 01:15:35.000000000 +1200
++++ openssl-0.9.7g-STEP/fips/fips_make_sha1	2006-04-26 02:07:44.367346688 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ S=`pwd`/fips/sha1/fips_standalone_sha1
+ 
+diff -urN openssl-0.9.7g/fips/fips_test_suite.c openssl-0.9.7g-STEP/fips/fips_test_suite.c
+--- openssl-0.9.7g/fips/fips_test_suite.c	2004-07-27 12:17:46.000000000 +1200
++++ openssl-0.9.7g-STEP/fips/fips_test_suite.c	2006-04-26 02:07:44.372345928 +1200
+@@ -267,7 +267,7 @@
+     /* Power-up self test failure
+     */
+     printf("1. Automatic power-up self test...");
+-    printf( FIPS_mode_set(1,"/dev/null") ? Fail("passed INCORRECTLY!\n") : "failed as expected\n" );
++    printf( FIPS_mode_set(1,"/System/Devices/null") ? Fail("passed INCORRECTLY!\n") : "failed as expected\n" );
+ 
+     /* Algorithm call when uninitialized failure
+     */
+diff -urN openssl-0.9.7g/fips/openssl_fips_fingerprint openssl-0.9.7g-STEP/fips/openssl_fips_fingerprint
+--- openssl-0.9.7g/fips/openssl_fips_fingerprint	2005-01-04 23:21:55.000000000 +1300
++++ openssl-0.9.7g-STEP/fips/openssl_fips_fingerprint	2006-04-26 02:07:44.376345320 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # Check the library fingerprint and generate an executable fingerprint, or
+ # return an error
+diff -urN openssl-0.9.7g/ms/cmp.pl openssl-0.9.7g-STEP/ms/cmp.pl
+--- openssl-0.9.7g/ms/cmp.pl	1998-12-21 23:52:45.000000000 +1300
++++ openssl-0.9.7g-STEP/ms/cmp.pl	2006-04-26 02:11:25.355751344 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ ($#ARGV == 1) || die "usage: cmp.pl <file1> <file2>\n";
+ 
+diff -urN openssl-0.9.7g/openssl.spec openssl-0.9.7g-STEP/openssl.spec
+--- openssl-0.9.7g/openssl.spec	2005-04-12 03:10:06.000000000 +1200
++++ openssl-0.9.7g-STEP/openssl.spec	2006-04-26 01:50:43.698511936 +1200
+@@ -4,7 +4,7 @@
+ %define librev g
+ Release: 1
+ 
+-%define openssldir /var/ssl
++%define openssldir /System/ApplicationData/ssl
+ 
+ Summary: Secure Sockets Layer and cryptography libraries and tools
+ Name: openssl
+@@ -16,7 +16,7 @@
+ Provides: SSL
+ URL: http://www.openssl.org/
+ Packager: Damien Miller <djm@mindrot.org>
+-BuildRoot:   /var/tmp/%{name}-%{version}-root
++BuildRoot:   /System/ApplicationData/TemporaryFiles/%{name}-%{version}-root
+ 
+ %description
+ The OpenSSL Project is a collaborative effort to develop a robust,
+@@ -85,7 +85,7 @@
+ 
+ %define CONFIG_FLAGS -DSSL_ALLOW_ADH --prefix=/usr --openssldir=%{openssldir}
+ 
+-perl util/perlpath.pl /usr/bin/perl
++perl util/perlpath.pl /System/Tools/perl
+ 
+ %ifarch i386 i486 i586 i686
+ ./Configure %{CONFIG_FLAGS} linux-elf shared
+@@ -105,7 +105,7 @@
+ make MANDIR=/usr/man MANSUFFIX=ssl INSTALL_PREFIX="$RPM_BUILD_ROOT" install
+ 
+ # Make backwards-compatibility symlink to ssleay
+-ln -sf /usr/bin/openssl $RPM_BUILD_ROOT/usr/bin/ssleay
++ln -sf /System/Tools/openssl $RPM_BUILD_ROOT/System/Tools/ssleay
+ 
+ %clean
+ rm -rf $RPM_BUILD_ROOT
+@@ -114,7 +114,7 @@
+ %defattr(0644,root,root,0755)
+ %doc CHANGES CHANGES.SSLeay LICENSE NEWS README
+ 
+-%attr(0755,root,root) /usr/bin/*
++%attr(0755,root,root) /System/Tools/*
+ %attr(0755,root,root) /usr/lib/*.so*
+ %attr(0755,root,root) %{openssldir}/misc/*
+ %attr(0644,root,root) /usr/man/man[157]/*
+diff -urN openssl-0.9.7g/os2/backwardify.pl openssl-0.9.7g-STEP/os2/backwardify.pl
+--- openssl-0.9.7g/os2/backwardify.pl	2003-11-29 03:51:17.000000000 +1300
++++ openssl-0.9.7g-STEP/os2/backwardify.pl	2006-04-26 02:11:32.116723520 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -w
++#!/System/Tools/perl -w
+ use strict;
+ 
+ # Use as $0
+diff -urN openssl-0.9.7g/shlib/hpux10-cc.sh openssl-0.9.7g-STEP/shlib/hpux10-cc.sh
+--- openssl-0.9.7g/shlib/hpux10-cc.sh	2004-05-12 00:46:10.000000000 +1200
++++ openssl-0.9.7g-STEP/shlib/hpux10-cc.sh	2006-04-26 02:11:32.118723216 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/sh
++#!/System/Tools/sh
+ #
+ # Run this script from the OpenSSL root directory:
+ # sh shlib/hpux10-cc.sh
+@@ -21,7 +21,7 @@
+ #          large amounts of memory and CPU time. Make sure to have at least
+ #          128MB of RAM available and that your kernel is configured to allow
+ #          at least 128MB data size (maxdsiz parameter which can be obtained
+-#          by multiplying 'echo maxdsiz/D | adb -k /stand/vmunix /dev/kmem'
++#          by multiplying 'echo maxdsiz/D | adb -k /stand/vmunix /System/Devices/kmem'
+ #          by 'getconf PAGE_SIZE').
+ #          The installation process can take several hours, even on fast
+ #          machines. +O4 optimization of the libcrypto.sl shared library may
+diff -urN openssl-0.9.7g/shlib/sco5-shared-gcc.sh openssl-0.9.7g-STEP/shlib/sco5-shared-gcc.sh
+--- openssl-0.9.7g/shlib/sco5-shared-gcc.sh	2003-03-23 22:16:04.000000000 +1200
++++ openssl-0.9.7g-STEP/shlib/sco5-shared-gcc.sh	2006-04-26 02:11:32.120722912 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ major="0"
+ minor="9.7b"
+diff -urN openssl-0.9.7g/shlib/sco5-shared-installed openssl-0.9.7g-STEP/shlib/sco5-shared-installed
+--- openssl-0.9.7g/shlib/sco5-shared-installed	2003-03-23 22:16:04.000000000 +1200
++++ openssl-0.9.7g-STEP/shlib/sco5-shared-installed	2006-04-26 02:11:32.121722760 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ major="0"
+ minor="9.7b"
+diff -urN openssl-0.9.7g/shlib/sco5-shared.sh openssl-0.9.7g-STEP/shlib/sco5-shared.sh
+--- openssl-0.9.7g/shlib/sco5-shared.sh	2003-03-23 22:16:04.000000000 +1200
++++ openssl-0.9.7g-STEP/shlib/sco5-shared.sh	2006-04-26 02:11:32.122722608 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ major="0"
+ minor="9.7b"
+diff -urN openssl-0.9.7g/shlib/solaris-sc4.sh openssl-0.9.7g-STEP/shlib/solaris-sc4.sh
+--- openssl-0.9.7g/shlib/solaris-sc4.sh	1999-03-13 09:26:27.000000000 +1300
++++ openssl-0.9.7g-STEP/shlib/solaris-sc4.sh	2006-04-26 02:11:32.122722608 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ major="1"
+ 
+diff -urN openssl-0.9.7g/shlib/solaris.sh openssl-0.9.7g-STEP/shlib/solaris.sh
+--- openssl-0.9.7g/shlib/solaris.sh	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/shlib/solaris.sh	2006-04-26 02:11:32.123722456 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ echo "#define DATE      \"`date`\"" >crypto/date.h
+ 
+diff -urN openssl-0.9.7g/shlib/svr5-shared-gcc.sh openssl-0.9.7g-STEP/shlib/svr5-shared-gcc.sh
+--- openssl-0.9.7g/shlib/svr5-shared-gcc.sh	2003-03-23 22:16:04.000000000 +1200
++++ openssl-0.9.7g-STEP/shlib/svr5-shared-gcc.sh	2006-04-26 02:11:32.124722304 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/sh
++#!/System/Tools/sh
+ 
+ major="0"
+ minor="9.7b"
+diff -urN openssl-0.9.7g/shlib/svr5-shared-installed openssl-0.9.7g-STEP/shlib/svr5-shared-installed
+--- openssl-0.9.7g/shlib/svr5-shared-installed	2003-03-23 22:16:04.000000000 +1200
++++ openssl-0.9.7g-STEP/shlib/svr5-shared-installed	2006-04-26 02:11:32.124722304 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/sh
++#!/System/Tools/sh
+ 
+ major="0"
+ minor="9.7b"
+diff -urN openssl-0.9.7g/shlib/svr5-shared.sh openssl-0.9.7g-STEP/shlib/svr5-shared.sh
+--- openssl-0.9.7g/shlib/svr5-shared.sh	2003-03-23 22:16:04.000000000 +1200
++++ openssl-0.9.7g-STEP/shlib/svr5-shared.sh	2006-04-26 02:11:32.125722152 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/sh
++#!/System/Tools/sh
+ 
+ major="0"
+ minor="9.7b"
+diff -urN openssl-0.9.7g/ssl/s3_clnt.c openssl-0.9.7g-STEP/ssl/s3_clnt.c
+--- openssl-0.9.7g/ssl/s3_clnt.c	2005-03-23 02:10:32.000000000 +1200
++++ openssl-0.9.7g-STEP/ssl/s3_clnt.c	2006-04-26 02:12:12.236624368 +1200
+@@ -1315,7 +1315,7 @@
+ #if 0
+ {
+ FILE *out;
+-out=fopen("/tmp/vsign.der","w");
++out=fopen("/System/TemporaryFiles/vsign.der","w");
+ fwrite(p,1,llen,out);
+ fclose(out);
+ }
+diff -urN openssl-0.9.7g/test/Makefile openssl-0.9.7g-STEP/test/Makefile
+--- openssl-0.9.7g/test/Makefile	2005-04-12 03:03:26.000000000 +1200
++++ openssl-0.9.7g-STEP/test/Makefile	2006-04-26 02:13:27.808135752 +1200
+@@ -135,7 +135,7 @@
+ # fips_test_aes
+ 
+ fips_test_aes:
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  mkdir -p fips_aes_data/rsp; \
+ 	  ../util/shlib_wrap.sh ./$(FIPS_AESTEST) -d fips_aes_data/list; \
+ 	fi
+@@ -152,7 +152,7 @@
+ test_sha:
+ 	../util/shlib_wrap.sh ./$(SHATEST)
+ 	../util/shlib_wrap.sh ./$(SHA1TEST)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  ../util/shlib_wrap.sh ./$(FIPS_SHA1TEST) sha1vectors.txt | sed s/Strings/Hashes/ | cmp sha1hashes.txt - ; \
+ 	fi
+ 
+@@ -191,7 +191,7 @@
+ 
+ test_rand:
+ 	../util/shlib_wrap.sh ./$(RANDTEST)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  ../util/shlib_wrap.sh ./$(FIPS_RANDTEST); \
+ 	fi
+ 
+@@ -200,29 +200,29 @@
+ 
+ test_x509:
+ 	echo test normal x509v1 certificate
+-	sh ./tx509 2>/dev/null
++	sh ./tx509 2>/System/Devices/null
+ 	echo test first x509v3 certificate
+-	sh ./tx509 v3-cert1.pem 2>/dev/null
++	sh ./tx509 v3-cert1.pem 2>/System/Devices/null
+ 	echo test second x509v3 certificate
+-	sh ./tx509 v3-cert2.pem 2>/dev/null
++	sh ./tx509 v3-cert2.pem 2>/System/Devices/null
+ 
+ test_rsa:
+-	@sh ./trsa 2>/dev/null
++	@sh ./trsa 2>/System/Devices/null
+ 	../util/shlib_wrap.sh ./$(RSATEST)
+ 
+ test_crl:
+-	@sh ./tcrl 2>/dev/null
++	@sh ./tcrl 2>/System/Devices/null
+ 
+ test_sid:
+-	@sh ./tsid 2>/dev/null
++	@sh ./tsid 2>/System/Devices/null
+ 
+ test_req:
+-	@sh ./treq 2>/dev/null
+-	@sh ./treq testreq2.pem 2>/dev/null
++	@sh ./treq 2>/System/Devices/null
++	@sh ./treq testreq2.pem 2>/System/Devices/null
+ 
+ test_pkcs7:
+-	@sh ./tpkcs7 2>/dev/null
+-	@sh ./tpkcs7d 2>/dev/null
++	@sh ./tpkcs7 2>/System/Devices/null
++	@sh ./tpkcs7d 2>/System/Devices/null
+ 
+ test_bn:
+ 	@echo starting big number library test, could take a while...
+@@ -250,7 +250,7 @@
+ 	@echo "Generate a set of DSA parameters"
+ 	../util/shlib_wrap.sh ./$(DSATEST)
+ 	../util/shlib_wrap.sh ./$(DSATEST) -app2_1
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  ../util/shlib_wrap.sh ./$(FIPS_DSATEST); \
+ 	  ../util/shlib_wrap.sh ./$(FIPS_DSATEST) -app2_1; \
+ 	fi
+@@ -273,7 +273,7 @@
+ test_ssl: keyU.ss certU.ss certCA.ss certP1.ss keyP1.ss certP2.ss keyP2.ss \
+ 		intP1.ss intP2.ss
+ 	@echo "test SSL protocol"
+-	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  sh ./testfipsssl keyU.ss certU.ss certCA.ss; \
+ 	fi
+ 	@sh ./testssl keyU.ss certU.ss certCA.ss
+@@ -322,7 +322,7 @@
+ 
+ $(FIPS_AESTEST)$(EXE_EXT): $(FIPS_AESTEST).o $(DLIBCRYPTO)
+ 	@target=$(FIPS_AESTEST); $(BUILD_CMD)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_AESTEST); \
+ 	fi
+ 
+@@ -352,7 +352,7 @@
+ 
+ $(FIPS_SHA1TEST)$(EXE_EXT): $(FIPS_SHA1TEST).o $(DLIBCRYPTO)
+ 	@target=$(FIPS_SHA1TEST); $(BUILD_CMD)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_SHA1TEST); \
+ 	fi
+ 
+@@ -391,7 +391,7 @@
+ 
+ $(FIPS_DESTEST)$(EXE_EXT): $(FIPS_DESTEST).o $(DLIBCRYPTO)
+ 	@target=$(FIPS_DESTEST); $(BUILD_CMD)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_DESTEST); \
+ 	fi
+ 
+@@ -400,7 +400,7 @@
+ 
+ $(FIPS_RANDTEST)$(EXE_EXT): $(FIPS_RANDTEST).o $(DLIBCRYPTO)
+ 	@target=$(FIPS_RANDTEST); $(BUILD_CMD)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_RANDTEST); \
+ 	fi
+ 
+@@ -412,7 +412,7 @@
+ 
+ $(FIPS_DSATEST)$(EXE_EXT): $(FIPS_DSATEST).o $(DLIBCRYPTO)
+ 	@target=$(FIPS_DSATEST); $(BUILD_CMD)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_DSATEST); \
+ 	fi
+ 
+@@ -421,7 +421,7 @@
+ 
+ $(SSLTEST)$(EXE_EXT): $(SSLTEST).o $(DLIBSSL) $(DLIBCRYPTO)
+ 	@target=$(SSLTEST); $(BUILD_CMD)
+-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
++	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /System/Devices/null; then \
+ 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(SSLTEST); \
+ 	fi
+ 
+diff -urN openssl-0.9.7g/test/bctest openssl-0.9.7g-STEP/test/bctest
+--- openssl-0.9.7g/test/bctest	2004-05-12 00:46:15.000000000 +1200
++++ openssl-0.9.7g-STEP/test/bctest	2006-04-26 02:13:20.355268760 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # This script is used by test/Makefile to check whether a sane 'bc'
+ # is installed.
+@@ -90,7 +90,7 @@
+ 
+         if [ "$failure" = none ]; then
+             # bc works; now check if it knows the 'print' command.
+-            if [ "OK" = "`echo 'print \"OK\"' | $bc 2>/dev/null`" ]
++            if [ "OK" = "`echo 'print \"OK\"' | $bc 2>/System/Devices/null`" ]
+             then
+                 echo "$bc"
+             else
+@@ -105,7 +105,7 @@
+ 
+ echo "No working bc found.  Consider installing GNU bc." >&2
+ if [ "$1" = ignore ]; then
+-  echo "cat >/dev/null"
++  echo "cat >/System/Devices/null"
+   exit 0
+ fi
+ exit 1
+diff -urN openssl-0.9.7g/test/tcrl openssl-0.9.7g-STEP/test/tcrl
+--- openssl-0.9.7g/test/tcrl	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/tcrl	2006-04-26 02:13:45.326472560 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH
+@@ -81,5 +81,5 @@
+ cmp f.p ff.p3
+ if [ $? != 0 ]; then exit 1; fi
+ 
+-/bin/rm -f f.* ff.* fff.*
++/System/Tools/rm -f f.* ff.* fff.*
+ exit 0
+diff -urN openssl-0.9.7g/test/testca openssl-0.9.7g-STEP/test/testca
+--- openssl-0.9.7g/test/testca	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/testca	2006-04-26 02:13:45.328472256 +1200
+@@ -1,6 +1,6 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+-SH="/bin/sh"
++SH="/System/Tools/sh"
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=./apps\;../apps\;$PATH
+ else
+@@ -14,7 +14,7 @@
+ OPENSSL="`pwd`/../util/shlib_wrap.sh openssl"
+ export OPENSSL
+ 
+-/bin/rm -fr demoCA
++/System/Tools/rm -fr demoCA
+ $SH ../apps/CA.sh -newca <<EOF
+ EOF
+ 
+@@ -46,6 +46,6 @@
+ 	exit 1;
+ fi
+ 
+-/bin/rm -fr demoCA newcert.pem newreq.pem
++/System/Tools/rm -fr demoCA newcert.pem newreq.pem
+ #usage: CA -newcert|-newreq|-newca|-sign|-verify
+ 
+diff -urN openssl-0.9.7g/test/testenc openssl-0.9.7g-STEP/test/testenc
+--- openssl-0.9.7g/test/testenc	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/testenc	2006-04-26 02:13:45.332471648 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ testsrc=Makefile
+ test=./p
+@@ -14,7 +14,7 @@
+ then
+ 	exit 1
+ else
+-	/bin/rm $test.cipher $test.clear
++	/System/Tools/rm $test.cipher $test.clear
+ fi
+ echo base64
+ $cmd enc -non-fips-allow -a -e < $test > $test.cipher
+@@ -24,7 +24,7 @@
+ then
+ 	exit 1
+ else
+-	/bin/rm $test.cipher $test.clear
++	/System/Tools/rm $test.cipher $test.clear
+ fi
+ 
+ for i in `$cmd list-cipher-commands`
+@@ -37,7 +37,7 @@
+ 	then
+ 		exit 1
+ 	else
+-		/bin/rm $test.$i.cipher $test.$i.clear
++		/System/Tools/rm $test.$i.cipher $test.$i.clear
+ 	fi
+ 
+ 	echo $i base64
+@@ -48,7 +48,7 @@
+ 	then
+ 		exit 1
+ 	else
+-		/bin/rm $test.$i.cipher $test.$i.clear
++		/System/Tools/rm $test.$i.cipher $test.$i.clear
+ 	fi
+ done
+ rm -f $test
+diff -urN openssl-0.9.7g/test/testfipsssl openssl-0.9.7g-STEP/test/testfipsssl
+--- openssl-0.9.7g/test/testfipsssl	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/testfipsssl	2006-04-26 02:13:45.335471192 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if [ "$1" = "" ]; then
+   key=../apps/server.pem
+@@ -15,7 +15,7 @@
+ 
+ ssltest="../util/shlib_wrap.sh ./ssltest -F -key $key -cert $cert -c_key $key -c_cert $cert -cipher $ciphers"
+ 
+-if ../util/shlib_wrap.sh ../apps/openssl x509 -in $cert -text -noout | fgrep 'DSA Public Key' >/dev/null; then
++if ../util/shlib_wrap.sh ../apps/openssl x509 -in $cert -text -noout | fgrep 'DSA Public Key' >/System/Devices/null; then
+   dsa_cert=YES
+ else
+   dsa_cert=NO
+diff -urN openssl-0.9.7g/test/testgen openssl-0.9.7g-STEP/test/testgen
+--- openssl-0.9.7g/test/testgen	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/testgen	2006-04-26 02:13:45.336471040 +1200
+@@ -1,10 +1,10 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ T=testcert
+ KEY=512
+ CA=../certs/testca.pem
+ 
+-/bin/rm -f $T.1 $T.2 $T.key
++/System/Tools/rm -f $T.1 $T.2 $T.key
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH;
+diff -urN openssl-0.9.7g/test/testss openssl-0.9.7g-STEP/test/testss
+--- openssl-0.9.7g/test/testss	2005-04-12 03:03:26.000000000 +1200
++++ openssl-0.9.7g-STEP/test/testss	2006-04-26 02:13:45.342470128 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ digest='-sha1'
+ reqcmd="../util/shlib_wrap.sh ../apps/openssl req"
+@@ -157,7 +157,7 @@
+ echo The second generated proxy certificate is $P2cert
+ echo The second generated proxy private key is $P2key
+ 
+-/bin/rm err.ss
+-#/bin/rm $P1intermediate
+-#/bin/rm $P2intermediate
++/System/Tools/rm err.ss
++#/System/Tools/rm $P1intermediate
++#/System/Tools/rm $P2intermediate
+ exit 0
+diff -urN openssl-0.9.7g/test/testssl openssl-0.9.7g-STEP/test/testssl
+--- openssl-0.9.7g/test/testssl	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/testssl	2006-04-26 02:13:51.486536088 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if [ "$1" = "" ]; then
+   key=../apps/server.pem
+@@ -12,7 +12,7 @@
+ fi
+ ssltest="../util/shlib_wrap.sh ./ssltest -key $key -cert $cert -c_key $key -c_cert $cert"
+ 
+-if ../util/shlib_wrap.sh ../apps/openssl x509 -in $cert -text -noout | fgrep 'DSA Public Key' >/dev/null; then
++if ../util/shlib_wrap.sh ../apps/openssl x509 -in $cert -text -noout | fgrep 'DSA Public Key' >/System/Devices/null; then
+   dsa_cert=YES
+ else
+   dsa_cert=NO
+diff -urN openssl-0.9.7g/test/testsslproxy openssl-0.9.7g-STEP/test/testsslproxy
+--- openssl-0.9.7g/test/testsslproxy	2005-04-12 03:03:26.000000000 +1200
++++ openssl-0.9.7g-STEP/test/testsslproxy	2006-04-26 02:13:51.488535784 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ echo 'Testing a lot of proxy conditions.'
+ echo 'Some of them may turn out being invalid, which is fine.'
+diff -urN openssl-0.9.7g/test/tpkcs7 openssl-0.9.7g-STEP/test/tpkcs7
+--- openssl-0.9.7g/test/tpkcs7	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/tpkcs7	2006-04-26 02:13:51.491535328 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH
+@@ -51,5 +51,5 @@
+ cmp f.p ff.p3
+ if [ $? != 0 ]; then exit 1; fi
+ 
+-/bin/rm -f f.* ff.* fff.*
++/System/Tools/rm -f f.* ff.* fff.*
+ exit 0
+diff -urN openssl-0.9.7g/test/tpkcs7d openssl-0.9.7g-STEP/test/tpkcs7d
+--- openssl-0.9.7g/test/tpkcs7d	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/tpkcs7d	2006-04-26 02:13:51.492535176 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH
+@@ -44,5 +44,5 @@
+ cmp f.p ff.p3
+ if [ $? != 0 ]; then exit 1; fi
+ 
+-/bin/rm -f f.* ff.* fff.*
++/System/Tools/rm -f f.* ff.* fff.*
+ exit 0
+diff -urN openssl-0.9.7g/test/treq openssl-0.9.7g-STEP/test/treq
+--- openssl-0.9.7g/test/treq	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/treq	2006-04-26 02:13:51.495534720 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH
+@@ -86,5 +86,5 @@
+ cmp f.p ff.p3
+ if [ $? != 0 ]; then exit 1; fi
+ 
+-/bin/rm -f f.* ff.* fff.*
++/System/Tools/rm -f f.* ff.* fff.*
+ exit 0
+diff -urN openssl-0.9.7g/test/trsa openssl-0.9.7g-STEP/test/trsa
+--- openssl-0.9.7g/test/trsa	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/trsa	2006-04-26 02:13:51.497534416 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH
+@@ -86,5 +86,5 @@
+ cmp f.p ff.p3
+ if [ $? != 0 ]; then exit 1; fi
+ 
+-/bin/rm -f f.* ff.* fff.*
++/System/Tools/rm -f f.* ff.* fff.*
+ exit 0
+diff -urN openssl-0.9.7g/test/tsid openssl-0.9.7g-STEP/test/tsid
+--- openssl-0.9.7g/test/tsid	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/tsid	2006-04-26 02:13:51.499534112 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH
+@@ -81,5 +81,5 @@
+ cmp f.p ff.p3
+ if [ $? != 0 ]; then exit 1; fi
+ 
+-/bin/rm -f f.* ff.* fff.*
++/System/Tools/rm -f f.* ff.* fff.*
+ exit 0
+diff -urN openssl-0.9.7g/test/tx509 openssl-0.9.7g-STEP/test/tx509
+--- openssl-0.9.7g/test/tx509	2005-02-02 12:45:40.000000000 +1300
++++ openssl-0.9.7g-STEP/test/tx509	2006-04-26 02:13:51.501533808 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ if test "$OSTYPE" = msdosdjgpp; then
+     PATH=../apps\;$PATH
+@@ -81,5 +81,5 @@
+ cmp f.p ff.p3
+ if [ $? != 0 ]; then exit 1; fi
+ 
+-/bin/rm -f f.* ff.* fff.*
++/System/Tools/rm -f f.* ff.* fff.*
+ exit 0
+diff -urN openssl-0.9.7g/times/091/mips-rel.pl openssl-0.9.7g-STEP/times/091/mips-rel.pl
+--- openssl-0.9.7g/times/091/mips-rel.pl	1998-12-23 04:04:47.000000000 +1300
++++ openssl-0.9.7g-STEP/times/091/mips-rel.pl	2006-04-26 02:14:33.130205288 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ &doit(100,"Pentium   100 32",0.0195,0.1000,0.6406,4.6100);	# pentium-100
+ &doit(200,"PPro      200 32",0.0070,0.0340,0.2087,1.4700);	# pentium-100
+diff -urN openssl-0.9.7g/tools/c89.sh openssl-0.9.7g-STEP/tools/c89.sh
+--- openssl-0.9.7g/tools/c89.sh	2001-11-23 00:09:42.000000000 +1300
++++ openssl-0.9.7g-STEP/tools/c89.sh	2006-04-26 02:14:33.140203768 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh -k
++#!/System/Tools/sh -k
+ #
+ # Re-order arguments so that -L comes first
+ #
+diff -urN openssl-0.9.7g/tools/c_hash openssl-0.9.7g-STEP/tools/c_hash
+--- openssl-0.9.7g/tools/c_hash	1999-01-03 04:52:11.000000000 +1300
++++ openssl-0.9.7g-STEP/tools/c_hash	2006-04-26 02:14:33.140203768 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # print out the hash values 
+ #
+ 
+diff -urN openssl-0.9.7g/tools/c_info openssl-0.9.7g-STEP/tools/c_info
+--- openssl-0.9.7g/tools/c_info	1999-01-03 04:52:11.000000000 +1300
++++ openssl-0.9.7g-STEP/tools/c_info	2006-04-26 02:14:33.140203768 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # print the subject
+ #
+diff -urN openssl-0.9.7g/tools/c_issuer openssl-0.9.7g-STEP/tools/c_issuer
+--- openssl-0.9.7g/tools/c_issuer	2004-03-22 10:50:24.000000000 +1200
++++ openssl-0.9.7g-STEP/tools/c_issuer	2006-04-26 02:14:33.141203616 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # print out the issuer
+ #
+diff -urN openssl-0.9.7g/tools/c_name openssl-0.9.7g-STEP/tools/c_name
+--- openssl-0.9.7g/tools/c_name	1999-01-03 04:52:11.000000000 +1300
++++ openssl-0.9.7g-STEP/tools/c_name	2006-04-26 02:14:33.141203616 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # print the subject
+ #
+diff -urN openssl-0.9.7g/tools/c_rehash openssl-0.9.7g-STEP/tools/c_rehash
+--- openssl-0.9.7g/tools/c_rehash	2005-04-12 03:17:49.000000000 +1200
++++ openssl-0.9.7g-STEP/tools/c_rehash	2006-04-26 02:14:33.143203312 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/System/Tools/perl
+ 
+ 
+ # Perl c_rehash script, scan all files in a directory
+@@ -15,7 +15,7 @@
+ 	$ENV{OPENSSL} = $openssl;
+ }
+ 
+-$ENV{PATH} .= ":$dir/bin";
++$ENV{PATH} .= ":$dir/System/Tools";
+ 
+ if(! -x $openssl) {
+ 	my $found = 0;
+diff -urN openssl-0.9.7g/tools/c_rehash.in openssl-0.9.7g-STEP/tools/c_rehash.in
+--- openssl-0.9.7g/tools/c_rehash.in	2002-10-12 09:35:45.000000000 +1300
++++ openssl-0.9.7g-STEP/tools/c_rehash.in	2006-04-26 02:14:33.144203160 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ 
+ # Perl c_rehash script, scan all files in a directory
+@@ -15,7 +15,7 @@
+ 	$ENV{OPENSSL} = $openssl;
+ }
+ 
+-$ENV{PATH} .= ":$dir/bin";
++$ENV{PATH} .= ":$dir/System/Tools";
+ 
+ if(! -x $openssl) {
+ 	my $found = 0;
+diff -urN openssl-0.9.7g/util/FreeBSD.sh openssl-0.9.7g-STEP/util/FreeBSD.sh
+--- openssl-0.9.7g/util/FreeBSD.sh	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/util/FreeBSD.sh	2006-04-26 02:14:33.155201488 +1200
+@@ -1,6 +1,6 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+-perl util/perlpath.pl /usr/bin
++perl util/perlpath.pl /System/Tools
+ perl util/ssldir.pl /usr/local  
+ perl util/mk1mf.pl FreeBSD >Makefile.FreeBSD
+ perl Configure FreeBSD
+diff -urN openssl-0.9.7g/util/add_cr.pl openssl-0.9.7g-STEP/util/add_cr.pl
+--- openssl-0.9.7g/util/add_cr.pl	1998-12-21 23:56:20.000000000 +1300
++++ openssl-0.9.7g-STEP/util/add_cr.pl	2006-04-26 02:14:33.147202704 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # This adds a copyright message to a souce code file.
+ # It also gets the file name correct.
+diff -urN openssl-0.9.7g/util/bat.sh openssl-0.9.7g-STEP/util/bat.sh
+--- openssl-0.9.7g/util/bat.sh	2003-01-31 06:37:49.000000000 +1300
++++ openssl-0.9.7g-STEP/util/bat.sh	2006-04-26 02:14:33.148202552 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ $infile="/home/eay/ssl/SSLeay/MINFO";
+ 
+diff -urN openssl-0.9.7g/util/ck_errf.pl openssl-0.9.7g-STEP/util/ck_errf.pl
+--- openssl-0.9.7g/util/ck_errf.pl	1998-12-22 00:00:38.000000000 +1300
++++ openssl-0.9.7g-STEP/util/ck_errf.pl	2006-04-26 02:14:33.149202400 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # This is just a quick script to scan for cases where the 'error'
+ # function name in a XXXerr() macro is wrong.
+diff -urN openssl-0.9.7g/util/clean-depend.pl openssl-0.9.7g-STEP/util/clean-depend.pl
+--- openssl-0.9.7g/util/clean-depend.pl	2001-10-10 21:27:28.000000000 +1300
++++ openssl-0.9.7g-STEP/util/clean-depend.pl	2006-04-26 02:14:33.150202248 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl -w
++#!/usr/local/System/Tools/perl -w
+ # Clean the dependency list in a makefile of standard includes...
+ # Written by Ben Laurie <ben@algroup.co.uk> 19 Jan 1999
+ 
+diff -urN openssl-0.9.7g/util/cygwin.sh openssl-0.9.7g-STEP/util/cygwin.sh
+--- openssl-0.9.7g/util/cygwin.sh	2004-09-28 23:25:11.000000000 +1200
++++ openssl-0.9.7g-STEP/util/cygwin.sh	2006-04-26 02:14:33.151202096 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/System/Tools/bash
+ #
+ # This script configures, builds and packs the binary package for
+ # the Cygwin net distribution version of OpenSSL
+@@ -8,7 +8,7 @@
+ #set -x
+ 
+ CONFIG_OPTIONS="--prefix=/usr shared no-idea no-rc5 no-mdc2"
+-INSTALL_PREFIX=/tmp/install
++INSTALL_PREFIX=/System/TemporaryFiles/install
+ 
+ VERSION=
+ SUBVERSION=$1
+@@ -109,10 +109,10 @@
+ create_profile_files
+ 
+ cd ${INSTALL_PREFIX}
+-strip usr/bin/*.exe usr/bin/*.dll
++strip usr/System/Tools/*.exe usr/System/Tools/*.dll
+ 
+ # Runtime package
+-find etc usr/bin usr/share/doc usr/ssl/certs usr/ssl/man/man[157] \
++find etc usr/System/Tools usr/share/doc usr/ssl/certs usr/ssl/man/man[157] \
+      usr/ssl/misc usr/ssl/openssl.cnf usr/ssl/private -empty -o \! -type d |
+ tar cjfT openssl-${VERSION}-${SUBVERSION}.tar.bz2 -
+ # Development package
+diff -urN openssl-0.9.7g/util/deleof.pl openssl-0.9.7g-STEP/util/deleof.pl
+--- openssl-0.9.7g/util/deleof.pl	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/util/deleof.pl	2006-04-26 02:14:33.151202096 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ while (<>)
+ 	{
+diff -urN openssl-0.9.7g/util/dirname.pl openssl-0.9.7g-STEP/util/dirname.pl
+--- openssl-0.9.7g/util/dirname.pl	2002-06-06 02:10:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/dirname.pl	2006-04-26 02:14:33.152201944 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ if ($#ARGV < 0) {
+     die "dirname.pl: too few arguments\n";
+diff -urN openssl-0.9.7g/util/do_ms.sh openssl-0.9.7g-STEP/util/do_ms.sh
+--- openssl-0.9.7g/util/do_ms.sh	1999-06-01 09:58:18.000000000 +1200
++++ openssl-0.9.7g-STEP/util/do_ms.sh	2006-04-26 02:14:33.152201944 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # generate the Microsoft makefiles and .def files
+ #
+diff -urN openssl-0.9.7g/util/domd openssl-0.9.7g-STEP/util/domd
+--- openssl-0.9.7g/util/domd	2004-05-12 00:46:18.000000000 +1200
++++ openssl-0.9.7g-STEP/util/domd	2006-04-26 02:14:33.152201944 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # Do a makedepend, only leave out the standard headers
+ # Written by Ben Laurie <ben@algroup.co.uk> 19 Jan 1999
+ 
+diff -urN openssl-0.9.7g/util/err-ins.pl openssl-0.9.7g-STEP/util/err-ins.pl
+--- openssl-0.9.7g/util/err-ins.pl	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/util/err-ins.pl	2006-04-26 02:14:33.153201792 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # tack error codes onto the end of a file
+ #
+diff -urN openssl-0.9.7g/util/extract-names.pl openssl-0.9.7g-STEP/util/extract-names.pl
+--- openssl-0.9.7g/util/extract-names.pl	2004-03-26 07:52:36.000000000 +1200
++++ openssl-0.9.7g-STEP/util/extract-names.pl	2006-04-26 02:14:33.153201792 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/System/Tools/perl
+ 
+ $/ = "";			# Eat a paragraph at once.
+ while(<STDIN>) {
+diff -urN openssl-0.9.7g/util/files.pl openssl-0.9.7g-STEP/util/files.pl
+--- openssl-0.9.7g/util/files.pl	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/util/files.pl	2006-04-26 02:14:33.154201640 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # used to generate the file MINFO for use by util/mk1mf.pl
+ # It is basically a list of all variables from the passed makefile
+diff -urN openssl-0.9.7g/util/fixNT.sh openssl-0.9.7g-STEP/util/fixNT.sh
+--- openssl-0.9.7g/util/fixNT.sh	2004-05-12 00:46:18.000000000 +1200
++++ openssl-0.9.7g-STEP/util/fixNT.sh	2006-04-26 02:14:33.155201488 +1200
+@@ -1,14 +1,14 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # clean up the mess that NT makes of my source tree
+ #
+ 
+ if [ -f makefile -a ! -f Makefile ]; then
+-	/bin/mv makefile Makefile
++	/System/Tools/mv makefile Makefile
+ fi
+ chmod +x Configure util/*
+ echo cleaning
+-/bin/rm -f `find . -name '*.$$$' -print` 2>/dev/null >/dev/null
++/System/Tools/rm -f `find . -name '*.$$$' -print` 2>/System/Devices/null >/System/Devices/null
+ echo 'removing those damn ^M'
+ perl -pi -e 's/\015//' `find . -type 'f' -print |grep -v '.obj$' |grep -v '.der$' |grep -v '.gz'`
+ make -f Makefile links
+diff -urN openssl-0.9.7g/util/install.sh openssl-0.9.7g-STEP/util/install.sh
+--- openssl-0.9.7g/util/install.sh	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/util/install.sh	2006-04-26 02:14:33.156201336 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # install - install a program, script, or datafile
+ # This comes from X11R5; it is not part of GNU.
+diff -urN openssl-0.9.7g/util/mk1mf.pl openssl-0.9.7g-STEP/util/mk1mf.pl
+--- openssl-0.9.7g/util/mk1mf.pl	2004-05-17 16:28:30.000000000 +1200
++++ openssl-0.9.7g-STEP/util/mk1mf.pl	2006-04-26 02:14:53.315136712 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # A bit of an evil hack but it post processes the file ../MINFO which
+ # is generated by `make files` in the top directory.
+ # This script outputs one mega makefile that has no shell stuff or any
+diff -urN openssl-0.9.7g/util/mkcerts.sh openssl-0.9.7g-STEP/util/mkcerts.sh
+--- openssl-0.9.7g/util/mkcerts.sh	2002-11-16 10:26:02.000000000 +1300
++++ openssl-0.9.7g-STEP/util/mkcerts.sh	2006-04-26 02:14:53.317136408 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # This script will re-make all the required certs.
+ # cd apps
+@@ -20,7 +20,7 @@
+ $SSLEAY req $CONF \
+ 	-new -md5 -newkey $CAbits \
+ 	-keyout pca-key.pem \
+-	-out pca-req.pem -nodes >/dev/null <<EOF
++	-out pca-req.pem -nodes >/System/Devices/null <<EOF
+ AU
+ Queensland
+ .
+@@ -56,7 +56,7 @@
+ $SSLEAY req $CONF \
+ 	-new -md5 -newkey $CAbits \
+ 	-keyout ca-key.pem \
+-	-out ca-req.pem -nodes >/dev/null <<EOF
++	-out ca-req.pem -nodes >/System/Devices/null <<EOF
+ AU
+ Queensland
+ .
+@@ -93,7 +93,7 @@
+ $SSLEAY req $CONF \
+ 	-new -md5 -newkey 512 \
+ 	-keyout s512-key.pem \
+-	-out s512-req.pem -nodes >/dev/null <<EOF
++	-out s512-req.pem -nodes >/System/Devices/null <<EOF
+ AU
+ Queensland
+ .
+@@ -130,7 +130,7 @@
+ $SSLEAY req $CONF \
+ 	-new -md5 -newkey 1024 \
+ 	-keyout s1024key.pem \
+-	-out s1024req.pem -nodes >/dev/null <<EOF
++	-out s1024req.pem -nodes >/System/Devices/null <<EOF
+ AU
+ Queensland
+ .
+@@ -167,7 +167,7 @@
+ $SSLEAY req $CONF \
+ 	-new -md5 -newkey 512 \
+ 	-keyout c512-key.pem \
+-	-out c512-req.pem -nodes >/dev/null <<EOF
++	-out c512-req.pem -nodes >/System/Devices/null <<EOF
+ AU
+ Queensland
+ .
+@@ -210,11 +210,11 @@
+ do
+ $SSLEAY x509 -issuer -subject -in $i -noout >$$
+ cat $$
+-/bin/cat $i >>$$
+-/bin/mv $$ $i
++/System/Tools/cat $i >>$$
++/System/Tools/mv $$ $i
+ done
+ 
+-#/bin/rm -f *key.pem *req.pem *.srl
++#/System/Tools/rm -f *key.pem *req.pem *.srl
+ 
+ echo Finished
+ 
+diff -urN openssl-0.9.7g/util/mkdef.pl openssl-0.9.7g-STEP/util/mkdef.pl
+--- openssl-0.9.7g/util/mkdef.pl	2005-02-06 06:19:23.000000000 +1300
++++ openssl-0.9.7g-STEP/util/mkdef.pl	2006-04-26 02:14:59.431206928 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl -w
++#!/usr/local/System/Tools/perl -w
+ #
+ # generate a .def file
+ #
+diff -urN openssl-0.9.7g/util/mkdir-p.pl openssl-0.9.7g-STEP/util/mkdir-p.pl
+--- openssl-0.9.7g/util/mkdir-p.pl	1999-06-08 22:17:55.000000000 +1200
++++ openssl-0.9.7g-STEP/util/mkdir-p.pl	2006-04-26 02:14:59.432206776 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # mkdir-p.pl
+ 
+diff -urN openssl-0.9.7g/util/mkerr.pl openssl-0.9.7g-STEP/util/mkerr.pl
+--- openssl-0.9.7g/util/mkerr.pl	2005-04-12 03:03:25.000000000 +1200
++++ openssl-0.9.7g-STEP/util/mkerr.pl	2006-04-26 02:14:59.438205864 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl -w
++#!/usr/local/System/Tools/perl -w
+ 
+ my $config = "crypto/err/openssl.ec";
+ my $debug = 0;
+diff -urN openssl-0.9.7g/util/mkfiles.pl openssl-0.9.7g-STEP/util/mkfiles.pl
+--- openssl-0.9.7g/util/mkfiles.pl	2004-10-27 02:01:37.000000000 +1300
++++ openssl-0.9.7g-STEP/util/mkfiles.pl	2006-04-26 02:14:59.440205560 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # This is a hacked version of files.pl for systems that can't do a 'make files'.
+ # Do a perl util/mkminfo.pl >MINFO to build MINFO
+diff -urN openssl-0.9.7g/util/mklink.pl openssl-0.9.7g-STEP/util/mklink.pl
+--- openssl-0.9.7g/util/mklink.pl	2004-12-21 02:18:56.000000000 +1300
++++ openssl-0.9.7g-STEP/util/mklink.pl	2006-04-26 02:14:59.441205408 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # mklink.pl
+ 
+diff -urN openssl-0.9.7g/util/mkstack.pl openssl-0.9.7g-STEP/util/mkstack.pl
+--- openssl-0.9.7g/util/mkstack.pl	2004-10-05 05:27:36.000000000 +1300
++++ openssl-0.9.7g-STEP/util/mkstack.pl	2006-04-26 02:14:59.443205104 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl -w
++#!/usr/local/System/Tools/perl -w
+ 
+ # This is a utility that searches out "DECLARE_STACK_OF()"
+ # declarations in .h and .c files, and updates/creates/replaces
+diff -urN openssl-0.9.7g/util/opensslwrap.sh openssl-0.9.7g-STEP/util/opensslwrap.sh
+--- openssl-0.9.7g/util/opensslwrap.sh	2005-02-02 12:45:42.000000000 +1300
++++ openssl-0.9.7g-STEP/util/opensslwrap.sh	2006-04-26 02:14:59.444204952 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ HERE="`echo $0 | sed -e 's|[^/]*$||'`"
+ OPENSSL="${HERE}../apps/openssl"
+diff -urN openssl-0.9.7g/util/perlpath.pl openssl-0.9.7g-STEP/util/perlpath.pl
+--- openssl-0.9.7g/util/perlpath.pl	1999-03-11 08:57:05.000000000 +1300
++++ openssl-0.9.7g-STEP/util/perlpath.pl	2006-04-26 02:14:59.445204800 +1200
+@@ -1,12 +1,12 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+-# modify the '#!/usr/local/bin/perl'
++# modify the '#!/usr/local/System/Tools/perl'
+ # line in all scripts that rely on perl.
+ #
+ 
+ require "find.pl";
+ 
+-$#ARGV == 0 || print STDERR "usage: perlpath newpath  (eg /usr/bin)\n";
++$#ARGV == 0 || print STDERR "usage: perlpath newpath  (eg /System/Tools)\n";
+ &find(".");
+ 
+ sub wanted
+diff -urN openssl-0.9.7g/util/pl/BC-16.pl openssl-0.9.7g-STEP/util/pl/BC-16.pl
+--- openssl-0.9.7g/util/pl/BC-16.pl	2004-05-17 16:28:30.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/BC-16.pl	2006-04-26 02:15:05.682256624 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # VCw16lib.pl - the file for Visual C++ 1.52b for windows, static libraries
+ #
+ 
+diff -urN openssl-0.9.7g/util/pl/BC-32.pl openssl-0.9.7g-STEP/util/pl/BC-32.pl
+--- openssl-0.9.7g/util/pl/BC-32.pl	2004-05-17 16:28:30.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/BC-32.pl	2006-04-26 02:15:05.684256320 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # Borland C++ builder 3 and 4 -- Janez Jere <jj@void.si>
+ #
+ 
+diff -urN openssl-0.9.7g/util/pl/Mingw32.pl openssl-0.9.7g-STEP/util/pl/Mingw32.pl
+--- openssl-0.9.7g/util/pl/Mingw32.pl	2004-05-17 16:28:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/Mingw32.pl	2006-04-26 02:15:05.687255864 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # Mingw32.pl -- Mingw
+ #
+diff -urN openssl-0.9.7g/util/pl/OS2-EMX.pl openssl-0.9.7g-STEP/util/pl/OS2-EMX.pl
+--- openssl-0.9.7g/util/pl/OS2-EMX.pl	2004-05-17 16:28:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/OS2-EMX.pl	2006-04-26 02:15:05.688255712 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # OS2-EMX.pl - for EMX GCC on OS/2
+ #
+diff -urN openssl-0.9.7g/util/pl/VC-16.pl openssl-0.9.7g-STEP/util/pl/VC-16.pl
+--- openssl-0.9.7g/util/pl/VC-16.pl	2004-05-17 16:28:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/VC-16.pl	2006-04-26 02:15:05.691255256 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # VCw16lib.pl - the file for Visual C++ 1.52b for windows, static libraries
+ #
+ 
+diff -urN openssl-0.9.7g/util/pl/VC-32.pl openssl-0.9.7g-STEP/util/pl/VC-32.pl
+--- openssl-0.9.7g/util/pl/VC-32.pl	2004-12-31 11:53:57.000000000 +1300
++++ openssl-0.9.7g-STEP/util/pl/VC-32.pl	2006-04-26 02:15:11.661347664 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # VCw32lib.pl - the file for Visual C++ 4.[01] for windows NT, static libraries
+ #
+ 
+diff -urN openssl-0.9.7g/util/pl/VC-CE.pl openssl-0.9.7g-STEP/util/pl/VC-CE.pl
+--- openssl-0.9.7g/util/pl/VC-CE.pl	2004-05-17 16:28:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/VC-CE.pl	2006-04-26 02:15:11.663347360 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ # VC-CE.pl - the file for eMbedded Visual C++ 3.0 for windows CE, static libraries
+ #
+ 
+diff -urN openssl-0.9.7g/util/pl/linux.pl openssl-0.9.7g-STEP/util/pl/linux.pl
+--- openssl-0.9.7g/util/pl/linux.pl	2004-05-17 16:28:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/linux.pl	2006-04-26 02:15:05.686256016 +1200
+@@ -1,11 +1,11 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # linux.pl - the standard unix makefile stuff.
+ #
+ 
+ $o='/';
+-$cp='/bin/cp';
+-$rm='/bin/rm -f';
++$cp='/System/Tools/cp';
++$rm='/System/Tools/rm -f';
+ 
+ # C compiler stuff
+ 
+diff -urN openssl-0.9.7g/util/pl/ultrix.pl openssl-0.9.7g-STEP/util/pl/ultrix.pl
+--- openssl-0.9.7g/util/pl/ultrix.pl	2004-05-17 16:28:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/ultrix.pl	2006-04-26 02:15:05.689255560 +1200
+@@ -1,11 +1,11 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # linux.pl - the standard unix makefile stuff.
+ #
+ 
+ $o='/';
+-$cp='/bin/cp';
+-$rm='/bin/rm -f';
++$cp='/System/Tools/cp';
++$rm='/System/Tools/rm -f';
+ 
+ # C compiler stuff
+ 
+diff -urN openssl-0.9.7g/util/pl/unix.pl openssl-0.9.7g-STEP/util/pl/unix.pl
+--- openssl-0.9.7g/util/pl/unix.pl	2004-05-17 16:28:31.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pl/unix.pl	2006-04-26 02:15:05.690255408 +1200
+@@ -1,11 +1,11 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # unix.pl - the standard unix makefile stuff.
+ #
+ 
+ $o='/';
+-$cp='/bin/cp';
+-$rm='/bin/rm -f';
++$cp='/System/Tools/cp';
++$rm='/System/Tools/rm -f';
+ 
+ # C compiler stuff
+ 
+diff -urN openssl-0.9.7g/util/pod2man.pl openssl-0.9.7g-STEP/util/pod2man.pl
+--- openssl-0.9.7g/util/pod2man.pl	2002-05-31 03:30:21.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pod2man.pl	2006-04-26 02:15:05.667258904 +1200
+@@ -1,5 +1,5 @@
+-: #!/usr/bin/perl-5.005
+-    eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
++: #!/System/Tools/perl-5.005
++    eval 'exec /System/Tools/perl -S $0 ${1+"$@"}'
+ 	if $running_under_some_shell;
+ 
+ $DEF_PM_SECTION = '3pm' || '3';
+diff -urN openssl-0.9.7g/util/pod2mantest openssl-0.9.7g-STEP/util/pod2mantest
+--- openssl-0.9.7g/util/pod2mantest	2004-05-12 00:46:19.000000000 +1200
++++ openssl-0.9.7g-STEP/util/pod2mantest	2006-04-26 02:15:05.667258904 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # This script is used by test/Makefile to check whether a sane 'pod2man'
+ # is installed.
+@@ -31,14 +31,14 @@
+     if [ ! "$pod2man" = '' ]; then
+         failure=none
+ 
+-	if "$pod2man" --section=1 --center=OpenSSL --release=dev pod2mantest.pod | fgrep OpenSSL >/dev/null; then
++	if "$pod2man" --section=1 --center=OpenSSL --release=dev pod2mantest.pod | fgrep OpenSSL >/System/Devices/null; then
+ 	    :
+ 	else
+ 	    failure=BasicTest
+ 	fi
+ 
+ 	if [ "$failure" = none ]; then
+-	    if "$pod2man" --section=1 --center=OpenSSL --release=dev pod2mantest.pod | grep '^MARKER - ' >/dev/null; then
++	    if "$pod2man" --section=1 --center=OpenSSL --release=dev pod2mantest.pod | grep '^MARKER - ' >/System/Devices/null; then
+ 	        failure=MultilineTest
+ 	    fi
+ 	fi
+diff -urN openssl-0.9.7g/util/point.sh openssl-0.9.7g-STEP/util/point.sh
+--- openssl-0.9.7g/util/point.sh	2003-06-12 07:44:40.000000000 +1200
++++ openssl-0.9.7g-STEP/util/point.sh	2006-04-26 02:15:05.668258752 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ rm -f "$2"
+ if test "$OSTYPE" = msdosdjgpp; then
+diff -urN openssl-0.9.7g/util/selftest.pl openssl-0.9.7g-STEP/util/selftest.pl
+--- openssl-0.9.7g/util/selftest.pl	2004-05-12 00:46:19.000000000 +1200
++++ openssl-0.9.7g-STEP/util/selftest.pl	2006-04-26 02:15:05.670258448 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl -w
++#!/usr/local/System/Tools/perl -w
+ #
+ # Run the test suite and generate a report
+ #
+@@ -86,7 +86,7 @@
+ 	print OUT $not_our_fault;
+ 	goto err;
+     }
+-    system("ar r cctest.a /dev/null");
++    system("ar r cctest.a /System/Devices/null");
+     if (not -f "cctest.a") {
+ 	print OUT "Check your archive tool (ar).\n";
+ 	print OUT $not_our_fault;
+diff -urN openssl-0.9.7g/util/shlib_wrap.sh openssl-0.9.7g-STEP/util/shlib_wrap.sh
+--- openssl-0.9.7g/util/shlib_wrap.sh	2005-02-07 02:16:42.000000000 +1300
++++ openssl-0.9.7g-STEP/util/shlib_wrap.sh	2006-04-26 02:15:05.672258144 +1200
+@@ -1,8 +1,8 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ [ $# -ne 0 ] || set -x		# debug mode without arguments:-)
+ 
+-THERE="`echo $0 | sed -e 's|[^/]*$||' 2>/dev/null`.."
++THERE="`echo $0 | sed -e 's|[^/]*$||' 2>/System/Devices/null`.."
+ [ -d "${THERE}" ] || exec "$@"	# should never happen...
+ 
+ # Alternative to this is to parse ${THERE}/Makefile...
+@@ -11,17 +11,17 @@
+     while [ -h "$LIBCRYPTOSO" ]; do
+ 	LIBCRYPTOSO="${THERE}/`ls -l "$LIBCRYPTOSO" | sed -e 's|.*\-> ||'`"
+     done
+-    SOSUFFIX=`echo ${LIBCRYPTOSO} | sed -e 's|.*\.so||' 2>/dev/null`
++    SOSUFFIX=`echo ${LIBCRYPTOSO} | sed -e 's|.*\.so||' 2>/System/Devices/null`
+     LIBSSLSO="${THERE}/libssl.so${SOSUFFIX}"
+ fi
+ 
+-SYSNAME=`(uname -s) 2>/dev/null`;
++SYSNAME=`(uname -s) 2>/System/Devices/null`;
+ case "$SYSNAME" in
+ SunOS|IRIX*)
+ 	# SunOS and IRIX run-time linkers evaluate alternative
+ 	# variables depending on target ABI...
+ 	rld_var=LD_LIBRARY_PATH
+-	case "`(/usr/bin/file "$LIBCRYPTOSO") 2>/dev/null`" in
++	case "`(/System/Tools/file "$LIBCRYPTOSO") 2>/System/Devices/null`" in
+ 	*ELF\ 64*SPARC*)
+ 		[ -n "$LD_LIBRARY_PATH_64" ] && rld_var=LD_LIBRARY_PATH_64
+ 		;;
+diff -urN openssl-0.9.7g/util/sp-diff.pl openssl-0.9.7g-STEP/util/sp-diff.pl
+--- openssl-0.9.7g/util/sp-diff.pl	2000-08-15 02:05:53.000000000 +1200
++++ openssl-0.9.7g-STEP/util/sp-diff.pl	2006-04-26 02:15:05.673257992 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ #
+ # This file takes as input, the files that have been output from
+ # ssleay speed.
+diff -urN openssl-0.9.7g/util/speed.sh openssl-0.9.7g-STEP/util/speed.sh
+--- openssl-0.9.7g/util/speed.sh	1998-12-21 23:56:22.000000000 +1300
++++ openssl-0.9.7g-STEP/util/speed.sh	2006-04-26 02:15:05.674257840 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ #
+ # This is a ugly script use, in conjuction with editing the 'b'
+@@ -18,17 +18,17 @@
+ apps/ssleay speed >speed.1l
+ 
+ perl Configure bl-4c-2c
+-/bin/rm -f crypto/rc4/*.o crypto/bn/bn*.o crypto/md2/md2_dgst.o
++/System/Tools/rm -f crypto/rc4/*.o crypto/bn/bn*.o crypto/md2/md2_dgst.o
+ make
+ apps/ssleay speed rc4 rsa md2 >speed.2l
+ 
+ perl Configure bl-4c-ri
+-/bin/rm -f crypto/rc4/rc4*.o
++/System/Tools/rm -f crypto/rc4/rc4*.o
+ make
+ apps/ssleay speed rc4 >speed.3l
+ 
+ perl Configure b2-is-ri-dp
+-/bin/rm -f crypto/idea/i_*.o crypto/rc4/*.o crypto/des/ecb_enc.o crypto/bn/bn*.o
++/System/Tools/rm -f crypto/idea/i_*.o crypto/rc4/*.o crypto/des/ecb_enc.o crypto/bn/bn*.o
+ apps/ssleay speed rsa rc4 idea des >speed.4l
+ 
+ cat speed.1 >speed.log
+diff -urN openssl-0.9.7g/util/src-dep.pl openssl-0.9.7g-STEP/util/src-dep.pl
+--- openssl-0.9.7g/util/src-dep.pl	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/util/src-dep.pl	2006-04-26 02:15:05.676257536 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ # we make up an array of
+ # $file{function_name}=filename;
+diff -urN openssl-0.9.7g/util/tab_num.pl openssl-0.9.7g-STEP/util/tab_num.pl
+--- openssl-0.9.7g/util/tab_num.pl	1998-12-21 23:52:46.000000000 +1300
++++ openssl-0.9.7g-STEP/util/tab_num.pl	2006-04-26 02:15:05.680256928 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/local/System/Tools/perl
+ 
+ $num=1;
+ $width=40;
+diff -urN openssl-0.9.7g/util/x86asm.sh openssl-0.9.7g-STEP/util/x86asm.sh
+--- openssl-0.9.7g/util/x86asm.sh	1998-12-22 00:00:39.000000000 +1300
++++ openssl-0.9.7g-STEP/util/x86asm.sh	2006-04-26 02:15:05.680256928 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ echo Generating x86 assember
+ echo Bignum

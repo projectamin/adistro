@@ -1,0 +1,40 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Texinfo-->
+
+<!--retreiving package-->
+
+	<amin:download>
+		<amin:param name='uri'>http://freshmeat.net/redir/texinfo/10367/url_bz2/texinfo-4.8.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/texinfo-4.8.tar.bz2</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/texinfo-4.8.tar.bz2</amin:param>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>prefix=/bootstrap</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/texinfo-4.8</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/texinfo-4.8</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/texinfo-4.8</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>texinfo-4.8</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+	</amin:command>
+
+</amin:profile>

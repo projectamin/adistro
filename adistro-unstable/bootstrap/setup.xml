@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--setup the bootstrap env-->
+        <amin:command name='mkdir'>
+                <amin:param name='target'>adistro</amin:param>
+                <amin:shell name='dir'>/opt/</amin:shell>
+                <amin:flag>p</amin:flag>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>packages bootstrap build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/</amin:shell>
+		<amin:flag>p</amin:flag>
+	</amin:command>
+        <amin:command name="link">
+                <amin:param name="source">/opt/adistro/bootstrap</amin:param>
+                <amin:param name="target">/</amin:param>
+                <amin:flag>sf</amin:flag>
+        </amin:command>
+
+</amin:profile>

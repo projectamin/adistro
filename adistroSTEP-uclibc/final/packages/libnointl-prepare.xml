@@ -1,0 +1,16 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Libnointl prepare-->
+
+<!--grabbing packages-->
+
+      <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/packages/libnointl-20070701.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/libnointl-20070701.tar.gz</amin:param>
+      </amin:download>
+
+      <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/libnointl-20070701.tar.gz</amin:param>
+      </amin:command>
+
+</amin:profile>

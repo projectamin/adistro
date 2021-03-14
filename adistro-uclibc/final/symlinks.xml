@@ -1,0 +1,63 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!-- symlinks to bootstrap tools created until actual is built and installed in new FS -->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/bin/mksh</amin:param>
+		<amin:param name='target'>/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/bin/pwd</amin:param>
+		<amin:param name='target'>/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/bin/cat</amin:param>
+		<amin:param name='target'>/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/bin/stty</amin:param>
+		<amin:param name='target'>/bin</amin:param>
+		<amin:flag>sf</amin:flag>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<!--<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/lib/libgcc_s.so.1</amin:param>
+		<amin:param name='target'>/usr/lib</amin:param>
+		<amin:flag>sf</amin:flag>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>-->
+
+	<amin:command name='link'>
+		<amin:param name='source'>/bootstrap/bin/mksh</amin:param>
+		<amin:param name='target'>/bin/sh</amin:param>
+		<amin:flag>sf</amin:flag>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+        <amin:command name='link'>
+                <amin:param name='source'>/bootstrap/bin/mksh</amin:param>
+                <amin:param name='target'>/bin/bash</amin:param>
+                <amin:flag>sf</amin:flag>
+                 <amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+</amin:chroot>
+
+</amin:profile>

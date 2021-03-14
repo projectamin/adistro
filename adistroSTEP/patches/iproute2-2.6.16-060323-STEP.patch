@@ -1,0 +1,1295 @@
+diff -urN iproute2-2.6.16-060323/ChangeLog iproute2-2.6.16-060323-STEP/ChangeLog
+--- iproute2-2.6.16-060323/ChangeLog	2006-03-22 12:07:49.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/ChangeLog	2006-04-09 08:34:09.646946680 +1200
+@@ -520,7 +520,7 @@
+ 	* Add man pages from SuSe
+ 	* SuSE patches
+ 	     - path to db4.1
+-	     - don't hardcode path to /tmp in ifstat
++	     - don't hardcode path to /System/TemporaryFiles in ifstat
+ 	       Alternat fix: was to use TMPDIR
+ 	     - handle non-root user calling ip route flush going into
+ 	       an infinite loop.
+diff -urN iproute2-2.6.16-060323/Makefile iproute2-2.6.16-060323-STEP/Makefile
+--- iproute2-2.6.16-060323/Makefile	2005-07-09 10:08:47.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/Makefile	2006-04-09 08:48:56.677097600 +1200
+@@ -1,6 +1,6 @@
+-DESTDIR=
+-SBINDIR=/usr/sbin
+-CONFDIR=/etc/iproute2
++DESTDIR=/System/Applications/Iproute2-2.6.16-060323
++SBINDIR=/sbin
++CONFDIR=/etc
+ DOCDIR=/usr/share/doc/iproute2
+ MANDIR=/usr/share/man
+ 
+diff -urN iproute2-2.6.16-060323/README iproute2-2.6.16-060323-STEP/README
+--- iproute2-2.6.16-060323/README	2004-06-29 08:37:23.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/README	2006-04-09 08:34:09.652945768 +1200
+@@ -1,5 +1,5 @@
+ Primary site is:
+-	http://developer.osdl.org/dev/iproute2
++	http://System/Deviceseloper.osdl.org/System/Devices/iproute2
+ 
+ Original FTP site is:
+ 	ftp://ftp.inr.ac.ru/ip-routing/
+diff -urN iproute2-2.6.16-060323/README.iproute2+tc iproute2-2.6.16-060323-STEP/README.iproute2+tc
+--- iproute2-2.6.16-060323/README.iproute2+tc	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/README.iproute2+tc	2006-04-09 08:34:09.656945160 +1200
+@@ -78,7 +78,7 @@
+ 
+ 
+ 
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ TC=/home/root/tc
+ 
+diff -urN iproute2-2.6.16-060323/README.lnstat iproute2-2.6.16-060323-STEP/README.lnstat
+--- iproute2-2.6.16-060323/README.lnstat	2004-10-20 09:24:47.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/README.lnstat	2006-04-09 08:34:09.658944856 +1200
+@@ -6,7 +6,7 @@
+ 'rtstat' program.
+ 
+ In addition to routing cache statistics, it supports any kind of statistics
+-the linux kernel exports via a file in /proc/net/stat.  In a stock 2.6.9
++the linux kernel exports via a file in /System/Processes/net/stat.  In a stock 2.6.9
+ kernel, this is 
+ 	per-protocol neighbour cache statistics 
+ 		(ipv4, ipv6, atm, decnet)
+@@ -30,12 +30,12 @@
+ 
+ It will display something like
+  
+-/proc/net/stat/arp_cache:
++/System/Processes/net/stat/arp_cache:
+          1: entries
+          2: allocs
+          3: destroys
+ [...]
+-/proc/net/stat/rt_cache:
++/System/Processes/net/stat/rt_cache:
+          1: entries
+          2: in_hit
+          3: in_slow_tot
+diff -urN iproute2-2.6.16-060323/configure iproute2-2.6.16-060323-STEP/configure
+--- iproute2-2.6.16-060323/configure	2005-01-18 12:26:46.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/configure	2006-04-09 08:34:09.660944552 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#! /System/Tools/bash
+ # This is not an autconf generated configure
+ #
+ INCLUDE=${1:-"$PWD/include"}
+@@ -8,7 +8,7 @@
+ echo "TC schedulers"
+ 
+ echo -n " ATM	"
+-cat >/tmp/atmtest.c <<EOF
++cat >/System/TemporaryFiles/atmtest.c <<EOF
+ #include <atm.h>
+ int main(int argc, char **argv) {
+ 	struct atm_qos qos;
+@@ -16,7 +16,7 @@
+ 	return 0;
+ }
+ EOF
+-gcc -I$INCLUDE -o /tmp/atmtest /tmp/atmtest.c -latm >/dev/null 2>&1 
++gcc -I$INCLUDE -o /System/TemporaryFiles/atmtest /System/TemporaryFiles/atmtest.c -latm >/System/Devices/null 2>&1 
+ if [ $? -eq 0 ]
+ then
+     echo "TC_CONFIG_ATM:=y" >>Config
+@@ -24,4 +24,4 @@
+ else
+     echo no
+ fi
+-rm -f /tmp/atmtest.c /tmp/atmtest
++rm -f /System/TemporaryFiles/atmtest.c /System/TemporaryFiles/atmtest
+diff -urN iproute2-2.6.16-060323/doc/Makefile iproute2-2.6.16-060323-STEP/doc/Makefile
+--- iproute2-2.6.16-060323/doc/Makefile	2005-03-11 08:01:36.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/doc/Makefile	2006-04-09 08:34:09.661944400 +1200
+@@ -33,7 +33,7 @@
+ 
+ %.dvi: %.tex
+ 	@set -e; pass=2; echo "Running LaTeX $<"; \
+-	while [ `$(LATEX) $< </dev/null 2>&1 | \
++	while [ `$(LATEX) $< </System/Devices/null 2>&1 | \
+ 		 grep -c '^\(LaTeX Warning: Label(s) may\|No file \|! Emergency stop\)'` -ge 1 ]; do \
+ 		if [ $$pass -gt 3 ]; then \
+ 			echo "Seems, something is wrong. Try by hands." ; exit 1 ; \
+diff -urN iproute2-2.6.16-060323/doc/actions/dummy-README iproute2-2.6.16-060323-STEP/doc/actions/dummy-README
+--- iproute2-2.6.16-060323/doc/actions/dummy-README	2006-01-11 07:50:18.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/doc/actions/dummy-README	2006-04-09 08:34:23.416853336 +1200
+@@ -70,7 +70,7 @@
+ that most people use IMQ for below:
+ 
+ --------
+-export TC="/sbin/tc"
++export TC="/System/AdminTools/tc"
+ 
+ $TC qdisc add dev dummy0 root handle 1: prio 
+ $TC qdisc add dev dummy0 parent 1:1 handle 10: sfq
+diff -urN iproute2-2.6.16-060323/doc/api-ip6-flowlabels.tex iproute2-2.6.16-060323-STEP/doc/api-ip6-flowlabels.tex
+--- iproute2-2.6.16-060323/doc/api-ip6-flowlabels.tex	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/api-ip6-flowlabels.tex	2006-04-09 08:34:09.667943488 +1200
+@@ -382,7 +382,7 @@
+ \paragraph{Listing flow labels.} 
+ \addcontentsline{toc}{subsection}{Listing flow labels}
+ List of currently allocated
+-flow labels may be read from \verb|/proc/net/ip6_flowlabel|.
++flow labels may be read from \verb|/System/Processes/net/ip6_flowlabel|.
+ 
+ \begin{verbatim}
+ Label S Owner Users Linger Expires Dst                              Opt
+diff -urN iproute2-2.6.16-060323/doc/arpd.sgml iproute2-2.6.16-060323-STEP/doc/arpd.sgml
+--- iproute2-2.6.16-060323/doc/arpd.sgml	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/arpd.sgml	2006-04-09 08:34:09.668943336 +1200
+@@ -36,7 +36,7 @@
+ If <tt/FILE/ is <tt/-/, <tt/stdin/ is read to get ARP table.
+  
+ <item><tt/-b DATABASE/  - location of database file. Default location is
+-<tt>/var/lib/arpd/arpd.db</tt>.
++<tt>/System/ApplicationData/lib/arpd/arpd.db</tt>.
+ 
+ <item><tt/-a NUMBER/ - <tt/arpd/ not only passively listens ARP on wire, but
+ also send brodcast queries itself. <tt/NUMBER/ is number of such queries
+@@ -84,7 +84,7 @@
+ <p> In order to <tt/arpd/ be able to serve as ARP resolver, kernel must be
+ compiled with the option <tt/CONFIG_ARPD/ and, in the case when interface list
+ is not given on command line, variable <tt/app_solicit/
+-on interfaces of interest should be set in <tt>/proc/sys/net/ipv4/neigh/*</tt>.
++on interfaces of interest should be set in <tt>/System/Processes/sys/net/ipv4/neigh/*</tt>.
+ If this is not made <tt/arpd/ still collects gratuitous ARP information
+ in its database.
+ 
+@@ -95,20 +95,20 @@
+ with kernel functionality:
+ 
+ <tscreen><verb>
+-   arpd -b /var/tmp/arpd.db
++   arpd -b /System/ApplicationData/TemporaryFiles/arpd.db
+ </verb></tscreen>
+ 
+ <item> Look at result after some time:
+ 
+ <tscreen><verb>
+    killall arpd
+-   arpd -l -b /var/tmp/arpd.db
++   arpd -l -b /System/ApplicationData/TemporaryFiles/arpd.db
+ </verb></tscreen>
+ 
+ <item> To enable kernel helper, leaving leading role to kernel:
+ 
+ <tscreen><verb>
+-   arpd -b /var/tmp/arpd.db -a 1 eth0 eth1
++   arpd -b /System/ApplicationData/TemporaryFiles/arpd.db -a 1 eth0 eth1
+ </verb></tscreen>
+ 
+ <item> Completely replace kernel resolution on interfaces <tt/eth0/
+@@ -117,7 +117,7 @@
+ and made under authority of <tt/arpd/: 
+ 
+ <tscreen><verb>
+-   arpd -b /var/tmp/arpd.db -a 3 -k eth0 eth1
++   arpd -b /System/ApplicationData/TemporaryFiles/arpd.db -a 3 -k eth0 eth1
+ </verb></tscreen>
+ 
+ This is mode which <tt/arpd/ is supposed to work normally.
+diff -urN iproute2-2.6.16-060323/doc/do-psnup iproute2-2.6.16-060323-STEP/doc/do-psnup
+--- iproute2-2.6.16-060323/doc/do-psnup	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/do-psnup	2006-04-09 08:34:09.669943184 +1200
+@@ -1,13 +1,13 @@
+-#! /bin/bash
++#! /System/Tools/bash
+ # $1 = Temporary file . "string"
+ # $2 = File to process . "string"
+ # $3 = Page size . ie: a4 , letter ... "string"
+ # $4 = Number of pages to fit on a single sheet . "numeric"
+ 
+-if type psnup >&/dev/null; then
++if type psnup >&/System/Devices/null; then
+ 	echo "psnup -$4 -p$3 $1 $2"
+ 	psnup -$4 -p$3 $1 $2
+-elif type psmulti >&/dev/null; then
++elif type psmulti >&/System/Devices/null; then
+ 	echo "psmulti $1 > $2"
+ 	psmulti $1 > $2
+ else
+diff -urN iproute2-2.6.16-060323/doc/ip-cref.tex iproute2-2.6.16-060323-STEP/doc/ip-cref.tex
+--- iproute2-2.6.16-060323/doc/ip-cref.tex	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/ip-cref.tex	2006-04-09 08:34:18.334625952 +1200
+@@ -2513,7 +2513,7 @@
+ the first network configuration command is issued. F.e.\ if
+ you insert:
+ \begin{verbatim}
+-  rtmon file /var/log/rtmon.log
++  rtmon file /System/ApplicationData/log/rtmon.log
+ \end{verbatim}
+ in a startup script, you will be able to view the full history
+ later.
+@@ -2729,12 +2729,12 @@
+ Routers may answer ARP/NDISC solicitations on behalf of other hosts.
+ In Linux-2.2 proxy ARP on an interface may be enabled
+ by setting the kernel \verb|sysctl| variable 
+-\verb|/proc/sys/net/ipv4/conf/<dev>/proxy_arp| to 1. After this, the router
++\verb|/System/Processes/sys/net/ipv4/conf/<dev>/proxy_arp| to 1. After this, the router
+ starts to answer ARP requests on the interface \verb|<dev>|, provided
+ the route to the requested destination does {\em not\/} go back via the same
+ device.
+ 
+-The variable \verb|/proc/sys/net/ipv4/conf/all/proxy_arp| enables proxy
++The variable \verb|/System/Processes/sys/net/ipv4/conf/all/proxy_arp| enables proxy
+ ARP on all the IP devices.
+ 
+ However, this approach fails in the case of IPv6 because the router
+@@ -2926,7 +2926,7 @@
+ \end{NB}
+ 
+ \begin{verbatim}
+-#! /bin/bash
++#! /System/Tools/bash
+ \end{verbatim}
+ \begin{flushleft}
+ \# {\bf Usage: \verb|ifone ADDRESS[/PREFIX-LENGTH] [DEVICE]|}\\
+@@ -3030,7 +3030,7 @@
+ arping -A -c 1 -I $dev $ipaddr
+ noarp=$?
+ ( sleep 2;
+-  arping -U -c 1 -I $dev $ipaddr ) >& /dev/null </dev/null &
++  arping -U -c 1 -I $dev $ipaddr ) >& /System/Devices/null </System/Devices/null &
+ \end{verbatim}
+ 
+ \begin{flushleft}
+@@ -3086,7 +3086,7 @@
+ on hosts and on routers.
+ 
+ \begin{verbatim}
+-#! /bin/bash
++#! /System/Tools/bash
+ \end{verbatim}
+ \begin{flushleft}
+ \# {\bf Usage: \verb?ifcfg DEVICE[:ALIAS] [add|del] ADDRESS[/LENGTH] [PEER]?}\\
+@@ -3103,7 +3103,7 @@
+ \begin{verbatim}
+ CheckForwarding () {
+   local sbase fwd
+-  sbase=/proc/sys/net/ipv4/conf
++  sbase=/System/Processes/sys/net/ipv4/conf
+   fwd=0
+   if [ -d $sbase ]; then
+     for dir in $sbase/*/forwarding; do
+@@ -3271,7 +3271,7 @@
+ arping -q -A -c 1 -I $dev $ipaddr
+ noarp=$?
+ ( sleep 2 ;
+-  arping -q -U -c 1 -I $dev $ipaddr ) >& /dev/null </dev/null &
++  arping -q -U -c 1 -I $dev $ipaddr ) >& /System/Devices/null </System/Devices/null &
+ \end{verbatim}
+ \begin{flushleft}
+ \# {\bf Step 4} (optional) --- Add some control routes.\\
+@@ -3281,10 +3281,10 @@
+ \# 3. Add default multicast route.
+ \end{flushleft}
+ \begin{verbatim}
+-ip route add unreachable 224.0.0.0/24 >& /dev/null 
+-ip route add unreachable 255.255.255.255 >& /dev/null
++ip route add unreachable 224.0.0.0/24 >& /System/Devices/null 
++ip route add unreachable 255.255.255.255 >& /System/Devices/null
+ if [ `ip link ls $dev | grep -c MULTICAST` -ge 1 ]; then
+-  ip route add 224.0.0.0/4 dev $dev scope global >& /dev/null
++  ip route add 224.0.0.0/4 dev $dev scope global >& /System/Devices/null
+ fi
+ \end{verbatim}
+ \begin{flushleft}
+diff -urN iproute2-2.6.16-060323/doc/ip-tunnels.tex iproute2-2.6.16-060323-STEP/doc/ip-tunnels.tex
+--- iproute2-2.6.16-060323/doc/ip-tunnels.tex	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/ip-tunnels.tex	2006-04-09 08:34:18.339625192 +1200
+@@ -403,7 +403,7 @@
+ but not fatal flaw. The tunnel becomes NBMA rather than broadcast network.
+ You may disable dynamic ARPing by:
+ \begin{verbatim}
+-  echo 0 > /proc/sys/net/ipv4/neigh/Universe/mcast_solicit
++  echo 0 > /System/Processes/sys/net/ipv4/neigh/Universe/mcast_solicit
+ \end{verbatim}
+ and to add required information to ARP tables manually:
+ \begin{verbatim}
+diff -urN iproute2-2.6.16-060323/doc/nstat.sgml iproute2-2.6.16-060323-STEP/doc/nstat.sgml
+--- iproute2-2.6.16-060323/doc/nstat.sgml	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/nstat.sgml	2006-04-09 08:34:18.357622456 +1200
+@@ -50,13 +50,13 @@
+ </itemize>
+ 
+ <p>
+-History is just dump saved in file <tt>/tmp/.Xstat.uUID</tt>
++History is just dump saved in file <tt>/System/TemporaryFiles/.Xstat.uUID</tt>
+ or in file given by environment variables <tt/NSTAT_HISTORY/,
+ <tt/IFSTAT_HISTORY/ and <tt/RTACCT_HISTORY/.
+ Each time when you use <tt/Xstat/ values there are updated.
+ If you use patterns, only the values which you _really_ see
+ are updated. If you want to skip an unintersting period,
+-use option <tt/-n/, or just output to <tt>/dev/null</tt>.
++use option <tt/-n/, or just output to <tt>/System/Devices/null</tt>.
+ 
+ <p>
+ <tt/Xstat/ understands when history is invalidated by system reboot
+diff -urN iproute2-2.6.16-060323/doc/rtstat.sgml iproute2-2.6.16-060323-STEP/doc/rtstat.sgml
+--- iproute2-2.6.16-060323/doc/rtstat.sgml	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/rtstat.sgml	2006-04-09 08:34:23.405855008 +1200
+@@ -14,7 +14,7 @@
+ <p>
+ The kernel patch (not required since linux-2.4.7) adds statistics counters
+ from route cache process into 
+-/proc/net/rt_cache_stat. A companion user mode program presents the statistics
++/System/Processes/net/rt_cache_stat. A companion user mode program presents the statistics
+ in a vmstat or iostat manner. The ratio between cache hits and misses gives 
+ the flow length.
+ 
+diff -urN iproute2-2.6.16-060323/doc/ss.sgml iproute2-2.6.16-060323-STEP/doc/ss.sgml
+--- iproute2-2.6.16-060323/doc/ss.sgml	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/doc/ss.sgml	2006-04-09 08:34:23.410854248 +1200
+@@ -17,11 +17,11 @@
+ 
+ <sect>Why?
+ 
+-<p> <tt>/proc</tt> interface is inadequate, unfortunately.
++<p> <tt>/System/Processes</tt> interface is inadequate, unfortunately.
+ When amount of sockets is enough large, <tt/netstat/ or even
+-plain <tt>cat /proc/net/tcp/</tt> cause nothing but pains and curses.
++plain <tt>cat /System/Processes/net/tcp/</tt> cause nothing but pains and curses.
+ In linux-2.4 the desease became worse: even if amount
+-of sockets is small reading <tt>/proc/net/tcp/</tt> is slow enough.
++of sockets is small reading <tt>/System/Processes/net/tcp/</tt> is slow enough.
+ 
+ This utility presents a new approach, which is supposed to scale
+ well. I am not going to describe technical details here and
+@@ -29,7 +29,7 @@
+ The only important thing to say is that it is not so bad idea
+ to load module <tt/tcp_diag/, which can be found in directory
+ <tt/Modules/ of <tt/iproute2/. If you do not make this <tt/ss/
+-will work, but it falls back to <tt>/proc</tt> and becomes slow
++will work, but it falls back to <tt>/System/Processes</tt> and becomes slow
+ like <tt/netstat/, well, a bit faster yet (see section "Some numbers"). 
+ 
+ <sect>Old news
+@@ -286,14 +286,14 @@
+    to local X servers:
+ 
+ <tscreen><verb>
+-   ss -xp dst "/tmp/.X11-unix/*"
++   ss -xp dst "/System/TemporaryFiles/.X11-unix/*"
+ </verb></tscreen>
+ 
+    Pardon, this does not work with current kernel, patching is required.
+    But we still can look at server side:
+    
+ <tscreen><verb>
+-   ss -x src "/tmp/.X11-unix/*"
++   ss -x src "/System/TemporaryFiles/.X11-unix/*"
+ </verb></tscreen>
+ 
+ </itemize>
+@@ -320,7 +320,7 @@
+ <item><tt/-v/, <tt/-V/  - print version of <tt/ss/ and exit
+ <item><tt/-s/  - print summary statistics. This option does not parse
+ socket lists obtaining summary from various sources. It is useful
+-when amount of sockets is so huge that parsing <tt>/proc/net/tcp</tt>
++when amount of sockets is so huge that parsing <tt>/System/Processes/net/tcp</tt>
+ is painful.
+ <item><tt/-D FILE/  - do not display anything, just dump raw information
+ about TCP sockets to <tt/FILE/ after applying filters. If <tt/FILE/ is <tt/-/
+@@ -434,14 +434,14 @@
+ 
+ <p>
+ <itemize>
+-<item> <tt/PROC_SLABINFO/  to override <tt>/proc/slabinfo</tt>
+-<item> <tt/PROC_NET_TCP/  to override <tt>/proc/net/tcp</tt>
+-<item> <tt/PROC_NET_UDP/  to override <tt>/proc/net/udp</tt>
++<item> <tt/PROC_SLABINFO/  to override <tt>/System/Processes/slabinfo</tt>
++<item> <tt/PROC_NET_TCP/  to override <tt>/System/Processes/net/tcp</tt>
++<item> <tt/PROC_NET_UDP/  to override <tt>/System/Processes/net/udp</tt>
+ <item> etc.
+ </itemize> 
+ 
+ <p>
+-Variable <tt/PROC_ROOT/ allows to change root of all the <tt>/proc/</tt>
++Variable <tt/PROC_ROOT/ allows to change root of all the <tt>/System/Processes/</tt>
+ hierarchy.
+ 
+ <p>
+@@ -450,7 +450,7 @@
+ 
+ 
+ <p> This option is used mainly to investigate bug reports,
+-when dumps of files usually found in <tt>/proc/</tt> are recevied
++when dumps of files usually found in <tt>/System/Processes/</tt> are recevied
+ by e-mail.
+ 
+ <sect1> Output format
+diff -urN iproute2-2.6.16-060323/examples/SYN-DoS.rate.limit iproute2-2.6.16-060323-STEP/examples/SYN-DoS.rate.limit
+--- iproute2-2.6.16-060323/examples/SYN-DoS.rate.limit	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/SYN-DoS.rate.limit	2006-04-09 08:34:23.424852120 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh -x
++#! /System/Tools/sh -x
+ #
+ # sample script on using the ingress capabilities
+ # this script shows how one can rate limit incoming SYNs
+diff -urN iproute2-2.6.16-060323/examples/cbq.init-v0.7.3 iproute2-2.6.16-060323-STEP/examples/cbq.init-v0.7.3
+--- iproute2-2.6.16-060323/examples/cbq.init-v0.7.3	2005-10-13 11:46:23.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/examples/cbq.init-v0.7.3	2006-04-09 08:34:28.433090752 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/System/Tools/bash
+ #
+ #    cbq.init v0.7.3
+ #    Copyright (C) 1999  Pavel Golubev <pg@ksi-linux.com>
+@@ -103,7 +103,7 @@
+ #	  - in case of overlapping TIME parameters, the last match is taken
+ #	- Juanjo Ciarlante <jjo at mendoza.gov.ar>
+ #	  - chkconfig tags, list + stats startup parameters
+-#	  - optional tc & ip command logging (into /var/run/cbq-*)
++#	  - optional tc & ip command logging (into /System/ApplicationData/RuntimeData/cbq-*)
+ #	- Rafal Maszkowski <rzm at icm.edu.pl>
+ #	  - PEAK parameter for setting TBF's burst peak rate
+ #	  - fix for many config files (use find instead of ls)
+@@ -164,7 +164,7 @@
+ #
+ # To speed up the "start" command, simple caching was introduced in version
+ # 0.6.4. The caching works so that the sequence of "tc" commands for given
+-# configuration is stored in a file (/var/cache/cbq.init by default) which
++# configuration is stored in a file (/System/ApplicationData/cache/cbq.init by default) which
+ # is used next time the "start" command is run to avoid repeated parsing of
+ # configuration files. This cache is invalidated whenever any of the CBQ
+ # configuration files changes. If you want to run "cbq.init start" without
+@@ -474,9 +474,9 @@
+ export LC_ALL=C
+ 
+ ### Command locations
+-TC=/sbin/tc
+-IP=/sbin/ip
+-MP=/sbin/modprobe
++TC=/System/AdminTools/tc
++IP=/System/AdminTools/ip
++MP=/System/AdminTools/modprobe
+ 
+ ### Default filter priorities (must be different)
+ PRIO_RULE_DEFAULT=${PRIO_RULE:-100}
+@@ -485,10 +485,10 @@
+ 
+ ### Default CBQ_PATH & CBQ_CACHE settings
+ CBQ_PATH=${CBQ_PATH:-/etc/sysconfig/cbq}
+-CBQ_CACHE=${CBQ_CACHE:-/var/cache/cbq.init}
++CBQ_CACHE=${CBQ_CACHE:-/System/ApplicationData/cache/cbq.init}
+ 
+ ### Uncomment to enable logfile for debugging
+-#CBQ_DEBUG="/var/run/cbq-$1"
++#CBQ_DEBUG="/System/ApplicationData/RuntimeData/cbq-$1"
+ 
+ ### Modules to probe for. Uncomment the last CBQ_PROBE
+ ### line if you have QoS support compiled into kernel
+@@ -519,7 +519,7 @@
+ 
+ ### Remove root class from device $1
+ cbq_device_off () {
+-	tc qdisc del dev $1 root 2> /dev/null
++	tc qdisc del dev $1 root 2> /System/Devices/null
+ } # cbq_device_off
+ 
+ 
+@@ -605,7 +605,7 @@
+ 	CFILE=`sed -n 's/#.*//; s/[[:space:]]//g; /^[[:alnum:]_]\+=[[:alnum:].,:;/*@-_]\+$/ p' $1/$2`
+ 
+ 	### Check class number
+-	IDVAL=`/usr/bin/printf "%d" 0x$CLASS 2> /dev/null`
++	IDVAL=`/System/Tools/printf "%d" 0x$CLASS 2> /System/Devices/null`
+ 	[ $? -ne 0 -o $IDVAL -lt 2 -o $IDVAL -gt 65535 ] &&
+ 		cbq_fail_off "class ID of $2 must be in range <0002-FFFF>!"
+ 
+@@ -723,7 +723,7 @@
+ 	fi
+ 
+ 	### run the cached commands
+-	exec /bin/sh $CBQ_CACHE 2> /dev/null
++	exec /System/Tools/sh $CBQ_CACHE 2> /System/Devices/null
+ fi
+ 
+ ### Load DEVICES, DEVFIELDS and CLASSLIST
+@@ -744,7 +744,7 @@
+ 	fi
+ 
+ 	### Check if the device is there
+-	ip link show $dev &> /dev/null ||
++	ip link show $dev &> /System/Devices/null ||
+ 		cbq_fail_off "device $dev not found!"
+ 
+ 	### Remove old root qdisc from device
+diff -urN iproute2-2.6.16-060323/examples/cbqinit.eth1 iproute2-2.6.16-060323-STEP/examples/cbqinit.eth1
+--- iproute2-2.6.16-060323/examples/cbqinit.eth1	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/cbqinit.eth1	2006-04-09 08:34:28.434090600 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ TC=/home/root/tc
+ IP=/home/root/ip
+diff -urN iproute2-2.6.16-060323/examples/dhcp-client-script iproute2-2.6.16-060323-STEP/examples/dhcp-client-script
+--- iproute2-2.6.16-060323/examples/dhcp-client-script	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/dhcp-client-script	2006-04-09 08:34:28.438089992 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/System/Tools/bash
+ #
+ # dhclient-script for Linux.
+ #
+@@ -14,7 +14,7 @@
+ # we should install and preserve.
+ #
+ 
+-exec >> /tmp/DHS.log 2>&1
++exec >> /System/TemporaryFiles/DHS.log 2>&1
+ 
+ echo dhc-script $* reason=$reason
+ set | grep "^\(old_\|new_\|check_\)"
+@@ -270,9 +270,9 @@
+ #       $2 = address
+ #
+ UnsolicitedARP() {
+-    if [ -f /sbin/arping ]; then
+-	/sbin/arping -A -c 1 -I "$1" "$2" &
+-	(sleep 2 ; /sbin/arping -U -c 1 -I "$1" "$2" ) &
++    if [ -f /System/AdminTools/arping ]; then
++	/System/AdminTools/arping -A -c 1 -I "$1" "$2" &
++	(sleep 2 ; /System/AdminTools/arping -U -c 1 -I "$1" "$2" ) &
+     fi
+ }
+ 
+@@ -281,8 +281,8 @@
+ #       $2 = test address
+ # returns: 0, if DAD succeeded.
+ DAD() {
+-  if [ -f /sbin/arping ]; then
+-	/sbin/arping -c 2 -w 3 -D -I "$1" "$2"
++  if [ -f /System/AdminTools/arping ]; then
++	/System/AdminTools/arping -c 2 -w 3 -D -I "$1" "$2"
+ 	return $?
+   fi
+   return 0
+@@ -344,10 +344,10 @@
+ PREINIT)
+   ifconfig $interface:dhcp down
+   ifconfig $interface:dhcp1 down
+-  if [ -d /proc/sys/net/ipv4/conf/$interface ]; then
++  if [ -d /System/Processes/sys/net/ipv4/conf/$interface ]; then
+     ifconfig $interface:dhcp 10.10.10.10 netmask 255.255.255.255
+     ifconfig $interface:dhcp down
+-    if [ -d /proc/sys/net/ipv4/conf/$interface ]; then
++    if [ -d /System/Processes/sys/net/ipv4/conf/$interface ]; then
+ 	LOG The interface $interface already configured.
+     fi
+   fi
+diff -urN iproute2-2.6.16-060323/examples/diffserv/Edge1 iproute2-2.6.16-060323-STEP/examples/diffserv/Edge1
+--- iproute2-2.6.16-060323/examples/diffserv/Edge1	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/Edge1	2006-04-09 08:34:28.439089840 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh -x
++#! /System/Tools/sh -x
+ #
+ # sample script on using the ingress capabilities
+ # This script just tags on the ingress interfac using Ipchains
+diff -urN iproute2-2.6.16-060323/examples/diffserv/Edge2 iproute2-2.6.16-060323-STEP/examples/diffserv/Edge2
+--- iproute2-2.6.16-060323/examples/diffserv/Edge2	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/Edge2	2006-04-09 08:34:28.441089536 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh -x
++#! /System/Tools/sh -x
+ #
+ # sample script on using the ingress capabilities
+ # This script tags the fwmark on the ingress interface using IPchains
+diff -urN iproute2-2.6.16-060323/examples/diffserv/Edge31-ca-u32 iproute2-2.6.16-060323-STEP/examples/diffserv/Edge31-ca-u32
+--- iproute2-2.6.16-060323/examples/diffserv/Edge31-ca-u32	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/Edge31-ca-u32	2006-04-09 08:34:28.444089080 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh -x
++#! /System/Tools/sh -x
+ #
+ # sample script on using the ingress capabilities using u32 classifier
+ # This script tags tcindex based on metering on the ingress 
+diff -urN iproute2-2.6.16-060323/examples/diffserv/Edge31-cb-chains iproute2-2.6.16-060323-STEP/examples/diffserv/Edge31-cb-chains
+--- iproute2-2.6.16-060323/examples/diffserv/Edge31-cb-chains	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/Edge31-cb-chains	2006-04-09 08:34:28.446088776 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh -x
++#! /System/Tools/sh -x
+ #
+ # sample script on using the ingress capabilities
+ # This script fwmark tags(IPchains) based on metering on the ingress 
+diff -urN iproute2-2.6.16-060323/examples/diffserv/Edge32-ca-u32 iproute2-2.6.16-060323-STEP/examples/diffserv/Edge32-ca-u32
+--- iproute2-2.6.16-060323/examples/diffserv/Edge32-ca-u32	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/Edge32-ca-u32	2006-04-09 08:34:28.448088472 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh -x
++#! /System/Tools/sh -x
+ #
+ # sample script on using the ingress capabilities using u32 classifier
+ # This script tags tcindex based on metering on the ingress 
+diff -urN iproute2-2.6.16-060323/examples/diffserv/Edge32-cb-chains iproute2-2.6.16-060323-STEP/examples/diffserv/Edge32-cb-chains
+--- iproute2-2.6.16-060323/examples/diffserv/Edge32-cb-chains	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/Edge32-cb-chains	2006-04-09 08:34:28.449088320 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh -x
++#! /System/Tools/sh -x
+ #
+ # sample script on using the ingress capabilities
+ # This script fwmark tags(IPchains) based on metering on the ingress 
+diff -urN iproute2-2.6.16-060323/examples/diffserv/Edge32-cb-u32 iproute2-2.6.16-060323-STEP/examples/diffserv/Edge32-cb-u32
+--- iproute2-2.6.16-060323/examples/diffserv/Edge32-cb-u32	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/Edge32-cb-u32	2006-04-09 08:34:28.453087712 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh 
++#! /System/Tools/sh 
+ #
+ # sample script on using the ingress capabilities using u32 classifier
+ # This script tags tcindex based on metering on the ingress 
+diff -urN iproute2-2.6.16-060323/examples/diffserv/afcbq iproute2-2.6.16-060323-STEP/examples/diffserv/afcbq
+--- iproute2-2.6.16-060323/examples/diffserv/afcbq	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/afcbq	2006-04-09 08:34:28.455087408 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/System/Tools/perl
+ #
+ #
+ # AF using CBQ for a single interface eth0 
+diff -urN iproute2-2.6.16-060323/examples/diffserv/ef-prio iproute2-2.6.16-060323-STEP/examples/diffserv/ef-prio
+--- iproute2-2.6.16-060323/examples/diffserv/ef-prio	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/ef-prio	2006-04-09 08:34:33.754281808 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/System/Tools/perl
+ $TC = "/root/DS-6-beta/iproute2-990530-dsing/tc/tc";
+ $DEV = "dev eth1";
+ $efrate="1.5Mbit";
+diff -urN iproute2-2.6.16-060323/examples/diffserv/efcbq iproute2-2.6.16-060323-STEP/examples/diffserv/efcbq
+--- iproute2-2.6.16-060323/examples/diffserv/efcbq	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/examples/diffserv/efcbq	2006-04-09 08:34:33.755281656 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/System/Tools/perl
+ #
+ $TC = "/root/DS-6-beta/iproute2-990530-dsing/tc/tc";
+ $DEV = "dev eth1";
+diff -urN iproute2-2.6.16-060323/include/linux/netlink.h iproute2-2.6.16-060323-STEP/include/linux/netlink.h
+--- iproute2-2.6.16-060323/include/linux/netlink.h	2006-01-11 07:43:32.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/include/linux/netlink.h	2006-04-09 08:34:33.775278616 +1200
+@@ -4,7 +4,7 @@
+ #include <linux/socket.h> /* for sa_family_t */
+ #include <linux/types.h>
+ 
+-#define NETLINK_ROUTE		0	/* Routing/device hook				*/
++#define NETLINK_ROUTE		0	/* Routing/System/Devicesice hook				*/
+ #define NETLINK_W1		1	/* 1-wire subsystem				*/
+ #define NETLINK_USERSOCK	2	/* Reserved for user mode socket protocols 	*/
+ #define NETLINK_FIREWALL	3	/* Firewalling hook				*/
+diff -urN iproute2-2.6.16-060323/ip/ifcfg iproute2-2.6.16-060323-STEP/ip/ifcfg
+--- iproute2-2.6.16-060323/ip/ifcfg	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/ip/ifcfg	2006-04-09 08:34:38.890500984 +1200
+@@ -1,8 +1,8 @@
+-#! /bin/bash
++#! /System/Tools/bash
+ 
+ CheckForwarding () {
+   local sbase fwd
+-  sbase=/proc/sys/net/ipv4/conf
++  sbase=/System/Processes/sys/net/ipv4/conf
+   fwd=0
+   if [ -d $sbase ]; then
+     for dir in $sbase/*/forwarding; do
+@@ -123,12 +123,12 @@
+ arping -q -A -c 1 -I $dev $ipaddr
+ noarp=$?
+ ( sleep 2 ;
+-  arping -q -U -c 1 -I $dev $ipaddr ) >& /dev/null </dev/null &
++  arping -q -U -c 1 -I $dev $ipaddr ) >& /System/Devices/null </System/Devices/null &
+ 
+-ip route add unreachable 224.0.0.0/24 >& /dev/null 
+-ip route add unreachable 255.255.255.255 >& /dev/null
++ip route add unreachable 224.0.0.0/24 >& /System/Devices/null 
++ip route add unreachable 255.255.255.255 >& /System/Devices/null
+ if [ `ip link ls $dev | grep -c MULTICAST` -ge 1 ]; then
+-  ip route add 224.0.0.0/4 dev $dev scope global >& /dev/null
++  ip route add 224.0.0.0/4 dev $dev scope global >& /System/Devices/null
+ fi
+ 
+ if [ $fwd -eq 0 ]; then
+diff -urN iproute2-2.6.16-060323/ip/ipmaddr.c iproute2-2.6.16-060323-STEP/ip/ipmaddr.c
+--- iproute2-2.6.16-060323/ip/ipmaddr.c	2005-07-06 10:37:15.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/ip/ipmaddr.c	2006-04-09 08:34:44.244687024 +1200
+@@ -85,7 +85,7 @@
+ void read_dev_mcast(struct ma_info **result_p)
+ {
+ 	char buf[256];
+-	FILE *fp = fopen("/proc/net/dev_mcast", "r");
++	FILE *fp = fopen("/System/Processes/net/System/Devices_mcast", "r");
+ 
+ 	if (!fp)
+ 		return;
+@@ -123,7 +123,7 @@
+ {
+ 	struct ma_info m;
+ 	char buf[256];
+-	FILE *fp = fopen("/proc/net/igmp", "r");
++	FILE *fp = fopen("/System/Processes/net/igmp", "r");
+ 
+ 	if (!fp)
+ 		return;
+@@ -158,7 +158,7 @@
+ void read_igmp6(struct ma_info **result_p)
+ {
+ 	char buf[256];
+-	FILE *fp = fopen("/proc/net/igmp6", "r");
++	FILE *fp = fopen("/System/Processes/net/igmp6", "r");
+ 
+ 	if (!fp)
+ 		return;
+diff -urN iproute2-2.6.16-060323/ip/ipmroute.c iproute2-2.6.16-060323-STEP/ip/ipmroute.c
+--- iproute2-2.6.16-060323/ip/ipmroute.c	2005-10-08 05:41:34.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/ip/ipmroute.c	2006-04-09 08:34:44.248686416 +1200
+@@ -53,7 +53,7 @@
+ static void read_viftable(void)
+ {
+ 	char buf[256];
+-	FILE *fp = fopen("/proc/net/ip_mr_vif", "r");
++	FILE *fp = fopen("/System/Processes/net/ip_mr_vif", "r");
+ 
+ 	if (!fp)
+ 		return;
+@@ -78,7 +78,7 @@
+ static void read_mroute_list(FILE *ofp)
+ {
+ 	char buf[256];
+-	FILE *fp = fopen("/proc/net/ip_mr_cache", "r");
++	FILE *fp = fopen("/System/Processes/net/ip_mr_cache", "r");
+ 
+ 	if (!fp)
+ 		return;
+diff -urN iproute2-2.6.16-060323/ip/iproute.c iproute2-2.6.16-060323-STEP/ip/iproute.c
+--- iproute2-2.6.16-060323/ip/iproute.c	2005-10-13 11:49:50.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/ip/iproute.c	2006-04-09 08:34:49.301918208 +1200
+@@ -968,7 +968,7 @@
+ 
+ static int iproute_flush_cache(void)
+ {
+-#define ROUTE_FLUSH_PATH "/proc/sys/net/ipv4/route/flush"
++#define ROUTE_FLUSH_PATH "/System/Processes/sys/net/ipv4/route/flush"
+ 
+ 	int len;
+ 	int flush_fd = open (ROUTE_FLUSH_PATH, O_WRONLY);
+diff -urN iproute2-2.6.16-060323/ip/iptunnel.c iproute2-2.6.16-060323-STEP/ip/iptunnel.c
+--- iproute2-2.6.16-060323/ip/iptunnel.c	2005-02-11 07:31:18.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/ip/iptunnel.c	2006-04-09 08:34:49.324914712 +1200
+@@ -476,7 +476,7 @@
+ 	struct ip_tunnel_parm p1;
+ 
+ 	char buf[512];
+-	FILE *fp = fopen("/proc/net/dev", "r");
++	FILE *fp = fopen("/System/Processes/net/System/Devices", "r");
+ 	if (fp == NULL) {
+ 		perror("fopen");
+ 		return -1;
+@@ -490,7 +490,7 @@
+ 		buf[sizeof(buf) - 1] = 0;
+ 		if ((ptr = strchr(buf, ':')) == NULL ||
+ 		    (*ptr++ = 0, sscanf(buf, "%s", name) != 1)) {
+-			fprintf(stderr, "Wrong format of /proc/net/dev. Sorry.\n");
++			fprintf(stderr, "Wrong format of /System/Processes/net/System/Devices. Sorry.\n");
+ 			return -1;
+ 		}
+ 		if (sscanf(ptr, "%ld%ld%ld%ld%ld%ld%ld%*d%ld%ld%ld%ld%ld%ld%ld",
+diff -urN iproute2-2.6.16-060323/ip/routef iproute2-2.6.16-060323-STEP/ip/routef
+--- iproute2-2.6.16-060323/ip/routef	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/ip/routef	2006-04-09 08:34:54.073192864 +1200
+@@ -1,3 +1,3 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ exec ip -4 ro flush  scope global  type unicast
+diff -urN iproute2-2.6.16-060323/ip/routel iproute2-2.6.16-060323-STEP/ip/routel
+--- iproute2-2.6.16-060323/ip/routel	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/ip/routel	2006-04-09 08:34:54.074192712 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #$Id$
+ 
+ #
+diff -urN iproute2-2.6.16-060323/ip/rtpr iproute2-2.6.16-060323-STEP/ip/rtpr
+--- iproute2-2.6.16-060323/ip/rtpr	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/ip/rtpr	2006-04-09 08:34:54.077192256 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#! /System/Tools/bash
+ 
+ exec tr "[\\\\]" "[
+ ]"
+diff -urN iproute2-2.6.16-060323/lib/utils.c iproute2-2.6.16-060323-STEP/lib/utils.c
+--- iproute2-2.6.16-060323/lib/utils.c	2005-09-02 07:21:50.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/lib/utils.c	2006-04-09 08:35:05.047524512 +1200
+@@ -372,7 +372,7 @@
+ 	} else if (getenv("PROC_ROOT")) {
+ 		snprintf(name, sizeof(name)-1, "%s/net/psched", getenv("PROC_ROOT"));
+ 	} else {
+-		strcpy(name, "/proc/net/psched");
++		strcpy(name, "/System/Processes/net/psched");
+ 	}
+ 	fp = fopen(name, "r");
+ 
+diff -urN iproute2-2.6.16-060323/man/man8/ip.8 iproute2-2.6.16-060323-STEP/man/man8/ip.8
+--- iproute2-2.6.16-060323/man/man8/ip.8	2006-01-04 08:25:29.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/man/man8/ip.8	2006-04-09 08:35:05.070521016 +1200
+@@ -1786,7 +1786,7 @@
+ is issued. F.e. if you insert:
+ .sp
+ .in +8
+-rtmon file /var/log/rtmon.log
++rtmon file /System/ApplicationData/log/rtmon.log
+ .in -8
+ .sp
+ in a startup script, you will be able to view the full history
+diff -urN iproute2-2.6.16-060323/misc/Makefile iproute2-2.6.16-060323-STEP/misc/Makefile
+--- iproute2-2.6.16-060323/misc/Makefile	2005-06-24 05:39:57.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/Makefile	2006-04-09 08:49:13.022612704 +1200
+@@ -1,7 +1,7 @@
+ SSOBJ=ss.o ssfilter.o
+ LNSTATOBJ=lnstat.o lnstat_util.o
+ 
+-TARGETS=ss nstat ifstat rtacct arpd lnstat
++TARGETS=ss nstat ifstat rtacct lnstat
+ 
+ include ../Config
+ 
+diff -urN iproute2-2.6.16-060323/misc/arpd.c iproute2-2.6.16-060323-STEP/misc/arpd.c
+--- iproute2-2.6.16-060323/misc/arpd.c	2005-07-06 10:37:15.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/arpd.c	2006-04-09 08:35:15.877878048 +1200
+@@ -40,7 +40,7 @@
+ int resolve_hosts;
+ 
+ DB	*dbase;
+-char	*dbname = "/var/lib/arpd/arpd.db";
++char	*dbname = "/System/ApplicationData/lib/arpd/arpd.db";
+ 
+ int	ifnum;	
+ int	*ifvec;
+@@ -125,7 +125,7 @@
+ 		FILE *fp;
+ 
+ 		if (active_probing) {
+-			sprintf(buf, "/proc/sys/net/ipv4/neigh/%s/mcast_solicit", ifnames[i]);
++			sprintf(buf, "/System/Processes/sys/net/ipv4/neigh/%s/mcast_solicit", ifnames[i]);
+ 			if ((fp = fopen(buf, "w")) != NULL) {
+ 				if (no_kernel_broadcasts)
+ 					strcpy(buf, "0\n");
+@@ -136,7 +136,7 @@
+ 			}
+ 		}
+ 
+-		sprintf(buf, "/proc/sys/net/ipv4/neigh/%s/app_solicit", ifnames[i]);
++		sprintf(buf, "/System/Processes/sys/net/ipv4/neigh/%s/app_solicit", ifnames[i]);
+ 		if ((fp = fopen(buf, "w")) != NULL) {
+ 			sprintf(buf, "%d\n", active_probing<=1 ? 1 : active_probing);
+ 			fputs(buf, fp);
+@@ -158,14 +158,14 @@
+ 		FILE *fp;
+ 
+ 		if (active_probing) {
+-			sprintf(buf, "/proc/sys/net/ipv4/neigh/%s/mcast_solicit", ifnames[i]);
++			sprintf(buf, "/System/Processes/sys/net/ipv4/neigh/%s/mcast_solicit", ifnames[i]);
+ 			if ((fp = fopen(buf, "w")) != NULL) {
+ 				strcpy(buf, "3\n");
+ 				fputs(buf, fp);
+ 				fclose(fp);
+ 			}
+ 		}
+-		sprintf(buf, "/proc/sys/net/ipv4/neigh/%s/app_solicit", ifnames[i]);
++		sprintf(buf, "/System/Processes/sys/net/ipv4/neigh/%s/app_solicit", ifnames[i]);
+ 		if ((fp = fopen(buf, "w")) != NULL) {
+ 			strcpy(buf, "0\n");
+ 			fputs(buf, fp);
+@@ -787,7 +787,7 @@
+ 		}
+ 
+ 		chdir("/");
+-		fd = open("/dev/null", O_RDWR);
++		fd = open("/System/Devices/null", O_RDWR);
+ 		if (fd >= 0) {
+ 			dup2(fd, 0);
+ 			dup2(fd, 1);
+diff -urN iproute2-2.6.16-060323/misc/ifstat.c iproute2-2.6.16-060323-STEP/misc/ifstat.c
+--- iproute2-2.6.16-060323/misc/ifstat.c	2005-07-09 10:08:47.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/ifstat.c	2006-04-09 08:35:15.884876984 +1200
+@@ -711,7 +711,7 @@
+ 		if (!ignore_history) {
+ 			FILE *tfp;
+ 			long uptime;
+-			if ((tfp = fopen("/proc/uptime", "r")) != NULL) {
++			if ((tfp = fopen("/System/Processes/uptime", "r")) != NULL) {
+ 				if (fscanf(tfp, "%ld", &uptime) != 1)
+ 					uptime = -1;
+ 				fclose(tfp);
+diff -urN iproute2-2.6.16-060323/misc/lnstat.h iproute2-2.6.16-060323-STEP/misc/lnstat.h
+--- iproute2-2.6.16-060323/misc/lnstat.h	2004-10-20 09:47:13.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/misc/lnstat.h	2006-04-09 08:35:15.888876376 +1200
+@@ -5,7 +5,7 @@
+ 
+ #define LNSTAT_VERSION "0.02 041002"
+ 
+-#define PROC_NET_STAT	"/proc/net/stat"
++#define PROC_NET_STAT	"/System/Processes/net/stat"
+ 
+ #define LNSTAT_MAX_FILES			32
+ #define LNSTAT_MAX_FIELDS_PER_LINE		32
+diff -urN iproute2-2.6.16-060323/misc/lnstat_util.c iproute2-2.6.16-060323-STEP/misc/lnstat_util.c
+--- iproute2-2.6.16-060323/misc/lnstat_util.c	2005-09-02 06:11:03.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/lnstat_util.c	2006-04-09 08:35:15.891875920 +1200
+@@ -215,7 +215,7 @@
+ 	dir = opendir(path);
+ 	if (!dir) {
+ 		struct lnstat_file *lf;
+-		/* Old kernel, before /proc/net/stat was introduced */
++		/* Old kernel, before /System/Processes/net/stat was introduced */
+ 		fprintf(stderr, "Your kernel doesn't have lnstat support. ");
+ 
+ 		/* we only support rtstat, not multiple files */
+@@ -233,7 +233,7 @@
+ 
+ 		fprintf(stderr, "Fallback to old rtstat-only operation\n");
+ 
+-		lf = alloc_and_open("/proc/net", "rt_cache_stat");
++		lf = alloc_and_open("/System/Processes/net", "rt_cache_stat");
+ 		if (!lf)
+ 			return NULL;
+ 		lf->compat = 1;
+diff -urN iproute2-2.6.16-060323/misc/netbug iproute2-2.6.16-060323-STEP/misc/netbug
+--- iproute2-2.6.16-060323/misc/netbug	2004-04-16 08:56:59.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/netbug	2006-04-09 08:35:15.892875768 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#! /System/Tools/bash
+ 
+ echo -n "Send network configuration summary to [ENTER means kuznet@ms2.inr.ac.ru] "
+ IFS="" read mail || exit 1
+@@ -8,42 +8,42 @@
+ netbug=""
+ while [ "$netbug" = "" ]; do
+ 	netbug=`echo netbug.$$.$RANDOM`
+-	if [ -e /tmp/$netbug ]; then
++	if [ -e /System/TemporaryFiles/$netbug ]; then
+ 		netbug=""
+ 	fi
+ done
+ 
+-tmppath=/tmp/$netbug
++tmppath=/System/TemporaryFiles/$netbug
+ 
+ trap "rm -rf $tmppath $tmppath.tar.gz" 0 SIGINT
+ 
+ mkdir $tmppath
+ mkdir $tmppath/net
+ 
+-cat /proc/slabinfo > $tmppath/slabinfo
+-cat /proc/net/netstat > $tmppath/net/netstat
+-cat /proc/net/unix > $tmppath/net/unix
+-cat /proc/net/packet > $tmppath/net/packet
+-cat /proc/net/netlink > $tmppath/net/netlink
+-cat /proc/net/psched > $tmppath/net/psched
+-cat /proc/net/softnet_stat > $tmppath/net/softnet_stat
+-cat /proc/net/sockstat > $tmppath/net/sockstat
+-cat /proc/net/tcp > $tmppath/net/tcp
+-cat /proc/net/udp > $tmppath/net/udp
+-cat /proc/net/raw > $tmppath/net/raw
+-cat /proc/net/snmp > $tmppath/net/snmp
++cat /System/Processes/slabinfo > $tmppath/slabinfo
++cat /System/Processes/net/netstat > $tmppath/net/netstat
++cat /System/Processes/net/unix > $tmppath/net/unix
++cat /System/Processes/net/packet > $tmppath/net/packet
++cat /System/Processes/net/netlink > $tmppath/net/netlink
++cat /System/Processes/net/psched > $tmppath/net/psched
++cat /System/Processes/net/softnet_stat > $tmppath/net/softnet_stat
++cat /System/Processes/net/sockstat > $tmppath/net/sockstat
++cat /System/Processes/net/tcp > $tmppath/net/tcp
++cat /System/Processes/net/udp > $tmppath/net/udp
++cat /System/Processes/net/raw > $tmppath/net/raw
++cat /System/Processes/net/snmp > $tmppath/net/snmp
+ 
+ ss -aioem -D $tmppath/tcpdiag
+ 
+-if [ -e /proc/net/tcp6 ]; then
+-	cat /proc/net/sockstat6 > $tmppath/net/sockstat6
+-	cat /proc/net/tcp6 > $tmppath/net/tcp6
+-	cat /proc/net/udp6 > $tmppath/net/udp6
+-	cat /proc/net/raw6 > $tmppath/net/raw6
+-	cat /proc/net/snmp6 > $tmppath/net/snmp6
++if [ -e /System/Processes/net/tcp6 ]; then
++	cat /System/Processes/net/sockstat6 > $tmppath/net/sockstat6
++	cat /System/Processes/net/tcp6 > $tmppath/net/tcp6
++	cat /System/Processes/net/udp6 > $tmppath/net/udp6
++	cat /System/Processes/net/raw6 > $tmppath/net/raw6
++	cat /System/Processes/net/snmp6 > $tmppath/net/snmp6
+ fi
+ 
+-cd /tmp
++cd /System/TemporaryFiles
+ tar c $netbug | gzip -9c > $netbug.tar.gz
+ 
+ uuencode $netbug.tar.gz $netbug.tar.gz | mail -s $netbug "$mail"
+diff -urN iproute2-2.6.16-060323/misc/nstat.c iproute2-2.6.16-060323-STEP/misc/nstat.c
+--- iproute2-2.6.16-060323/misc/nstat.c	2005-07-09 10:08:47.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/nstat.c	2006-04-09 08:35:15.898874856 +1200
+@@ -1,5 +1,5 @@
+ /*
+- * nstat.c	handy utility to read counters /proc/net/netstat and snmp
++ * nstat.c	handy utility to read counters /System/Processes/net/netstat and snmp
+  *
+  *		This program is free software; you can redistribute it and/or
+  *		modify it under the terms of the GNU General Public License
+@@ -48,7 +48,7 @@
+ 	char store[128];
+ 	char *p = getenv(env);
+ 	if (!p) {
+-		p = getenv("PROC_ROOT") ? : "/proc";
++		p = getenv("PROC_ROOT") ? : "/System/Processes";
+ 		snprintf(store, sizeof(store)-1, "%s/%s", p, name);
+ 		p = store;
+ 	}
+@@ -529,7 +529,7 @@
+ 	if (getenv("NSTAT_HISTORY"))
+ 		snprintf(hist_name, sizeof(hist_name), getenv("NSTAT_HISTORY"));
+ 	else
+-		sprintf(hist_name, "/tmp/.nstat.u%d", getuid());
++		sprintf(hist_name, "/System/TemporaryFiles/.nstat.u%d", getuid());
+ 
+ 	if (reset_history)
+ 		unlink(hist_name);
+@@ -561,7 +561,7 @@
+ 		if (!ignore_history) {
+ 			FILE *tfp;
+ 			long uptime;
+-			if ((tfp = fopen("/proc/uptime", "r")) != NULL) {
++			if ((tfp = fopen("/System/Processes/uptime", "r")) != NULL) {
+ 				if (fscanf(tfp, "%ld", &uptime) != 1)
+ 					uptime = -1;
+ 				fclose(tfp);
+diff -urN iproute2-2.6.16-060323/misc/rtacct.c iproute2-2.6.16-060323-STEP/misc/rtacct.c
+--- iproute2-2.6.16-060323/misc/rtacct.c	2005-07-09 10:08:47.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/rtacct.c	2006-04-09 08:35:15.904873944 +1200
+@@ -1,5 +1,5 @@
+ /*
+- * rtacct.c		Applet to display contents of /proc/net/rt_acct.
++ * rtacct.c		Applet to display contents of /System/Processes/net/rt_acct.
+  *
+  *		This program is free software; you can redistribute it and/or
+  *		modify it under the terms of the GNU General Public License
+@@ -48,7 +48,7 @@
+ 	char store[1024];
+ 	char *p = getenv(env);
+ 	if (!p) {
+-		p = getenv("PROC_ROOT") ? : "/proc";
++		p = getenv("PROC_ROOT") ? : "/System/Processes";
+ 		snprintf(store, sizeof(store)-1, "%s/%s", p, name);
+ 		p = store;
+ 	}
+@@ -103,7 +103,7 @@
+ 		if (tbl_ptr != NULL)
+ 			return tbl_ptr;
+ 
+-		fd = open("/dev/mem", O_RDONLY);
++		fd = open("/System/Devices/mem", O_RDONLY);
+ 		if (fd < 0) {
+ 			perror("magic open");
+ 			exit(-1);
+@@ -537,7 +537,7 @@
+ 	if (getenv("RTACCT_HISTORY"))
+ 		snprintf(hist_name, sizeof(hist_name), getenv("RTACCT_HISTORY"));
+ 	else
+-		sprintf(hist_name, "/tmp/.rtacct.u%d", getuid());
++		sprintf(hist_name, "/System/TemporaryFiles/.rtacct.u%d", getuid());
+ 
+ 	if (reset_history)
+ 		unlink(hist_name);
+@@ -578,7 +578,7 @@
+ 		if (!ignore_history) {
+ 			FILE *tfp;
+ 			long uptime;
+-			if ((tfp = fopen("/proc/uptime", "r")) != NULL) {
++			if ((tfp = fopen("/System/Processes/uptime", "r")) != NULL) {
+ 				if (fscanf(tfp, "%ld", &uptime) != 1)
+ 					uptime = -1;
+ 				fclose(tfp);
+diff -urN iproute2-2.6.16-060323/misc/ss.c iproute2-2.6.16-060323-STEP/misc/ss.c
+--- iproute2-2.6.16-060323/misc/ss.c	2005-09-02 07:21:50.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/misc/ss.c	2006-04-09 08:35:22.222913456 +1200
+@@ -117,7 +117,7 @@
+ 	char store[128];
+ 	char *p = getenv(env);
+ 	if (!p) {
+-		p = getenv("PROC_ROOT") ? : "/proc";
++		p = getenv("PROC_ROOT") ? : "/System/Processes";
+ 		snprintf(store, sizeof(store)-1, "%s/%s", p, name);
+ 		p = store;
+ 	}
+@@ -216,7 +216,7 @@
+ 	sprintf(pattern, "socket:[%d]", ino);
+ 	pattern_len = strlen(pattern);
+ 
+-	strncpy(name, getenv("PROC_ROOT") ? : "/proc/", sizeof(name)/2);
++	strncpy(name, getenv("PROC_ROOT") ? : "/System/Processes/", sizeof(name)/2);
+ 	name[sizeof(name)/2] = 0;
+ 	if (strlen(name) == 0 ||
+ 	    name[strlen(name)-1] != '/')
+@@ -263,7 +263,7 @@
+ 				char tmp[1024];
+ 				FILE *fp;
+ 				snprintf(tmp, sizeof(tmp), "%s/%d/stat",
+-					 getenv("PROC_ROOT") ? : "/proc", pid);
++					 getenv("PROC_ROOT") ? : "/System/Processes", pid);
+ 				if ((fp = fopen(tmp, "r")) != NULL) {
+ 					fscanf(fp, "%*d (%[^)])", process);
+ 					fclose(fp);
+@@ -440,7 +440,7 @@
+ void init_service_resolver(void)
+ {
+ 	char buf[128];
+-	FILE *fp = popen("/usr/sbin/rpcinfo -p 2>/dev/null", "r");
++	FILE *fp = popen("/System/AdminTools/rpcinfo -p 2>/System/Devices/null", "r");
+ 	if (fp) {
+ 		fgets(buf, sizeof(buf), fp);
+ 		while (fgets(buf, sizeof(buf), fp) != NULL) {
+@@ -1652,7 +1652,7 @@
+ 	    && tcp_show_netlink(f, NULL, socktype) == 0)
+ 		return 0;
+ 
+-	/* Sigh... We have to parse /proc/net/tcp... */
++	/* Sigh... We have to parse /System/Processes/net/tcp... */
+ 
+ 	/* Estimate amount of sockets and try to allocate
+ 	 * huge buffer to read all the table at one read.
+@@ -2176,7 +2176,7 @@
+ 				char procname[64];
+ 				FILE *fp;
+ 				sprintf(procname, "%s/%d/stat",
+-					getenv("PROC_ROOT") ? : "/proc", pid);
++					getenv("PROC_ROOT") ? : "/System/Processes", pid);
+ 				if ((fp = fopen(procname, "r")) != NULL) {
+ 					if (fscanf(fp, "%*d (%[^)])", procname) == 1) {
+ 						sprintf(procname+strlen(procname), "/%d", pid);  
+diff -urN iproute2-2.6.16-060323/tc/m_ipt.c iproute2-2.6.16-060323-STEP/tc/m_ipt.c
+--- iproute2-2.6.16-060323/tc/m_ipt.c	2005-06-24 05:36:38.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/tc/m_ipt.c	2006-04-09 08:35:51.100523392 +1200
+@@ -52,7 +52,7 @@
+ #endif
+ 
+ #ifndef PROC_SYS_MODPROBE
+-#define PROC_SYS_MODPROBE "/proc/sys/kernel/modprobe"
++#define PROC_SYS_MODPROBE "/System/Processes/sys/kernel/modprobe"
+ #endif
+ 
+ static const char *ipthooks[] = {
+diff -urN iproute2-2.6.16-060323/tc/tc_core.c iproute2-2.6.16-060323-STEP/tc/tc_core.c
+--- iproute2-2.6.16-060323/tc/tc_core.c	2004-07-31 08:26:15.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/tc/tc_core.c	2006-04-09 08:36:08.372897592 +1200
+@@ -74,7 +74,7 @@
+ 
+ int tc_core_init()
+ {
+-	FILE *fp = fopen("/proc/net/psched", "r");
++	FILE *fp = fopen("/System/Processes/net/psched", "r");
+ 
+ 	if (fp == NULL)
+ 		return -1;
+diff -urN iproute2-2.6.16-060323/tc/tc_util.c iproute2-2.6.16-060323-STEP/tc/tc_util.c
+--- iproute2-2.6.16-060323/tc/tc_util.c	2005-03-15 07:44:54.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/tc/tc_util.c	2006-04-09 08:36:17.052578080 +1200
+@@ -101,7 +101,7 @@
+ 	return buf;
+ }
+ 
+-/* See http://physics.nist.gov/cuu/Units/binary.html */
++/* See http://physics.nist.gov/cuu/Units/System/Toolsary.html */
+ static const struct rate_suffix {
+ 	const char *name;
+ 	double scale;
+diff -urN iproute2-2.6.16-060323/testsuite/Makefile iproute2-2.6.16-060323-STEP/testsuite/Makefile
+--- iproute2-2.6.16-060323/testsuite/Makefile	2005-06-24 08:18:38.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/testsuite/Makefile	2006-04-09 08:36:17.054577776 +1200
+@@ -5,7 +5,7 @@
+ 
+ TESTS := $(patsubst tests/%,%,$(wildcard tests/*.t))
+ IPVERS := $(filter-out iproute2/Makefile,$(wildcard iproute2/*))
+-KENV := $(shell cat /proc/config.gz | gunzip | grep ^CONFIG)
++KENV := $(shell cat /System/Processes/config.gz | gunzip | grep ^CONFIG)
+ 
+ .PHONY: compile listtests alltests configure $(TESTS)
+ 
+diff -urN iproute2-2.6.16-060323/testsuite/lib/generic.sh iproute2-2.6.16-060323-STEP/testsuite/lib/generic.sh
+--- iproute2-2.6.16-060323/testsuite/lib/generic.sh	2005-06-24 08:37:43.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/testsuite/lib/generic.sh	2006-04-09 08:36:24.749407984 +1200
+@@ -25,8 +25,8 @@
+ {
+ 	SCRIPT=$1; shift
+ 	DESC=$1; shift
+-	TMP_ERR=`mktemp /tmp/tc_testsuite.XXXXXX` || exit
+-	TMP_OUT=`mktemp /tmp/tc_testsuite.XXXXXX` || exit
++	TMP_ERR=`mktemp /System/TemporaryFiles/tc_testsuite.XXXXXX` || exit
++	TMP_OUT=`mktemp /System/TemporaryFiles/tc_testsuite.XXXXXX` || exit
+ 
+ 	$TC $@ 2> $TMP_ERR > $TMP_OUT
+ 
+@@ -53,8 +53,8 @@
+ {
+ 	SCRIPT=$1; shift
+ 	DESC=$1; shift
+-	TMP_ERR=`mktemp /tmp/tc_testsuite.XXXXXX` || exit
+-	TMP_OUT=`mktemp /tmp/tc_testsuite.XXXXXX` || exit
++	TMP_ERR=`mktemp /System/TemporaryFiles/tc_testsuite.XXXXXX` || exit
++	TMP_OUT=`mktemp /System/TemporaryFiles/tc_testsuite.XXXXXX` || exit
+ 
+ 	$IP $@ 2> $TMP_ERR > $TMP_OUT
+ 
+diff -urN iproute2-2.6.16-060323/testsuite/tests/cbq.t iproute2-2.6.16-060323-STEP/testsuite/tests/cbq.t
+--- iproute2-2.6.16-060323/testsuite/tests/cbq.t	2005-06-24 08:31:37.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/testsuite/tests/cbq.t	2006-04-09 08:36:24.751407680 +1200
+@@ -1,5 +1,5 @@
+-#!/bin/sh
+-$TC qdisc del dev $DEV root >/dev/null 2>&1
++#!/System/Tools/sh
++$TC qdisc del dev $DEV root >/System/Devices/null 2>&1
+ $TC qdisc add dev $DEV root handle 10:0 cbq bandwidth 100Mbit avpkt 1400 mpu 64
+ $TC class add dev $DEV parent 10:0  classid 10:12   cbq bandwidth 100mbit rate 100mbit allot 1514 prio 3 maxburst 1 avpkt  500 bounded
+ $TC qdisc list dev $DEV
+diff -urN iproute2-2.6.16-060323/testsuite/tests/cls-testbed.t iproute2-2.6.16-060323-STEP/testsuite/tests/cls-testbed.t
+--- iproute2-2.6.16-060323/testsuite/tests/cls-testbed.t	2005-06-24 08:31:37.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/testsuite/tests/cls-testbed.t	2006-04-09 08:36:24.752407528 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/System/Tools/bash
+ # vim: ft=sh
+ 
+ source lib/generic.sh
+diff -urN iproute2-2.6.16-060323/testsuite/tests/dsmark.t iproute2-2.6.16-060323-STEP/testsuite/tests/dsmark.t
+--- iproute2-2.6.16-060323/testsuite/tests/dsmark.t	2005-06-24 08:31:37.000000000 +1200
++++ iproute2-2.6.16-060323-STEP/testsuite/tests/dsmark.t	2006-04-09 08:36:24.750407832 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/System/Tools/bash
+ # vim: ft=sh
+ 
+ source lib/generic.sh
+diff -urN iproute2-2.6.16-060323/testsuite/tests/policer iproute2-2.6.16-060323-STEP/testsuite/tests/policer
+--- iproute2-2.6.16-060323/testsuite/tests/policer	2005-01-18 12:27:05.000000000 +1300
++++ iproute2-2.6.16-060323-STEP/testsuite/tests/policer	2006-04-09 08:36:24.752407528 +1200
+@@ -1,5 +1,5 @@
+-#!/bin/sh
+-$TC qdisc del dev $DEV root >/dev/null 2>&1
++#!/System/Tools/sh
++$TC qdisc del dev $DEV root >/System/Devices/null 2>&1
+ $TC qdisc add dev $DEV root handle 10:0 cbq bandwidth 100Mbit avpkt 1400 mpu 64
+ $TC class add dev $DEV parent 10:0  classid 10:12   cbq bandwidth 100mbit rate 100mbit allot 1514 prio 3 maxburst 1 avpkt  500 bounded
+ $TC filter add dev $DEV parent 10:0 protocol ip prio 10 u32 match ip protocol 1 0xff police rate 2kbit buffer 10k drop flowid 10:12

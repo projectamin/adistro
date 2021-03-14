@@ -1,0 +1,64 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Sed-->
+
+<!--retreiving package-->
+
+
+	<amin:download>
+		<amin:param name='uri'>ftp://ftp.gnu.org/gnu/sed/sed-4.0.9.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/sed-4.0.9.tar.gz</amin:param>
+	</amin:download>
+	
+	<amin:download>
+		<amin:param name='alt'>http://adistroSTEP.st8vrt.com/patches/sed-4.0.9-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/sed-4.0.9-STEP.patch</amin:param>
+        </amin:download>	
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/sed-4.0.9.tar.gz</amin:param>
+	</amin:command>
+	
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:param name='input'>/opt/adistro/packages/sed-4.0.9-STEP.patch</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/sed-4.0.9</amin:shell>
+        </amin:command>	
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/bootstrap/System/Applications/Sed-4.0.9/
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/sed-4.0.9</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/sed-4.0.9</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/sed-4.0.9</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>sed-4.0.9</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Sed-4.0.9/bin/sed</amin:param>
+		<amin:param name='target'>sed</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+
+</amin:profile>

@@ -1,0 +1,38 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Tar-1.22-->
+
+<!--retreiving package-->
+
+
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/gnu/tar/tar-1.22.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.funet.fi/pub/gnu/alpha/gnu/tar/tar-1.22.tar.gz</amin:param>
+		<amin:param name="alt">http://slackware.oregonstate.edu/slackware_source/a/tar/tar-1.22.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/tar-1.22.tar.gz</amin:param>
+	</amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistrobc/src</amin:param>
+		<amin:param name='archive'>/opt/adistrobc/packages/tar-1.22.tar.gz</amin:param>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:flag>
+			prefix=/adistrobc-bootstrap 
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/tar-1.22</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistrobc/src/tar-1.22</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/src/tar-1.22</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>tar-1.22</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+</amin:profile>

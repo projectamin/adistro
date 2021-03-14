@@ -1,0 +1,88 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Bash-->
+
+<!--retreiving package-->
+
+	<amin:download>
+		<amin:param name='uri'>http://mirrors.sunsite.dk/gnu/bash/bash-3.0.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/bash-3.0.tar.gz</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/bash-3.0-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/bash-3.0-STEP.patch</amin:param>
+        </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/bash-3.0.tar.gz</amin:param>
+	</amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/packages/bash-3.0-STEP.patch</amin:param>
+                <amin:shell name="dir">/build/bash-3.0</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/System/Applications/Bash-3.0/
+		sysconfdir=/System/Settings
+		</amin:flag>
+		<amin:shell name='dir'>/build/bash-3.0</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name='env'>CFLAGS=-L/System/Library/Libraries/Ncurses-5.4/lib</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/build/bash-3.0</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name='env'>CFLAGS=-L/System/Library/Libraries/Ncurses-5.4/lib</amin:shell>
+		<!--<amin:shell name="env">LD_LIBRARY_PATH=/System/Library/Libraries/Ncurses-5.4/lib:/System/Library/Libraries/Glibc-2.3.4/lib</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/bash-3.0</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name='env'>CFLAGS=-L/System/Library/Libraries/Ncurses-5.4/lib</amin:shell>
+	</amin:command>
+
+	<!--<amin:command name='remove'>
+		<amin:param name='target'>bash-3.0</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>-->
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Bash-3.0/bin/bash</amin:param>
+		<amin:param name='target'>bash</amin:param>
+		<amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Bash-3.0/bin/bash</amin:param>
+		<amin:param name='target'>sh</amin:param>
+		<amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Bash-3.0/bin/bashbug</amin:param>
+		<amin:param name='target'>bashbug</amin:param>
+		<amin:shell name='dir'>/System/Tools/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

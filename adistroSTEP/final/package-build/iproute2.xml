@@ -1,0 +1,152 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--iproute2-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://developer.osdl.org/dev/iproute2/download/iproute2-2.6.16-060323.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/iproute2-2.6.16-060323.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/iproute2-2.6.16-060323-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/iproute2-2.6.16-060323-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/iproute2-2.6.16-060323.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/iproute2-2.6.16-060323-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/iproute2-2.6.16-060323</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='system_command'>
+                <amin:param name='basename'>chmod</amin:param>
+                <amin:param>+x configure</amin:param>
+                <amin:shell name='dir'>/build/iproute2-2.6.16-060323/</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+                <amin:shell name='dir'>/build/iproute2-2.6.16-060323</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/iproute2-2.6.16-060323</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/iproute2-2.6.16-060323</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">iproute2-2.6.16-060323</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/ctstat</amin:param>
+                <amin:param name='target'>ctstat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/ifcfg</amin:param>
+                <amin:param name='target'>ifcfg</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/ifstat</amin:param>
+                <amin:param name='target'>ifstat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command> 
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/ip</amin:param>
+                <amin:param name='target'>ip</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/lnstat</amin:param>
+                <amin:param name='target'>lnstat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/nstat</amin:param>
+                <amin:param name='target'>nstat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/routef</amin:param>
+                <amin:param name='target'>routef</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/routel</amin:param>
+                <amin:param name='target'>routel</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/rtacct</amin:param>
+                <amin:param name='target'>rtacct</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/rtmon</amin:param>
+                <amin:param name='target'>rtmon</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/rtpr</amin:param>
+                <amin:param name='target'>rtpr</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/rtstat</amin:param>
+                <amin:param name='target'>rtstat</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/Iproute2-2.6.16-060323/sbin/ss</amin:param>
+                <amin:param name='target'>ss</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

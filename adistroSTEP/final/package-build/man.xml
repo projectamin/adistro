@@ -1,0 +1,67 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--man-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://cvsup.de.openbsd.org/pub/linux/utils/man/man-1.5p.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/man-1.5p.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/man-1.5p-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/man-1.5p-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/man-1.5p.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/man-1.5p-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/man-1.5p</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Applications/Man-1.5p
+                </amin:flag>
+                <amin:shell name='dir'>/build/man-1.5p</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/man-1.5p</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/man-1.5p</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">man-1.5p</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <!--<amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/man-1.5p/bin/sed</amin:param>
+                <amin:param name='target'>sed</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>-->
+
+</amin:chroot>
+</amin:profile>

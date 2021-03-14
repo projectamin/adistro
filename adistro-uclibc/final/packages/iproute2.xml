@@ -1,0 +1,46 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--IPRoute2-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/build</amin:param>
+		<amin:param name='archive'>/packages/iproute2-2.6.23.tar.bz2</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/packages/iproute2-remove-ipv6.patch</amin:flag>
+                <amin:shell name="dir">/build/iproute2-2.6.23</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='search_replace'>
+		<amin:param name='target'>misc/Makefile</amin:param>
+		<amin:flag name='find'>TARGETS=ss nstat ifstat rtacct arpd lnstat</amin:flag>
+		<amin:flag name='replace'>TARGETS=ss nstat ifstat rtacct lnstat</amin:flag>
+		<amin:shell name='dir'>/build/iproute2-2.6.23</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>SBINDIR=/sbin</amin:param>
+		<amin:shell name='dir'>/build/iproute2-2.6.23</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install SBINDIR=/sbin</amin:param>
+		<amin:shell name='dir'>/build/iproute2-2.6.23</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>iproute2-2.6.23</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+
+</amin:chroot>
+</amin:profile>

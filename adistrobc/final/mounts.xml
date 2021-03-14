@@ -1,0 +1,30 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>proc sys</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc</amin:shell>
+	</amin:command>
+	<amin:command name='mount'>
+		<amin:flag name='type'>proc</amin:flag>
+		<amin:param name='device'>proc</amin:param>
+		<amin:param name='target'>/opt/adistrobc/proc</amin:param>
+	</amin:command>
+	<amin:command name='mount'>
+		<amin:flag name='type'>sysfs</amin:flag>
+		<amin:param name='device'>sysfs</amin:param>
+		<amin:param name='target'>/opt/adistrobc/sys/</amin:param>
+	</amin:command>
+	<amin:command name='mount'>
+		<amin:flag>f</amin:flag>
+		<amin:flag name='type'>tmpfs</amin:flag>
+		<amin:param name='device'>tmpfs</amin:param>
+		<amin:param name='target'>/opt/adistrobc/dev/shm</amin:param>
+	</amin:command>
+	<amin:command name='mount'>
+		<amin:flag>f</amin:flag>
+		<amin:flag name="type">devpts</amin:flag>
+		<amin:param>-o gid=4,mode=620</amin:param>
+		<amin:param name="device">devpts</amin:param>
+		<amin:param name='target'>/opt/adistrobc/dev/pts</amin:param>
+	</amin:command>
+</amin:profile>

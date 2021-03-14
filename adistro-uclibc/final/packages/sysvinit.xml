@@ -1,0 +1,88 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Sysvinit-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/sysvinit-2.85.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/sysvinit-2.85.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/sysvinit-2.85.tar.gz</amin:param>
+	</amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='make'>
+		<amin:param>-C src</amin:param>
+		<amin:shell name='dir'>/build/sysvinit-2.85</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>-C src install</amin:param>
+		<amin:shell name='dir'>/build/sysvinit-2.85</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>rc.halt</amin:param>
+		<amin:param name='target'>rc.0</amin:param>
+		<amin:shell name='dir'>/etc</amin:shell>
+	</amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+                <amin:param name='source'>rc.sysinit</amin:param>
+                <amin:param name='target'>rc.1</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+                <amin:param name='source'>rc.sysinit</amin:param>
+                <amin:param name='target'>rc.2</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+                <amin:param name='source'>rc.sysinit</amin:param>
+                <amin:param name='target'>rc.3</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+                <amin:param name='source'>rc.sysinit</amin:param>
+                <amin:param name='target'>rc.4</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+                <amin:param name='source'>rc.sysinit</amin:param>
+                <amin:param name='target'>rc.5</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+                <amin:param name='source'>rc.halt</amin:param>
+                <amin:param name='target'>rc.6</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>sysvinit-2.85</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+
+</amin:chroot>
+</amin:profile>

@@ -1,0 +1,148 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+
+<!--retreiving package-->
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/glibc/glibc-2.4.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/glibc-2.4.tar.bz2</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/glibc-2.4-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/glibc-2.4-STEP.patch</amin:param>
+        </amin:download>
+
+<!--installing-->
+
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/glibc-2.4.tar.bz2</amin:param>
+        </amin:command> 
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/packages/glibc-2.4-STEP.patch</amin:flag>
+                <amin:shell name='dir'>/build/glibc-2.4</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command> 
+ 
+        <amin:command name='mkdir'>
+                <amin:param name='target'>glibc-build</amin:param>
+                <amin:shell name="dir">/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+                <amin:param name='config'>../glibc-2.4/configure</amin:param>
+                <amin:flag>
+                 disable-profile
+                 enable-add-ons=nptl
+                 with-tls
+                 with-headers=/bootstrap/System/Library/Headers/
+                 with-__thread
+                 enable-kernel=2.6.0
+                 cache-file=/System/Devices/null
+                 prefix=/System/Library/Libraries/Glibc-2.4/
+		 sysconfdir=/System/Settings/
+		 includedir=/System/Library/Headers
+                </amin:flag>
+                <amin:shell name="dir">/build/glibc-build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+                <amin:shell name="env">LDFLAGS=-B/bootstrap/System/Library/Libraries/Glibc-2.4/lib</amin:shell>
+		<amin:shell name="env">CFLAGS=-I/bootstrap/System/Library/Headers</amin:shell>
+		<amin:shell name="env">CPPFLAGS=-I/bootstrap/System/Library/Headers</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+                <amin:shell name='dir'>/build/glibc-build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name="system_command">
+		<amin:param name="basename">touch</amin:param>
+		<amin:param>/System/Settings/ld.so.conf</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='make'>
+                <amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/glibc-build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:param>localedata/install-locales</amin:param>
+                <amin:shell name='dir'>/build/glibc-build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+<!-- who needs glibc manpages ;-)
+	
+        <amin:command name='make'>
+		<amin:flag>C</amin:flag>
+                <amin:param>../glibc-2.4/linuxthreads/man</amin:param>
+                <amin:shell name='dir'>/build/glibc-build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:flag>C</amin:flag>
+                <amin:param>../glibc-2.4/linuxthreads/man install</amin:param>
+                <amin:shell name='dir'>/build/glibc-build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+-->
+        <amin:command name="textdump">
+                <amin:param name="target">nsswitch.conf</amin:param>
+                <amin:param name="content">
+# Begin /System/Settings/nsswitch.conf
+passwd: files
+group: files
+shadow: files
+hosts: files dns
+networks: files
+protocols: files
+services: files
+ethers: files
+rpc: files
+# End /System/Settings/nsswitch.conf
+		</amin:param>
+                <amin:shell name="dir">/System/Settings/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name="copy">
+		<amin:flag>remove-destination</amin:flag>
+		<amin:param name="source">Auckland</amin:param>
+		<amin:param name="target">/System/Settings/localtime</amin:param>
+		<amin:shell name="dir">/System/Library/Libraries/Glibc-2.4/share/zoneinfo/Pacific/</amin:shell>
+	<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name="textdump">
+                <amin:param name="target">ld.so.conf</amin:param>
+                <amin:param name="content">
+# Begin /System/Settings/ld.so.conf
+/System/Library/Libraries/Glibc-2.4/lib
+/System/Library/Libraries/Binutils-2.17/lib
+/System/Library/Libraries/Ncurses-5.4/lib
+# End /System/Settings/ld.so.conf
+		</amin:param>
+		<amin:shell name="dir">/System/Settings</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">glibc-build glibc-2.4</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+</amin:chroot>
+
+</amin:profile>
+

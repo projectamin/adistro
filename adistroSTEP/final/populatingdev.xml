@@ -1,0 +1,33 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/packages/MAKEDEV-1.7-STEP.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/MAKEDEV-1.7-STEP.bz2</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/System/Devices</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/MAKEDEV-1.7-STEP.bz2</amin:param>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+
+<!--Populating devices-->
+
+        <amin:command name="system_command">
+                <amin:param name='basename'>chmod</amin:param>
+                <amin:param>754 MAKEDEV-1.7-STEP</amin:param>
+                 <amin:shell name='dir'>/System/Devices</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name="system_command">
+                <amin:param name='basename'>./MAKEDEV-1.7-STEP</amin:param>
+                <amin:param>generic</amin:param>
+                 <amin:shell name='dir'>/System/Devices</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/AdminTools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

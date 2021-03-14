@@ -1,0 +1,23 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--domainname-mod-me-to-suite-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='touch'>
+                <amin:param>/etc/domainname</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='textdump'>
+		<amin:param name='content'>
+DOMAINNAME=domain.com
+		</amin:param>
+                <amin:param name='target'>/etc/domainname</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

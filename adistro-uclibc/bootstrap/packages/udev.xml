@@ -1,0 +1,66 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Udev-->
+
+<!--retreiveing package-->
+
+	<amin:download>
+		<amin:param name='uri'>ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/udev-026.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/udev-026.tar.bz2</amin:param>
+	</amin:download>
+
+	<amin:download>
+		<amin:param name="uri">http://lfs.mesi.com.ar/patches/downloads/udev/udev-026-config-1.patch</amin:param>
+		<amin:param name="file">/opt/adistro-uclibc/packages/udev-026-config-1.patch</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/udev-026.tar.bz2</amin:param>
+	</amin:command>
+
+	<amin:command name="patch">
+		<amin:flag>Np1</amin:flag>
+		<amin:param name="input">/opt/adistro-uclibc/packages/udev-026-config-1.patch</amin:param>
+		<amin:shell name="dir">/opt/adistro-uclibc/build/udev-026</amin:shell>
+	</amin:command>
+
+        <amin:command name='search_replace'>
+                <amin:param name='target'>udevstart.c</amin:param>
+                <amin:flag name='find'>/sbin/udev</amin:flag>
+                <amin:flag name='replace'>/bootstrap/sbin/udev</amin:flag>
+		<amin:shell name="dir">/opt/adistro-uclibc/build/udev-026</amin:shell>
+        </amin:command>
+
+        <amin:command name='search_replace'>
+                <amin:param name='target'>etc/udev/udev.conf.in</amin:param>
+                <amin:flag name='find'>/etc</amin:flag>
+                <amin:flag name='replace'>/bootstrap/etc</amin:flag>
+		<amin:shell name="dir">/opt/adistro-uclibc/build/udev-026</amin:shell>
+        </amin:command>
+
+	<amin:command name='make'>
+		<amin:param>prefix=/bootstrap etcdir=/bootstrap/etc</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/udev-026</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='make'>
+                <amin:param>udevdir=/dev etc/udev/udev.conf</amin:param>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/udev-026</amin:shell>
+                <amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='make'>
+		<amin:param>DESTDIR=/bootstrap</amin:param>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/udev-026</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>udev-026</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/</amin:shell>
+	</amin:command>
+</amin:profile>

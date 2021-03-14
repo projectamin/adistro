@@ -1,0 +1,27 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Flex-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.gnu.org/gnu/gawk/flex-2.5.31.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/flex-2.5.31.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/flex-2.5.31-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/flex-2.5.31-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/flex-2.5.31.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>../../packages/flex-2.5.31-STEP.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/flex-2.5.31</amin:shell>
+        </amin:command>
+</amin:profile>

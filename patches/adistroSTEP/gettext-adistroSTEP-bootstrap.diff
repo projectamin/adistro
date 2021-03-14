@@ -1,0 +1,771 @@
+diff -urN gettext-0.14.1/gettext-tools/lib/csharpcomp.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/csharpcomp.c
+--- gettext-0.14.1/gettext-tools/lib/csharpcomp.c	2004-01-16 23:49:06.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/csharpcomp.c	2005-05-17 14:45:09.720947328 +1200
+@@ -78,7 +78,7 @@
+   if (!cscc_tested)
+     {
+       /* Test for presence of cscc:
+-	 "cscc --version >/dev/null 2>/dev/null"  */
++	 "cscc --version >/System/Devices/null 2>/dev/null"  */
+       char *argv[3];
+       int exitstatus;
+ 
+@@ -184,7 +184,7 @@
+   if (!mcs_tested)
+     {
+       /* Test for presence of mcs:
+-	 "mcs --version >/dev/null 2>/dev/null"  */
++	 "mcs --version >/System/Devices/null 2>/dev/null"  */
+       char *argv[3];
+       int exitstatus;
+ 
+@@ -324,7 +324,7 @@
+   if (!csc_tested)
+     {
+       /* Test for presence of csc:
+-	 "csc -help >/dev/null 2>/dev/null"  */
++	 "csc -help >/System/Devices/null 2>/dev/null"  */
+       char *argv[3];
+       int exitstatus;
+ 
+diff -urN gettext-0.14.1/gettext-tools/lib/csharpexec.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/csharpexec.c
+--- gettext-0.14.1/gettext-tools/lib/csharpexec.c	2004-01-16 23:49:06.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/csharpexec.c	2005-05-17 14:45:09.721947176 +1200
+@@ -76,7 +76,7 @@
+   if (!ilrun_tested)
+     {
+       /* Test for presence of ilrun:
+-	 "ilrun --version >/dev/null 2>/dev/null"  */
++	 "ilrun --version >/System/Devices/null 2>/dev/null"  */
+       char *argv[3];
+       int exitstatus;
+ 
+@@ -146,7 +146,7 @@
+   if (!mono_tested)
+     {
+       /* Test for presence of mono:
+-	 "mono --version >/dev/null 2>/dev/null"  */
++	 "mono --version >/System/Devices/null 2>/dev/null"  */
+       char *argv[3];
+       int exitstatus;
+ 
+diff -urN gettext-0.14.1/gettext-tools/lib/execute.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/execute.c
+--- gettext-0.14.1/gettext-tools/lib/execute.c	2004-01-05 23:48:31.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/execute.c	2005-05-17 14:45:09.722947024 +1200
+@@ -109,7 +109,7 @@
+ 
+ 
+ /* Execute a command, optionally redirecting any of the three standard file
+-   descriptors to /dev/null.  Return its exit code.
++   descriptors to /System/Devices/null.  Return its exit code.
+    If it didn't terminate correctly, exit if exit_on_error is true, otherwise
+    return 127.
+    If slave_process is true, the child process will be terminated when its
+@@ -218,19 +218,19 @@
+ 	  (null_stdin
+ 	    && (err = posix_spawn_file_actions_addopen (&actions,
+ 							STDIN_FILENO,
+-							"/dev/null", O_RDONLY,
++							"/System/Devices/null", O_RDONLY,
+ 							0))
+ 	       != 0)
+ 	  || (null_stdout
+ 	      && (err = posix_spawn_file_actions_addopen (&actions,
+ 							  STDOUT_FILENO,
+-							  "/dev/null", O_RDWR,
++							  "/System/Devices/null", O_RDWR,
+ 							  0))
+ 		 != 0)
+ 	  || (null_stderr
+ 	      && (err = posix_spawn_file_actions_addopen (&actions,
+ 							  STDERR_FILENO,
+-							  "/dev/null", O_RDWR,
++							  "/System/Devices/null", O_RDWR,
+ 							  0))
+ 		 != 0)
+ 	  || (slave_process
+@@ -272,12 +272,12 @@
+       int nulloutfd;
+ 
+       if ((!null_stdin
+-	   || ((nullinfd = open ("/dev/null", O_RDONLY, 0)) >= 0
++	   || ((nullinfd = open ("/System/Devices/null", O_RDONLY, 0)) >= 0
+ 	       && (nullinfd == STDIN_FILENO
+ 		   || (dup2 (nullinfd, STDIN_FILENO) >= 0
+ 		       && close (nullinfd) >= 0))))
+ 	  && (!(null_stdout || null_stderr)
+-	      || ((nulloutfd = open ("/dev/null", O_RDWR, 0)) >= 0
++	      || ((nulloutfd = open ("/System/Devices/null", O_RDWR, 0)) >= 0
+ 		  && (!null_stdout
+ 		      || nulloutfd == STDOUT_FILENO
+ 		      || dup2 (nulloutfd, STDOUT_FILENO) >= 0)
+diff -urN gettext-0.14.1/gettext-tools/lib/execute.h gettext-0.14.1-adistroSTEP/gettext-tools/lib/execute.h
+--- gettext-0.14.1/gettext-tools/lib/execute.h	2004-01-05 23:48:31.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/execute.h	2005-05-17 14:45:11.908614752 +1200
+@@ -22,7 +22,7 @@
+ #include <stdbool.h>
+ 
+ /* Execute a command, optionally redirecting any of the three standard file
+-   descriptors to /dev/null.  Return its exit code.
++   descriptors to /System/Devices/null.  Return its exit code.
+    If it didn't terminate correctly, exit if exit_on_error is true, otherwise
+    return 127.
+    If ignore_sigpipe is true, consider a subprocess termination due to SIGPIPE
+diff -urN gettext-0.14.1/gettext-tools/lib/full-write.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/full-write.c
+--- gettext-0.14.1/gettext-tools/lib/full-write.c	2003-01-09 07:37:13.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/full-write.c	2005-05-17 14:45:09.724946720 +1200
+@@ -49,7 +49,7 @@
+ # define ZERO_BYTE_TRANSFER_ERRNO 0
+ #else
+ /* Some buggy drivers return 0 when one tries to write beyond
+-   a device's end.  (Example: Linux 1.2.13 on /dev/fd0.)
++   a device's end.  (Example: Linux 1.2.13 on /System/Devices/fd0.)
+    Set errno to ENOSPC so they get a sensible diagnostic.  */
+ # define ZERO_BYTE_TRANSFER_ERRNO ENOSPC
+ #endif
+diff -urN gettext-0.14.1/gettext-tools/lib/fwriteerror.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/fwriteerror.c
+--- gettext-0.14.1/gettext-tools/lib/fwriteerror.c	2003-09-14 21:24:27.000000000 +1200
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/fwriteerror.c	2005-05-17 14:45:09.724946720 +1200
+@@ -61,9 +61,9 @@
+ 
+ #if TEST
+ 
+-/* Name of a file on which writing fails.  On systems without /dev/full,
++/* Name of a file on which writing fails.  On systems without /System/Devices/full,
+    you can choose a filename on a full filesystem.  */
+-#define UNWRITABLE_FILE "/dev/full"
++#define UNWRITABLE_FILE "/System/Devices/full"
+ 
+ int
+ main ()
+diff -urN gettext-0.14.1/gettext-tools/lib/javacomp.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/javacomp.c
+--- gettext-0.14.1/gettext-tools/lib/javacomp.c	2004-01-05 23:48:31.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/javacomp.c	2005-05-17 14:45:09.731945656 +1200
+@@ -54,10 +54,10 @@
+    Program  from        A  C               O  g  T
+ 
+    $JAVAC   unknown     N  n/a            -O -g  true
+-   gcj -C   GCC 3.2     Y  --classpath=P  -O -g  gcj --version | sed -e 's,^[^0-9]*,,' -e 1q | sed -e '/^3\.[01]/d' | grep '^[3-9]' >/dev/null
+-   javac    JDK 1.1.8   Y  -classpath P   -O -g  javac 2>/dev/null; test $? = 1
+-   javac    JDK 1.3.0   Y  -classpath P   -O -g  javac 2>/dev/null; test $? -le 2
+-   jikes    Jikes 1.14  N  -classpath P   -O -g  jikes 2>/dev/null; test $? = 1
++   gcj -C   GCC 3.2     Y  --classpath=P  -O -g  gcj --version | sed -e 's,^[^0-9]*,,' -e 1q | sed -e '/^3\.[01]/d' | grep '^[3-9]' >/System/Devices/null
++   javac    JDK 1.1.8   Y  -classpath P   -O -g  javac 2>/System/Devices/null; test $? = 1
++   javac    JDK 1.3.0   Y  -classpath P   -O -g  javac 2>/System/Devices/null; test $? -le 2
++   jikes    Jikes 1.14  N  -classpath P   -O -g  jikes 2>/System/Devices/null; test $? = 1
+ 
+    All compilers support the option "-d DIRECTORY" for the base directory
+    of the classes to be written.
+@@ -158,11 +158,11 @@
+ 	if (verbose)
+ 	  printf ("%s\n", command);
+ 
+-	argv[0] = "/bin/sh";
++	argv[0] = "/System/Tools/sh";
+ 	argv[1] = "-c";
+ 	argv[2] = command;
+ 	argv[3] = NULL;
+-	exitstatus = execute (javac, "/bin/sh", argv, false, false, false,
++	exitstatus = execute (javac, "/System/Tools/sh", argv, false, false, false,
+ 			      false, true, true);
+ 	err = (exitstatus != 0);
+ 
+@@ -190,9 +190,9 @@
+     if (!gcj_tested)
+       {
+ 	/* Test for presence of gcj:
+-	   "gcj --version 2> /dev/null | \
++	   "gcj --version 2> /System/Devices/null | \
+ 	    sed -e 's,^[^0-9]*,,' -e 1q | \
+-	    sed -e '/^3\.[01]/d' | grep '^[3-9]' > /dev/null"  */
++	    sed -e '/^3\.[01]/d' | grep '^[3-9]' > /System/Devices/null"  */
+ 	char *argv[3];
+ 	pid_t child;
+ 	int fd[1];
+@@ -314,7 +314,7 @@
+ 
+     if (!javac_tested)
+       {
+-	/* Test for presence of javac: "javac 2> /dev/null ; test $? -le 2"  */
++	/* Test for presence of javac: "javac 2> /System/Devices/null ; test $? -le 2"  */
+ 	char *argv[2];
+ 	int exitstatus;
+ 
+@@ -391,7 +391,7 @@
+ 
+     if (!jikes_tested)
+       {
+-	/* Test for presence of jikes: "jikes 2> /dev/null ; test $? = 1"  */
++	/* Test for presence of jikes: "jikes 2> /System/Devices/null ; test $? = 1"  */
+ 	char *argv[2];
+ 	int exitstatus;
+ 
+diff -urN gettext-0.14.1/gettext-tools/lib/javaexec.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/javaexec.c
+--- gettext-0.14.1/gettext-tools/lib/javaexec.c	2004-01-05 23:48:31.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/javaexec.c	2005-05-17 14:45:09.732945504 +1200
+@@ -51,10 +51,10 @@
+    Program    from         A B  C              T
+ 
+    $JAVA      unknown      N Y  n/a            true
+-   gij        GCC 3.0      Y Y  n/a            gij --version >/dev/null
+-   java       JDK 1.1.8    Y Y  -classpath P   java -version 2>/dev/null
+-   jre        JDK 1.1.8    N Y  -classpath P   jre 2>/dev/null; test $? = 1
+-   java       JDK 1.3.0    Y Y  -classpath P   java -version 2>/dev/null
++   gij        GCC 3.0      Y Y  n/a            gij --version >/System/Devices/null
++   java       JDK 1.1.8    Y Y  -classpath P   java -version 2>/System/Devices/null
++   jre        JDK 1.1.8    N Y  -classpath P   jre 2>/System/Devices/null; test $? = 1
++   java       JDK 1.3.0    Y Y  -classpath P   java -version 2>/System/Devices/null
+    jview      MS IE        Y Y  -cp P          jview -? >nul; %errorlevel% = 1
+ 
+    The CLASSPATH is a colon separated list of pathnames. (On Windows: a
+@@ -175,11 +175,11 @@
+ 	if (verbose)
+ 	  printf ("%s\n", command);
+ 
+-	argv[0] = "/bin/sh";
++	argv[0] = "/System/Tools/sh";
+ 	argv[1] = "-c";
+ 	argv[2] = command;
+ 	argv[3] = NULL;
+-	err = executer (java, "/bin/sh", argv, private_data);
++	err = executer (java, "/System/Tools/sh", argv, private_data);
+ 
+ 	freesa (command);
+ 
+@@ -204,7 +204,7 @@
+ 
+     if (!gij_tested)
+       {
+-	/* Test for presence of gij: "gij --version > /dev/null"  */
++	/* Test for presence of gij: "gij --version > /System/Devices/null"  */
+ 	char *argv[3];
+ 	int exitstatus;
+ 
+@@ -257,7 +257,7 @@
+ 
+     if (!java_tested)
+       {
+-	/* Test for presence of java: "java -version 2> /dev/null"  */
++	/* Test for presence of java: "java -version 2> /System/Devices/null"  */
+ 	char *argv[3];
+ 	int exitstatus;
+ 
+@@ -312,7 +312,7 @@
+ 
+     if (!jre_tested)
+       {
+-	/* Test for presence of jre: "jre 2> /dev/null ; test $? = 1"  */
++	/* Test for presence of jre: "jre 2> /System/Devices/null ; test $? = 1"  */
+ 	char *argv[2];
+ 	int exitstatus;
+ 
+diff -urN gettext-0.14.1/gettext-tools/lib/pipe-bidi.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe-bidi.c
+--- gettext-0.14.1/gettext-tools/lib/pipe-bidi.c	2003-10-15 23:15:23.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe-bidi.c	2005-05-17 14:45:09.738944592 +1200
+@@ -237,7 +237,7 @@
+ 	  || (null_stderr
+ 	      && (err = posix_spawn_file_actions_addopen (&actions,
+ 							  STDERR_FILENO,
+-							  "/dev/null", O_RDWR,
++							  "/System/Devices/null", O_RDWR,
+ 							  0))
+ 		 != 0)
+ 	  || (slave_process
+@@ -288,7 +288,7 @@
+ 	  && close (ofd[1]) >= 0
+ 	  && close (ifd[0]) >= 0
+ 	  && (!null_stderr
+-	      || ((nulloutfd = open ("/dev/null", O_RDWR, 0)) >= 0
++	      || ((nulloutfd = open ("/System/Devices/null", O_RDWR, 0)) >= 0
+ 		  && (nulloutfd == STDERR_FILENO
+ 		      || (dup2 (nulloutfd, STDERR_FILENO) >= 0
+ 			  && close (nulloutfd) >= 0))))
+diff -urN gettext-0.14.1/gettext-tools/lib/pipe.h gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe.h
+--- gettext-0.14.1/gettext-tools/lib/pipe.h	2003-10-15 23:15:23.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe.h	2005-05-17 14:45:11.919613080 +1200
+@@ -121,7 +121,7 @@
+ # define DEV_NULL "NUL"
+ #else
+ /* Unix API.  */
+-# define DEV_NULL "/dev/null"
++# define DEV_NULL "/System/Devices/null"
+ #endif
+ 
+ 
+diff -urN gettext-0.14.1/gettext-tools/lib/pipe-in.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe-in.c
+--- gettext-0.14.1/gettext-tools/lib/pipe-in.c	2003-10-15 23:15:23.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe-in.c	2005-05-17 14:45:09.739944440 +1200
+@@ -240,7 +240,7 @@
+ 	  || (null_stderr
+ 	      && (err = posix_spawn_file_actions_addopen (&actions,
+ 							  STDERR_FILENO,
+-							  "/dev/null", O_RDWR,
++							  "/System/Devices/null", O_RDWR,
+ 							  0))
+ 		 != 0)
+ 	  || (prog_stdin != NULL
+@@ -293,7 +293,7 @@
+ 	  && close (ifd[1]) >= 0
+ 	  && close (ifd[0]) >= 0
+ 	  && (!null_stderr
+-	      || ((nulloutfd = open ("/dev/null", O_RDWR, 0)) >= 0
++	      || ((nulloutfd = open ("/System/Devices/null", O_RDWR, 0)) >= 0
+ 		  && (nulloutfd == STDERR_FILENO
+ 		      || (dup2 (nulloutfd, STDERR_FILENO) >= 0
+ 			  && close (nulloutfd) >= 0))))
+diff -urN gettext-0.14.1/gettext-tools/lib/pipe-out.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe-out.c
+--- gettext-0.14.1/gettext-tools/lib/pipe-out.c	2003-10-15 23:15:23.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/pipe-out.c	2005-05-17 14:45:09.739944440 +1200
+@@ -240,7 +240,7 @@
+ 	  || (null_stderr
+ 	      && (err = posix_spawn_file_actions_addopen (&actions,
+ 							  STDERR_FILENO,
+-							  "/dev/null", O_RDWR,
++							  "/System/Devices/null", O_RDWR,
+ 							  0))
+ 		 != 0)
+ 	  || (prog_stdout != NULL
+@@ -293,7 +293,7 @@
+ 	  && close (ofd[0]) >= 0
+ 	  && close (ofd[1]) >= 0
+ 	  && (!null_stderr
+-	      || ((nulloutfd = open ("/dev/null", O_RDWR, 0)) >= 0
++	      || ((nulloutfd = open ("/System/Devices/null", O_RDWR, 0)) >= 0
+ 		  && (nulloutfd == STDERR_FILENO
+ 		      || (dup2 (nulloutfd, STDERR_FILENO) >= 0
+ 			  && close (nulloutfd) >= 0))))
+diff -urN gettext-0.14.1/gettext-tools/lib/sh-quote.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/sh-quote.c
+--- gettext-0.14.1/gettext-tools/lib/sh-quote.c	2003-10-17 23:28:06.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/sh-quote.c	2005-05-17 14:45:09.742943984 +1200
+@@ -32,7 +32,7 @@
+ /* Must quote the program name and arguments since Unix shells interpret
+    characters like " ", "'", "<", ">", "$" etc. in a special way.  This
+    kind of quoting should work unless the string contains "\n" and we call
+-   csh.  But we are lucky: only /bin/sh will be used.  */
++   csh.  But we are lucky: only /System/Tools/sh will be used.  */
+ 
+ #define SHELL_SPECIAL_CHARS "\t\n !\"#$&'()*;<=>?[\\]`{|}~"
+ 
+diff -urN gettext-0.14.1/gettext-tools/lib/tmpdir.c gettext-0.14.1-adistroSTEP/gettext-tools/lib/tmpdir.c
+--- gettext-0.14.1/gettext-tools/lib/tmpdir.c	2002-11-15 03:53:38.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/tmpdir.c	2005-05-17 14:45:09.745943528 +1200
+@@ -36,7 +36,7 @@
+ 
+ #include <stdio.h>
+ #ifndef P_tmpdir
+-# define P_tmpdir "/tmp"
++# define P_tmpdir "/System/TemporaryFiles"
+ #endif
+ 
+ #include <sys/stat.h>
+@@ -87,7 +87,7 @@
+ 
+ /* Path search algorithm, for tmpnam, tmpfile, etc.  If DIR is
+    non-null and exists, uses it; otherwise uses the first of $TMPDIR,
+-   P_tmpdir, /tmp that exists.  Copies into TMPL a template suitable
++   P_tmpdir, /System/TemporaryFiles that exists.  Copies into TMPL a template suitable
+    for use with mk[s]temp.  Will fail (-1) if DIR is non-null and
+    doesn't exist, none of the searched dirs exists, or there's not
+    enough space in TMPL. */
+@@ -124,8 +124,8 @@
+     {
+       if (direxists (P_tmpdir))
+ 	dir = P_tmpdir;
+-      else if (strcmp (P_tmpdir, "/tmp") != 0 && direxists ("/tmp"))
+-	dir = "/tmp";
++      else if (strcmp (P_tmpdir, "/System/TemporaryFiles") != 0 && direxists ("/tmp"))
++	dir = "/System/TemporaryFiles";
+       else
+ 	{
+ 	  __set_errno (ENOENT);
+diff -urN gettext-0.14.1/gettext-tools/lib/tmpdir.h gettext-0.14.1-adistroSTEP/gettext-tools/lib/tmpdir.h
+--- gettext-0.14.1/gettext-tools/lib/tmpdir.h	2002-11-15 03:53:38.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/lib/tmpdir.h	2005-05-17 14:45:11.921612776 +1200
+@@ -20,7 +20,7 @@
+ 
+ /* Path search algorithm, for tmpnam, tmpfile, etc.  If DIR is
+    non-null and exists, uses it; otherwise uses the first of $TMPDIR,
+-   P_tmpdir, /tmp that exists.  Copies into TMPL a template suitable
++   P_tmpdir, /System/TemporaryFiles that exists.  Copies into TMPL a template suitable
+    for use with mk[s]temp.  Will fail (-1) if DIR is non-null and
+    doesn't exist, none of the searched dirs exists, or there's not
+    enough space in TMPL. */
+diff -urN gettext-0.14.1/gettext-tools/src/format-awk.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-awk.c
+--- gettext-0.14.1/gettext-tools/src/format-awk.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-awk.c	2005-05-17 14:45:45.826458456 +1200
+@@ -651,7 +651,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-awk.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-awk.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-c.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-c.c
+--- gettext-0.14.1/gettext-tools/src/format-c.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-c.c	2005-05-17 14:45:45.828458152 +1200
+@@ -1089,7 +1089,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-c.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-c.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-csharp.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-csharp.c
+--- gettext-0.14.1/gettext-tools/src/format-csharp.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-csharp.c	2005-05-17 14:45:45.829458000 +1200
+@@ -281,7 +281,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-csharp.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-csharp.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-elisp.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-elisp.c
+--- gettext-0.14.1/gettext-tools/src/format-elisp.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-elisp.c	2005-05-17 14:45:45.829458000 +1200
+@@ -499,7 +499,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-elisp.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-elisp.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-gcc-internal.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-gcc-internal.c
+--- gettext-0.14.1/gettext-tools/src/format-gcc-internal.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-gcc-internal.c	2005-05-17 14:45:45.830457848 +1200
+@@ -418,7 +418,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-gcc-internal.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-gcc-internal.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-java.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-java.c
+--- gettext-0.14.1/gettext-tools/src/format-java.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-java.c	2005-05-17 14:45:45.831457696 +1200
+@@ -884,7 +884,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-java.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-java.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-librep.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-librep.c
+--- gettext-0.14.1/gettext-tools/src/format-librep.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-librep.c	2005-05-17 14:45:45.834457240 +1200
+@@ -460,7 +460,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-librep.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-librep.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-lisp.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-lisp.c
+--- gettext-0.14.1/gettext-tools/src/format-lisp.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-lisp.c	2005-05-17 14:45:45.839456480 +1200
+@@ -3518,7 +3518,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-lisp.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-lisp.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-pascal.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-pascal.c
+--- gettext-0.14.1/gettext-tools/src/format-pascal.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-pascal.c	2005-05-17 14:45:45.840456328 +1200
+@@ -552,7 +552,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-pascal.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-pascal.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-perl-brace.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-perl-brace.c
+--- gettext-0.14.1/gettext-tools/src/format-perl-brace.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-perl-brace.c	2005-05-17 14:45:45.841456176 +1200
+@@ -288,7 +288,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-perl-brace.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-perl-brace.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-perl.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-perl.c
+--- gettext-0.14.1/gettext-tools/src/format-perl.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-perl.c	2005-05-17 14:45:45.842456024 +1200
+@@ -759,7 +759,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-perl.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-perl.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-php.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-php.c
+--- gettext-0.14.1/gettext-tools/src/format-php.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-php.c	2005-05-17 14:45:45.843455872 +1200
+@@ -496,7 +496,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-php.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-php.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-python.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-python.c
+--- gettext-0.14.1/gettext-tools/src/format-python.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-python.c	2005-05-17 14:45:45.844455720 +1200
+@@ -670,7 +670,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-python.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-python.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-qt.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-qt.c
+--- gettext-0.14.1/gettext-tools/src/format-qt.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-qt.c	2005-05-17 14:45:45.844455720 +1200
+@@ -223,7 +223,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-qt.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-qt.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-sh.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-sh.c
+--- gettext-0.14.1/gettext-tools/src/format-sh.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-sh.c	2005-05-17 14:45:45.845455568 +1200
+@@ -394,7 +394,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-sh.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-sh.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-tcl.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-tcl.c
+--- gettext-0.14.1/gettext-tools/src/format-tcl.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-tcl.c	2005-05-17 14:45:45.846455416 +1200
+@@ -544,7 +544,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-tcl.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-tcl.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/format-ycp.c gettext-0.14.1-adistroSTEP/gettext-tools/src/format-ycp.c
+--- gettext-0.14.1/gettext-tools/src/format-ycp.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/format-ycp.c	2005-05-17 14:45:45.846455416 +1200
+@@ -233,7 +233,7 @@
+ /*
+  * For Emacs M-x compile
+  * Local Variables:
+- * compile-command: "/bin/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-ycp.c ../lib/libgettextlib.la"
++ * compile-command: "/System/Tools/sh ../libtool --mode=link gcc -o a.out -static -O -g -Wall -I.. -I../lib -I../intl -DHAVE_CONFIG_H -DTEST format-ycp.c ../lib/libgettextlib.la"
+  * End:
+  */
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/msggrep.c gettext-0.14.1-adistroSTEP/gettext-tools/src/msggrep.c
+--- gettext-0.14.1/gettext-tools/src/msggrep.c	2004-01-15 01:01:04.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/msggrep.c	2005-05-17 14:45:45.859453440 +1200
+@@ -359,14 +359,14 @@
+ 	 on every call.  */
+       grep_path = find_in_path ("grep");
+ 
+-      /* On Solaris, we need to use /usr/xpg4/bin/grep instead of
+-	 /usr/bin/grep, because /usr/bin/grep doesn't understand the options
++      /* On Solaris, we need to use /usr/xpg4/System/Tools/grep instead of
++	 /usr/System/Tools/grep, because /usr/bin/grep doesn't understand the options
+ 	 -q and -e.  */
+ #if (defined (sun) || defined (__sun)) && defined (__SVR4)
+-      if ((strcmp (grep_path, "/usr/bin/grep") == 0
+-	   || strcmp (grep_path, "/bin/grep") == 0)
+-	  && access ("/usr/xpg4/bin/grep", X_OK) == 0)
+-	grep_path = "/usr/xpg4/bin/grep";
++      if ((strcmp (grep_path, "/usr/System/Tools/grep") == 0
++	   || strcmp (grep_path, "/System/Tools/grep") == 0)
++	  && access ("/usr/xpg4/System/Tools/grep", X_OK) == 0)
++	grep_path = "/usr/xpg4/System/Tools/grep";
+ #endif
+     }
+ 
+@@ -379,7 +379,7 @@
+ 	size_t i, j;
+ 
+ 	/* We use "grep -q" because it is slightly more efficient than
+-	   "grep".  We pipe grep's output to /dev/null anyway.  But
++	   "grep".  We pipe grep's output to /System/Devices/null anyway.  But
+ 	   SunOS4's grep program doesn't understand the -q option.  */
+ #if (defined (sun) || defined (__sun)) && !defined (__SVR4)
+ 	option_q = 0;
+diff -urN gettext-0.14.1/gettext-tools/src/msginit.c gettext-0.14.1-adistroSTEP/gettext-tools/src/msginit.c
+--- gettext-0.14.1/gettext-tools/src/msginit.c	2004-01-19 03:43:14.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/msginit.c	2005-05-17 14:45:45.862452984 +1200
+@@ -951,10 +951,10 @@
+   prog = concatenated_pathname (gettextlibdir, "project-id", NULL);
+ 
+   /* Call the project-id shell script.  */
+-  argv[0] = "/bin/sh";
++  argv[0] = "/System/Tools/sh";
+   argv[1] = prog;
+   argv[2] = NULL;
+-  child = create_pipe_in (prog, "/bin/sh", argv, DEV_NULL, false, true, false,
++  child = create_pipe_in (prog, "/System/Tools/sh", argv, DEV_NULL, false, true, false,
+ 			  fd);
+   if (child == -1)
+     goto failed;
+@@ -1017,11 +1017,11 @@
+   prog = concatenated_pathname (gettextlibdir, "project-id", NULL);
+ 
+   /* Call the project-id shell script.  */
+-  argv[0] = "/bin/sh";
++  argv[0] = "/System/Tools/sh";
+   argv[1] = prog;
+   argv[2] = "yes";
+   argv[3] = NULL;
+-  child = create_pipe_in (prog, "/bin/sh", argv, DEV_NULL, false, true, false,
++  child = create_pipe_in (prog, "/System/Tools/sh", argv, DEV_NULL, false, true, false,
+ 			  fd);
+   if (child == -1)
+     goto failed;
+@@ -1172,14 +1172,14 @@
+   int exitstatus;
+ 
+   /* Ask the user for his email address.  */
+-  argv[0] = "/bin/sh";
++  argv[0] = "/System/Tools/sh";
+   argv[1] = (char *) prog;
+   argv[2] = _("\
+ The new message catalog should contain your email address, so that users can\n\
+ give you feedback about the translations, and so that maintainers can contact\n\
+ you in case of unexpected technical problems.\n");
+   argv[3] = NULL;
+-  child = create_pipe_in (prog, "/bin/sh", argv, DEV_NULL, false, true, false,
++  child = create_pipe_in (prog, "/System/Tools/sh", argv, DEV_NULL, false, true, false,
+ 			  fd);
+   if (child == -1)
+     goto failed;
+@@ -1254,14 +1254,14 @@
+   int exitstatus;
+ 
+   /* Call the team-address shell script.  */
+-  argv[0] = "/bin/sh";
++  argv[0] = "/System/Tools/sh";
+   argv[1] = (char *) prog;
+   argv[2] = (char *) relocate (PROJECTSDIR);
+   argv[3] = (char *) relocate (LIBDIR "/gettext");
+   argv[4] = (char *) catalogname;
+   argv[5] = (char *) language;
+   argv[6] = NULL;
+-  child = create_pipe_in (prog, "/bin/sh", argv, DEV_NULL, false, true, false,
++  child = create_pipe_in (prog, "/System/Tools/sh", argv, DEV_NULL, false, true, false,
+ 			  fd);
+   if (child == -1)
+     goto failed;
+diff -urN gettext-0.14.1/gettext-tools/src/open-po.c gettext-0.14.1-adistroSTEP/gettext-tools/src/open-po.c
+--- gettext-0.14.1/gettext-tools/src/open-po.c	2003-10-17 23:28:07.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/open-po.c	2005-05-17 14:45:45.868452072 +1200
+@@ -50,7 +50,7 @@
+   size_t k;
+   const char *dir;
+ 
+-  if (strcmp (input_name, "-") == 0 || strcmp (input_name, "/dev/stdin") == 0)
++  if (strcmp (input_name, "-") == 0 || strcmp (input_name, "/System/Devices/stdin") == 0)
+     {
+       *real_file_name_p = xstrdup (_("<stdin>"));
+       return stdin;
+diff -urN gettext-0.14.1/gettext-tools/src/read-mo.c gettext-0.14.1-adistroSTEP/gettext-tools/src/read-mo.c
+--- gettext-0.14.1/gettext-tools/src/read-mo.c	2004-01-16 00:30:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/read-mo.c	2005-05-17 14:45:45.877450704 +1200
+@@ -232,7 +232,7 @@
+   unsigned int i;
+   static lex_pos_ty pos = { __FILE__, __LINE__ };
+ 
+-  if (strcmp (filename, "-") == 0 || strcmp (filename, "/dev/stdin") == 0)
++  if (strcmp (filename, "-") == 0 || strcmp (filename, "/System/Devices/stdin") == 0)
+     {
+       fp = stdin;
+       SET_BINARY (fileno (fp));
+diff -urN gettext-0.14.1/gettext-tools/src/urlget.c gettext-0.14.1-adistroSTEP/gettext-tools/src/urlget.c
+--- gettext-0.14.1/gettext-tools/src/urlget.c	2004-01-07 23:34:36.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/urlget.c	2005-05-17 14:45:45.883449792 +1200
+@@ -280,7 +280,7 @@
+ 
+     if (!wget_tested)
+       {
+-	/* Test for presence of wget: "wget --version > /dev/null"  */
++	/* Test for presence of wget: "wget --version > /System/Devices/null"  */
+ 	char *argv[3];
+ 	int exitstatus;
+ 
+@@ -323,7 +323,7 @@
+ 
+     if (!lynx_tested)
+       {
+-	/* Test for presence of lynx: "lynx --version > /dev/null"  */
++	/* Test for presence of lynx: "lynx --version > /System/Devices/null"  */
+ 	char *argv[3];
+ 	int exitstatus;
+ 
+@@ -364,7 +364,7 @@
+ 
+     if (!curl_tested)
+       {
+-	/* Test for presence of curl: "curl --version > /dev/null"  */
++	/* Test for presence of curl: "curl --version > /System/Devices/null"  */
+ 	char *argv[3];
+ 	int exitstatus;
+ 
+diff -urN gettext-0.14.1/gettext-tools/src/write-po.c gettext-0.14.1-adistroSTEP/gettext-tools/src/write-po.c
+--- gettext-0.14.1/gettext-tools/src/write-po.c	2004-01-10 10:57:18.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/write-po.c	2005-05-17 14:45:45.889448880 +1200
+@@ -1100,7 +1100,7 @@
+ 
+   /* Open the output file.  */
+   if (filename != NULL && strcmp (filename, "-") != 0
+-      && strcmp (filename, "/dev/stdout") != 0)
++      && strcmp (filename, "/System/Devices/stdout") != 0)
+     {
+       fp = fopen (filename, "w");
+       if (fp == NULL)
+diff -urN gettext-0.14.1/gettext-tools/src/x-awk.c gettext-0.14.1-adistroSTEP/gettext-tools/src/x-awk.c
+--- gettext-0.14.1/gettext-tools/src/x-awk.c	2003-12-30 00:54:11.000000000 +1300
++++ gettext-0.14.1-adistroSTEP/gettext-tools/src/x-awk.c	2005-05-17 14:45:45.893448272 +1200
+@@ -502,7 +502,7 @@
+ 	     (c) '/' after this keyword in invalid anyway. All others.
+ 	     I used the following script for the distinction.
+ 		for k in $awk_keywords; do
+-		  echo; echo $k; awk "function foo () { $k / 10 }" < /dev/null
++		  echo; echo $k; awk "function foo () { $k / 10 }" < /System/Devices/null
+ 		done
+ 	   */
+ 	  if (strcmp (buffer, "do") == 0

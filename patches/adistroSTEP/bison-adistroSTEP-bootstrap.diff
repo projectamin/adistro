@@ -1,0 +1,24 @@
+diff -urN bison-1.875a/src/files.c bison-1.875a-adistroSTEP/src/files.c
+--- bison-1.875a/src/files.c	2003-01-03 09:27:54.000000000 +1300
++++ bison-1.875a-adistroSTEP/src/files.c	2005-05-23 13:46:41.423401688 +1200
+@@ -176,7 +176,7 @@
+    None are allocated, they are simply pointers to parts of FILENAME.
+    Examples:
+ 
+-   '/tmp/foo.tab.c' -> *BASE = 'foo.tab.c', *TAB = '.tab.c', *EXT =
++   '/System/TemporaryFiles/foo.tab.c' -> *BASE = 'foo.tab.c', *TAB = '.tab.c', *EXT =
+    '.c'
+ 
+    'foo.c' -> *BASE = 'foo.c', *TAB = NULL, *EXT = '.c'
+diff -urN bison-1.875a/src/system.h bison-1.875a-adistroSTEP/src/system.h
+--- bison-1.875a/src/system.h	2003-01-04 03:15:16.000000000 +1300
++++ bison-1.875a-adistroSTEP/src/system.h	2005-05-23 13:47:07.444445888 +1200
+@@ -264,7 +264,7 @@
+ #endif /* ! VMS */
+ 
+ #ifndef DEFAULT_TMPDIR
+-# define DEFAULT_TMPDIR "/tmp"
++# define DEFAULT_TMPDIR "/System/TemporaryFiles"
+ #endif
+ 
+ 

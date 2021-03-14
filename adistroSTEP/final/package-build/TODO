@@ -1,0 +1,5 @@
+iproute2
+perl
+texinfo
+
+require symlinks and perl needs patch fixing

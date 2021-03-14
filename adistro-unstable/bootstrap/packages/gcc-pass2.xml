@@ -1,0 +1,83 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gcc-->
+
+<!--grabbing packages-->
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/pub/gnu/gcc/gcc-4.3.1/gcc-4.3.1.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-4.3.1.tar.bz2</amin:param>
+	</amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://st8vrt.com/patches/adistro/gcc/gcc-4.3.1-adistro-specs-1.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-4.3.1-adistro-specs-1.patch</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://www.st8vrt.com/patches/adistro/gcc-4.3.1-adistro-Makefile.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/gcc-4.3.1-adistro-Makefile.patch</amin:param>
+        </amin:download>
+<!--running install-->
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gcc-4.3.1.tar.bz2</amin:param>
+	</amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/gcc-4.3.1-adistro-specs-1.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gcc-4.3.1</amin:shell>
+        </amin:command>
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/gcc-4.3.1-adistro-Makefile.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/gcc-4.3.1</amin:shell>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-4.3.1/configure</amin:param>
+		<amin:flag> 
+			prefix=/bootstrap 
+			enable-languages=c,c++
+			with-local-prefix=/bootstrap
+			libexecdir=/bootstrap/lib
+			with-dynamic-linker=/bootstrap/lib/ld-linux.so.2
+			enable-threads=posix
+			enable-__cxa_atexit
+			disable-libstdcxx-pch
+			enable-clocale
+			with-nostdinc
+			enable-shared
+			enable-multilib=no
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>LD_LIBRARY_PATH=/bootstrap/lib</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>gcc</amin:param>
+		<amin:param name='target'>cc</amin:param>
+		<amin:shell name='dir'>/bootstrap/bin</amin:shell>
+	</amin:command>
+        <amin:command name='remove'>
+                <amin:param name='target'>gcc-build</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+        <amin:command name='remove'>
+                <amin:param name='target'>gcc-4.3.1</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+
+</amin:profile>
+

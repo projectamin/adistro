@@ -1,0 +1,68 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/net-tools-1.60.tar.bz2</amin:param>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>/packages/net-tools-1.60-gcc4-2.6fixes.patch</amin:flag>
+                <amin:shell name='dir'>/src/net-tools-1.60</amin:shell>
+                <amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+        </amin:command>
+	<amin:command name='textdump'>
+	<amin:shell name='dir'>/src/net-tools-1.60</amin:shell>
+		<amin:param name='content'>
+#define HAVE_AFINET6 1
+#define HAVE_AFIPX 1
+#define HAVE_AFATALK 1
+#define HAVE_AFAX25 1
+#define HAVE_AFNETROM 1
+#define HAVE_AFROSE 0
+#define HAVE_AFX25 1
+#define HAVE_AFECONET 0
+#define HAVE_AFDECnet 0
+#define HAVE_AFASH 0
+#define HAVE_HWETHER 1
+#define HAVE_HWARC 1
+#define HAVE_HWSLIP 1
+#define HAVE_HWPPP 1
+#define HAVE_HWTUNNEL 1
+#define HAVE_HWSTRIP 1
+#define HAVE_HWTR 1
+#define HAVE_HWAX25 1
+#define HAVE_HWROSE 0
+#define HAVE_HWNETROM 1
+#define HAVE_HWX25 1
+#define HAVE_HWFR 1
+#define HAVE_HWSIT 0
+#define HAVE_HWFDDI 0
+#define HAVE_HWHIPPI 0
+#define HAVE_HWASH 0
+#define HAVE_HWHDLCLAPB 0
+#define HAVE_HWIRDA 1
+#define HAVE_HWEC 0
+#define HAVE_FW_MASQUERADE 0
+#define HAVE_IP_TOOLS 0
+#define HAVE_MII 0
+		</amin:param>
+		<amin:param name='target'>config.h</amin:param>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/src/net-tools-1.60</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/src/net-tools-1.60</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>net-tools-1.60</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

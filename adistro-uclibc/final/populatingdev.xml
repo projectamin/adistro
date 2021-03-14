@@ -1,0 +1,526 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name="mknod">
+                <amin:param name="target">null</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">1</amin:param>
+                <amin:param name="minor">3</amin:param>
+                <amin:flag name="mode">0777</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">zero</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">1</amin:param>
+                <amin:param name="minor">5</amin:param>
+                <amin:flag name="mode">0666</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">urandom</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">1</amin:param>
+                <amin:param name="minor">9</amin:param>
+                <amin:flag name="mode">0444</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">console</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">5</amin:param>
+                <amin:param name="minor">1</amin:param>
+                <amin:flag name="mode">0600</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">fd0</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">2</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hda</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hda1</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">1</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hda2</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">2</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hda3</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">3</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hda4</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">4</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hda5</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">5</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdb</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">64</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdb1</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">65</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdb2</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">66</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdb3</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">67</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdb4</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">68</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdb5</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">3</amin:param>
+                <amin:param name="minor">69</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdc</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">22</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">hdd</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">22</amin:param>
+                <amin:param name="minor">64</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sda</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sda1</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">1</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sda2</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">2</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sda3</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">3</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sda4</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">4</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sda5</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">5</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sdb</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">16</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sdb1</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">17</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sdb2</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">18</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sdb3</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">19</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sdb4</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">20</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sdb5</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">8</amin:param>
+                <amin:param name="minor">21</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">kmem</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">1</amin:param>
+                <amin:param name="minor">2</amin:param>
+                <amin:flag name="mode">0000</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">mem</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">1</amin:param>
+                <amin:param name="minor">1</amin:param>
+                <amin:flag name="mode">0640</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">port</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">1</amin:param>
+                <amin:param name="minor">4</amin:param>
+                <amin:flag name="mode">0640</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">ptmx</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">5</amin:param>
+                <amin:param name="minor">2</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">5</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty0</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty1</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">1</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty2</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">2</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty3</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">3</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty4</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">4</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty5</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">5</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">tty6</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">6</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">ttyS0</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">64</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">ttyS191</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">4</amin:param>
+                <amin:param name="minor">255</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">mixer</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">14</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sequencer</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">14</amin:param>
+                <amin:param name="minor">1</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">midi00</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">14</amin:param>
+                <amin:param name="minor">2</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">dsp</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">14</amin:param>
+                <amin:param name="minor">3</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">audio</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">14</amin:param>
+                <amin:param name="minor">4</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">sndstat</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">14</amin:param>
+                <amin:param name="minor">6</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">audioctl</amin:param>
+                <amin:param name="type">c</amin:param>
+                <amin:param name="major">14</amin:param>
+                <amin:param name="minor">7</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name="mknod">
+                <amin:param name="target">loop</amin:param>
+                <amin:param name="type">b</amin:param>
+                <amin:param name="major">7</amin:param>
+                <amin:param name="minor">0</amin:param>
+                <amin:flag name="mode">0660</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+       <amin:command name="link">
+                <amin:param name="source">loop</amin:param>
+                <amin:param name="target">loop0</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+       <amin:command name="link">
+                <amin:param name="source">loop</amin:param>
+                <amin:param name="target">loop1</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+       <amin:command name="link">
+                <amin:param name="source">loop</amin:param>
+                <amin:param name="target">loop2</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+       <amin:command name="link">
+                <amin:param name="source">loop</amin:param>
+                <amin:param name="target">loop3</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+       <amin:command name="link">
+                <amin:param name="source">loop</amin:param>
+                <amin:param name="target">loop4</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+       <amin:command name="link">
+                <amin:param name="source">loop</amin:param>
+                <amin:param name="target">loop5</amin:param>
+                <amin:flag>sf</amin:flag>
+                <amin:shell name="dir">/dev</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

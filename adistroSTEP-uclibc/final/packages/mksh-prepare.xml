@@ -1,0 +1,28 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--mksh-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R30.cpio.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/mksh-R30.cpio.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/mksh-R30-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/mksh-R30-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/mksh-R30.cpio.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/mksh-R30-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/mksh</amin:shell>
+        </amin:command>
+
+</amin:profile>

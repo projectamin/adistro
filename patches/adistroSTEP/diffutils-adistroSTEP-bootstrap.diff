@@ -1,0 +1,74 @@
+diff -urN diffutils-2.8.1/exgettext diffutils-2.8.1-adistroSTEP/exgettext
+--- diffutils-2.8.1/exgettext	2002-03-01 20:42:53.000000000 +1300
++++ diffutils-2.8.1-adistroSTEP/exgettext	2005-05-17 13:40:35.000000000 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Wrapper around gettext for programs using the msgid convention.
+ 
+ # Copyright (C) 1998, 2001 Free Software Foundation, Inc.
+@@ -86,7 +86,7 @@
+ '
+ keyword_options=`(
+   cd $directory &&
+-  $AWK "$generate_keyword_options" $files < /dev/null
++  $AWK "$generate_keyword_options" $files < /System/Devices/null
+ )` || exit
+ 
+ # Generate temporary file reflecting the %e strings in the scanned files.
+@@ -112,7 +112,7 @@
+   }
+ '
+ (cd $directory &&
+- $AWK "$generate_emsgids" $files < /dev/null
++ $AWK "$generate_emsgids" $files < /System/Devices/null
+ ) > $directory/$tmp || exit
+ 
+ # Run the xgettext command, with temporary added as a file to scan.
+diff -urN diffutils-2.8.1/lib/tempname.c diffutils-2.8.1-adistroSTEP/lib/tempname.c
+--- diffutils-2.8.1/lib/tempname.c	2002-02-06 18:36:12.000000000 +1300
++++ diffutils-2.8.1-adistroSTEP/lib/tempname.c	2005-05-17 13:38:49.000000000 +1200
+@@ -29,7 +29,7 @@
+ 
+ #include <stdio.h>
+ #ifndef P_tmpdir
+-# define P_tmpdir "/tmp"
++# define P_tmpdir "/System/TemporaryFiles"
+ #endif
+ #ifndef TMP_MAX
+ # define TMP_MAX 238328
+@@ -182,8 +182,8 @@
+     {
+       if (direxists (P_tmpdir))
+ 	dir = P_tmpdir;
+-      else if (strcmp (P_tmpdir, "/tmp") != 0 && direxists ("/tmp"))
+-	dir = "/tmp";
++      else if (strcmp (P_tmpdir, "/System/TemporaryFiles") != 0 && direxists ("/System/TemporaryFiles"))
++	dir = "/System/TemporaryFiles";
+       else
+ 	{
+ 	  __set_errno (ENOENT);
+diff -urN diffutils-2.8.1/src/sdiff.c diffutils-2.8.1-adistroSTEP/src/sdiff.c
+--- diffutils-2.8.1/src/sdiff.c	2002-03-11 21:00:47.000000000 +1300
++++ diffutils-2.8.1-adistroSTEP/src/sdiff.c	2005-05-17 13:42:25.000000000 +1200
+@@ -1187,7 +1187,7 @@
+ }
+ 
+ #ifndef P_tmpdir
+-# define P_tmpdir "/tmp"
++# define P_tmpdir "/System/TemporaryFiles"
+ #endif
+ #ifndef TMPDIR_ENV
+ # define TMPDIR_ENV "TMPDIR"
+diff -urN diffutils-2.8.1/src/system.h diffutils-2.8.1-adistroSTEP/src/system.h
+--- diffutils-2.8.1/src/system.h	2002-04-06 08:37:31.000000000 +1200
++++ diffutils-2.8.1-adistroSTEP/src/system.h	2005-05-17 13:38:00.000000000 +1200
+@@ -342,7 +342,7 @@
+ #endif
+ 
+ #ifndef NULL_DEVICE
+-# define NULL_DEVICE "/dev/null"
++# define NULL_DEVICE "/System/Devices/null"
+ #endif
+ 
+ /* Do struct stat *S, *T describe the same special file?  */

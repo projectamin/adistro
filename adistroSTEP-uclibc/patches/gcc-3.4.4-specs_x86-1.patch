@@ -1,0 +1,131 @@
+Submitted By: Robert Connolly <robert at linuxfromscratch dot org> (ashes)
+Date: 2004-11-14
+Initial Package Version: 3.4.3
+Upstream Status: Not submitted - LFS specific
+Origin: None
+Description: This patch is a replacement for the LFS gcc-specs patch.
+This patch adds --with-dynamic-linker and --with-nostdinc to gcc/configure.
+The point is so the gcc source can be reused in every stage, aswell uclibc's
+dynamic linker (or others) can be specified.
+
+Also see:
+http://www.linuxfromscratch.org/hlfs/
+
+diff -Naur gcc-3.4.3.orig/gcc/Makefile.in gcc-3.4.3.specs/gcc/Makefile.in
+--- gcc-3.4.3.orig/gcc/Makefile.in	2004-10-18 16:00:39.000000000 +0000
++++ gcc-3.4.3.specs/gcc/Makefile.in	2004-11-14 17:41:43.329209760 +0000
+@@ -702,7 +702,7 @@
+ 
+ # This is the variable actually used when we compile. If you change this,
+ # you probably want to update BUILD_CFLAGS in configure.ac
+-ALL_CFLAGS = $(X_CFLAGS) $(T_CFLAGS) \
++ALL_CFLAGS = $(X_CFLAGS) $(T_CFLAGS) @NOSTDINC@ \
+   $(CFLAGS) $(INTERNAL_CFLAGS) $(COVERAGE_FLAGS) $(WARN_CFLAGS) $(XCFLAGS) @DEFS@
+ 
+ # Likewise.
+@@ -1424,7 +1424,8 @@
+ 	(SHLIB_LINK='$(SHLIB_LINK)' \
+ 	SHLIB_MULTILIB='$(SHLIB_MULTILIB)'; \
+ 	$(CC) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+-  $(DRIVER_DEFINES) \
++  $(DRIVER_DEFINES) `if test -n "@DYNAMICLINKER@" ; then \
++	echo -D__DYNAMIC_LINKER__=\"@DYNAMICLINKER@\" ; fi` \
+   -c $(srcdir)/gcc.c $(OUTPUT_OPTION))
+ 
+ gccspec.o: gccspec.c $(CONFIG_H) $(SYSTEM_H) coretypes.h $(TM_H) $(GCC_H)
+diff -Naur gcc-3.4.3.orig/gcc/config/i386/linux.h gcc-3.4.3.specs/gcc/config/i386/linux.h
+--- gcc-3.4.3.orig/gcc/config/i386/linux.h	2003-11-29 03:08:10.000000000 +0000
++++ gcc-3.4.3.specs/gcc/config/i386/linux.h	2004-11-14 17:40:58.112083808 +0000
+@@ -109,6 +109,15 @@
+ /* If ELF is the default format, we should not use /lib/elf.  */
+ 
+ #undef	LINK_SPEC
++#ifdef __DYNAMIC_LINKER__
++#define LINK_SPEC "-m elf_i386 %{shared:-shared} \
++  %{!shared: \
++    %{!ibcs: \
++      %{!static: \
++        %{rdynamic:-export-dynamic} \
++        %{!dynamic-linker:-dynamic-linker "__DYNAMIC_LINKER__"}} \
++        %{static:-static}}}"
++#else
+ #ifdef USE_GNULIBC_1
+ #define LINK_SPEC "-m elf_i386 %{shared:-shared} \
+   %{!shared: \
+@@ -126,6 +135,7 @@
+ 	%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
+ 	%{static:-static}}}"
+ #endif
++#endif
+ 
+ /* A C statement (sans semicolon) to output to the stdio stream
+    FILE the assembler definition of uninitialized global DECL named
+diff -Naur gcc-3.4.3.orig/gcc/config/linux.h gcc-3.4.3.specs/gcc/config/linux.h
+--- gcc-3.4.3.orig/gcc/config/linux.h	2003-11-29 03:08:10.000000000 +0000
++++ gcc-3.4.3.specs/gcc/config/linux.h	2004-11-14 17:40:58.114083504 +0000
+@@ -124,3 +124,7 @@
+ #endif
+ 
+ #define TARGET_HAS_F_SETLKW
++#ifdef NOSTDINC
++#undef STANDARD_INCLUDE_DIR
++#define STANDARD_INCLUDE_DIR 0
++#endif
+diff -Naur gcc-3.4.3.orig/gcc/configure gcc-3.4.3.specs/gcc/configure
+--- gcc-3.4.3.orig/gcc/configure	2004-11-05 04:14:05.000000000 +0000
++++ gcc-3.4.3.specs/gcc/configure	2004-11-14 17:42:16.961096936 +0000
+@@ -914,6 +914,10 @@
+                           with the compiler
+   --with-system-zlib      use installed libz
+   --with-slibdir=DIR      shared libraries in DIR LIBDIR
++  --with-dynamic-linker=PATH
++                          specifies path to dynamic linker.
++                          example: "/lib/ld-linux.so.2"
++  --with-nostdinc         build gcc to ignore standard include directories
+ 
+ Some influential environment variables:
+   CC          C compiler command
+@@ -4808,6 +4812,34 @@
+   onestep=""
+ fi;
+ 
++# Check whether --with-dynamic-linker= was given.
++
++if test "${with_dynamic_linker+set}" = set; then
++  withval="$with_dynamic_linker"
++  case "${withval}" in
++yes)    { { echo "$as_me:$LINENO: error: bad value ${withval} given for dynamic linker" >&5
++echo "$as_me: error: bad value ${withval} given for dynamic linker" >&2;}
++   { (exit 1); exit 1; }; } ;;
++no)     ;;
++*)	if test -e $withval ; then
++	DYNAMICLINKER=$withval
++	else
++	echo "$as_me: error: bad value $withval given for dynamic linker. No such file." >&2
++	exit 1
++	fi ;;
++esac
++fi;
++
++# Check whether --with-nostdinc was given.
++
++if test "${with_nostdinc+set}" = set; then
++  withval="$with_nostdinc"
++  case "${withval}" in
++yes)	NOSTDINC="-DNOSTDINC" ;;
++no)	;;
++*)	NOSTDINC="-DNOSTDINC" ;;
++esac
++fi;
+ 
+ # -------------------------
+ # Checks for other programs
+@@ -13036,6 +13068,8 @@
+ s,@TARGET_SYSTEM_ROOT_DEFINE@,$TARGET_SYSTEM_ROOT_DEFINE,;t t
+ s,@CROSS_SYSTEM_HEADER_DIR@,$CROSS_SYSTEM_HEADER_DIR,;t t
+ s,@onestep@,$onestep,;t t
++s,@DYNAMICLINKER@,$DYNAMICLINKER,;t t
++s,@NOSTDINC@,$NOSTDINC,;t t
+ s,@SET_MAKE@,$SET_MAKE,;t t
+ s,@AWK@,$AWK,;t t
+ s,@LN@,$LN,;t t

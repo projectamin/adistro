@@ -1,0 +1,12 @@
+diff -urN gcc-4.1.1-STEP/gcc/Makefile.in gcc-4.1.1-STEP-nofixincludes/gcc/Makefile.in
+--- gcc-4.1.1-STEP/gcc/Makefile.in	2006-09-27 22:25:16.000000000 -0500
++++ gcc-4.1.1-STEP-nofixincludes/gcc/Makefile.in	2006-09-27 22:19:43.000000000 -0500
+@@ -3182,7 +3182,7 @@
+ 	  SHELL='$(SHELL)'; MACRO_LIST=`${PWD_COMMAND}`/macro_list ; \
+ 	  export TARGET_MACHINE srcdir SHELL MACRO_LIST && \
+ 	  cd $(build_objdir)/fixincludes && \
+-	  $(SHELL) ./fixinc.sh ../../gcc/include \
++	  $(SHELL) -c true ../../gcc/include \
+ 	    $(SYSTEM_HEADER_DIR) $(OTHER_FIXINCLUDES_DIRS) )
+ 	rm -f include/syslimits.h
+ 	if [ -f include/limits.h ]; then \

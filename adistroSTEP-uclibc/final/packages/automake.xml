@@ -1,0 +1,242 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--automake-->
+
+<amin:chroot dir='/opt/adistro'>
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/System/Applications/Automake-1.9.6
+                </amin:flag>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+<!-- behold the l337 hackiness that is this mess to work around the leetness that a sed and move cant achieve after my patches for some reason-->
+	<amin:command name='copy'>
+		<amin:param name='source'>automake.in</amin:param>
+		<amin:param name='target'>automake</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+        <amin:command name='copy'>
+                <amin:param name='source'>aclocal.in</amin:param>
+                <amin:param name='target'>aclocal</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='copy'>
+                <amin:param name='source'>Config.in</amin:param>
+                <amin:param name='target'>Config.pm</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@APIVERSION@</amin:param>
+		<amin:param name='replace'>1.9</amin:param>
+		<amin:param name='target'>automake</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+        <amin:command name='search_replace'>
+                <amin:param name='find'>@PACKAGE@</amin:param>
+                <amin:param name='replace'>automake</amin:param> 
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='search_replace'>
+                <amin:param name='find'>@PATH_SEPARATOR@</amin:param>
+                <amin:param name='replace'>:</amin:param>
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6/</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='search_replace'>
+                <amin:param name='find'>@PERL@</amin:param>
+                <amin:param name='replace'>/System/Tools/perl</amin:param>
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='search_replace'>
+                <amin:param name='find'>@SHELL@</amin:param>
+                <amin:param name='replace'>/System/Tools/sh</amin:param>
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='search_replace'>
+                <amin:param name='find'>@VERSION@</amin:param>
+                <amin:param name='replace'>1.9.6</amin:param>
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='search_replace'>
+                <amin:param name='find'>@configure_input@</amin:param>
+                <amin:param name='replace'>Generated via Amin , all your base are belong to us.</amin:param>
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='search_replace'>
+                <amin:param name='find'>@datadir@</amin:param>
+                <amin:param name='replace'>/System/Applications/Automake-1.9.6/usr/share</amin:param>
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                 <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+	<!-- change to aclocal below -->
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@APIVERSION@</amin:param>
+		<amin:param name='replace'>1.9</amin:param>
+		<amin:param name='target'>aclocal</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@PACKAGE@</amin:param>
+		<amin:param name='replace'>automake</amin:param> 
+		<amin:param name='target'>aclocal</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@PATH_SEPARATOR@</amin:param>
+		<amin:param name='replace'>:</amin:param>
+		<amin:param name='target'>aclocal</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@PERL@</amin:param>
+		<amin:param name='replace'>/System/Tools/perl</amin:param>
+		<amin:param name='target'>aclocal</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@SHELL@</amin:param>
+		<amin:param name='replace'>/System/Tools/sh</amin:param>
+		<amin:param name='target'>aclocal</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@VERSION@</amin:param>
+		<amin:param name='replace'>1.9.6</amin:param>
+		<amin:param name='target'>aclocal</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@configure_input@</amin:param>
+		<amin:param name='replace'>Generated via Amin , all your base are belong to us.</amin:param>
+		<amin:param name='target'>aclocal</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@datadir@</amin:param>
+		<amin:param name='replace'>/System/Applications/Automake-1.9.6/usr/share</amin:param>
+		<amin:param name='target'>automake</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+<!-- change to config.pm below -->
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@APIVERSION@</amin:param>
+		<amin:param name='replace'>1.9</amin:param>
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@PACKAGE@</amin:param>
+		<amin:param name='replace'>automake</amin:param> 
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@PATH_SEPARATOR@</amin:param>
+		<amin:param name='replace'>:</amin:param>
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@PERL@</amin:param>
+		<amin:param name='replace'>/System/Tools/perl</amin:param>
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@SHELL@</amin:param>
+		<amin:param name='replace'>/System/Tools/sh</amin:param>
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@VERSION@</amin:param>
+		<amin:param name='replace'>1.9.6</amin:param>
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+	<amin:command name='search_replace'>
+		<amin:param name='find'>@configure_input@</amin:param>
+		<amin:param name='replace'>Generated via Amin , all your base are belong to us.</amin:param>
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+<!--	<amin:command name='search_replace'>
+		<amin:param name='find'>@datadir@</amin:param>
+		<amin:param name='replace'>/System/Applications/Automake-1.9.6/usr/share</amin:param>
+		<amin:param name='target'>Config.pm</amin:param>
+		<amin:shell name='dir'>/build/automake-1.9.6/lib/Automake</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>-->
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/automake-1.9.6</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">automake-1.9.6</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/automake-1.9.6/bin/aclocal</amin:param>
+                <amin:param name='target'>aclocal</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/automake-1.9.6/bin/aclocal-1.9</amin:param>
+                <amin:param name='target'>aclocal-1.9</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/automake-1.9.6/bin/automake</amin:param>
+                <amin:param name='target'>automake</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/automake-1.9.6/bin/automake-1.9</amin:param>
+                <amin:param name='target'>automake-1.9</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>
+</amin:chroot>
+</amin:profile>

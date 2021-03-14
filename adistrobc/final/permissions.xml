@@ -1,0 +1,17 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name="chown">
+		<amin:param name="group">0.0</amin:param>
+		<amin:param name="target">proc</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name="chown">
+		<amin:flag>R</amin:flag>
+		<amin:param name="group">0.0</amin:param>
+		<amin:param name="target">bin boot dev etc home lib mnt opt root sbin tmp usr var</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

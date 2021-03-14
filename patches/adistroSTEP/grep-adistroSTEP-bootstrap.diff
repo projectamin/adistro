@@ -1,0 +1,12 @@
+diff -urN grep-2.5.1/src/grep.c grep-2.5.1-adistroSTEP/src/grep.c
+--- grep-2.5.1/src/grep.c	2002-03-27 03:54:12.000000000 +1200
++++ grep-2.5.1-adistroSTEP/src/grep.c	2005-05-17 14:11:24.998751888 +1200
+@@ -1677,7 +1677,7 @@
+     {
+       if (keycc == 0)
+ 	{
+-	  /* No keys were specified (e.g. -f /dev/null).  Match nothing.  */
++	  /* No keys were specified (e.g. -f /System/Devices/null).  Match nothing.  */
+ 	  out_invert ^= 1;
+ 	  match_lines = match_words = 0;
+ 	}

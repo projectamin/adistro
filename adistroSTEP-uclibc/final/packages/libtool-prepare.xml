@@ -1,0 +1,27 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--libtool-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.gnu.org/gnu/libtool/libtool-1.5.14.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/libtool-1.5.14.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/libtool-1.5.14-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/libtool-1.5.14-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/libtool-1.5.14.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/libtool-1.5.14-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/libtool-1.5.14</amin:shell>
+        </amin:command>
+</amin:profile>

@@ -1,0 +1,29 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Patch-->
+
+<!--retrieving package-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.netsw.org/system/tools/fileutils/diff/patch-2.5.4.tar.gz</amin:param>
+                <amin:param name='alt'>http://ftp.gnu.org/gnu/patch/patch-2.5.4.tar.gz</amin:param>
+                <amin:param name='alt'>http://ftp.teledanmark.no/pub/gnu/patch-2.5.4.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/patch-2.5.4.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/patch-2.5.4-STEP.patch</amin:param>
+                <amin:param name='file'>/packages/patch-2.5.4-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/patch-2.5.4.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>/opt/adistro/packages/patch-2.5.4-STEP.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/patch-2.5.4</amin:shell>
+        </amin:command>
+
+</amin:profile>

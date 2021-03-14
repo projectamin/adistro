@@ -1,0 +1,56 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--mksh-->
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>mksh</amin:param>
+		<amin:shell name="dir">/bin</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/build</amin:param>
+		<amin:param name='archive'>/packages/mksh_33.4.orig.tar.gz</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>sh</amin:param>
+		<amin:param>Build.sh</amin:param>
+		<amin:shell name='dir'>/build/mksh-33.4</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='copy'>
+		<amin:flag>v</amin:flag>
+		<amin:param name='source'>mksh</amin:param>
+		<amin:param name='target'>/bin/</amin:param>
+		<amin:shell name='dir'>/build/mksh-33.4</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>mksh</amin:param>
+                <amin:param name='target'>sh</amin:param>
+                <amin:shell name='dir'>/bin</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>mksh</amin:param>
+                <amin:param name='target'>bash</amin:param>
+                <amin:shell name='dir'>/bin</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>mksh-33.4</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

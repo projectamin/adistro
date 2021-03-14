@@ -1,0 +1,62 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Metalog-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/metalog-0.8.tar.bz2</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>prefix=/usr</amin:flag>
+		<amin:shell name='dir'>/build/metalog-0.8</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install-strip</amin:param>
+		<amin:shell name='dir'>/build/metalog-0.8</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>metalog-0.8</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+
+	<amin:command name='textdump'>
+		<amin:param name='content'>
+maxsize  = 100000
+maxtime  = 86400
+maxfiles = 5
+
+Kernel messages :
+  facility = "kern"
+  logdir   = "/var/log/kernel"
+
+Crond :
+  program  = "crond"
+  logdir   = "/var/log/crond"
+
+Password failures :
+
+  regex    = "(password|login|authentication)\s+(fail|invalid)"
+  regex    = "(failed|invalid)\s+(password|login|authentication)"
+  regex    = "ILLEGAL ROOT LOGIN"
+  logdir   = "/var/log/pwdfail"
+
+Critical messages :
+
+  facility = "*"
+  minimum  = 1
+  logdir   = "/var/log/important"
+	</amin:param>
+	<amin:param name='target'>/etc/metalog.conf</amin:param>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

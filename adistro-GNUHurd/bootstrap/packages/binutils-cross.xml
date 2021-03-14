@@ -1,0 +1,50 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Binutils-->
+
+<!--grabbing packages-->
+
+        <amin:download>
+              	<amin:param name='uri'>ftp://ftp.gnu.org/gnu/binutils/binutils-2.16.1.tar.bz2</amin:param>
+              	<amin:param name='file'>/opt/adistro/packages/binutils-2.16.1.tar.bz2</amin:param>
+        </amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/binutils-2.16.1.tar.bz2</amin:param>
+	</amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>binutils-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../binutils-2.16.1/configure</amin:param>
+		<amin:flag>
+		prefix=/bootstrap/crosstools
+		disable-nls
+		target=i686-pc-gnu
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>LD_LIBRARY_PATH=/bootstrap/crosstools/lib</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+		<amin:shell name='env'>LD_LIBRARY_PATH=/bootstrap/crosstools/lib</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>/opt/adistro/build/binutils-build</amin:param>
+		<amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+        <amin:command name='remove'>
+                <amin:flag>rf</amin:flag>
+                <amin:param name='target'>/opt/adistro/build/binutils-2.16.1</amin:param>
+                <amin:shell name="env">PATH=/bootstrap/crosstools/bin:/bin:/usr/bin</amin:shell>
+        </amin:command>
+
+</amin:profile>

@@ -1,0 +1,107 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--sysklogd-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.4.1.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/sysklogd-1.4.1.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/sysklogd-1.4.1-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/sysklogd-1.4.1-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/sysklogd-1.4.1.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:param name="input">/opt/adistro/packages/sysklogd-1.4.1-STEP.patch</amin:param>
+                <amin:shell name="dir">/opt/adistro/build/sysklogd-1.4.1</amin:shell>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='make'>
+		<!--<amin:param>prefix=/System/Applications/Sysklogd-1.4.1</amin:param>-->
+                <amin:shell name='dir'>/build/sysklogd-1.4.1</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/System/Applications/Sysklogd-1.4.1</amin:param>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/System/Applications/Sysklogd-1.4.1/bin</amin:param>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/System/Applications/Sysklogd-1.4.1/man</amin:param>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/System/Applications/Sysklogd-1.4.1/man/man5</amin:param>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/System/Applications/Sysklogd-1.4.1/man/man8</amin:param>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>prefix=/System/Applications/Sysklogd-1.4.1 install</amin:param>
+                <amin:shell name='dir'>/build/sysklogd-1.4.1</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		<amin:shell name="env">LD_PRELOAD=/System/Library/Libraries/Ncurses-5.4/lib/libncurses.so.5</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">sysklogd-1.4.1</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name='textdump'>
+		<amin:param name='target'>/System/Settings/syslog.conf</amin:param>
+		<amin:param name='content'>
+# Begin /System/Settings/syslog.conf
+auth,authpriv.* -/System/Logs/auth.log
+*.*;auth,authpriv.none -/System/Logs/sys.log
+daemon.* -/System/Logs/daemon.log
+kern.* -/System/Logs/kern.log
+mail.* -/System/Logs/mail.log
+user.* -/System/Logs/user.log
+*.emerg *
+# log the bootscript output:
+local2.* -/System/Logs/boot.log
+# End /System/Settings/syslog.conf
+		</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+		</amin:command>
+        <!--<amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/sysklogd-1.4.1/bin/sed</amin:param>
+                <amin:param name='target'>sed</amin:param>
+                <amin:shell name='dir'>/System/Tools/</amin:shell>
+        </amin:command>-->
+
+</amin:chroot>
+</amin:profile>

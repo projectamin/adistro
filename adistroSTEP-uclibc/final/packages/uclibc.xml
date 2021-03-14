@@ -1,0 +1,68 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--UClibc-->
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>install</amin:param>
+		<amin:param>-m444 /packages/uClibc-locale-030818.tgz extra/locale/</amin:param>
+		<amin:shell name="dir">/build/uClibc-0.9.27</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>all</amin:param>
+		<amin:shell name='dir'>/build/uClibc-0.9.27</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='make'>
+                <amin:param>-C utils</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>include/asm</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>include/asm-generic</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>include/linux</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name='make'>
+		<amin:param>all install</amin:param>
+		<amin:shell name='dir'>/build/uClibc-0.9.27</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='make'>
+                <amin:param>-C utils install</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/System/Tools:/Local/Tools:/System/Library/Tools:/bootstrap/System/Tools:/bootstrap/System/Library/Tools</amin:shell>
+	</amin:command>
+
+<!--	<amin:command name='copy'>
+		<amin:param name='source'>libintl.h</amin:param>
+		<amin:param name='target'>/bootstrap/System/Library/Headers/include/</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Libraries/uClibc-0.9.27/include</amin:shell>
+	</amin:command>-->
+
+	<amin:command name='remove'>
+		<amin:param name='target'>uClibc-0.9.27</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

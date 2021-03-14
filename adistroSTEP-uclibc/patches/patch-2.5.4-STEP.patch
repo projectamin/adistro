@@ -1,0 +1,1030 @@
+diff -urN patch-2.5.4/ChangeLog patch-2.5.4-STEP/ChangeLog
+--- patch-2.5.4/ChangeLog	1999-08-30 18:38:49.000000000 +1200
++++ patch-2.5.4-STEP/ChangeLog	2005-08-24 03:22:07.432371056 +1200
+@@ -63,7 +63,7 @@
+ 	* util.c (<basename.h>): Include.
+ 	(move_file): Adjust to new find_backup_file_name convention.
+ 	(doprogram, mkdir, rmdir): Remove; now in separate files.
+-	(fetchame): Match "/dev/null", not NULL_DEVICE.
++	(fetchame): Match "/System/Devices/null", not NULL_DEVICE.
+ 	Ignore names that don't have enough slashes to strip off.
+ 
+ 	* version.c: Update copyright notice.
+@@ -370,7 +370,7 @@
+ 	Move to util.c.
+ 	(get_input_file): Invoke new functions version_controller and
+ 	version_get to simplify this code.
+-	(plan_b): "/dev/tty" -> NULL_DEVICE
++	(plan_b): "/System/Devices/tty" -> NULL_DEVICE
+ 
+ 	* pch.h (pch_timestamp): New decl.
+ 	* pch.c (p_timestamp): New var; takes over from global timestamp array.
+@@ -394,7 +394,7 @@
+ 	(SCCSPREFIX, GET. GET_LOCKED, SCCSDIFF1, SCCSDIFF2,
+  	RCSSUFFIX, CHECKOUT, CHECKOUT_LOCKED, RCSDIFF1): Moved here from inp.c.
+ 	(version_controller, version_get): New functions.
+-	(ask): Look only at /dev/tty for answers; and when standard output is
++	(ask): Look only at /System/Devices/tty for answers; and when standard output is
+ 	not a terminal and ! posixly_correct, don't even look there.
+ 	Remove unnecessary fflushes of stdout.
+ 	(ok_to_reverse): Say "Skipping patch." when deciding to skip patch..
+@@ -554,7 +554,7 @@
+ 
+ 	* patch.man: Fix documentation of backup file name to match behavior.
+ 	Add advice for ordering of patches of derived files.
+-	Add /dev/tty to list of files used.
++	Add /System/Devices/tty to list of files used.
+ 	* README: Adjust instructions for building on DOS.
+ 	* pc/djgpp/README: Remove tentative wording.
+ 	* NEWS: The DOS port is now tested.
+@@ -657,7 +657,7 @@
+ 	* inp.c (scan_input, get_input_file): Quote file names in diagnostics.
+ 	(get_input_file): Set inerrno if it's not already set.
+ 	Don't create file; it's now the caller's responsibility.
+-	(plan_b): Use /dev/null if input size is zero, since it might not exist.
++	(plan_b): Use /System/Devices/null if input size is zero, since it might not exist.
+ 	Use create_file to create temporary file.
+ 
+ 	* NEWS: Add PATCH_VERSION_CONTROL; DOS port is untested.
+@@ -1232,7 +1232,7 @@
+ 	(fatal, pfatal, say): New functions that use stdarg.
+ 	All callers changed.
+ 	(zask): Renamed from `ask'.  Now uses stdarg.  Output to stdout,
+-	and read from /dev/tty, or if that cannot be opened, from
++	and read from /System/Devices/tty, or if that cannot be opened, from
+ 	stderr, stdout, stdin, whichever is first a tty.
+ 	Print "EOF" when an EOF is read.  Do not echo input.
+ 	(sigs): New array.
+@@ -1670,7 +1670,7 @@
+ Fri Jul  3 23:48:14 1992  David J. MacKenzie  (djm@nutrimat.gnu.ai.mit.edu)
+ 
+ 	* util.c (fetchname): Accept whitespace between `Index:' and filename.
+-	Also plug a small memory leak for diffs against /dev/null.
++	Also plug a small memory leak for diffs against /System/Devices/null.
+ 	From eggert@twinsun.com (Paul Eggert).
+ 
+ 	* common.h: Don't define TRUE and FALSE if already defined.
+diff -urN patch-2.5.4/INSTALL patch-2.5.4-STEP/INSTALL
+--- patch-2.5.4/INSTALL	1997-06-23 23:40:27.000000000 +1200
++++ patch-2.5.4-STEP/INSTALL	2005-08-24 03:22:07.439369992 +1200
+@@ -158,7 +158,7 @@
+ 
+ `--cache-file=FILE'
+      Use and save the results of the tests in FILE instead of
+-     `./config.cache'.  Set FILE to `/dev/null' to disable caching, for
++     `./config.cache'.  Set FILE to `/System/Devices/null' to disable caching, for
+      debugging `configure'.
+ 
+ `--help'
+@@ -168,7 +168,7 @@
+ `--silent'
+ `-q'
+      Do not print messages saying which checks are being made.  To
+-     suppress all normal output, redirect it to `/dev/null' (any error
++     suppress all normal output, redirect it to `/System/Devices/null' (any error
+      messages will still be shown).
+ 
+ `--srcdir=DIR'
+diff -urN patch-2.5.4/Makefile.in patch-2.5.4-STEP/Makefile.in
+--- patch-2.5.4/Makefile.in	1999-08-30 18:37:54.000000000 +1200
++++ patch-2.5.4-STEP/Makefile.in	2005-08-24 03:37:36.088193912 +1200
+@@ -57,7 +57,7 @@
+ 
+ #### End of system configuration section. ####
+ 
+-SHELL = /bin/sh
++SHELL = /System/Tools/sh
+ 
+ LIBSRCS = getopt.c getopt1.c malloc.c memchr.c realloc.c rename.c
+ SRCS = addext.c argmatch.c backupfile.c basename.c error.c inp.c maketime.c \
+@@ -112,12 +112,6 @@
+ 
+ Makefile: Makefile.in $(CONFIG_STATUS)
+ 	$(SHELL) $(CONFIG_STATUS)
+-config.status: configure
+-	$(SHELL) $(CONFIG_STATUS) --recheck
+-configure: configure.in $(srcdir)/aclocal.m4
+-	cd $(srcdir) && autoconf
+-config.hin: configure.in
+-	cd $(srcdir) && rm -f config.hin && autoheader
+ 
+ M4DIR = $(srcdir)/m4
+ ACINCLUDE_INPUTS = $(M4DIR)/ccstdc.m4 $(M4DIR)/d-ino.m4 \
+diff -urN patch-2.5.4/NEWS patch-2.5.4-STEP/NEWS
+--- patch-2.5.4/NEWS	1998-03-21 14:51:32.000000000 +1200
++++ patch-2.5.4-STEP/NEWS	2005-08-24 03:22:07.442369536 +1200
+@@ -149,7 +149,7 @@
+   - -b is equivalent to --version-control=simple;
+     `-z SUFF' has the meaning that `-b SUFF' used to.
+   - Names of files to be patched are taken first from *** line and then from
+-    --- line of context diffs; then from Index: line; /dev/tty is
++    --- line of context diffs; then from Index: line; /System/Devices/tty is
+     consulted if none of the above files exist.  However, if the patch
+     appears to create a file, the file does not have to exist: instead,
+     the first name with the longest existing directory prefix is taken.
+diff -urN patch-2.5.4/aclocal.m4 patch-2.5.4-STEP/aclocal.m4
+--- patch-2.5.4/aclocal.m4	1999-08-30 01:09:30.000000000 +1200
++++ patch-2.5.4-STEP/aclocal.m4	2005-08-24 03:22:07.446368928 +1200
+@@ -171,7 +171,7 @@
+ AC_DEFUN(AC_SYS_LARGEFILE_FLAGS,
+   [AC_CACHE_CHECK([for $1 value to request large file support],
+      ac_cv_sys_largefile_$1,
+-     [ac_cv_sys_largefile_$1=`($GETCONF LFS_$1) 2>/dev/null` || {
++     [ac_cv_sys_largefile_$1=`($GETCONF LFS_$1) 2>/System/Devices/null` || {
+ 	ac_cv_sys_largefile_$1=no
+ 	ifelse($1, CFLAGS,
+ 	  [case "$host_os" in
+diff -urN patch-2.5.4/common.h patch-2.5.4-STEP/common.h
+--- patch-2.5.4/common.h	1999-08-30 18:20:08.000000000 +1200
++++ patch-2.5.4-STEP/common.h	2005-08-24 03:22:07.455367560 +1200
+@@ -320,9 +320,9 @@
+ #endif
+ 
+ #ifndef NULL_DEVICE
+-#define NULL_DEVICE "/dev/null"
++#define NULL_DEVICE "/System/Devices/null"
+ #endif
+ 
+ #ifndef TTY_DEVICE
+-#define TTY_DEVICE "/dev/tty"
++#define TTY_DEVICE "/System/Devices/tty"
+ #endif
+diff -urN patch-2.5.4/config.guess patch-2.5.4-STEP/config.guess
+--- patch-2.5.4/config.guess	1999-08-06 00:55:17.000000000 +1200
++++ patch-2.5.4-STEP/config.guess	2005-08-24 03:22:07.752322416 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # Attempt to guess a canonical system name.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999
+ #   Free Software Foundation, Inc.
+@@ -53,14 +53,14 @@
+ 
+ # This is needed to find uname on a Pyramid OSx when run in the BSD universe.
+ # (ghazi@noc.rutgers.edu 8/24/94.)
+-if (test -f /.attbin/uname) >/dev/null 2>&1 ; then
++if (test -f /.attbin/uname) >/System/Devices/null 2>&1 ; then
+ 	PATH=$PATH:/.attbin ; export PATH
+ fi
+ 
+-UNAME_MACHINE=`(uname -m) 2>/dev/null` || UNAME_MACHINE=unknown
+-UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+-UNAME_SYSTEM=`(uname -s) 2>/dev/null` || UNAME_SYSTEM=unknown
+-UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
++UNAME_MACHINE=`(uname -m) 2>/System/Devices/null` || UNAME_MACHINE=unknown
++UNAME_RELEASE=`(uname -r) 2>/System/Devices/null` || UNAME_RELEASE=unknown
++UNAME_SYSTEM=`(uname -s) 2>/System/Devices/null` || UNAME_SYSTEM=unknown
++UNAME_VERSION=`(uname -v) 2>/System/Devices/null` || UNAME_VERSION=unknown
+ 
+ dummy=dummy-$$
+ trap 'rm -f $dummy.c $dummy.o $dummy; exit 1' 1 2 15
+@@ -93,7 +93,7 @@
+ 	ret \$31,(\$26),1
+ 	.end main
+ EOF
+-	$CC_FOR_BUILD $dummy.s -o $dummy 2>/dev/null
++	$CC_FOR_BUILD $dummy.s -o $dummy 2>/System/Devices/null
+ 	if test "$?" = 0 ; then
+ 		./$dummy
+ 		case "$?" in
+@@ -167,7 +167,7 @@
+ 	exit 0;;
+     Pyramid*:OSx*:*:* | MIS*:OSx*:*:* | MIS*:SMP_DC-OSx*:*:*)
+ 	# akee@wpdis03.wpafb.af.mil (Earle F. Ake) contributed MIS and NILE.
+-	if test "`(/bin/universe) 2>/dev/null`" = att ; then
++	if test "`(/System/Tools/universe) 2>/System/Devices/null`" = att ; then
+ 		echo pyramid-pyramid-sysv3
+ 	else
+ 		echo pyramid-pyramid-bsd
+@@ -192,7 +192,7 @@
+ 	echo sparc-sun-solaris3`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+ 	exit 0 ;;
+     sun4*:SunOS:*:*)
+-	case "`/usr/bin/arch -k`" in
++	case "`/System/Tools/arch -k`" in
+ 	    Series*|S4*)
+ 		UNAME_RELEASE=`uname -v`
+ 		;;
+@@ -204,9 +204,9 @@
+ 	echo m68k-sun-sunos${UNAME_RELEASE}
+ 	exit 0 ;;
+     sun*:*:4.2BSD:*)
+-	UNAME_RELEASE=`(head -1 /etc/motd | awk '{print substr($5,1,3)}') 2>/dev/null`
++	UNAME_RELEASE=`(head -1 /etc/motd | awk '{print substr($5,1,3)}') 2>/System/Devices/null`
+ 	test "x${UNAME_RELEASE}" = "x" && UNAME_RELEASE=3
+-	case "`/bin/arch`" in
++	case "`/System/Tools/arch`" in
+ 	    sun3)
+ 		echo m68k-sun-sunos${UNAME_RELEASE}
+ 		;;
+@@ -327,7 +327,7 @@
+ 	exit 0 ;;
+     AViiON:dgux:*:*)
+         # DG/UX returns AViiON for all architectures
+-        UNAME_PROCESSOR=`/usr/bin/uname -p`
++        UNAME_PROCESSOR=`/System/Tools/uname -p`
+         if [ $UNAME_PROCESSOR = mc88100 -o $UNAME_PROCESSOR = mc88110 ] ; then
+ 	if [ ${TARGET_BINARY_INTERFACE}x = m88kdguxelfx \
+ 	     -o ${TARGET_BINARY_INTERFACE}x = x ] ; then
+@@ -361,7 +361,7 @@
+ 	echo i386-ibm-aix
+ 	exit 0 ;;
+     *:AIX:2:3)
+-	if grep bos325 /usr/include/stdio.h >/dev/null 2>&1; then
++	if grep bos325 /usr/include/stdio.h >/System/Devices/null 2>&1; then
+ 		sed 's/^		//' << EOF >$dummy.c
+ 		#include <sys/systemcfg.h>
+ 
+@@ -376,7 +376,7 @@
+ 		$CC_FOR_BUILD $dummy.c -o $dummy && ./$dummy && rm $dummy.c $dummy && exit 0
+ 		rm -f $dummy.c $dummy
+ 		echo rs6000-ibm-aix3.2.5
+-	elif grep bos324 /usr/include/stdio.h >/dev/null 2>&1; then
++	elif grep bos324 /usr/include/stdio.h >/System/Devices/null 2>&1; then
+ 		echo rs6000-ibm-aix3.2.4
+ 	else
+ 		echo rs6000-ibm-aix3.2
+@@ -384,13 +384,13 @@
+ 	exit 0 ;;
+     *:AIX:*:4)
+ 	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | head -1 | awk '{ print $1 }'`
+-	if /usr/sbin/lsattr -EHl ${IBM_CPU_ID} | grep POWER >/dev/null 2>&1; then
++	if /usr/sbin/lsattr -EHl ${IBM_CPU_ID} | grep POWER >/System/Devices/null 2>&1; then
+ 		IBM_ARCH=rs6000
+ 	else
+ 		IBM_ARCH=powerpc
+ 	fi
+-	if [ -x /usr/bin/oslevel ] ; then
+-		IBM_REV=`/usr/bin/oslevel`
++	if [ -x /System/Tools/oslevel ] ; then
++		IBM_REV=`/System/Tools/oslevel`
+ 	else
+ 		IBM_REV=4.${UNAME_RELEASE}
+ 	fi
+@@ -453,7 +453,7 @@
+                   exit (0);
+               }
+ EOF
+-	($CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null ) && HP_ARCH=`./$dummy`
++	($CC_FOR_BUILD $dummy.c -o $dummy 2>/System/Devices/null ) && HP_ARCH=`./$dummy`
+ 	rm -f $dummy.c $dummy
+ 	esac
+ 	HPUX_REV=`echo ${UNAME_RELEASE}|sed -e 's/[^.]*.[0B]*//'`
+@@ -579,8 +579,8 @@
+ 	echo ${UNAME_MACHINE}-unknown-bsdi${UNAME_RELEASE}
+ 	exit 0 ;;
+     *:FreeBSD:*:*)
+-	if test -x /usr/bin/objformat; then
+-	    if test "elf" = "`/usr/bin/objformat`"; then
++	if test -x /System/Tools/objformat; then
++	    if test "elf" = "`/System/Tools/objformat`"; then
+ 		echo ${UNAME_MACHINE}-unknown-freebsdelf`echo ${UNAME_RELEASE}|sed -e 's/[-_].*//'`
+ 		exit 0
+ 	    fi
+@@ -663,9 +663,9 @@
+ }
+ EOF
+ 		LIBC=""
+-		$CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null
++		$CC_FOR_BUILD $dummy.c -o $dummy 2>/System/Devices/null
+ 		if test "$?" = 0 ; then
+-			./$dummy | grep 1\.99 > /dev/null
++			./$dummy | grep 1\.99 > /System/Devices/null
+ 			if test "$?" = 0 ; then
+ 				LIBC="libc1"
+ 			fi
+@@ -693,7 +693,7 @@
+ 		.end main
+ EOF
+ 		LIBC=""
+-		$CC_FOR_BUILD $dummy.s -o $dummy 2>/dev/null
++		$CC_FOR_BUILD $dummy.s -o $dummy 2>/System/Devices/null
+ 		if test "$?" = 0 ; then
+ 			./$dummy
+ 			case "$?" in
+@@ -715,7 +715,7 @@
+ 			esac
+ 
+ 			objdump --private-headers $dummy | \
+-			  grep ld.so.1 > /dev/null
++			  grep ld.so.1 > /System/Devices/null
+ 			if test "$?" = 0 ; then
+ 				LIBC="libc1"
+ 			fi
+@@ -738,7 +738,7 @@
+   return 0;
+ }
+ EOF
+-	  $CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
++	  $CC_FOR_BUILD $dummy.c -o $dummy 2>/System/Devices/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
+ 	  rm -f $dummy.c $dummy
+ 	else
+ 	  # Either a pre-BFD a.out linker (linux-gnuoldld)
+@@ -746,7 +746,7 @@
+ 	  # GCC wants to distinguish between linux-gnuoldld and linux-gnuaout.
+ 	  # If ld does not provide *any* "supported emulations:"
+ 	  # that means it is gnuoldld.
+-	  echo "$ld_help_string" | grep >/dev/null 2>&1 "supported emulations:"
++	  echo "$ld_help_string" | grep >/System/Devices/null 2>&1 "supported emulations:"
+ 	  test $? != 0 && echo "${UNAME_MACHINE}-pc-linux-gnuoldld" && exit 0
+ 
+ 	  case "${UNAME_MACHINE}" in
+@@ -781,7 +781,7 @@
+   return 0;
+ }
+ EOF
+-	  $CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
++	  $CC_FOR_BUILD $dummy.c -o $dummy 2>/System/Devices/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
+ 	  rm -f $dummy.c $dummy
+ 	fi ;;
+ # ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.  earlier versions
+@@ -798,32 +798,32 @@
+ 	echo ${UNAME_MACHINE}-pc-sysv4.2uw${UNAME_VERSION}
+ 	exit 0 ;;
+     i?86:*:4.*:* | i?86:SYSTEM_V:4.*:*)
+-	if grep Novell /usr/include/link.h >/dev/null 2>/dev/null; then
++	if grep Novell /usr/include/link.h >/System/Devices/null 2>/System/Devices/null; then
+ 		echo ${UNAME_MACHINE}-univel-sysv${UNAME_RELEASE}
+ 	else
+ 		echo ${UNAME_MACHINE}-pc-sysv${UNAME_RELEASE}
+ 	fi
+ 	exit 0 ;;
+     i?86:*:5:7*)
+-	UNAME_REL=`(/bin/uname -X|egrep Release|sed -e 's/.*= //')`
+-	(/bin/uname -X|egrep i80486 >/dev/null) && UNAME_MACHINE=i486
+-	(/bin/uname -X|egrep '^Machine.*Pentium' >/dev/null) && UNAME_MACHINE=i586
+-	(/bin/uname -X|egrep '^Machine.*Pent.*II' >/dev/null) && UNAME_MACHINE=i686
+-	(/bin/uname -X|egrep '^Machine.*Pentium Pro' >/dev/null) && UNAME_MACHINE=i585
++	UNAME_REL=`(/System/Tools/uname -X|egrep Release|sed -e 's/.*= //')`
++	(/System/Tools/uname -X|egrep i80486 >/System/Devices/null) && UNAME_MACHINE=i486
++	(/System/Tools/uname -X|egrep '^Machine.*Pentium' >/System/Devices/null) && UNAME_MACHINE=i586
++	(/System/Tools/uname -X|egrep '^Machine.*Pent.*II' >/System/Devices/null) && UNAME_MACHINE=i686
++	(/System/Tools/uname -X|egrep '^Machine.*Pentium Pro' >/System/Devices/null) && UNAME_MACHINE=i585
+ 	echo ${UNAME_MACHINE}-${UNAME_SYSTEM}${UNAME_VERSION}-sysv${UNAME_RELEASE}
+ 	exit 0 ;;
+     i?86:*:3.2:*)
+ 	if test -f /usr/options/cb.name; then
+ 		UNAME_REL=`sed -n 's/.*Version //p' </usr/options/cb.name`
+ 		echo ${UNAME_MACHINE}-pc-isc$UNAME_REL
+-	elif /bin/uname -X 2>/dev/null >/dev/null ; then
+-		UNAME_REL=`(/bin/uname -X|egrep Release|sed -e 's/.*= //')`
+-		(/bin/uname -X|egrep i80486 >/dev/null) && UNAME_MACHINE=i486
+-		(/bin/uname -X|egrep '^Machine.*Pentium' >/dev/null) \
++	elif /System/Tools/uname -X 2>/System/Devices/null >/System/Devices/null ; then
++		UNAME_REL=`(/System/Tools/uname -X|egrep Release|sed -e 's/.*= //')`
++		(/System/Tools/uname -X|egrep i80486 >/System/Devices/null) && UNAME_MACHINE=i486
++		(/System/Tools/uname -X|egrep '^Machine.*Pentium' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i586
+-		(/bin/uname -X|egrep '^Machine.*Pent ?II' >/dev/null) \
++		(/System/Tools/uname -X|egrep '^Machine.*Pent ?II' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i686
+-		(/bin/uname -X|egrep '^Machine.*Pentium Pro' >/dev/null) \
++		(/System/Tools/uname -X|egrep '^Machine.*Pentium Pro' >/System/Devices/null) \
+ 			&& UNAME_MACHINE=i686
+ 		echo ${UNAME_MACHINE}-pc-sco$UNAME_REL
+ 	else
+@@ -842,7 +842,7 @@
+ 	echo i860-intel-osf1
+ 	exit 0 ;;
+     i860:*:4.*:*) # i860-SVR4
+-	if grep Stardent /usr/include/sys/uadmin.h >/dev/null 2>&1 ; then
++	if grep Stardent /usr/include/sys/uadmin.h >/System/Devices/null 2>&1 ; then
+ 	  echo i860-stardent-sysv${UNAME_RELEASE} # Stardent Vistra i860-SVR4
+ 	else # Add other i860-SVR4 vendors below as they are discovered.
+ 	  echo i860-unknown-sysv${UNAME_RELEASE}  # Unknown i860-SVR4
+@@ -858,12 +858,12 @@
+ 	OS_REL=''
+ 	test -r /etc/.relid \
+ 	&& OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
+-	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++	/System/Tools/uname -p 2>/System/Devices/null | grep 86 >/System/Devices/null \
+ 	  && echo i486-ncr-sysv4.3${OS_REL} && exit 0
+-	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
++	/System/Tools/uname -p 2>/System/Devices/null | /System/Tools/grep entium >/System/Devices/null \
+ 	  && echo i586-ncr-sysv4.3${OS_REL} && exit 0 ;;
+     3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
+-        /bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++        /System/Tools/uname -p 2>/System/Devices/null | grep 86 >/System/Devices/null \
+           && echo i486-ncr-sysv4 && exit 0 ;;
+     m68*:LynxOS:2.*:*)
+ 	echo m68k-unknown-lynxos${UNAME_RELEASE}
+@@ -890,8 +890,8 @@
+ 	echo mips-sni-sysv4
+ 	exit 0 ;;
+     *:SINIX-*:*:*)
+-	if uname -p 2>/dev/null >/dev/null ; then
+-		UNAME_MACHINE=`(uname -p) 2>/dev/null`
++	if uname -p 2>/System/Devices/null >/System/Devices/null ; then
++		UNAME_MACHINE=`(uname -p) 2>/System/Devices/null`
+ 		echo ${UNAME_MACHINE}-sni-sysv4
+ 	else
+ 		echo ns32k-sni-sysv
+@@ -986,7 +986,7 @@
+ #define __ARCHITECTURE__ "m68k"
+ #endif
+   int version;
+-  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/dev/null`;
++  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/System/Devices/null`;
+   if (version < 4)
+     printf ("%s-next-nextstep%d\n", __ARCHITECTURE__, version);
+   else
+@@ -1050,7 +1050,7 @@
+ }
+ EOF
+ 
+-$CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null && ./$dummy && rm $dummy.c $dummy && exit 0
++$CC_FOR_BUILD $dummy.c -o $dummy 2>/System/Devices/null && ./$dummy && rm $dummy.c $dummy && exit 0
+ rm -f $dummy.c $dummy
+ 
+ # Apollos put the system type in the environment.
+diff -urN patch-2.5.4/configure patch-2.5.4-STEP/configure
+--- patch-2.5.4/configure	1999-08-30 18:44:34.000000000 +1200
++++ patch-2.5.4-STEP/configure	2005-08-24 03:22:54.698185560 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ 
+ # Guess values for system-dependent variables and create Makefiles.
+ # Generated automatically using autoconf version 2.13 
+@@ -51,7 +51,7 @@
+ # Initialize some other variables.
+ subdirs=
+ MFLAGS= MAKEFLAGS=
+-SHELL=${CONFIG_SHELL-/bin/sh}
++SHELL=${CONFIG_SHELL-/System/Tools/sh}
+ # Maximum number of lines to put in a shell here document.
+ ac_max_here_lines=12
+ 
+@@ -404,12 +404,12 @@
+ # 0 standard input
+ # 1 file creation
+ # 2 errors and warnings
+-# 3 some systems may open it to /dev/tty
++# 3 some systems may open it to /System/Devices/tty
+ # 4 used on the Kubota Titan
+ # 6 checking for... messages and results
+ # 5 compiler messages saved in config.log
+ if test "$silent" = yes; then
+-  exec 6>/dev/null
++  exec 6>/System/Devices/null
+ else
+   exec 6>&1
+ fi
+@@ -510,9 +510,9 @@
+ 
+ ac_exeext=
+ ac_objext=o
+-if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
++if (echo "testing\c"; echo 1,2,3) | grep c >/System/Devices/null; then
+   # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
+-  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
++  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/System/Devices/null; then
+     ac_n= ac_c='
+ ' ac_t='	'
+   else
+@@ -564,7 +564,7 @@
+ 
+ 
+ # Make sure we can run config.sub.
+-if ${CONFIG_SHELL-/bin/sh} $ac_config_sub sun4 >/dev/null 2>&1; then :
++if ${CONFIG_SHELL-/System/Tools/sh} $ac_config_sub sun4 >/System/Devices/null 2>&1; then :
+ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
+ fi
+ 
+@@ -576,14 +576,14 @@
+ NONE)
+   case $nonopt in
+   NONE)
+-    if host_alias=`${CONFIG_SHELL-/bin/sh} $ac_config_guess`; then :
++    if host_alias=`${CONFIG_SHELL-/System/Tools/sh} $ac_config_guess`; then :
+     else { echo "configure: error: can not guess host type; you must specify one" 1>&2; exit 1; }
+     fi ;;
+   *) host_alias=$nonopt ;;
+   esac ;;
+ esac
+ 
+-host=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $host_alias`
++host=`${CONFIG_SHELL-/System/Tools/sh} $ac_config_sub $host_alias`
+ host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+ host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+@@ -730,7 +730,7 @@
+ if { (eval echo configure:731: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+   # If we can't run a trivial program, we are probably using a cross compiler.
+-  if (./conftest; exit) 2>/dev/null; then
++  if (./conftest; exit) 2>/System/Devices/null; then
+     ac_cv_prog_cc_cross=no
+   else
+     ac_cv_prog_cc_cross=yes
+@@ -767,7 +767,7 @@
+   yes;
+ #endif
+ EOF
+-if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:771: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
++if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:771: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/System/Devices/null 2>&1; then
+   ac_cv_prog_gcc=yes
+ else
+   ac_cv_prog_gcc=no
+@@ -838,7 +838,7 @@
+ #include <assert.h>
+ Syntax Error
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:843: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -855,7 +855,7 @@
+ #include <assert.h>
+ Syntax Error
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:860: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -872,7 +872,7 @@
+ #include <assert.h>
+ Syntax Error
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:877: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -926,7 +926,7 @@
+       for ac_prog in ginstall scoinst install; do
+         if test -f $ac_dir/$ac_prog; then
+ 	  if test $ac_prog = install &&
+-            grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
++            grep dspmsg $ac_dir/$ac_prog >/System/Devices/null 2>&1; then
+ 	    # AIX install.  It has an incompatible calling convention.
+ 	    :
+ 	  else
+@@ -972,7 +972,7 @@
+ 	@echo 'ac_maketemp="${MAKE}"'
+ EOF
+ # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+-eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
++eval `${MAKE-make} -f conftestmake 2>/System/Devices/null | grep temp=`
+ if test -n "$ac_maketemp"; then
+   eval ac_cv_prog_make_${ac_make}_set=yes
+ else
+@@ -1039,7 +1039,7 @@
+   esac ;;
+ esac
+ 
+-build=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $build_alias`
++build=`${CONFIG_SHELL-/System/Tools/sh} $ac_config_sub $build_alias`
+ build_cpu=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+ build_vendor=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+ build_os=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+@@ -1096,7 +1096,7 @@
+ if eval "test \"`echo '$''{'ac_cv_sys_largefile_CFLAGS'+set}'`\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+-  ac_cv_sys_largefile_CFLAGS=`($GETCONF LFS_CFLAGS) 2>/dev/null` || {
++  ac_cv_sys_largefile_CFLAGS=`($GETCONF LFS_CFLAGS) 2>/System/Devices/null` || {
+ 	ac_cv_sys_largefile_CFLAGS=no
+ 	case "$host_os" in
+ 	   # IRIX 6.2 and later require cc -n32.
+@@ -1134,7 +1134,7 @@
+ if eval "test \"`echo '$''{'ac_cv_sys_largefile_LDFLAGS'+set}'`\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+-  ac_cv_sys_largefile_LDFLAGS=`($GETCONF LFS_LDFLAGS) 2>/dev/null` || {
++  ac_cv_sys_largefile_LDFLAGS=`($GETCONF LFS_LDFLAGS) 2>/System/Devices/null` || {
+ 	ac_cv_sys_largefile_LDFLAGS=no
+ 	
+       }
+@@ -1146,7 +1146,7 @@
+ if eval "test \"`echo '$''{'ac_cv_sys_largefile_LIBS'+set}'`\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+-  ac_cv_sys_largefile_LIBS=`($GETCONF LFS_LIBS) 2>/dev/null` || {
++  ac_cv_sys_largefile_LIBS=`($GETCONF LFS_LIBS) 2>/System/Devices/null` || {
+ 	ac_cv_sys_largefile_LIBS=no
+ 	
+       }
+@@ -1297,7 +1297,7 @@
+ 
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "yes" >/dev/null 2>&1; then
++  egrep "yes" >/System/Devices/null 2>&1; then
+   rm -rf conftest*
+   echo "$ac_t""yes" 1>&6; cat >> confdefs.h <<\EOF
+ #define _ALL_SOURCE 1
+@@ -1321,7 +1321,7 @@
+ #include "confdefs.h"
+ #include <minix/config.h>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:1326: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -1362,7 +1362,7 @@
+ echo $ac_n "checking for POSIXized ISC""... $ac_c" 1>&6
+ echo "configure:1364: checking for POSIXized ISC" >&5
+ if test -d /etc/conf/kconfig.d &&
+-  grep _POSIX_VERSION /usr/include/sys/unistd.h >/dev/null 2>&1
++  grep _POSIX_VERSION /usr/include/sys/unistd.h >/System/Devices/null 2>&1
+ then
+   echo "$ac_t""yes" 1>&6
+   ISC=yes # If later tests want to check for ISC.
+@@ -1584,7 +1584,7 @@
+ #include <string.h>
+ #include <float.h>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:1589: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -1607,7 +1607,7 @@
+ #include <string.h>
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "memchr" >/dev/null 2>&1; then
++  egrep "memchr" >/System/Devices/null 2>&1; then
+   :
+ else
+   rm -rf conftest*
+@@ -1625,7 +1625,7 @@
+ #include <stdlib.h>
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "free" >/dev/null 2>&1; then
++  egrep "free" >/System/Devices/null 2>&1; then
+   :
+ else
+   rm -rf conftest*
+@@ -1652,7 +1652,7 @@
+ exit (0); }
+ 
+ EOF
+-if { (eval echo configure:1656: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:1656: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   :
+ else
+@@ -1688,7 +1688,7 @@
+ #include "confdefs.h"
+ #include <$ac_hdr>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:1693: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -1931,7 +1931,7 @@
+ #include <string.h>
+ #include <float.h>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:1936: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -1954,7 +1954,7 @@
+ #include <string.h>
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "memchr" >/dev/null 2>&1; then
++  egrep "memchr" >/System/Devices/null 2>&1; then
+   :
+ else
+   rm -rf conftest*
+@@ -1972,7 +1972,7 @@
+ #include <stdlib.h>
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "free" >/dev/null 2>&1; then
++  egrep "free" >/System/Devices/null 2>&1; then
+   :
+ else
+   rm -rf conftest*
+@@ -1999,7 +1999,7 @@
+ exit (0); }
+ 
+ EOF
+-if { (eval echo configure:2003: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:2003: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   :
+ else
+@@ -2035,7 +2035,7 @@
+ #include "confdefs.h"
+ #include <$ac_hdr>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:2040: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -2113,7 +2113,7 @@
+ #endif
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "(^|[^a-zA-Z_0-9])mode_t[^a-zA-Z_0-9]" >/dev/null 2>&1; then
++  egrep "(^|[^a-zA-Z_0-9])mode_t[^a-zA-Z_0-9]" >/System/Devices/null 2>&1; then
+   rm -rf conftest*
+   ac_cv_type_mode_t=yes
+ else
+@@ -2146,7 +2146,7 @@
+ #endif
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "(^|[^a-zA-Z_0-9])off_t[^a-zA-Z_0-9]" >/dev/null 2>&1; then
++  egrep "(^|[^a-zA-Z_0-9])off_t[^a-zA-Z_0-9]" >/System/Devices/null 2>&1; then
+   rm -rf conftest*
+   ac_cv_type_off_t=yes
+ else
+@@ -2179,7 +2179,7 @@
+ #endif
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "(^|[^a-zA-Z_0-9])pid_t[^a-zA-Z_0-9]" >/dev/null 2>&1; then
++  egrep "(^|[^a-zA-Z_0-9])pid_t[^a-zA-Z_0-9]" >/System/Devices/null 2>&1; then
+   rm -rf conftest*
+   ac_cv_type_pid_t=yes
+ else
+@@ -2253,7 +2253,7 @@
+ #endif
+ EOF
+ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  egrep "(^|[^a-zA-Z_0-9])size_t[^a-zA-Z_0-9]" >/dev/null 2>&1; then
++  egrep "(^|[^a-zA-Z_0-9])size_t[^a-zA-Z_0-9]" >/System/Devices/null 2>&1; then
+   rm -rf conftest*
+   ac_cv_type_size_t=yes
+ else
+@@ -2320,7 +2320,7 @@
+ #include "confdefs.h"
+ #include <$ac_hdr>
+ EOF
+-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
++ac_try="$ac_cpp conftest.$ac_ext >/System/Devices/null 2>conftest.out"
+ { (eval echo configure:2325: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ if test -z "$ac_err"; then
+@@ -2587,7 +2587,7 @@
+     }
+ 	  
+ EOF
+-if { (eval echo configure:2591: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:2591: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   jm_cv_func_working_malloc=yes
+ else
+@@ -2638,7 +2638,7 @@
+     }
+ 	  
+ EOF
+-if { (eval echo configure:2642: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:2642: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   jm_cv_func_working_realloc=yes
+ else
+@@ -2678,7 +2678,7 @@
+ #include <$ac_header_dirent>
+ int closedir(); main() { exit(closedir(opendir(".")) != 0); }
+ EOF
+-if { (eval echo configure:2682: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
++if { (eval echo configure:2682: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/System/Devices/null
+ then
+   ac_cv_func_closedir_void=no
+ else
+@@ -2830,15 +2830,15 @@
+ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
+   test -d $ac_dir || continue
+   test -w $ac_dir || continue # It is less confusing to not echo anything here.
+-  (echo 1 > $ac_dir/conftest9012345) 2>/dev/null
+-  (echo 2 > $ac_dir/conftest9012346) 2>/dev/null
+-  val=`cat $ac_dir/conftest9012345 2>/dev/null`
++  (echo 1 > $ac_dir/conftest9012345) 2>/System/Devices/null
++  (echo 2 > $ac_dir/conftest9012346) 2>/System/Devices/null
++  val=`cat $ac_dir/conftest9012345 2>/System/Devices/null`
+   if test ! -f $ac_dir/conftest9012345 || test "$val" != 1; then
+     ac_cv_sys_long_file_names=no
+-    rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
++    rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/System/Devices/null
+     break
+   fi
+-  rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
++  rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/System/Devices/null
+ done
+ fi
+ 
+@@ -2915,7 +2915,7 @@
+ # the --cache-file=FILE option to use a different cache file; that is
+ # what configure does when it calls configure scripts in
+ # subdirectories, so they share the cache.
+-# Giving --cache-file=/dev/null disables caching, for debugging configure.
++# Giving --cache-file=/System/Devices/null disables caching, for debugging configure.
+ # config.status only pays attention to the cache file if you give it the
+ # --recheck option to rerun configure.
+ #
+@@ -2974,11 +2974,11 @@
+ echo creating $CONFIG_STATUS
+ rm -f $CONFIG_STATUS
+ cat > $CONFIG_STATUS <<EOF
+-#! /bin/sh
++#! /System/Tools/sh
+ # Generated automatically by configure.
+ # Run this file to recreate the current configuration.
+ # This directory was configured as follows,
+-# on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
++# on host `(hostname || uname -n) 2>/System/Devices/null | sed 1q`:
+ #
+ # $0 $ac_configure_args
+ #
+@@ -2990,8 +2990,8 @@
+ do
+   case "\$ac_option" in
+   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
+-    echo "running \${CONFIG_SHELL-/bin/sh} $0 $ac_configure_args --no-create --no-recursion"
+-    exec \${CONFIG_SHELL-/bin/sh} $0 $ac_configure_args --no-create --no-recursion ;;
++    echo "running \${CONFIG_SHELL-/System/Tools/sh} $0 $ac_configure_args --no-create --no-recursion"
++    exec \${CONFIG_SHELL-/System/Tools/sh} $0 $ac_configure_args --no-create --no-recursion ;;
+   -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
+     echo "$CONFIG_STATUS generated by autoconf version 2.13"
+     exit 0 ;;
+@@ -3252,7 +3252,7 @@
+   echo "/* $ac_file.  Generated automatically by configure.  */" > conftest.h
+   cat conftest.in >> conftest.h
+   rm -f conftest.in
+-  if cmp -s $ac_file conftest.h 2>/dev/null; then
++  if cmp -s $ac_file conftest.h 2>/System/Devices/null; then
+     echo "$ac_file is unchanged"
+     rm -f conftest.h
+   else
+@@ -3277,5 +3277,5 @@
+ EOF
+ chmod +x $CONFIG_STATUS
+ rm -fr confdefs* $ac_clean_files
+-test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
++test "$no_create" = yes || ${CONFIG_SHELL-/System/Tools/sh} $CONFIG_STATUS || exit 1
+ 
+diff -urN patch-2.5.4/install-sh patch-2.5.4-STEP/install-sh
+--- patch-2.5.4/install-sh	1999-03-03 02:44:48.000000000 +1300
++++ patch-2.5.4-STEP/install-sh	2005-08-24 03:23:48.827956584 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # install - install a program, script, or datafile
+ # This comes from X11R5 (mit/util/scripts/install.sh).
+diff -urN patch-2.5.4/m4/largefile.m4 patch-2.5.4-STEP/m4/largefile.m4
+--- patch-2.5.4/m4/largefile.m4	1999-08-18 07:56:44.000000000 +1200
++++ patch-2.5.4-STEP/m4/largefile.m4	2005-08-24 03:22:08.583196104 +1200
+@@ -12,7 +12,7 @@
+ AC_DEFUN(AC_SYS_LARGEFILE_FLAGS,
+   [AC_CACHE_CHECK([for $1 value to request large file support],
+      ac_cv_sys_largefile_$1,
+-     [ac_cv_sys_largefile_$1=`($GETCONF LFS_$1) 2>/dev/null` || {
++     [ac_cv_sys_largefile_$1=`($GETCONF LFS_$1) 2>/System/Devices/null` || {
+ 	ac_cv_sys_largefile_$1=no
+ 	ifelse($1, CFLAGS,
+ 	  [case "$host_os" in
+diff -urN patch-2.5.4/mkdir.c patch-2.5.4-STEP/mkdir.c
+--- patch-2.5.4/mkdir.c	1999-04-27 00:16:14.000000000 +1200
++++ patch-2.5.4-STEP/mkdir.c	2005-08-24 03:24:33.465170696 +1200
+@@ -89,7 +89,7 @@
+       mode = umask (0);	/* Get current umask.  */
+       /* Set for mkdir.  */
+       umask (mode | ((S_IRWXU | S_IRWXG | S_IRWXO) & ~dmode));
+-      execl ("/bin/mkdir", "mkdir", dpath, (char *) 0);
++      execl ("/System/Tools/mkdir", "mkdir", dpath, (char *) 0);
+       _exit (1);
+ 
+     default:			/* Parent process.  */
+@@ -99,7 +99,7 @@
+ 
+       if (status)
+ 	{
+-	  /* /bin/mkdir failed.  */
++	  /* /System/Tools/mkdir failed.  */
+ 	  errno = EIO;
+ 	  return -1;
+ 	}
+diff -urN patch-2.5.4/patch.c patch-2.5.4-STEP/patch.c
+--- patch-2.5.4/patch.c	1999-08-30 18:20:08.000000000 +1200
++++ patch-2.5.4-STEP/patch.c	2005-08-24 03:26:01.892727664 +1200
+@@ -1308,7 +1308,7 @@
+ #endif
+ 
+ #ifndef TMPDIR
+-#define TMPDIR "/tmp"
++#define TMPDIR "/System/TemporaryFiles"
+ #endif
+ 
+ static char const *
+diff -urN patch-2.5.4/patch.man patch-2.5.4-STEP/patch.man
+--- patch-2.5.4/patch.man	1998-03-22 03:48:43.000000000 +1200
++++ patch-2.5.4-STEP/patch.man	2005-08-24 03:22:08.631188808 +1200
+@@ -152,7 +152,7 @@
+ .BI \*=strip= num
+ option.
+ The name
+-.B /dev/null
++.B /System/Devices/null
+ is also ignored.
+ .TP
+ .B " \(bu"
+@@ -291,7 +291,7 @@
+ \fB\*=binary\fP
+ Read and write all files in binary mode,
+ except for standard output and
+-.BR /dev/tty .
++.BR /System/Devices/tty .
+ This option has no effect on \s-1POSIX\s0-conforming systems.
+ On systems like \s-1DOS\s0 where this option makes a difference,
+ the patch should be generated by
+@@ -759,7 +759,7 @@
+ .IB $TMPDIR "/p\(**"
+ temporary files
+ .TP
+-.B /dev/tty
++.B /System/Devices/tty
+ controlling terminal; used to get answers to questions asked of the user
+ .SH "SEE ALSO"
+ .BR diff (1),
+@@ -819,7 +819,7 @@
+ patches out of order without some warning.
+ .PP
+ You can create a file by sending out a diff that compares
+-.B /dev/null
++.B /System/Devices/null
+ or an empty file dated the Epoch (1970-01-01 00:00:00 \s-1UTC\s0)
+ to the file you want to create.
+ This only works if the file you want to create doesn't exist already in
+@@ -1048,12 +1048,12 @@
+ and looked for an answer from
+ the first file in the following list that was a terminal:
+ standard error, standard output,
+-.BR /dev/tty ,
++.BR /System/Devices/tty ,
+ and standard input.
+ Now
+ .B patch
+ sends questions to standard output and gets answers from
+-.BR /dev/tty .
++.BR /System/Devices/tty .
+ Defaults for some answers have been changed so that
+ .B patch
+ never goes into an infinite loop when using default answers.
+diff -urN patch-2.5.4/rmdir.c patch-2.5.4-STEP/rmdir.c
+--- patch-2.5.4/rmdir.c	1999-03-30 16:43:36.000000000 +1200
++++ patch-2.5.4-STEP/rmdir.c	2005-08-24 03:24:54.615955288 +1200
+@@ -64,7 +64,7 @@
+       return -1;		/* errno already set */
+ 
+     case 0:			/* child process */
+-      execl ("/bin/rmdir", "rmdir", dpath, (char *) 0);
++      execl ("/System/Tools/rmdir", "rmdir", dpath, (char *) 0);
+       _exit (1);
+ 
+     default:			/* parent process */
+@@ -77,7 +77,7 @@
+       if (status)
+ 	{
+ 
+-	  /* /bin/rmdir failed.  */
++	  /* /System/Tools/rmdir failed.  */
+ 
+ 	  errno = EIO;
+ 	  return -1;
+diff -urN patch-2.5.4/util.c patch-2.5.4-STEP/util.c
+--- patch-2.5.4/util.c	1999-08-30 18:20:08.000000000 +1200
++++ patch-2.5.4-STEP/util.c	2005-08-24 03:22:08.678181664 +1200
+@@ -562,11 +562,11 @@
+ 
+   if (ttyfd == -2)
+     {
+-      /* If standard output is not a tty, don't bother opening /dev/tty,
++      /* If standard output is not a tty, don't bother opening /System/Devices/tty,
+ 	 since it's unlikely that stdout will be seen by the tty user.
+ 	 The isatty test also works around a bug in GNU Emacs 19.34 under Linux
+-	 which makes a call-process `patch' hang when it reads from /dev/tty.
+-	 POSIX.2 requires that we read /dev/tty, though.  */
++	 which makes a call-process `patch' hang when it reads from /System/Devices/tty.
++	 POSIX.2 requires that we read /System/Devices/tty, though.  */
+       ttyfd = (posixly_correct || isatty (STDOUT_FILENO)
+ 	       ? open (TTY_DEVICE, O_RDONLY)
+ 	       : -1);
+@@ -968,10 +968,10 @@
+     if (!*name)
+       return 0;
+ 
+-    /* If the name is "/dev/null", ignore the name and mark the file
+-       as being nonexistent.  The name "/dev/null" appears in patches
++    /* If the name is "/System/Devices/null", ignore the name and mark the file
++       as being nonexistent.  The name "/System/Devices/null" appears in patches
+        regardless of how NULL_DEVICE is spelled.  */
+-    if (strcmp (at, "/dev/null") == 0)
++    if (strcmp (at, "/System/Devices/null") == 0)
+       {
+ 	if (pstamp)
+ 	  *pstamp = 0;

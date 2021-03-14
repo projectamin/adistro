@@ -1,0 +1,107 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/glibc-2.7.tar.gz</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name="touch">
+		<amin:param>/etc/ld.so.conf</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+<!--	
+	<amin:command name='system_command'>
+		<amin:param name='basename'>touch</amin:param>
+		<amin:param>/usr/include/limits.h</amin:param>
+	</amin:command>	
+	<amin:command name='search_replace'>
+                <amin:param name='target'>malloc/Makefile</amin:param>
+                <amin:flag name='find'>$(PERL)</amin:flag>
+                <amin:flag name='replace'>/usr/bin/perl</amin:flag>
+                <amin:shell name='dir'>/usr/src/glibc-2.3.2</amin:shell>
+        </amin:command>
+	<amin:command name='search_replace'>
+                <amin:param name='target'>login/Makefile</amin:param>
+                <amin:flag name='find'>root</amin:flag>
+                <amin:flag name='replace'>0</amin:flag>
+                <amin:shell name='dir'>/usr/src/glibc-2.3.2</amin:shell>
+        </amin:command>
+	<amin:command name='search_replace'>
+      		<amin:param name='target'>shlib-versions</amin:param>
+       		<amin:flag name='find'>ld-linux.so.2</amin:flag>
+       		<amin:flag name='replace'>ld-lsb.so.1</amin:flag>
+   		<amin:shell name='dir'>/usr/src/glibc-2.3.2</amin:shell>
+       	</amin:command>
+	<amin:command name='search_replace'>
+        	<amin:param name='target'>ldconfig.h</amin:param>
+        	<amin:flag name='find'>ld-linux.so.2</amin:flag>
+        	<amin:flag name='replace'>ld-lsb.so.1</amin:flag>
+		<amin:shell name='dir'>/usr/src/glibc-2.3.2/sysdeps/unix/sysv/linux/i386</amin:shell>
+	</amin:command>
+-->	
+	<amin:command name='mkdir'>
+		<amin:param name='target'>glibc-build</amin:param>
+                <amin:shell name='dir'>/src/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name="textdump">
+		<amin:param name="target">configparms</amin:param>
+		<amin:param name="content">CFLAGS += -march=i686 -fno-stack-protector -O2</amin:param>
+		<amin:shell name="dir">/src/glibc-build/</amin:shell>
+	</amin:command>
+	<amin:command name="patch">
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/packages/glibc-configure.in.patch</amin:flag>
+		<amin:shell name="dir">/src/glibc-2.7</amin:shell>
+	</amin:command>
+	<amin:command name="patch">
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/packages/glibc-configure.patch</amin:flag>
+		<amin:shell name="dir">/src/glibc-2.7</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../glibc-2.7/configure</amin:param>
+		<amin:flag>
+			prefix=/usr 
+			disable-profile 
+			with-tls 
+			without-cvs
+			with-__thread
+			enable-add-ons 
+			libexecdir=/usr/bin 
+			infodir=/usr/share/info 
+			with-headers=/usr/include
+			enable-kernel=2.6.0		
+			without-gd
+			without-selinux
+		</amin:flag>
+		<amin:shell name='dir'>/src/glibc-build</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/src/glibc-build</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/src/glibc-build</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>locale</amin:param>
+                <amin:shell name='dir'>/usr/lib/</amin:shell>
+	</amin:command>
+	<amin:command name="system_command">
+		<amin:param name="basename">localedef</amin:param>
+		<amin:param>-i en_US -f ISO-8859-1 en_US</amin:param>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>glibc-2.7 glibc-build</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	-->	
+</amin:chroot>
+</amin:profile>

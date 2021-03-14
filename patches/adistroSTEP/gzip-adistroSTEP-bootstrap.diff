@@ -1,0 +1,303 @@
+diff -urN gzip-1.3.5/gzexe.in gzip-1.3.5-adistroSTEP/gzexe.in
+--- gzip-1.3.5/gzexe.in	2002-09-28 18:18:11.000000000 +1200
++++ gzip-1.3.5-adistroSTEP/gzexe.in	2005-05-17 13:30:55.308121008 +1200
+@@ -1,5 +1,5 @@
+ :
+-#!/bin/sh
++#!/System/Tools/sh
+ # gzexe: compressor for Unix executables.
+ # Use this only for binaries that you do not use frequently.
+ #
+@@ -9,9 +9,9 @@
+ # We also try to retain the original file permissions on the compressed file.
+ # For safety reasons, gzexe will not create setuid or setgid shell scripts.
+ 
+-# WARNING: the first line of this file must be either : or #!/bin/sh
++# WARNING: the first line of this file must be either : or #!/System/Tools/sh
+ # The : is required for some old versions of csh.
+-# On Ultrix, /bin/sh is too buggy, change the first line to: #!/bin/sh5
++# On Ultrix, /System/Tools/sh is too buggy, change the first line to: #!/bin/sh5
+ 
+ 
+ # Copyright (C) 1998, 2002 Free Software Foundation
+@@ -74,7 +74,7 @@
+   echo cannot find tail
+   exit 1
+ fi
+-case `echo foo | $tail -n +1 2>/dev/null` in
++case `echo foo | $tail -n +1 2>/System/Devices/null` in
+ foo) tail="$tail -n";;
+ esac
+ 
+@@ -85,16 +85,16 @@
+     continue
+   fi
+   if test $decomp -eq 0; then
+-    if sed -e 1d -e 2q "$i" | grep "^skip=[0-9]*$" >/dev/null; then
++    if sed -e 1d -e 2q "$i" | grep "^skip=[0-9]*$" >/System/Devices/null; then
+       echo "${x}: $i is already gzexe'd"
+       continue
+     fi
+   fi
+-  if ls -l "$i" | grep '^...[sS]' > /dev/null; then
++  if ls -l "$i" | grep '^...[sS]' > /System/Devices/null; then
+     echo "${x}: $i has setuid permission, unchanged"
+     continue
+   fi
+-  if ls -l "$i" | grep '^......[sS]' > /dev/null; then
++  if ls -l "$i" | grep '^......[sS]' > /System/Devices/null; then
+     echo "${x}: $i has setgid permission, unchanged"
+     continue
+   fi
+@@ -103,12 +103,12 @@
+ 	echo "${x}: $i would depend on itself"; continue ;;
+   esac
+   if test -z "$cpmod"; then
+-    cp -p "$i" $tmp 2>/dev/null || cp "$i" $tmp
+-    if test -w $tmp 2>/dev/null; then
++    cp -p "$i" $tmp 2>/System/Devices/null || cp "$i" $tmp
++    if test -w $tmp 2>/System/Devices/null; then
+       writable=1
+     else
+       writable=0
+-      chmod u+w $tmp 2>/dev/null
++      chmod u+w $tmp 2>/System/Devices/null
+     fi
+   fi
+   if test $decomp -eq 0; then
+@@ -118,25 +118,25 @@
+ set -C
+ umask=`umask`
+ umask 77
+-if tail +$skip "$0" | "BINDIR"/gzip -cd > /tmp/gztmp$$; then
++if tail +$skip "$0" | "BINDIR"/gzip -cd > /System/TemporaryFiles/gztmp$$; then
+   umask $umask
+-  /bin/chmod 700 /tmp/gztmp$$
+-  prog="`echo $0 | /bin/sed 's|^.*/||'`"
+-  if /bin/ln /tmp/gztmp$$ "/tmp/$prog" 2>/dev/null; then
+-    trap '/bin/rm -f /tmp/gztmp$$ "/tmp/$prog"; exit $res' 0
+-    (/bin/sleep 5; /bin/rm -f /tmp/gztmp$$ "/tmp/$prog") 2>/dev/null &
+-    /tmp/"$prog" ${1+"$@"}; res=$?
++  /System/Tools/chmod 700 /System/TemporaryFiles/gztmp$$
++  prog="`echo $0 | /System/Tools/sed 's|^.*/||'`"
++  if /System/Tools/ln /System/TemporaryFiles/gztmp$$ "/tmp/$prog" 2>/System/Devices/null; then
++    trap '/System/Tools/rm -f /System/TemporaryFiles/gztmp$$ "/tmp/$prog"; exit $res' 0
++    (/System/Tools/sleep 5; /bin/rm -f /System/TemporaryFiles/gztmp$$ "/tmp/$prog") 2>/System/Devices/null &
++    /System/TemporaryFiles/"$prog" ${1+"$@"}; res=$?
+   else
+-    trap '/bin/rm -f /tmp/gztmp$$; exit $res' 0
+-    (/bin/sleep 5; /bin/rm -f /tmp/gztmp$$) 2>/dev/null &
+-    /tmp/gztmp$$ ${1+"$@"}; res=$?
++    trap '/System/Tools/rm -f /System/TemporaryFiles/gztmp$$; exit $res' 0
++    (/System/Tools/sleep 5; /bin/rm -f /System/TemporaryFiles/gztmp$$) 2>/System/Devices/null &
++    /System/TemporaryFiles/gztmp$$ ${1+"$@"}; res=$?
+   fi
+ else
+   echo Cannot decompress $0; exit 1
+ fi; exit $res
+ EOF
+     gzip -cv9 "$i" >> $tmp || {
+-      /bin/rm -f $tmp
++      /System/Tools/rm -f $tmp
+       echo ${x}: compression not possible for $i, file unchanged.
+       res=1
+       continue
+@@ -145,7 +145,7 @@
+   else
+     # decompression
+     skip=22
+-    if sed -e 1d -e 2q "$i" | grep "^skip=[0-9][0-9]*$" >/dev/null; then
++    if sed -e 1d -e 2q "$i" | grep "^skip=[0-9][0-9]*$" >/System/Devices/null; then
+       eval `sed -e 1d -e 2q "$i"`
+     fi
+     if tail +$skip "$i" | gzip -cd > $tmp; then
+@@ -163,7 +163,7 @@
+     res=1
+     continue
+   }
+-  mv $tmp "$i" || cp -p $tmp "$i" 2>/dev/null || cp $tmp "$i" || {
++  mv $tmp "$i" || cp -p $tmp "$i" 2>/System/Devices/null || cp $tmp "$i" || {
+     echo ${x}: cannot create $i
+     rm -f $tmp
+     res=1
+@@ -171,9 +171,9 @@
+   }
+   rm -f $tmp
+   if test -n "$cpmod"; then
+-    $cpmod "$i~" "$i" 2>/dev/null
++    $cpmod "$i~" "$i" 2>/System/Devices/null
+   elif test $writable -eq 0; then
+-    chmod u-w $i 2>/dev/null
++    chmod u-w $i 2>/System/Devices/null
+   fi
+ done
+ exit $res
+diff -urN gzip-1.3.5/zdiff.in gzip-1.3.5-adistroSTEP/zdiff.in
+--- gzip-1.3.5/zdiff.in	2002-09-26 20:33:24.000000000 +1200
++++ gzip-1.3.5-adistroSTEP/zdiff.in	2005-05-17 13:30:57.562778248 +1200
+@@ -1,6 +1,6 @@
+ :
+-#!/bin/sh
+-# sh is buggy on RS/6000 AIX 3.2. Replace above line with #!/bin/ksh
++#!/System/Tools/sh
++# sh is buggy on RS/6000 AIX 3.2. Replace above line with #!/System/Tools/ksh
+ 
+ # Zcmp and zdiff are used to invoke the cmp or the  diff  pro-
+ # gram  on compressed files.  All options specified are passed
+@@ -47,11 +47,11 @@
+ 	        *[-.]gz* | *[-.][zZ] | *.t[ga]z)
+ 			F=`echo "$2" | sed 's|.*/||;s|[-.][zZtga]*||'`
+ 			set -C
+-			trap 'rm -f /tmp/"$F".$$; exit 2' HUP INT PIPE TERM 0
+-			gzip -cdfq "$2" > /tmp/"$F".$$ || exit
+-                        gzip -cdfq "$1" | $comp $OPTIONS - /tmp/"$F".$$
++			trap 'rm -f /System/TemporaryFiles/"$F".$$; exit 2' HUP INT PIPE TERM 0
++			gzip -cdfq "$2" > /System/TemporaryFiles/"$F".$$ || exit
++                        gzip -cdfq "$1" | $comp $OPTIONS - /System/TemporaryFiles/"$F".$$
+                         STAT="$?"
+-			/bin/rm -f /tmp/"$F".$$ || STAT=2
++			/System/Tools/rm -f /System/TemporaryFiles/"$F".$$ || STAT=2
+ 			trap - HUP INT PIPE TERM 0
+ 			exit $STAT;;
+ 
+diff -urN gzip-1.3.5/zforce.in gzip-1.3.5-adistroSTEP/zforce.in
+--- gzip-1.3.5/zforce.in	2002-09-29 18:01:53.000000000 +1200
++++ gzip-1.3.5-adistroSTEP/zforce.in	2005-05-17 13:30:57.563778096 +1200
+@@ -1,5 +1,5 @@
+ :
+-#!/bin/sh
++#!/System/Tools/sh
+ # zforce: force a gz extension on all gzip files so that gzip will not
+ # compress them twice.
+ #
+@@ -46,7 +46,7 @@
+   *[-.]z | *[-.]gz | *.t[ag]z) continue;;
+   esac
+ 
+-  if gzip -lv < "$i" 2>/dev/null | grep '^defl' > /dev/null; then
++  if gzip -lv < "$i" 2>/System/Devices/null | grep '^defl' > /dev/null; then
+ 
+     new="$i.gz"
+     if mv "$i" "$new"; then
+diff -urN gzip-1.3.5/zgrep.in gzip-1.3.5-adistroSTEP/zgrep.in
+--- gzip-1.3.5/zgrep.in	2002-09-28 17:53:14.000000000 +1200
++++ gzip-1.3.5-adistroSTEP/zgrep.in	2005-05-17 13:30:57.563778096 +1200
+@@ -1,5 +1,5 @@
+ :
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # zgrep -- a wrapper around a grep program that decompresses files as needed
+ # Adapted from a version sent by Charles Levert <charles@comm.polymtl.ca>
+@@ -95,9 +95,9 @@
+ for i do
+   gzip -cdfq "$i" |
+     if test $files_with_matches -eq 1; then
+-      $grep $opt "$pat" > /dev/null && echo $i
++      $grep $opt "$pat" > /System/Devices/null && echo $i
+     elif test $files_without_matches -eq 1; then
+-      $grep $opt "$pat" > /dev/null || echo $i
++      $grep $opt "$pat" > /System/Devices/null || echo $i
+     elif test $with_filename -eq 0 && { test $# -eq 1 || test $no_filename -eq 1; }; then
+       $grep $opt "$pat"
+     else
+diff -urN gzip-1.3.5/zless.in gzip-1.3.5-adistroSTEP/zless.in
+--- gzip-1.3.5/zless.in	2002-09-29 19:14:43.000000000 +1200
++++ gzip-1.3.5-adistroSTEP/zless.in	2005-05-17 13:30:57.563778096 +1200
+@@ -1,5 +1,5 @@
+ :
+-#!/bin/sh
++#!/System/Tools/sh
+ PATH="BINDIR:$PATH"; export PATH
+ LESSOPEN="|gzip -cdfq %s"; export LESSOPEN
+ exec less "$@"
+diff -urN gzip-1.3.5/zmore.in gzip-1.3.5-adistroSTEP/zmore.in
+--- gzip-1.3.5/zmore.in	2002-09-28 20:19:37.000000000 +1200
++++ gzip-1.3.5-adistroSTEP/zmore.in	2005-05-17 13:30:57.563778096 +1200
+@@ -1,5 +1,5 @@
+ :
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ # Copyright (C) 2001, 2002 Free Software Foundation
+ # Copyright (C) 1992, 1993 Jean-loup Gailly
+@@ -26,17 +26,17 @@
+ else
+   n1='-n'; n2=''
+ fi
+-oldtty=`stty -g 2>/dev/null`
+-if stty -cbreak 2>/dev/null; then
++oldtty=`stty -g 2>/System/Devices/null`
++if stty -cbreak 2>/System/Devices/null; then
+   cb='cbreak'; ncb='-cbreak'
+ else
+   # 'stty min 1' resets eof to ^a on both SunOS and SysV!
+   cb='min 1 -icanon'; ncb='icanon eof ^d'
+ fi
+ if test $? -eq 0 && test -n "$oldtty"; then
+-   trap 'stty $oldtty 2>/dev/null; exit' 0 2 3 5 10 13 15
++   trap 'stty $oldtty 2>/System/Devices/null; exit' 0 2 3 5 10 13 15
+ else
+-   trap 'stty $ncb echo 2>/dev/null; exit' 0 2 3 5 10 13 15
++   trap 'stty $ncb echo 2>/System/Devices/null; exit' 0 2 3 5 10 13 15
+ fi
+ 
+ if test $# = 0; then
+@@ -52,9 +52,9 @@
+ 	< "$FILE" || continue
+ 	if test $FIRST -eq 0; then
+ 		echo $n1 "--More--(Next file: $FILE)$n2"
+-		stty $cb -echo 2>/dev/null
+-		ANS=`dd bs=1 count=1 2>/dev/null` 
+-		stty $ncb echo 2>/dev/null
++		stty $cb -echo 2>/System/Devices/null
++		ANS=`dd bs=1 count=1 2>/System/Devices/null` 
++		stty $ncb echo 2>/System/Devices/null
+ 		echo " "
+ 		case "$ANS" in
+ 		[eq]) exit;;
+diff -urN gzip-1.3.5/znew.in gzip-1.3.5-adistroSTEP/znew.in
+--- gzip-1.3.5/znew.in	2002-09-27 18:17:09.000000000 +1200
++++ gzip-1.3.5-adistroSTEP/znew.in	2005-05-17 13:30:57.564777944 +1200
+@@ -1,5 +1,5 @@
+ :
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ PATH="BINDIR:$PATH"; export PATH
+ check=0
+@@ -14,7 +14,7 @@
+ # block is the disk block size (best guess, need not be exact)
+ 
+ warn="(does not preserve modes and timestamp)"
+-tmp=/tmp/zfoo.$$
++tmp=/System/TemporaryFiles/zfoo.$$
+ set -C
+ echo hi > $tmp.1
+ echo hi > $tmp.2
+@@ -23,7 +23,7 @@
+   warn=""
+ fi
+ 
+-if test -z "$cpmod" && ${TOUCH-touch} -r $tmp.1 $tmp.2 2>/dev/null; then
++if test -z "$cpmod" && ${TOUCH-touch} -r $tmp.1 $tmp.2 2>/System/Devices/null; then
+   cpmod="${TOUCH-touch}"
+   cpmodarg="-r"
+   warn="(does not preserve file modes)"
+@@ -85,14 +85,14 @@
+   if test $pipe -eq 1; then
+     if gzip -d < "$n.Z" | gzip $opt > "$n$ext"; then
+       # Copy file attributes from old file to new one, if possible.
+-      test -n "$cpmod" && $cpmod $cpmodarg "$n.Z" "$n$ext" 2> /dev/null
++      test -n "$cpmod" && $cpmod $cpmodarg "$n.Z" "$n$ext" 2> /System/Devices/null
+     else
+       echo error while recompressing $n.Z
+       res=1; continue
+     fi
+   else
+     if test $check -eq 1; then
+-      if cp -p "$n.Z" "$n.$$" 2> /dev/null || cp "$n.Z" "$n.$$"; then
++      if cp -p "$n.Z" "$n.$$" 2> /System/Devices/null || cp "$n.Z" "$n.$$"; then
+ 	:
+       else
+ 	echo cannot backup "$n.Z"

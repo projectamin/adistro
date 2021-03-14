@@ -1,0 +1,81 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--zmalloc-->
+
+<!--retreiving package-->
+<amin:chroot dir='/opt/adistro'>
+
+	<!--<amin:download>
+		<amin:param name='uri'></amin:param>
+		<amin:param name='file'>/packages/zmalloc-0.0.26.tar.gz<amin:param>
+	</amin:download>-->	
+
+	<!--<amin:command name='unpack'>
+		<amin:param name='target'>/build</amin:param>
+		<amin:param name='archive'>/packages/zmalloc-0.0.26.tar.gz</amin:param>
+	</amin:command>-->
+	
+	<!--<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name='input'></amin:flag>
+		<amin:shell name='dir'></amin:shell>
+        </amin:command>	-->
+
+<!--	<amin:command name='remove'>
+		<amin:param name='target'>*.h</amin:param>
+		<amin:shell name='dir'>/build/zero/include</amin:shell>
+	</amin:command>-->
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>gcc</amin:param>
+		<amin:param>-I/build/zero/include -L/Library/Libraries/uClibc-0.9.27/lib -O2 -shared -fPIC -o zmalloc.so.0.0.26 _malloc.c malloc.c -pthread</amin:param>
+		<amin:shell name='dir'>/build/zero/lib/c/malloc</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/System/Library/Libraries/Zmalloc-0.0.26</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/System/Library/Libraries/Zmalloc-0.0.26/lib</amin:param>
+                <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name='copy'>
+		<amin:param name='source'>zmalloc.so.0.0.26</amin:param>
+		<amin:param name='target'>/System/Library/Libraries/Zmalloc-0.0.26/lib/zmalloc.so.0.0.26</amin:param>
+		<amin:shell name='dir'>/build/zero/lib/c/malloc</amin:shell>
+		<amin:shell name="env">PATH=/System/Tools:/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>zero</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>zmalloc.so.0.0.26</amin:param>
+		<amin:param name='target'>zmalloc.so</amin:param>
+		<amin:shell name='dir'>/System/Library/Libraries/Zmalloc-0.0.26/lib/</amin:shell>
+        </amin:command>
+
+        <amin:command name='textdump'>
+                <amin:param name='target'>/System/Settings/ld.so.conf</amin:param>
+                <amin:param name='content'>
+/System/Library/Libraries/Zmalloc-0.0.26/lib
+                </amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+        </amin:command>
+
+        <amin:command name='ldconfig'>
+                <amin:flag>v</amin:flag>
+        </amin:command>
+</amin:chroot>	
+</amin:profile>

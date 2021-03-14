@@ -1,0 +1,85 @@
+<amin:profile xmlns:amin="http://projectamin.org/ns/">
+
+
+<!--Make new Filesystem-->
+	<amin:command name="mkdir">
+		<amin:param name="target">/opt/adistro/bootstrap</amin:param>
+		<amin:flag>p</amin:flag>
+	</amin:command>
+	<amin:command name="mkdir">
+		<amin:param name="target">System Local Network Users Volumes</amin:param>
+                <amin:flag>p</amin:flag>
+		<amin:shell name="dir">/opt/adistro/bootstrap</amin:shell>
+	</amin:command>
+	
+	<amin:command name="mkdir">
+		<amin:flag>p</amin:flag>
+		<amin:param name="target">AdminTools ApplicationData Applications Boot Devices Documentation Library Logs Mail Processes Servers Settings Source StartupItems TemporaryFiles Tools</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/System</amin:shell>
+	</amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">Databases PrintSpool RuntimeData TemporaryFiles</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/System/ApplicationData</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">LICENCES doc html info man</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/System/Documentation</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">Bundles Colors DTDs DocTemplates Frameworks Headers Languages Libraries Makefiles CharacterSets TimeZones Palettes PostScript Services Tools</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/System/Library</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">Incoming Outgoing</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/System/Mail</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">UserTemplates</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/System/Settings</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">AdminTools Applications Documentation Library Mail Servers Settings Source StartupItems Tools</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/Local</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">doc html info man</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/Local/Documentation</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">Bundles Colors Frameworks Headers Libraries Palettes PostScript Services Tools</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/Local/Library</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">Stored</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/Local/Mail</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">Applications Servers Users</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/Network</amin:shell>
+        </amin:command>
+        <amin:command name="mkdir">
+                <amin:flag>p</amin:flag>
+                <amin:param name="target">Administrator</amin:param>
+                <amin:shell name="dir">/opt/adistro/bootstrap/Users</amin:shell>
+        </amin:command>
+        <amin:command name="chmod">
+                <amin:param name="target">Users/Administrator</amin:param>
+                <amin:flag name="set">0750</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap</amin:shell>
+        </amin:command>
+        <amin:command name="chmod">
+                <amin:param name="target">System/TemporaryFiles</amin:param>
+                <amin:flag name="set">1777</amin:flag>
+                <amin:shell name="dir">/opt/adistro/bootstrap</amin:shell>
+        </amin:command>
+</amin:profile>

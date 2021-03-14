@@ -1,0 +1,69 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Binutils-pass2-->
+
+<!--grabbing packages-->
+
+        <amin:download>
+              	<amin:param name='uri'>http://ftp.gnu.org/gnu/binutils/binutils-2.17.tar.gz</amin:param>
+              	<amin:param name='file'>/opt/adistro/packages/binutils-2.17.tar.gz</amin:param>
+      </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/binutils-2.17-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/binutils-2.17-STEP.patch</amin:param>
+      </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/binutils-2.17.tar.gz</amin:param>
+	</amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:param name='input'>../../packages/binutils-2.17-STEP.patch</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/binutils-2.17</amin:shell>
+        </amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>binutils-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../binutils-2.17/configure</amin:param>
+		<amin:flag>
+		prefix=/bootstrap/System/Applications/Binutils-2.17/
+		with-lib-path=/bootstrap/System/Library/Libraries/Glibc-2.4/lib
+		enable-shared
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools/:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools/:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>tooldir=/bootstrap/System/Applications/Binutils-2.17/ install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools/:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:flag>C</amin:flag>
+		<amin:param>ld clean</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools/:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:flag>C</amin:flag>
+		<amin:param>ld LIB_PATH=/bootstrap/System/Library/Libraries/Glibc-2.4/lib/</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools/:/Local/Tools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/bootstrap/System/Applications/GCC-3.4.4/lib:/bootstrap/System/Library/Libraries/Glibc-2.4/lib</amin:shell>
+	</amin:command>
+
+</amin:profile>

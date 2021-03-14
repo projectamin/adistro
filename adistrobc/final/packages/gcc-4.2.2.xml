@@ -1,0 +1,68 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gcc-4.2.2-->
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/gcc-4.2.2.tar.bz2</amin:param>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+		<amin:flag name='input'>/packages/gcc-4.2.2-adistrobc-Makefile.patch</amin:flag>
+		<amin:shell name='dir'>/src/gcc-4.2.2</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+        </amin:command>
+	<amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/packages/gcc-4.2.2-adistrobc-cross_search_paths-1.patch</amin:flag>
+		<amin:shell name="dir">/src/gcc-4.2.2</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+		<amin:shell name='dir'>/src/</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-4.2.2/configure</amin:param>
+		<amin:flag>
+			prefix=/usr
+			enable-shared 
+			enable-languages=c,c++
+			disable-libstdcxx-pch 
+			libexecdir=/usr/lib 
+			enable-threads=posix 
+			enable-__cxa_atexit 
+			enable-clocale=gnu
+		</amin:flag>
+		<amin:shell name='dir'>/src/gcc-build</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/src/gcc-build</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/src/gcc-build</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>gcc-build gcc-4.2.2</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,21 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Binutils-pass2-->
+
+<!--grabbing packages-->
+
+      <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/binutils/binutils-2.16.1.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/binutils-2.16.1.tar.bz2</amin:param>
+      </amin:download>
+
+      <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/binutils-2.16.1-STEP-uclibc.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/binutils-2.16.1-STEP-uclibc.patch</amin:param>
+      </amin:download>
+
+      <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/binutils-2.16.1.tar.bz2</amin:param>
+      </amin:command>
+
+</amin:profile>

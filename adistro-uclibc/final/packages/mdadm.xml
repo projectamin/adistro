@@ -1,0 +1,86 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Mdadm-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://www.kernel.org/pub/linux/utils/raid/mdadm/mdadm-2.4.1.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/mdadm-2.4.1.tar.gz</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.debian.org/debian/pool/main/d/debianutils/debianutils_2.8.4.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/debianutils_2.8.4.tar.gz</amin:param>
+        </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/mdadm-2.4.1.tar.gz</amin:param>
+	</amin:command>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/debianutils_2.8.4.tar.gz</amin:param>
+        </amin:command>
+
+<amin:chroot dir='/opt/adistro'>
+
+	<amin:command name='configure'>
+		<amin:flag>prefix=/usr</amin:flag>
+		<amin:shell name='dir'>/build/debianutils-2.8.4</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os</amin:shell>
+	</amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/debianutils-2.8.4</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='copy'>
+                <amin:param name='source'>which</amin:param>
+                <amin:param name='target'>/usr/bin/which</amin:param>
+                <amin:shell name='dir'>/build/debianutils-2.8.4</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='system_command'>
+		<amin:param name='basename'>chmod</amin:param>
+		<amin:param>+x which</amin:param>
+		<amin:shell name='dir'>/usr/bin/</amin:shell>
+	</amin:command>
+
+	<amin:command name='search_replace'>
+		<amin:param name='find'>i386-uclibc-gcc</amin:param>
+		<amin:param name='replace'>i686-pc-linux-uclibc-gcc</amin:param>
+		<amin:param name='target'>Makefile</amin:param>
+		<amin:shell name='dir'>/build/mdadm-2.4.1</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>mdadm.uclibc</amin:param>
+		<amin:shell name='dir'>/build/mdadm-2.4.1</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='copy'>
+		<amin:param name='source'>mdadm.uclibc</amin:param>
+		<amin:param name='target'>/bin/mdadm</amin:param>
+		<amin:shell name='dir'>/build/mdadm-2.4.1</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>mdadm-2.4.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>debianutils-2.8.4</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/build/</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

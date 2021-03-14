@@ -1,0 +1,340 @@
+diff -urN glibc-20050117/nis/nss_compat/compat-grp.c glibc-20050117-adistroSTEP/nis/nss_compat/compat-grp.c
+--- glibc-20050117/nis/nss_compat/compat-grp.c	2004-09-13 08:38:05.000000000 +1200
++++ glibc-20050117-adistroSTEP/nis/nss_compat/compat-grp.c	2005-02-12 22:00:15.000000000 +1300
+@@ -106,7 +106,7 @@
+ 
+   if (ent->stream == NULL)
+     {
+-      ent->stream = fopen ("/etc/group", "rm");
++      ent->stream = fopen ("/System/Settings/group", "rm");
+ 
+       if (ent->stream == NULL)
+ 	status = errno == EAGAIN ? NSS_STATUS_TRYAGAIN : NSS_STATUS_UNAVAIL;
+@@ -221,7 +221,7 @@
+   return NSS_STATUS_SUCCESS;
+ }
+ 
+-/* This function handle the +group entrys in /etc/group */
++/* This function handle the +group entrys in /System/Settings/group */
+ static enum nss_status
+ getgrnam_plusgroup (const char *name, struct group *result, ent_t *ent,
+ 		    char *buffer, size_t buflen, int *errnop)
+@@ -312,7 +312,7 @@
+ 	  enum nss_status status;
+ 
+ 	  /* Store the group in the blacklist for the "+" at the end of
+-	     /etc/group */
++	     /System/Settings/group */
+ 	  memcpy (buf, &result->gr_name[1], len);
+ 	  status = getgrnam_plusgroup (&result->gr_name[1], result, ent,
+ 				       buffer, buflen, errnop);
+@@ -372,7 +372,7 @@
+   return result;
+ }
+ 
+-/* Searches in /etc/group and the NIS/NIS+ map for a special group */
++/* Searches in /System/Settings/group and the NIS/NIS+ map for a special group */
+ static enum nss_status
+ internal_getgrnam_r (const char *name, struct group *result, ent_t *ent,
+ 		     char *buffer, size_t buflen, int *errnop)
+@@ -503,7 +503,7 @@
+   return result;
+ }
+ 
+-/* Searches in /etc/group and the NIS/NIS+ map for a special group id */
++/* Searches in /System/Settings/group and the NIS/NIS+ map for a special group id */
+ static enum nss_status
+ internal_getgrgid_r (gid_t gid, struct group *result, ent_t *ent,
+ 		     char *buffer, size_t buflen, int *errnop)
+@@ -577,7 +577,7 @@
+ 	  enum nss_status status;
+ 
+ 	  /* Store the group in the blacklist for the "+" at the end of
+-	     /etc/group */
++	     /System/Settings/group */
+ 	  blacklist_store_name (&result->gr_name[1], ent);
+ 	  status = getgrnam_plusgroup (&result->gr_name[1], result, ent,
+ 				       buffer, buflen, errnop);
+diff -urN glibc-20050117/nis/nss_compat/compat-initgroups.c glibc-20050117-adistroSTEP/nis/nss_compat/compat-initgroups.c
+--- glibc-20050117/nis/nss_compat/compat-initgroups.c	2004-09-13 08:38:05.000000000 +1200
++++ glibc-20050117-adistroSTEP/nis/nss_compat/compat-initgroups.c	2005-02-12 22:00:58.000000000 +1300
+@@ -121,7 +121,7 @@
+   else
+     ent->blacklist.current = 0;
+ 
+-  ent->stream = fopen ("/etc/group", "rm");
++  ent->stream = fopen ("/System/Settings/group", "rm");
+ 
+   if (ent->stream == NULL)
+     status = errno == EAGAIN ? NSS_STATUS_TRYAGAIN : NSS_STATUS_UNAVAIL;
+@@ -385,7 +385,7 @@
+ 			    strlen (&grpbuf.gr_name[1]), ent))
+ 	    continue;
+ 	  /* Store the group in the blacklist for the "+" at the end of
+-	     /etc/group */
++	     /System/Settings/group */
+ 	  blacklist_store_name (&grpbuf.gr_name[1], ent);
+ 	  if (nss_getgrnam_r == NULL)
+ 	    return NSS_STATUS_UNAVAIL;
+diff -urN glibc-20050117/nscd/connections.c glibc-20050117-adistroSTEP/nscd/connections.c
+--- glibc-20050117/nscd/connections.c	2004-10-16 10:12:15.000000000 +1300
++++ glibc-20050117-adistroSTEP/nscd/connections.c	2005-02-12 22:03:00.000000000 +1300
+@@ -104,7 +104,7 @@
+     .check_file = 1,
+     .persistent = 0,
+     .shared = 0,
+-    .filename = "/etc/passwd",
++    .filename = "/System/Settings/passwd",
+     .db_filename = _PATH_NSCD_PASSWD_DB,
+     .disabled_iov = &pwd_iov_disabled,
+     .postimeout = 3600,
+@@ -119,7 +119,7 @@
+     .check_file = 1,
+     .persistent = 0,
+     .shared = 0,
+-    .filename = "/etc/group",
++    .filename = "/System/Settings/group",
+     .db_filename = _PATH_NSCD_GROUP_DB,
+     .disabled_iov = &grp_iov_disabled,
+     .postimeout = 3600,
+@@ -134,7 +134,7 @@
+     .check_file = 1,
+     .persistent = 0,
+     .shared = 0,
+-    .filename = "/etc/hosts",
++    .filename = "/System/Settings/hosts",
+     .db_filename = _PATH_NSCD_HOSTS_DB,
+     .disabled_iov = &hst_iov_disabled,
+     .postimeout = 3600,
+@@ -825,11 +825,11 @@
+   size_t buflen = 1024;
+   char *buf = alloca (buflen);
+   size_t readlen = 0;
+-  int fd = open ("/proc/self/cmdline", O_RDONLY);
++  int fd = open ("/System/Processes/self/cmdline", O_RDONLY);
+   if (fd == -1)
+     {
+       dbg_log (_("\
+-cannot open /proc/self/cmdline: %s; disabling paranoia mode"),
++cannot open /System/Processes/self/cmdline: %s; disabling paranoia mode"),
+ 	       strerror (errno));
+ 
+       paranoia = 0;
+@@ -843,7 +843,7 @@
+       if (n == -1)
+ 	{
+ 	  dbg_log (_("\
+-cannot open /proc/self/cmdline: %s; disabling paranoia mode"),
++cannot open /System/Processes/self/cmdline: %s; disabling paranoia mode"),
+ 		   strerror (errno));
+ 
+ 	  close (fd);
+@@ -930,7 +930,7 @@
+     }
+ 
+   /* The preparations are done.  */
+-  execv ("/proc/self/exe", argv);
++  execv ("/System/Processes/self/exe", argv);
+ 
+   /* If we come here, we will never be able to re-exec.  */
+   dbg_log (_("re-exec failed: %s; disabling paranoia mode"),
+diff -urN glibc-20050117/nss/db-Makefile glibc-20050117-adistroSTEP/nss/db-Makefile
+--- glibc-20050117/nss/db-Makefile	2001-07-06 16:55:37.000000000 +1200
++++ glibc-20050117-adistroSTEP/nss/db-Makefile	2005-02-12 22:04:15.000000000 +1300
+@@ -19,10 +19,10 @@
+ # Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ # 02111-1307 USA.
+ 
+-DATABASES = $(wildcard /etc/passwd /etc/group /etc/ethers /etc/protocols \
+-		       /etc/rpc /etc/services /etc/shadow /etc/netgroup)
++DATABASES = $(wildcard /System/Settings/passwd /System/Settings/group /System/Settings/ethers /System/Settings/protocols \
++		       /System/Settings/rpc /System/Settings/services /System/Settings/shadow /System/Settings/netgroup)
+ 
+-VAR_DB = /var/db
++VAR_DB = /System/ApplicationData/Databases
+ 
+ AWK = awk
+ MAKEDB = makedb --quiet
+@@ -30,7 +30,7 @@
+ all: $(patsubst %,$(VAR_DB)/%.db,$(notdir $(DATABASES)))
+ 
+ 
+-$(VAR_DB)/passwd.db: /etc/passwd
++$(VAR_DB)/passwd.db: /System/Settings/passwd
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { FS=":"; OFS=":"; cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+@@ -41,7 +41,7 @@
+ 	$(MAKEDB) -o $@ -
+ 	@echo "done."
+ 
+-$(VAR_DB)/group.db: /etc/group
++$(VAR_DB)/group.db: /System/Settings/group
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { FS=":"; OFS=":"; cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+@@ -52,7 +52,7 @@
+ 	$(MAKEDB) -o $@ -
+ 	@echo "done."
+ 
+-$(VAR_DB)/ethers.db: /etc/ethers
++$(VAR_DB)/ethers.db: /System/Settings/ethers
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+@@ -63,7 +63,7 @@
+ 	$(MAKEDB) -o $@ -
+ 	@echo "done."
+ 
+-$(VAR_DB)/protocols.db: /etc/protocols
++$(VAR_DB)/protocols.db: /System/Settings/protocols
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+@@ -76,7 +76,7 @@
+ 	$(MAKEDB) -o $@ -
+ 	@echo "done."
+ 
+-$(VAR_DB)/rpc.db: /etc/rpc
++$(VAR_DB)/rpc.db: /System/Settings/rpc
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+@@ -89,7 +89,7 @@
+ 	$(MAKEDB) -o $@ -
+ 	@echo "done."
+ 
+-$(VAR_DB)/services.db: /etc/services
++$(VAR_DB)/services.db: /System/Settings/services
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { FS="[ \t/]+"; cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+@@ -105,7 +105,7 @@
+ 	$(MAKEDB) -o $@ -
+ 	@echo "done."
+ 
+-$(VAR_DB)/shadow.db: /etc/shadow
++$(VAR_DB)/shadow.db: /System/Settings/shadow
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { FS=":"; OFS=":"; cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+@@ -126,7 +126,7 @@
+ 	  echo; \
+ 	fi
+ 
+-$(VAR_DB)/netgroup.db: /etc/netgroup
++$(VAR_DB)/netgroup.db: /System/Settings/netgroup
+ 	@echo -n "$(patsubst %.db,%,$(@F))... "
+ 	@$(AWK) 'BEGIN { cnt=0 } \
+ 		 /^[ \t]*$$/ { next } \
+diff -urN glibc-20050117/shlib-versions glibc-20050117-adistroSTEP/shlib-versions
+--- glibc-20050117/shlib-versions	2002-09-05 21:32:03.000000000 +1200
++++ glibc-20050117-adistroSTEP/shlib-versions	2005-02-12 21:59:11.000000000 +1300
+@@ -60,19 +60,19 @@
+ .*-.*-gnu-gnu.*		libc=0.3
+ 
+ # The dynamic loader also requires different names.
+-i.86-.*-linux.*		ld=ld-linux.so.2
+-sparc64-.*-linux.*	ld=ld-linux.so.2	GLIBC_2.2
+-sparc.*-.*-linux.*	ld=ld-linux.so.2
+-alpha.*-.*-linux.*	ld=ld-linux.so.2
+-arm.*-.*-linux.*	ld=ld-linux.so.2
+-sh.*-.*-linux.*		ld=ld-linux.so.2	GLIBC_2.2
+-ia64-.*-linux.*		ld=ld-linux-ia64.so.2	GLIBC_2.2
++i.86-.*-linux.*		ld=ld-adistro.so.2
++sparc64-.*-linux.*	ld=ld-adistro.so.2	GLIBC_2.2
++sparc.*-.*-linux.*	ld=ld-adistro.so.2
++alpha.*-.*-linux.*	ld=ld-adistro.so.2
++arm.*-.*-linux.*	ld=ld-adistro.so.2
++sh.*-.*-linux.*		ld=ld-adistro.so.2	GLIBC_2.2
++ia64-.*-linux.*		ld=ld-adistro-ia64.so.2	GLIBC_2.2
+ mips.*-.*-linux.*	ld=ld.so.1		GLIBC_2.0 GLIBC_2.2
+ hppa.*-.*-.*		ld=ld.so.1		GLIBC_2.2
+ s390x-.*-linux.*	ld=ld64.so.1		GLIBC_2.2
+ powerpc64.*-.*-linux.*	ld=ld64.so.1		GLIBC_2.3
+ cris-.*-linux.*		ld=ld.so.1		GLIBC_2.2
+-x86_64-.*-linux.*	ld=ld-linux-x86-64.so.2	GLIBC_2.2.5
++x86_64-.*-linux.*	ld=ld-adistro-x86-64.so.2	GLIBC_2.2.5
+ # We use the ELF ABI standard name for the default.
+ .*-.*-.*		ld=ld.so.1
+ 
+diff -urN glibc-20050117/sysdeps/unix/sysv/linux/i386/ldconfig.h glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/i386/ldconfig.h
+--- glibc-20050117/sysdeps/unix/sysv/linux/i386/ldconfig.h	2001-07-06 16:56:16.000000000 +1200
++++ glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/i386/ldconfig.h	2005-02-12 21:59:11.000000000 +1300
+@@ -19,7 +19,7 @@
+ #include <sysdeps/generic/ldconfig.h>
+ 
+ #define SYSDEP_KNOWN_INTERPRETER_NAMES \
+-  { "/lib/ld-linux.so.1", FLAG_ELF_LIBC5 },
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.1", FLAG_ELF_LIBC5 },
+ #define SYSDEP_KNOWN_LIBRARY_NAMES \
+   { "libc.so.5", FLAG_ELF_LIBC5 },	\
+   { "libm.so.5", FLAG_ELF_LIBC5 },
+diff -urN glibc-20050117/sysdeps/unix/sysv/linux/ia64/ldconfig.h glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/ia64/ldconfig.h
+--- glibc-20050117/sysdeps/unix/sysv/linux/ia64/ldconfig.h	2001-07-06 16:56:17.000000000 +1200
++++ glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/ia64/ldconfig.h	2005-02-12 21:59:11.000000000 +1300
+@@ -19,7 +19,7 @@
+ #include <sysdeps/generic/ldconfig.h>
+ 
+ #define SYSDEP_KNOWN_INTERPRETER_NAMES \
+-  { "/lib/ld-linux.so.2", FLAG_ELF_LIBC6 },
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2", FLAG_ELF_LIBC6 },
+ #define SYSDEP_KNOWN_LIBRARY_NAMES \
+   { "libc.so.6", FLAG_ELF_LIBC6 },	\
+   { "libm.so.6", FLAG_ELF_LIBC6 },
+diff -urN glibc-20050117/sysdeps/unix/sysv/linux/mips/mips64/ldconfig.h glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/mips/mips64/ldconfig.h
+--- glibc-20050117/sysdeps/unix/sysv/linux/mips/mips64/ldconfig.h	2003-03-18 04:20:44.000000000 +1200
++++ glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/mips/mips64/ldconfig.h	2005-02-12 21:59:11.000000000 +1300
+@@ -19,8 +19,8 @@
+ #include <sysdeps/generic/ldconfig.h>
+ 
+ #define SYSDEP_KNOWN_INTERPRETER_NAMES \
+-  { "/lib32/ld.so.1", FLAG_ELF_LIBC6 }, \
+-  { "/lib64/ld.so.1", FLAG_ELF_LIBC6 },
++  { "/System/Library/Libraries32/ld.so.1", FLAG_ELF_LIBC6 }, \
++  { "/System/Library/Libraries64/ld.so.1", FLAG_ELF_LIBC6 },
+ #define SYSDEP_KNOWN_LIBRARY_NAMES \
+   { "libc.so.6", FLAG_ELF_LIBC6 },	\
+   { "libm.so.6", FLAG_ELF_LIBC6 },
+diff -urN glibc-20050117/sysdeps/unix/sysv/linux/powerpc/ldconfig.h glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/powerpc/ldconfig.h
+--- glibc-20050117/sysdeps/unix/sysv/linux/powerpc/ldconfig.h	2002-09-14 21:00:26.000000000 +1200
++++ glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/powerpc/ldconfig.h	2005-02-12 21:59:11.000000000 +1300
+@@ -20,8 +20,8 @@
+ #include <sysdeps/generic/ldconfig.h>
+ 
+ #define SYSDEP_KNOWN_INTERPRETER_NAMES \
+-  { "/lib/ld.so.1", FLAG_ELF_LIBC6 },	\
+-  { "/lib64/ld64.so.1", FLAG_ELF_LIBC6 },
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1", FLAG_ELF_LIBC6 },	\
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld64.so.1", FLAG_ELF_LIBC6 },
+ #define SYSDEP_KNOWN_LIBRARY_NAMES \
+   { "libc.so.6", FLAG_ELF_LIBC6 },	\
+   { "libm.so.6", FLAG_ELF_LIBC6 },
+diff -urN glibc-20050117/sysdeps/unix/sysv/linux/s390/ldconfig.h glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/s390/ldconfig.h
+--- glibc-20050117/sysdeps/unix/sysv/linux/s390/ldconfig.h	2001-07-06 16:56:19.000000000 +1200
++++ glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/s390/ldconfig.h	2005-02-12 21:59:11.000000000 +1300
+@@ -19,8 +19,8 @@
+ #include <sysdeps/generic/ldconfig.h>
+ 
+ #define SYSDEP_KNOWN_INTERPRETER_NAMES \
+-  { "/lib/ld.so.1", FLAG_ELF_LIBC6 },	\
+-  { "/lib/ld64.so.1", FLAG_ELF_LIBC6 },
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld.so.1", FLAG_ELF_LIBC6 },	\
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld64.so.1", FLAG_ELF_LIBC6 },
+ #define SYSDEP_KNOWN_LIBRARY_NAMES \
+   { "libc.so.6", FLAG_ELF_LIBC6 },	\
+   { "libm.so.6", FLAG_ELF_LIBC6 },
+diff -urN glibc-20050117/sysdeps/unix/sysv/linux/x86_64/ldconfig.h glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/x86_64/ldconfig.h
+--- glibc-20050117/sysdeps/unix/sysv/linux/x86_64/ldconfig.h	2002-04-22 23:51:40.000000000 +1200
++++ glibc-20050117-adistroSTEP/sysdeps/unix/sysv/linux/x86_64/ldconfig.h	2005-02-12 21:59:11.000000000 +1300
+@@ -19,8 +19,8 @@
+ #include <sysdeps/generic/ldconfig.h>
+ 
+ #define SYSDEP_KNOWN_INTERPRETER_NAMES \
+-  { "/lib/ld-linux.so.2", FLAG_ELF_LIBC6 }, \
+-  { "/lib64/ld-linux-x86-64.so.2", FLAG_ELF_LIBC6 },
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro.so.2", FLAG_ELF_LIBC6 }, \
++  { "/System/Library/Libraries/Glibc-2.3-20050117/lib/ld-adistro-x86-64.so.2", FLAG_ELF_LIBC6 },
+ #define SYSDEP_KNOWN_LIBRARY_NAMES \
+   { "libc.so.6", FLAG_ELF_LIBC6 },	\
+   { "libm.so.6", FLAG_ELF_LIBC6 },

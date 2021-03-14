@@ -1,0 +1,199 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gettext-->
+
+<!--retreiving package-->
+
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/gettext/gettext-0.14.1.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gettext-0.14.1.tar.gz</amin:param>
+	</amin:download>
+	
+	<amin:download>
+		<amin:param name='alt'>http://adistroSTEP.st8vrt.com/patches/gettext-0.14.1-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gettext-0.14.1-STEP.patch</amin:param>
+        </amin:download>	
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gettext-0.14.1.tar.gz</amin:param>
+	</amin:command>
+	
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name='input'>/opt/adistro/packages/gettext-0.14.1-STEP.patch</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gettext-0.14.1</amin:shell>
+        </amin:command>	
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/bootstrap/System/Applications/Gettext-0.14.1/
+		disable-libasprintf
+		disable-csharp
+		with-included-gettext
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gettext-0.14.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+		<amin:shell name='env'>CFLAGS=-I/bootstrap/System/Library/Headers/include/</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/gettext-0.14.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gettext-0.14.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>gettext-0.14.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/autopoint</amin:param>
+		<amin:param name='target'>autopoint</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/gettext</amin:param>
+		<amin:param name='target'>gettext</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgcat</amin:param>
+		<amin:param name='target'>msgcat</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgcomm</amin:param>
+		<amin:param name='target'>msgcomm</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgen</amin:param>
+		<amin:param name='target'>msgen</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgfilter</amin:param>
+		<amin:param name='target'>msgfilter</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msggrep</amin:param>
+		<amin:param name='target'>msggrep</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgmerge</amin:param>
+		<amin:param name='target'>msgmerge</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msguniq</amin:param>
+		<amin:param name='target'>msguniq</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/xgettext</amin:param>
+		<amin:param name='target'>xgettext</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/envsubst</amin:param>
+		<amin:param name='target'>envsubst</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/gettextize</amin:param>
+		<amin:param name='target'>gettextize</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgattrib</amin:param>
+		<amin:param name='target'>msgattrib</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgcmp</amin:param>
+		<amin:param name='target'>msgcmp</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgconv</amin:param>
+		<amin:param name='target'>msgconv</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgexec</amin:param>
+		<amin:param name='target'>msgexec</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgfmt</amin:param>
+		<amin:param name='target'>msgfmt</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msginit</amin:param>
+		<amin:param name='target'>msginit</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/msgunfmt</amin:param>
+		<amin:param name='target'>msgunfmt</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Gettext-0.14.1/bin/ngettext</amin:param>
+		<amin:param name='target'>ngettext</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+</amin:profile>

@@ -1,0 +1,135 @@
+<amin:profile xmlns:amin="http://projectamin.org/ns/">
+	<amin:command name="mkdir">
+		<amin:param name="target">/opt/adistrobc/packages/</amin:param>
+                <amin:flag>p</amin:flag>
+	</amin:command>
+        <amin:download>
+	      	<amin:param name='uri'>http://ftp.gnu.org/gnu/binutils/binutils-2.17.tar.bz2</amin:param>
+		<amin:param name='alt'>http://oss.redundant.com/pub/gnu/binutils/binutils-2.17.tar.bz2</amin:param>
+              	<amin:param name='file'>/opt/adistrobc/packages/binutils-2.17.tar.bz2</amin:param>
+       </amin:download>
+       <amin:download>
+	       <amin:param name="uri">http://www.bzip.org/1.0.5/bzip2-1.0.5.tar.gz</amin:param>
+	       <amin:param name="file">/opt/adistrobc/packages/bzip2-1.0.5.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://mirrors.sunsite.dk/gnu/coreutils/coreutils-6.9.tar.bz2</amin:param>
+		<amin:param name="alt">http://sapi.vlsm.org/gnu/coreutils/coreutils-6.9.tar.bz2</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/coreutils-6.9.tar.bz2</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.funet.fi/pub/gnu/alpha/gnu/diffutils/diffutils-2.8.4.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.tuniv.szczecin.pl/pub/Linux/alpha-gnu/diffutils/diffutils-2.8.4.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/diffutils-2.8.4.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/gnu/gawk/gawk-3.1.6.tar.gz</amin:param>
+		<amin:param name="alt">http://kambing.vlsm.org/gnu/gawk/gawk-3.1.6.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/gawk-3.1.6.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/gcc/gcc-4.2.2/gcc-4.2.2.tar.bz2</amin:param>
+		<amin:param name='alt'>http://oss.redundant.com/pub/gnu/gcc/gcc-4.2.2/gcc-4.2.2.tar.bz2</amin:param>
+		<amin:param name='alt'>http://mirror.telentente.com/pub/gnu/gcc/gcc-4.2.2/gcc-4.2.2.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistrobc/packages/gcc-4.2.2.tar.bz2</amin:param>
+	</amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://projectamin.org:80/svnweb/adistro/checkout/adistrobc/patches/gcc-4.2.2-adistrobc-Makefile.patch</amin:param>
+                <amin:param name='file'>/opt/adistrobc/packages/gcc-4.2.2-adistrobc-Makefile.patch</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://projectamin.org:80/svnweb/adistro/checkout/adistrobc/patches/gcc-4.2.2-adistrobc-specs.patch</amin:param>
+                <amin:param name='file'>/opt/adistrobc/packages/gcc-4.2.2-adistrobc-specs.patch</amin:param>
+        </amin:download>
+        <amin:download>
+                <amin:param name='uri'>http://projectamin.org:80/svnweb/adistro/checkout/adistrobc/patches/gcc-4.2.2-adistrobc-cross_search_paths-1.patch</amin:param>
+                <amin:param name='file'>/opt/adistrobc/packages/gcc-4.2.2-adistrobc-cross_search_paths-1.patch</amin:param>
+        </amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/gnu/glibc/glibc-2.7.tar.gz</amin:param>
+		<amin:param name="alt">http://kambing.vlsm.org/gnu/glibc/glibc-2.7.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.algx.net/pub/gnu/glibc/glibc-2.7.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/glibc-2.7.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://mirrors.usc.edu/pub/gnu/grep/grep-2.5.3.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.gnu.org/gnu/grep/grep-2.5.3.tar.gz</amin:param>
+		<amin:param name="alt">http://www.ibiblio.org/pub/gnu/grep/grep-2.5.3.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/grep-2.5.3.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://mirrors.sunsite.dk/gnu/gzip/gzip-1.3.12.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.gnu.org/gnu/gzip/gzip-1.3.12.tar.gz</amin:param>
+		<amin:param name="alt">http://www.ibiblio.org/pub/gnu/gzip/gzip-1.3.12.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/gzip-1.3.12.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name='uri'>http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.26.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistrobc/packages/linux-2.6.26.tar.bz2</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://mirrors.sunsite.dk/gnu/make/make-3.81.tar.bz2</amin:param>
+		<amin:param name="alt">http://ftp.gnu.org/pub/gnu/make/make-3.81.tar.bz2</amin:param>
+		<amin:param name="alt">http://ftp.gnu.org/gnu/make/make-3.81.tar.bz2</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/make-3.81.tar.bz2</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">ftp://invisible-island.net/ncurses/ncurses-5.7.tar.gz</amin:param>
+		<amin:param name="alt">http://nl.lunar-linux.org/lunar/sources/sources/ncurses-5.7.tar.gz</amin:param>
+		<amin:param name="alt">http://machinery.il.fontys.nl/pub/lunatix/old/ncurses-5.7.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/ncurses-5.7.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://www.netsw.org/system/tools/fileutils/diff/patch-2.5.4.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.gnu.org/gnu/patch/patch-2.5.4.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.teledanmark.no/pub/gnu/patch-2.5.4.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/patch-2.5.4.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/gnu/sed/sed-4.1.5.tar.gz</amin:param>
+		<amin:param name="alt">http://mirror.telentente.com/pub/gnu/sed/sed-4.1.5.tar.gz</amin:param>
+		<amin:param name="alt">http://mirrors.usc.edu/pub/gnu/sed/sed-4.1.5.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/sed-4.1.5.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/gnu/tar/tar-1.19.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.funet.fi/pub/gnu/alpha/gnu/tar/tar-1.19.tar.gz</amin:param>
+		<amin:param name="alt">http://slackware.oregonstate.edu/slackware_source/a/tar/tar-1.19.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/tar-1.19.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/gnu/texinfo/texinfo-4.11.tar.bz2</amin:param>
+		<amin:param name="alt">http://mirrors.usc.edu/pub/gnu/texinfo/texinfo-4.11.tar.bz2</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/texinfo-4.11.tar.bz2</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/bash/bash-3.2.tar.gz</amin:param>
+		<amin:param name='alt'>http://oss.redundant.com/pub/gnu/bash/bash-3.2.tar.gz</amin:param>
+		<amin:param name='alt'>http://www.online-mirror.org/gnu/bash/bash-3.2.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistrobc/packages/bash-3.2.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/gnu/bison/bison-2.3.tar.bz2</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/bison-2.3.tar.bz2</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/pub/gnu/findutils/findutils-4.4.0.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/findutils-4.4.0.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">ftp://ftp.gnu.org/pub/gnu/m4/m4-1.4.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/m4-1.4.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name="uri">http://ftp.gnu.org/pub/gnu/gettext/gettext-0.17.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/gettext-0.17.tar.gz</amin:param>
+	</amin:download>	
+	<amin:download>
+		<amin:param name='uri'>http://www.cpan.org/src/perl-5.10.0.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistrobc/packages/perl-5.10.0.tar.gz</amin:param>
+	</amin:download>
+	<amin:download>
+		<amin:param name='uri'>http://projectamin.org:80/svnweb/adistro/checkout/adistrobc/patches/perl-5.10.0.patch</amin:param>
+		<amin:param name='file'>/opt/adistrobc/packages/perl-5.10.0.patch</amin:param>
+	</amin:download>
+</amin:profile>

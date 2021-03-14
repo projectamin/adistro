@@ -1,0 +1,20 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--motd-->
+
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='textdump'>
+		<amin:param name='content'>
+Welcome to Adistro - uClibc - Concept Implementation v.03 - 19/02/2008 
+All your amin are belong to us! ;)
+please report bugs to swishy@bcpub.com
+		</amin:param>
+                <amin:param name='target'>/etc/motd</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

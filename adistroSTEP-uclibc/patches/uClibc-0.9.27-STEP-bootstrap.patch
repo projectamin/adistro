@@ -1,0 +1,2159 @@
+diff -urN uClibc-0.9.27/Changelog uClibc-0.9.27-STEP/Changelog
+--- uClibc-0.9.27/Changelog	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/Changelog	2005-08-27 05:20:05.176834624 +1200
+@@ -250,7 +250,7 @@
+ 	o header file updates for v850 architecture
+ 	o Fixed v850 crt0.S __uClibc_main argument stack space
+     Jeffrey Damick
+-	o Fixed res_init() so it properly reloads /etc/resolv.conf
++	o Fixed res_init() so it properly reloads /bootstrap/System/Settings/resolv.conf
+     Vadim Lebedev
+ 	o Fixed ARM setjmp when floating point was disabled
+     David McCullough
+@@ -420,7 +420,7 @@
+     o   uClibc no longer requires perl to compile
+     o   mips dlopen was fixed by Steven J. Hill
+     o   pty and tty handling fixes
+-    o   Manuel Novoa added support for a new /etc/TZ file for globally
++    o   Manuel Novoa added support for a new /bootstrap/System/Settings/TZ file for globally
+ 	setting the system timezone.
+     o   Manuel also fixed up a number of remaining wide char issues. 
+     o   Lots of other little bug fixes and cleanups
+diff -urN uClibc-0.9.27/Changelog.full uClibc-0.9.27-STEP/Changelog.full
+--- uClibc-0.9.27/Changelog.full	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/Changelog.full	2005-08-27 06:06:30.318428744 +1200
+@@ -794,7 +794,7 @@
+ __dns_lookup(). Have attaced a txt file with my diffs regarding to
+ uClibc 0.9.26.
+ 
+-If two nameservers are included in /etc/resolv.conf and the first one is
++If two nameservers are included in /bootstrap/System/Settings/resolv.conf and the first one is
+ wrong and the secondary is correct the algorithm never
+ looked up the secondary one. Please review my diff and feel free to
+ submit the patch onto your CVS.
+@@ -2003,10 +2003,10 @@
+ Branch: HEAD
+ Tag: (none) 
+ Log:
+-Add missing mips specific include/sys/user.h
++Add missing mips specific include/sys/user.h
+ 
+ Members: 
+-	libc/sysdeps/linux/mips/sys/user.h:INITIAL->1.1 
++	libc/sysdeps/linux/mips/sys/user.h:INITIAL->1.1 
+ 
+ ---------------------
+ PatchSet 3266 
+@@ -2633,8 +2633,8 @@
+ 	libc/sysdeps/linux/frv/bits/setjmp.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/frv/bits/stackinfo.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/frv/bits/wordsize.h:INITIAL->1.1 
+-	libc/sysdeps/linux/frv/sys/procfs.h:INITIAL->1.1 
+-	libc/sysdeps/linux/frv/sys/ptrace.h:INITIAL->1.1 
++	libc/sysdeps/linux/frv/sys/procfs.h:INITIAL->1.1 
++	libc/sysdeps/linux/frv/sys/ptrace.h:INITIAL->1.1 
+ 
+ ---------------------
+ PatchSet 3307 
+@@ -2703,7 +2703,7 @@
+ 	libc/sysdeps/linux/frv/bits/elf-fdpic.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/frv/bits/kernel_stat.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/frv/bits/syscalls.h:INITIAL->1.1 
+-	libc/sysdeps/linux/frv/sys/ucontext.h:INITIAL->1.1 
++	libc/sysdeps/linux/frv/sys/ucontext.h:INITIAL->1.1 
+ 	libpthread/linuxthreads/sysdeps/frv/pt-machine.h:INITIAL->1.1 
+ 
+ ---------------------
+@@ -2920,7 +2920,7 @@
+ Branch: HEAD
+ Tag: (none) 
+ Log:
+-Bug fix: gethostbyname2_r would fail if /etc/host was missing.
++Bug fix: gethostbyname2_r would fail if /bootstrap/System/Settings/host was missing.
+ Bug fix: gethostbyname_r checked errno without first setting it to a
+          known value.
+ 
+@@ -3332,10 +3332,10 @@
+ Log:
+ It turns out that asm/reg.h is missing from the 2.6.x kernel headers,
+ which prevents libthread_db (used by gdb) from compiling.  Include a
+-copy within include/sys/user.h for mips, per what was done in glibc.
++copy within include/sys/user.h for mips, per what was done in glibc.
+ 
+ Members: 
+-	libc/sysdeps/linux/mips/sys/user.h:1.1->1.2 
++	libc/sysdeps/linux/mips/user.h:1.1->1.2 
+ 
+ ---------------------
+ PatchSet 3352 
+@@ -3852,7 +3852,7 @@
+ 	libc/sysdeps/linux/frv/sysdep.c:1.1->1.2 
+ 	libc/sysdeps/linux/frv/vfork.S:1.2->1.3 
+ 	libc/sysdeps/linux/frv/bits/syscalls.h:1.1->1.2 
+-	libc/sysdeps/linux/frv/sys/ucontext.h:1.1->1.2 
++	libc/sysdeps/linux/frv/sys/ucontext.h:1.1->1.2 
+ 
+ ---------------------
+ PatchSet 3383 
+@@ -4362,7 +4362,7 @@
+ 	libc/sysdeps/linux/h8300/bits/stackinfo.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/h8300/bits/syscalls.h:1.6->1.7 
+ 	libc/sysdeps/linux/h8300/bits/wordsize.h:1.3->1.4 
+-	libc/sysdeps/linux/h8300/sys/procfs.h:INITIAL->1.1 
++	libc/sysdeps/linux/h8300/sys/procfs.h:INITIAL->1.1 
+ 
+ ---------------------
+ PatchSet 3408 
+@@ -4373,7 +4373,7 @@
+ Log:
+ Atsushi Nemoto writes:
+ 
+-This is a patch for uClibc/libc/sysdeps/linux/mips/sys/procfs.h pulled
++This is a patch for uClibc/libc/sysdeps/linux/mips/sys/procfs.h pulled
+ from glibc CVS.
+ 
+ This fixes gdb with threaded application (with glibc environment).
+@@ -4384,7 +4384,7 @@
+ CVS).
+ 
+ Members: 
+-	libc/sysdeps/linux/mips/sys/procfs.h:1.1->1.2 
++	libc/sysdeps/linux/mips/sys/procfs.h:1.1->1.2 
+ 
+ ---------------------
+ PatchSet 3409 
+@@ -4526,8 +4526,8 @@
+ 	libc/sysdeps/linux/nios/bits/stat.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/nios/bits/syscalls.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/nios/bits/wordsize.h:INITIAL->1.1 
+-	libc/sysdeps/linux/nios/sys/procfs.h:INITIAL->1.1 
+-	libc/sysdeps/linux/nios/sys/ucontext.h:INITIAL->1.1 
++	libc/sysdeps/linux/nios/sys/procfs.h:INITIAL->1.1 
++	libc/sysdeps/linux/nios/sys/ucontext.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/nios2/Makefile:INITIAL->1.1 
+ 	libc/sysdeps/linux/nios2/__longjmp.S:INITIAL->1.1 
+ 	libc/sysdeps/linux/nios2/brk.c:INITIAL->1.1 
+@@ -4556,8 +4556,8 @@
+ 	libc/sysdeps/linux/nios2/bits/stat.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/nios2/bits/syscalls.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/nios2/bits/wordsize.h:INITIAL->1.1 
+-	libc/sysdeps/linux/nios2/sys/procfs.h:INITIAL->1.1 
+-	libc/sysdeps/linux/nios2/sys/ucontext.h:INITIAL->1.1 
++	libc/sysdeps/linux/nios2/sys/procfs.h:INITIAL->1.1 
++	libc/sysdeps/linux/nios2/sys/ucontext.h:INITIAL->1.1 
+ 	libpthread/linuxthreads/sysdeps/nios/pt-machine.h:INITIAL->1.1 
+ 	libpthread/linuxthreads/sysdeps/nios2/pt-machine.h:INITIAL->1.1 
+ 
+@@ -4662,7 +4662,7 @@
+ Support linux 2.6.x wide device major/minor numbers
+ 
+ Members: 
+-	include/sys/sysmacros.h:1.2->1.3 
++	include/sys/sysmacros.h:1.2->1.3 
+ 
+ ---------------------
+ PatchSet 3424 
+@@ -4675,7 +4675,7 @@
+ 
+ Members: 
+ 	include/stdlib.h:1.42->1.43 
+-	include/sys/sysmacros.h:1.3->1.4 
++	include/sys/sysmacros.h:1.3->1.4 
+ 
+ ---------------------
+ PatchSet 3425 
+@@ -4767,10 +4767,10 @@
+ 
+ Members: 
+ 	libc/sysdeps/linux/mips/sgidefs.h:1.1->1.2 
+-	libc/sysdeps/linux/mips/sys/asm.h:INITIAL->1.1 
+-	libc/sysdeps/linux/mips/sys/fpregdef.h:INITIAL->1.1 
+-	libc/sysdeps/linux/mips/sys/regdef.h:1.1->1.2 
+-	libc/sysdeps/linux/mips/sys/ucontext.h:1.1->1.2 
++	libc/sysdeps/linux/mips/sys/asm.h:INITIAL->1.1 
++	libc/sysdeps/linux/mips/sys/fpregdef.h:INITIAL->1.1 
++	libc/sysdeps/linux/mips/sys/regdef.h:1.1->1.2 
++	libc/sysdeps/linux/mips/sys/ucontext.h:1.1->1.2 
+ 
+ ---------------------
+ PatchSet 3431 
+@@ -4830,7 +4830,7 @@
+ 	include/string.h:1.25->1.26 
+ 	include/unistd.h:1.25->1.26 
+ 	include/wchar.h:1.7->1.8 
+-	include/sys/sysmacros.h:1.4->1.5 
++	include/sys/sysmacros.h:1.4->1.5 
+ 	libc/sysdeps/linux/arm/bits/string.h:1.1->1.2(DEAD) 
+ 	libc/sysdeps/linux/common/bits/string.h:1.1->1.2(DEAD) 
+ 	libc/sysdeps/linux/common/bits/string2.h:1.1->1.2(DEAD) 
+@@ -4978,7 +4978,7 @@
+ while playing around with Gentoo on uClibc, i hit some troubles with ldconfig
+ 
+ first, i found that it kept trying to read 'etc/ld.so.conf' ... it didnt want
+-to read '/etc/ld.so.conf' ... looking at the source, the default conf file is
++to read '/bootstrap/System/Settings/ld.so.conf' ... looking at the source, the default conf file is
+ defined as UCLIBC_RUNTIME_PREFIX "etc/ld.so.conf" ... all fine and dandy, but
+ the utils/Makefile builds the .c files with this:
+ -DUCLIBC_RUNTIME_PREFIX=$(R_PREFIX)
+@@ -4987,7 +4987,7 @@
+ -DUCLIBC_RUNTIME_PREFIX=\"$(RUNTIME_PREFIX)\"
+ changing the utils/Makefile to be like this fixed things for me
+ 
+-next up, i found that i wasnt getting an /etc/ld.so.cache file when i ran
++next up, i found that i wasnt getting an /bootstrap/System/Settings/ld.so.cache file when i ran
+ `ldconfig` ... looking at the code, USE_CACHE needs to be defined ...
+ Rules.mak has a line that reads LIBRARY_CACHE:=#-DUSE_CACHE by default, but
+ then LIBRARY_CACHE is never used anywhere :)
+@@ -5241,11 +5241,11 @@
+ 	libc/misc/internals/__uClibc_main.c:1.37->1.38 
+ 	libc/stdlib/malloc/malloc.h:1.19->1.20 
+ 	libc/sysdeps/linux/alpha/bits/uClibc_page.h:INITIAL->1.1 
+-	libc/sysdeps/linux/alpha/sys/user.h:1.1->1.2 
++	libc/sysdeps/linux/alpha/sys/user.h:1.1->1.2 
+ 	libc/sysdeps/linux/common/bits/uClibc_page.h:INITIAL->1.1 
+-	libc/sysdeps/linux/i386/sys/user.h:1.1->1.2 
++	libc/sysdeps/linux/i386/sys/user.h:1.1->1.2 
+ 	libc/sysdeps/linux/mips/bits/uClibc_page.h:INITIAL->1.1 
+-	libc/sysdeps/linux/mips/sys/user.h:1.2->1.3 
++	libc/sysdeps/linux/mips/sys/user.h:1.2->1.3 
+ 	libpthread/linuxthreads/internals.h:1.8->1.9 
+ 
+ ---------------------
+@@ -5282,7 +5282,7 @@
+ Branch: HEAD
+ Tag: (none) 
+ Log:
+-Do not fail all lookups when /etc/resolv.conf is missing, as i.e.
++Do not fail all lookups when /bootstrap/System/Settings/resolv.conf is missing, as i.e.
+ checking on 127.0.0.1 is still valid w/o resolv.conf
+  -Erik
+ 
+@@ -5640,8 +5640,8 @@
+ 	docs/Glibc_vs_uClibc_Differences.txt:1.14->1.15 
+ 	extra/Configs/Config.frv.default:1.2->1.3 
+ 	extra/Configs/Config.in:1.48->1.49 
+-	include/sys/gmon.h:1.2->1.3(DEAD) 
+-	include/sys/gmon_out.h:1.1->1.2(DEAD) 
++	include/sys/gmon.h:1.2->1.3(DEAD) 
++	include/sys/gmon_out.h:1.1->1.2(DEAD) 
+ 	libc/sysdeps/linux/alpha/__longjmp.S:1.1->1.2 
+ 	libc/sysdeps/linux/alpha/brk.S:1.4->1.5 
+ 	libc/sysdeps/linux/alpha/clone.S:1.1->1.2 
+@@ -5836,7 +5836,7 @@
+ -mike
+ 
+ Members: 
+-	libc/sysdeps/linux/arm/sys/ucontext.h:1.2->1.3 
++	libc/sysdeps/linux/arm/sys/ucontext.h:1.2->1.3 
+ 
+ ---------------------
+ PatchSet 3492 
+@@ -6713,7 +6713,7 @@
+ UCLIBC_RUNTIME_PREFIX"usr/lib".
+ 
+ X11 users should enable USE_CACHE in Rules.mak, add
+-/usr/X11R6/lib to /etc/ld.so.conf and run ldconfig.
++/usr/X11R6/lib to /bootstrap/System/Settings/ld.so.conf and run ldconfig.
+ 
+ Members: 
+ 	ldso/ldso/dl-elf.c:1.79->1.80 
+@@ -6789,7 +6789,7 @@
+ >     *) When LDSO_CACHE_SUPPORT=y, UCLIBC_RUNTIME_PREFIX /usr/X11R6/lib
+ >         should be excluded from the default library search path in
+ >         dl-elf.c, ldd, and ldconfig, and those wishing to include
+->         X11 stuff should add that into /etc/ld.so.conf and re-run
++>         X11 stuff should add that into /bootstrap/System/Settings/ld.so.conf and re-run
+ >         ldconfig.
+ >
+ >     *) At present, LDSO_CONF and LDSO_CACHE use the same names
+@@ -6824,13 +6824,13 @@
+ Log:
+ Peter Kjellerstedt writes:
+ After the addition of a configuration option for
+-enabling the support of /etc/ld.so.cache, I thought
++enabling the support of /bootstrap/System/Settings/ld.so.cache, I thought
+ it might be a good idea to add one for the support
+-of the /etc/ld.so.preload file too. So here it is.
++of the /bootstrap/System/Settings/ld.so.preload file too. So here it is.
+ 
+ While doing this, I also noticed that the dynamic
+ linker would hang indefinitely if either LD_PRELOAD
+-or /etc/ld.so.preload contained a library which was
++or /bootstrap/System/Settings/ld.so.preload contained a library which was
+ already loaded, so I made a patch for that too.
+ 
+ And of course, I could not resist from doing a little
+@@ -7350,7 +7350,7 @@
+ http://bugs.gentoo.org/show_bug.cgi?id=65892
+ 
+ Members: 
+-	include/sys/time.h:1.6->1.7 
++	include/sys/time.h:1.6->1.7 
+ 	libc/inet/rpc/auth_unix.c:1.8->1.9 
+ 	libc/inet/rpc/create_xid.c:1.3->1.4 
+ 	libc/misc/time/clock_gettime.c:1.1->1.2 
+@@ -7505,12 +7505,12 @@
+ Tag: (none) 
+ Log:
+ Revert Peter's __lib_gettimeofday patch.  There's the minor issue of
+-adding cruft to include/sys/time.h.  But also, there's no sense in
++adding cruft to include/sys/time.h.  But also, there's no sense in
+ making changes like this until we decide how we're going to approach
+ the hidden symbol transition.
+ 
+ Members: 
+-	include/sys/time.h:1.7->1.8 
++	include/sys/time.h:1.7->1.8 
+ 	libc/inet/rpc/auth_unix.c:1.9->1.10 
+ 	libc/inet/rpc/create_xid.c:1.4->1.5 
+ 	libc/misc/time/clock_gettime.c:1.2->1.3 
+@@ -7529,7 +7529,7 @@
+ Tag: (none) 
+ Log:
+ Revert Peter's __lib_gettimeofday patch.  There's the minor issue of
+-adding cruft to include/sys/time.h.  But also, there's no sense in
++adding cruft to include/sys/time.h.  But also, there's no sense in
+ making changes like this until we decide how we're going to approach
+ the hidden symbol transition.
+ 
+@@ -8009,7 +8009,7 @@
+ - Added support for 13 new syscalls to allow more things to compile when using uClibc. mincore() and the ones for Extended Attributes setxattr(), lsetxattr(), fsetxattr(), getxattr(), lgetxattr(), fgetxattr(), listxattr(), llistxattr(), flistxattr(), removexattr(), lremovexattr(), fremovexattr() which are optional.
+ 
+ Members: 
+-	include/sys/xattr.h:INITIAL->1.1 
++	include/sys/xattr.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/common/mincore.c:INITIAL->1.1 
+ 
+ ---------------------
+@@ -8084,11 +8084,11 @@
+ 	libc/sysdeps/linux/bfin/bits/stackinfo.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/bfin/bits/syscalls.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/bfin/bits/wordsize.h:INITIAL->1.1 
+-	libc/sysdeps/linux/bfin/sys/elf.h:INITIAL->1.1 
+-	libc/sysdeps/linux/bfin/sys/io.h:INITIAL->1.1 
+-	libc/sysdeps/linux/bfin/sys/procfs.h:INITIAL->1.1 
+-	libc/sysdeps/linux/bfin/sys/reg.h:INITIAL->1.1 
+-	libc/sysdeps/linux/bfin/sys/ucontext.h:INITIAL->1.1 
++	libc/sysdeps/linux/bfin/sys/elf.h:INITIAL->1.1 
++	libc/sysdeps/linux/bfin/sys/io.h:INITIAL->1.1 
++	libc/sysdeps/linux/bfin/sys/procfs.h:INITIAL->1.1 
++	libc/sysdeps/linux/bfin/sys/reg.h:INITIAL->1.1 
++	libc/sysdeps/linux/bfin/sys/ucontext.h:INITIAL->1.1 
+ 
+ ---------------------
+ PatchSet 3634 
+@@ -8734,7 +8734,7 @@
+ exists, returning ENOSYS in cases where it doesn't.
+ 
+ Members: 
+-	include/sys/epoll.h:INITIAL->1.1 
++	include/sys/epoll.h:INITIAL->1.1 
+ 	libc/sysdeps/linux/common/Makefile:1.104->1.105 
+ 	libc/sysdeps/linux/common/epoll.c:INITIAL->1.1 
+ 
+diff -urN uClibc-0.9.27/Makefile uClibc-0.9.27-STEP/Makefile
+--- uClibc-0.9.27/Makefile	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/Makefile	2005-08-27 05:20:26.266628488 +1200
+@@ -92,18 +92,18 @@
+ 	fi
+ 	@cd include/sys; \
+ 	set -e; \
+-	for i in `ls ../../libc/sysdeps/linux/common/sys/*.h` ; do \
++	for i in `ls ../../libc/sysdeps/linux/common/sys/*.h` ; do \
+ 		$(LN) -fs $$i .; \
+ 	done; \
+ 	if [ -d ../../libc/sysdeps/linux/$(TARGET_ARCH)/sys ] ; then \
+-		for i in `ls ../../libc/sysdeps/linux/$(TARGET_ARCH)/sys/*.h` ; do \
++		for i in `ls ../../libc/sysdeps/linux/$(TARGET_ARCH)/sys/*.h` ; do \
+ 			$(LN) -fs $$i .; \
+ 		done; \
+ 	fi
+ 	@cd $(TOPDIR); \
+ 	set -x -e; \
+-	TOPDIR=. CC="$(CC)" /bin/sh extra/scripts/gen_bits_syscall_h.sh > include/bits/sysnum.h.new; \
+-	if cmp include/bits/sysnum.h include/bits/sysnum.h.new >/dev/null 2>&1; then \
++	TOPDIR=. CC="$(CC)" /System/Tools/sh extra/scripts/gen_bits_syscall_h.sh > include/bits/sysnum.h.new; \
++	if cmp include/bits/sysnum.h include/bits/sysnum.h.new >/System/Devices/null 2>&1; then \
+ 		$(RM) include/bits/sysnum.h.new; \
+ 	else \
+ 		mv -f include/bits/sysnum.h.new include/bits/sysnum.h; \
+@@ -203,7 +203,7 @@
+ 	$(RM) $(PREFIX)$(DEVEL_PREFIX)include/shadow.h
+ endif
+ 	-@for i in `find  $(PREFIX)$(DEVEL_PREFIX) -type d` ; do \
+-	    chmod 755 $$i; chmod 644 $$i/*.h > /dev/null 2>&1; \
++	    chmod 755 $$i; chmod 644 $$i/*.h > /System/Devices/null 2>&1; \
+ 	done;
+ 	-find $(PREFIX)$(DEVEL_PREFIX) -name CVS | xargs $(RM) -r;
+ 	-chown -R `id | sed 's/^uid=\([0-9]*\).*gid=\([0-9]*\).*$$/\1.\2/'` $(PREFIX)$(DEVEL_PREFIX)
+@@ -253,8 +253,8 @@
+ 	$(MAKE) CROSS=$(CROSS) CC=$(CC) -C utils install
+ #ifeq ($(strip $(UCLIBC_HAS_LOCALE)),y)
+ #	@$(MAKE) -C libc/misc/wchar iconv.target
+-#	$(INSTALL) -d $(PREFIX)$(RUNTIME_PREFIX)/usr/bin;
+-#	$(INSTALL) -m 755 libc/misc/wchar/iconv.target $(PREFIX)$(RUNTIME_PREFIX)/usr/bin/iconv
++#	$(INSTALL) -d $(PREFIX)$(RUNTIME_PREFIX)/bootstrap/System/Tools;
++#	$(INSTALL) -m 755 libc/misc/wchar/iconv.target $(PREFIX)$(RUNTIME_PREFIX)/bootstrap/System/Tools/iconv
+ #endif
+ 
+ finished2:
+@@ -318,7 +318,7 @@
+ 
+ clean:
+ 	- find . \( -name \*.o -o -name \*.a -o -name \*.so -o -name core -o -name .\#\* \) -exec $(RM) {} \;
+-	@$(RM) -r tmp lib include/bits libc/tmp _install
++	@$(RM) -r tmp lib include/bits libc/bootstrap/System/TemporaryFiles _install
+ 	$(MAKE) -C test clean
+ 	$(MAKE) -C ldso clean
+ 	$(MAKE) -C libc/misc/internals clean
+@@ -328,11 +328,11 @@
+ 	$(MAKE) -C extra/locale clean
+ 	@set -e; \
+ 	for i in `(cd $(TOPDIR)/libc/sysdeps/linux/common/sys; ls *.h)` ; do \
+-		$(RM) include/sys/$$i; \
++		$(RM) include/sys/$$i; \
+ 	done; \
+ 	if [ -d libc/sysdeps/linux/$(TARGET_ARCH)/sys ] ; then \
+ 		for i in `(cd libc/sysdeps/linux/$(TARGET_ARCH)/sys; ls *.h)` ; do \
+-			$(RM) include/sys/$$i; \
++			$(RM) include/sys/$$i; \
+ 		done; \
+ 	fi;
+ 	@$(RM) include/linux include/asm*
+diff -urN uClibc-0.9.27/Rules.mak uClibc-0.9.27-STEP/Rules.mak
+--- uClibc-0.9.27/Rules.mak	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/Rules.mak	2005-08-27 05:20:02.049310080 +1200
+@@ -76,7 +76,7 @@
+ endif
+ 
+ # A nifty macro to make testing gcc features easier
+-check_gcc=$(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null > /dev/null 2>&1; \
++check_gcc=$(shell if $(CC) $(1) -S -o /System/Devices/null -xc /System/Devices/null > /System/Devices/null 2>&1; \
+ 	then echo "$(1)"; else echo "$(2)"; fi)
+ 
+ # Make certain these contain a final "/", but no "//"s.
+diff -urN uClibc-0.9.27/debian/config uClibc-0.9.27-STEP/debian/config
+--- uClibc-0.9.27/debian/config	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/debian/config	2005-08-27 05:20:05.627766072 +1200
+@@ -60,7 +60,7 @@
+ UCLIBC_HAS_TZ_CACHING=y
+ UCLIBC_HAS_TZ_FILE=y
+ UCLIBC_HAS_TZ_FILE_READ_MANY=y
+-UCLIBC_TZ_FILE_PATH="/etc/TZ"
++UCLIBC_TZ_FILE_PATH="/bootstrap/System/Settings/TZ"
+ 
+ #
+ # Networking Support
+diff -urN uClibc-0.9.27/debian/rules uClibc-0.9.27-STEP/debian/rules
+--- uClibc-0.9.27/debian/rules	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/debian/rules	2005-08-27 06:06:30.331426768 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/make -f
++#!/bootstrap/System/Tools/make -f
+ # Sample debian/rules that uses debhelper.
+ # GNU copyright 1997 to 1999 by Joey Hess.
+ 
+@@ -126,17 +126,17 @@
+ 	dh_clean -k
+ 	dh_installdirs
+ 
+-	-rm debian/tmp
+-	-mkdir debian/tmp
++	-rm debian/bootstrap/System/TemporaryFiles
++	-mkdir debian/bootstrap/System/TemporaryFiles
+ 
+-	# Add here commands to install the package into debian/tmp.
+-	$(MAKE) install install_utils PREFIX=`pwd`/debian/tmp
++	# Add here commands to install the package into debian/bootstrap/System/TemporaryFiles.
++	$(MAKE) install install_utils PREFIX=`pwd`/debian/bootstrap/System/TemporaryFiles
+ 
+-	install -d debian/tmp/usr/share/man/man1
++	install -d debian/bootstrap/System/TemporaryFiles/usr/share/man/man1
+ 	install -m 644 debian/ldd.1 \
+-	  debian/tmp/usr/share/man/man1/ldd.1
++	  debian/bootstrap/System/TemporaryFiles/usr/share/man/man1/ldd.1
+ 	install -m 644 debian/ldconfig.1 \
+-	  debian/tmp/usr/share/man/man1/ldconfig.1
++	  debian/bootstrap/System/TemporaryFiles/usr/share/man/man1/ldconfig.1
+ 	
+ 
+ # Build architecture-independent files here.
+diff -urN uClibc-0.9.27/debian/uclibc-dev.postinst uClibc-0.9.27-STEP/debian/uclibc-dev.postinst
+--- uClibc-0.9.27/debian/uclibc-dev.postinst	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/debian/uclibc-dev.postinst	2005-08-27 05:19:58.715816848 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ set -e
+ 
+diff -urN uClibc-0.9.27/debian/uclibc-dev.prerm uClibc-0.9.27-STEP/debian/uclibc-dev.prerm
+--- uClibc-0.9.27/debian/uclibc-dev.prerm	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/debian/uclibc-dev.prerm	2005-08-27 05:19:58.718816392 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ set -e
+ 
+ #DEBHELPER#
+diff -urN uClibc-0.9.27/debian/uclibc.postinst uClibc-0.9.27-STEP/debian/uclibc.postinst
+--- uClibc-0.9.27/debian/uclibc.postinst	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/debian/uclibc.postinst	2005-08-27 05:20:16.873056528 +1200
+@@ -1,9 +1,9 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ set -e
+ 
+ if [ "$1" = "configure" ]; then
+-	/sbin/ldconfig
++	/bootstrap/System/AdminTools/ldconfig
+ fi
+ 
+ #DEBHELPER#
+diff -urN uClibc-0.9.27/debian/uclibc.prerm uClibc-0.9.27-STEP/debian/uclibc.prerm
+--- uClibc-0.9.27/debian/uclibc.prerm	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/debian/uclibc.prerm	2005-08-27 05:19:58.723815632 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ 
+ set -e
+ 
+diff -urN uClibc-0.9.27/docs/Glibc_vs_uClibc_Differences.txt uClibc-0.9.27-STEP/docs/Glibc_vs_uClibc_Differences.txt
+--- uClibc-0.9.27/docs/Glibc_vs_uClibc_Differences.txt	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/docs/Glibc_vs_uClibc_Differences.txt	2005-08-27 06:06:30.335426160 +1200
+@@ -92,12 +92,12 @@
+ time functions
+ --------------
+ 1) Leap seconds are not supported.
+-2) /etc/timezone and the whole zoneinfo directory tree are not supported.
++2) /bootstrap/System/Settings/timezone and the whole zoneinfo directory tree are not supported.
+    To set the timezone, set the TZ environment variable as specified in
+    http://www.opengroup.org/onlinepubs/007904975/basedefs/xbd_chap08.html
+-   or you may also create an /etc/TZ file of a single line, ending with a
++   or you may also create an /bootstrap/System/Settings/TZ file of a single line, ending with a
+    newline, containing the TZ setting.  For example
+-   echo CST6CDT > /etc/TZ
++   echo CST6CDT > /bootstrap/System/Settings/TZ
+ 3) Currently, locale specific eras and alternate digits are not supported.
+    They are on my TODO list.
+ 
+diff -urN uClibc-0.9.27/docs/uclibc.org/FAQ.html uClibc-0.9.27-STEP/docs/uclibc.org/FAQ.html
+--- uClibc-0.9.27/docs/uclibc.org/FAQ.html	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/docs/uclibc.org/FAQ.html	2005-08-27 05:20:05.633765160 +1200
+@@ -353,7 +353,7 @@
+ 	<li>mkdir root_fs</li>
+ 	<li>su root</li>
+ 	<li>mount -o loop root_fs_i386 root_fs</li>
+-	<li>chroot root_fs /bin/su -</li>
++	<li>chroot root_fs /bootstrap/System/Tools/su -</li>
+     </ul>
+     Type "exit" to end the chroot session and return to the host system.
+     <p>
+@@ -387,11 +387,11 @@
+ 
+     This isn't really a uClibc question, but I'll answer it here anyways.  Job
+     control will be turned off since your shell can not obtain a controlling
+-    terminal.  This typically happens when you run your shell on /dev/console.
+-    The kernel will not provide a controlling terminal on the /dev/console
++    terminal.  This typically happens when you run your shell on /System/Devices/console.
++    The kernel will not provide a controlling terminal on the /System/Devices/console
+     device.  Your should run your shell on a normal tty such as tty1 or ttyS0
+     and everything will work perfectly.  If you <em>REALLY</em> want your shell
+-    to run on /dev/console, then you can hack your kernel (if you are into that
++    to run on /System/Devices/console, then you can hack your kernel (if you are into that
+     sortof thing) by changing drivers/char/tty_io.c to change the lines where
+     it sets "noctty = 1;" to instead set it to "0".  I recommend you instead
+     run your shell on a real console...
+@@ -445,7 +445,7 @@
+     <a href="http://www.uclibc.org/lists/uclibc/2002-August/006261.html">
+     http://www.uclibc.org/lists/uclibc/2002-August/004010.html</a> in the uClibc
+     mailing list archive.
+-    You can store the value of TZ in the file '/etc/TZ' and uClibc will then
++    You can store the value of TZ in the file '/bootstrap/System/Settings/TZ' and uClibc will then
+     automagically use the specified setting.
+ 
+ 
+diff -urN uClibc-0.9.27/docs/uclibc.org/cvs_write.html uClibc-0.9.27-STEP/docs/uclibc.org/cvs_write.html
+--- uClibc-0.9.27/docs/uclibc.org/cvs_write.html	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/docs/uclibc.org/cvs_write.html	2005-08-27 05:19:58.512847704 +1200
+@@ -8,7 +8,7 @@
+ <a href="mailto:andersen@codepoet.org">Erik Andersen</a> if he will set you up with 
+ an account.  To access CVS, you will want to add the following to set up your environment:
+ <pre>
+-$ export CVS_RSH=/usr/bin/ssh
++$ export CVS_RSH=/bootstrap/System/Tools/ssh
+ $ export CVSROOT='username@cvs.uclibc.org:/var/cvs'</pre>
+ <br>
+ It goes without saying you must change <em>username</em> to your own
+diff -urN uClibc-0.9.27/docs/uclibc.org/oldnews.html uClibc-0.9.27-STEP/docs/uclibc.org/oldnews.html
+--- uClibc-0.9.27/docs/uclibc.org/oldnews.html	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/docs/uclibc.org/oldnews.html	2005-08-27 05:20:05.641763944 +1200
+@@ -595,14 +595,14 @@
+     partition, or do what I did... <EM>WARNING, the following can be very
+     dangerous.  Please be sure you know what you are doing before trying this.
+     I am not responsible if you lose all your important data.</EM>I had a spare
+-    hard drive (in my case /dev/hdg but you'll want to adapt this to your own 
++    hard drive (in my case /System/Devices/hdg but you'll want to adapt this to your own 
+     needs), so I partitioned it with a single ext2 partition filling the drive 
+-    (in my case /dev/hdg1).  Then I ran:<PRE>
+-    bzcat root_fs_i386.bz2 | dd of=/dev/hdg1
+-    e2fsck -f /dev/hdg1
+-    resize2fs -p /dev/hdg1</PRE>
++    (in my case /System/Devices/hdg1).  Then I ran:<PRE>
++    bzcat root_fs_i386.bz2 | dd of=/System/Devices/hdg1
++    e2fsck -f /System/Devices/hdg1
++    resize2fs -p /System/Devices/hdg1</PRE>
+ 
+-    which overwrote everything on /dev/hdg with the new uClibc devel system,
++    which overwrote everything on /System/Devices/hdg with the new uClibc devel system,
+     and then expanded the filesystem with the uClibc devel system till it
+     filled the whole drive.
+     <p>
+@@ -621,7 +621,7 @@
+     newer versions of gcc (i.e. RedHat 8.0).  Thanks to Christian Michon,
+     uClibc no longer requires perl to compile.  Steven J. Hill fixed dlopen for
+     mips.  Several problems with pty and tty handling were fixed.  Manuel Novoa
+-    added new support for an /etc/TZ file to globally set the system timezone,
++    added new support for an /bootstrap/System/Settings/TZ file to globally set the system timezone,
+     and fixed up a number of remaining wide char issues.  Manuel is still hard
+     at work on bringing full locale support (optional of course) to uClibc.
+     And of course, this release includes the usual pile of bug fixes.  Many thanks
+diff -urN uClibc-0.9.27/docs/uclibc.org/toolchains.html uClibc-0.9.27-STEP/docs/uclibc.org/toolchains.html
+--- uClibc-0.9.27/docs/uclibc.org/toolchains.html	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/docs/uclibc.org/toolchains.html	2005-08-27 05:19:58.974777480 +1200
+@@ -82,7 +82,7 @@
+     <li>mkdir root_fs</li>
+     <li>su root</li>
+     <li>mount -o loop root_fs_i386 root_fs</li>
+-    <li>chroot root_fs /bin/su -</li>
++    <li>chroot root_fs /bootstrap/System/Tools/su -</li>
+ </ul>
+ Type "exit" to end the chroot session and return to your host system.
+ <p>
+diff -urN uClibc-0.9.27/extra/Configs/Config.frv.default uClibc-0.9.27-STEP/extra/Configs/Config.frv.default
+--- uClibc-0.9.27/extra/Configs/Config.frv.default	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/extra/Configs/Config.frv.default	2005-08-27 05:20:05.655761816 +1200
+@@ -71,7 +71,7 @@
+ UCLIBC_HAS_TZ_CACHING=y
+ UCLIBC_HAS_TZ_FILE=y
+ UCLIBC_HAS_TZ_FILE_READ_MANY=y
+-UCLIBC_TZ_FILE_PATH="/etc/TZ"
++UCLIBC_TZ_FILE_PATH="/bootstrap/System/Settings/TZ"
+ 
+ #
+ # Networking Support
+diff -urN uClibc-0.9.27/extra/Configs/Config.in uClibc-0.9.27-STEP/extra/Configs/Config.in
+--- uClibc-0.9.27/extra/Configs/Config.in	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/extra/Configs/Config.in	2005-08-27 06:06:30.343424944 +1200
+@@ -221,17 +221,17 @@
+ 	depends on BUILD_UCLIBC_LDSO
+ 	default y
+ 	help
+-	  Enable this to make use of /etc/ld.so.conf, the shared library loader
++	  Enable this to make use of /bootstrap/System/Settings/ld.so.conf, the shared library loader
+ 	  cache configuration file to support for non-standard library paths.
+ 	  After updating this file, it is necessary to run 'ldconfig' to update
+-	  the /etc/ld.so.cache shared library loader cache file.
++	  the /bootstrap/System/Settings/ld.so.cache shared library loader cache file.
+ 
+ config LDSO_PRELOAD_FILE_SUPPORT
+ 	bool "Enable shared library loader preload file support"
+ 	depends on BUILD_UCLIBC_LDSO
+ 	default n
+ 	help
+-	  Enable this to make use of /etc/ld.so.preload. This file contains a
++	  Enable this to make use of /bootstrap/System/Settings/ld.so.preload. This file contains a
+ 	  whitespace separated list of shared libraries to be loaded before
+ 	  the program.
+ 
+@@ -243,7 +243,7 @@
+ 	  If you wish to support both uClibc and glibc on the same system, it
+ 	  is necessary to set this to something other than "ld.so" to avoid
+ 	  conflicts with glibc, which also uses "ld.so".  This prevents both
+-	  libraries from using the same /etc/ld.so.* files.  If you wish to
++	  libraries from using the same /bootstrap/System/Settings/ld.so.* files.  If you wish to
+ 	  support both uClibc and glibc on the same system then you should set
+ 	  this to "ld-uClibc.so".
+ 
+@@ -400,13 +400,13 @@
+ 	  you can generally answer Y.
+ 
+ config ASSUME_DEVPTS
+-	bool "Assume that /dev/pts is a devpts or devfs file system"
++	bool "Assume that /System/Devices/pts is a devpts or devfs file system"
+ 	default y
+ 	help
+-	  Enable this if /dev/pts is on a devpts or devfs filesystem.  Both
+-	  these filesystems automatically manage permissions on the /dev/pts 
++	  Enable this if /System/Devices/pts is on a devpts or devfs filesystem.  Both
++	  these filesystems automatically manage permissions on the /System/Devices/pts 
+ 	  devices.  You may need to mount your devpts or devfs filesystem on
+-	  /dev/pts for this to work.
++	  /System/Devices/pts for this to work.
+ 
+ 	  Most people should answer Y.
+ 
+@@ -434,22 +434,22 @@
+ 	  Most people will answer Y.
+ 
+ config UCLIBC_HAS_TZ_FILE
+-	bool "Enable '/etc/TZ' file support to set a default timezone (uClibc-specific)"
++	bool "Enable '/bootstrap/System/Settings/TZ' file support to set a default timezone (uClibc-specific)"
+ 	default y
+ 	help
+ 	  Answer Y to enable the setting of a default timezone for uClibc.
+ 
+ 	  Ordinarily, uClibc gets the timezone information exclusively from the
+ 	  'TZ' environment variable.  In particular, there is no support for
+-	  the zoneinfo directory tree or the /etc/timezone file used by glibc.
++	  the zoneinfo directory tree or the /bootstrap/System/Settings/timezone file used by glibc.
+ 
+ 	  With this option enabled, uClibc will use the value stored in the
+-	  file '/etc/TZ' (default path) to obtain timezone information if the
++	  file '/bootstrap/System/Settings/TZ' (default path) to obtain timezone information if the
+ 	  'TZ' environment variable is missing or has an invalid value.  The
+ 	  file consists of a single line (newline required) of text describing
+ 	  the timezone in the format specified for the TZ environment variable.
+ 
+-	  Simply doing 'echo CST6CDT > /etc/TZ' is enough to create a valid file.
++	  Simply doing 'echo CST6CDT > /bootstrap/System/Settings/TZ' is enough to create a valid file.
+ 	  See
+ 	  http://www.opengroup.org/onlinepubs/007904975/basedefs/xbd_chap08.html
+ 	  for details on valid settings of 'TZ'.
+@@ -457,11 +457,11 @@
+ 	  Most people will answer Y.
+ 
+ config UCLIBC_HAS_TZ_FILE_READ_MANY
+-	bool "Repeatedly read the '/etc/TZ' file"
++	bool "Repeatedly read the '/bootstrap/System/Settings/TZ' file"
+ 	depends on UCLIBC_HAS_TZ_FILE
+ 	default y
+ 	help
+-	  Answer Y to enable repeated reading of the '/etc/TZ' file even after
++	  Answer Y to enable repeated reading of the '/bootstrap/System/Settings/TZ' file even after
+ 	  a valid value has been read.  This incurs the overhead of an open/read/close
+ 	  for each tzset() call (explicit or implied).  However, setting this
+ 	  will allows applications to update their timezone information if the contents
+@@ -472,11 +472,11 @@
+ config UCLIBC_TZ_FILE_PATH
+ 	string "Path to the 'TZ' file for setting the global timezone"
+ 	depends on UCLIBC_HAS_TZ_FILE
+-	default "/etc/TZ"
++	default "/bootstrap/System/Settings/TZ"
+ 	help
+ 	  This is the path to the 'TZ' file.
+ 
+-	  Most people will use the default of '/etc/TZ'.
++	  Most people will use the default of '/bootstrap/System/Settings/TZ'.
+ 
+ endmenu
+ 
+@@ -1049,7 +1049,7 @@
+ 	  like the following:
+ 	      $(RUNTIME_PREFIX)/
+ 	          lib/            <contains all runtime libraries>
+-	          usr/bin/ldd     <the ldd utility program>
++	          usr/bootstrap/System/Tools/ldd     <the ldd utility program>
+ 	          sbin/ldconfig   <the ldconfig utility program>
+ 	  This value is used by the 'make install' Makefile target.  Since this
+ 	  directory is compiled into the shared library loader, you will need to
+diff -urN uClibc-0.9.27/extra/libstrip/libstrip uClibc-0.9.27-STEP/extra/libstrip/libstrip
+--- uClibc-0.9.27/extra/libstrip/libstrip	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/extra/libstrip/libstrip	2005-08-27 05:20:26.292624536 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -w
++#!/bootstrap/System/Tools/perl -w
+ # vi: set ts=4:
+ 
+ # Libstrip - A utility to optimize libraries for specific executables
+@@ -68,5 +68,5 @@
+ 	-o libuClibc-0.9.5.so \\
+ 	-Wl,-soname,libc.so.0 -Wl,--script=ldscript \\
+ 	$topdir/libc/libc.a \\
+-	$topdir/libc/tmp/libgcc-need.a`
++	$topdir/libc/bootstrap/System/TemporaryFiles/libgcc-need.a`
+ 
+diff -urN uClibc-0.9.27/extra/scripts/fix_includes.sh uClibc-0.9.27-STEP/extra/scripts/fix_includes.sh
+--- uClibc-0.9.27/extra/scripts/fix_includes.sh	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/extra/scripts/fix_includes.sh	2005-08-27 06:06:30.434411112 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # Copyright (C) 2003 Erik Andersen <andersen@uclibc.org>
+ #
+ # This program is free software; you can redistribute it and/or
+@@ -59,10 +59,10 @@
+     esac;
+ done;
+ 
+-if [ ! -f "$KERNEL_SOURCE/Makefile" -a ! -f "$KERNEL_SOURCE/include/linux/version.h" ]; then
++if [ ! -f "$KERNEL_SOURCE/Makefile" -a ! -f "$KERNEL_SOURCE/linux/version.h" ]; then
+     echo "";
+     echo "";
+-    echo "The file $KERNEL_SOURCE/Makefile or $KERNEL_SOURCE/include/linux/version.h is missing!";
++    echo "The file $KERNEL_SOURCE/Makefile or $KERNEL_SOURCE/linux/version.h is missing!";
+     echo "Perhaps your kernel source is broken?"
+     echo "";
+     echo "";
+@@ -82,7 +82,7 @@
+ # set current VERSION, PATCHLEVEL, SUBLEVEL, EXTRAVERSION
+ eval `sed -n -e 's/^\([A-Z]*\) = \([0-9]*\)$/\1=\2/p' -e 's/^\([A-Z]*\) = \(-[-a-z0-9]*\)$/\1=\2/p' $KERNEL_SOURCE/Makefile`
+ else
+-ver=`grep UTS_RELEASE $KERNEL_SOURCE/include/linux/version.h | cut -d '"' -f 2`
++ver=`grep UTS_RELEASE $KERNEL_SOURCE/linux/version.h | cut -d '"' -f 2`
+ VERSION=`echo "$ver" | cut -d '.' -f 1`
+ PATCHLEVEL=`echo "$ver" | cut -d '.' -f 2`
+ if echo "$ver" | grep -q '-' ; then
+@@ -111,10 +111,10 @@
+ # Create a symlink to include/asm
+ 
+ rm -f include/asm*
+-if [ ! -d "$KERNEL_SOURCE/include/asm" ]; then
++if [ ! -d "$KERNEL_SOURCE/asm" ]; then
+     echo "";
+     echo "";
+-    echo "The symlink $KERNEL_SOURCE/include/asm is missing\!";
++    echo "The symlink $KERNEL_SOURCE/asm is missing\!";
+     echo "Perhaps you forgot to configure your kernel source?";
+     echo "You really should configure your kernel source tree so I";
+     echo "do not have to try and guess about this sort of thing.";
+@@ -126,17 +126,17 @@
+ 
+     if [ "$TARGET_ARCH" = "powerpc" ];then
+ 	set -x;
+-	ln -fs $KERNEL_SOURCE/include/asm-ppc include/asm;
++	ln -fs $KERNEL_SOURCE/asm-ppc include/asm;
+ 	set +x;
+     elif [ "$TARGET_ARCH" = "mips" ];then
+ 	set -x;
+-	ln -fs $KERNEL_SOURCE/include/asm-mips include/asm;
++	ln -fs $KERNEL_SOURCE/asm-mips include/asm;
+ 	set +x;
+     elif [ "$TARGET_ARCH" = "arm" ];then
+ 	set -x;
+-	ln -fs $KERNEL_SOURCE/include/asm-arm include/asm;
++	ln -fs $KERNEL_SOURCE/asm-arm include/asm;
+ 	set +x;
+-	if [ ! -L $KERNEL_SOURCE/include/asm-arm/proc ] ; then
++	if [ ! -L $KERNEL_SOURCE/asm-arm/proc ] ; then
+ 	    if [ ! -L proc ] ; then
+ 		(cd include/asm;
+ 		ln -fs proc-armv proc;
+@@ -145,36 +145,36 @@
+ 	fi;
+     elif [ "$TARGET_ARCH" = "cris" ]; then
+ 	set -x;
+-	ln -fs $KERNEL_SOURCE/include/asm-cris include/asm;
++	ln -fs $KERNEL_SOURCE/asm-cris include/asm;
+ 	set +x;
+     elif [ "$HAS_MMU" != "y" ]; then
+-	    if [ -d $KERNEL_SOURCE/include/asm-${TARGET_ARCH}nommu ] ; then
++	    if [ -d $KERNEL_SOURCE/asm-${TARGET_ARCH}nommu ] ; then
+ 		set -x;
+-		ln -fs $KERNEL_SOURCE/include/asm-${TARGET_ARCH}nommu include/asm;
++		ln -fs $KERNEL_SOURCE/asm-${TARGET_ARCH}nommu include/asm;
+ 		set +x;
+ 	    else
+ 		set -x;
+-		ln -fs $KERNEL_SOURCE/include/asm-$TARGET_ARCH include/asm;
++		ln -fs $KERNEL_SOURCE/asm-$TARGET_ARCH include/asm;
+ 		set +x;
+ 	    fi;
+     else
+ 	set -x;
+-	ln -fs $KERNEL_SOURCE/include/asm-$TARGET_ARCH include/asm;
++	ln -fs $KERNEL_SOURCE/asm-$TARGET_ARCH include/asm;
+ 	set +x;
+     fi;
+ else
+ # No guessing required.....
+-ln -fs $KERNEL_SOURCE/include/asm include/asm
++ln -fs $KERNEL_SOURCE/asm include/asm
+ fi;
+ 
+ 
+ # Annoyingly, 2.6.x kernel headers also need an include/asm-generic/ directory
+ if [ $VERSION -eq 2 ] && [ $PATCHLEVEL -ge 6 ] ; then
+-    ln -fs $KERNEL_SOURCE/include/asm-generic include/asm-generic
++    ln -fs $KERNEL_SOURCE/asm-generic include/asm-generic
+ fi;
+ 
+ 
+ # Create the include/linux symlink.
+ rm -f include/linux
+-ln -fs $KERNEL_SOURCE/include/linux include/linux
++ln -fs $KERNEL_SOURCE/linux include/linux
+ 
+diff -urN uClibc-0.9.27/extra/scripts/gen_bits_syscall_h.sh uClibc-0.9.27-STEP/extra/scripts/gen_bits_syscall_h.sh
+--- uClibc-0.9.27/extra/scripts/gen_bits_syscall_h.sh	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/extra/scripts/gen_bits_syscall_h.sh	2005-08-27 06:06:30.442409896 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ #
+ # June 27, 2001         Manuel Novoa III
+ #
+diff -urN uClibc-0.9.27/extra/scripts/getent uClibc-0.9.27-STEP/extra/scripts/getent
+--- uClibc-0.9.27/extra/scripts/getent	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/extra/scripts/getent	2005-08-27 05:20:05.769744488 +1200
+@@ -1,9 +1,9 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # $Header: $
+ 
+ search_entry() {
+   if [ -e "$1" ] ; then
+-    /bin/egrep -v "^#" $1 | /bin/sed 's/#.*$//' | /bin/egrep "${string}" | /bin/sed -n 1p
++    /bootstrap/System/Tools/egrep -v "^#" $1 | /bootstrap/System/Tools/sed 's/#.*$//' | /bootstrap/System/Tools/egrep "${string}" | /bootstrap/System/Tools/sed -n 1p
+     retval=$?
+     [ "$retval" = 0 ] || retval=2
+   else
+@@ -11,7 +11,7 @@
+   fi
+ }
+ 
+-file="/etc/$1"
++file="/bootstrap/System/Settings/$1"
+ string="dummy"
+ 
+ #aliases|ethers|group|hosts|netgroup|networks|passwd|protocols|rpc|services|shadow)
+@@ -25,10 +25,10 @@
+     string="^\<$2\>:"
+     ;;
+   aliases)
+-    if [ -f /etc/postfix/aliases ] ; then
+-      file="/etc/postfix/aliases"
+-    elif [ -f /etc/mail/aliases ] ; then
+-      file="/etc/mail/aliases"
++    if [ -f /bootstrap/System/Settings/postfix/aliases ] ; then
++      file="/bootstrap/System/Settings/postfix/aliases"
++    elif [ -f /bootstrap/System/Settings/mail/aliases ] ; then
++      file="/bootstrap/System/Settings/mail/aliases"
+     fi
+     string="^\<$2\>:"
+     ;;
+diff -urN uClibc-0.9.27/extra/scripts/relative_path.sh uClibc-0.9.27-STEP/extra/scripts/relative_path.sh
+--- uClibc-0.9.27/extra/scripts/relative_path.sh	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/extra/scripts/relative_path.sh	2005-08-27 05:20:02.156293816 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # This script computes a relative pathname from $1 to $2
+ # They are assumed to not contain . or .. pathname components,
+ # but if both directories exist and cd/pwd canonicalizes pathnames,
+@@ -21,8 +21,8 @@
+ # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ 
+-from=`(cd $1 > /dev/null && ${PWD_CMD-pwd} || echo $1) 2>/dev/null | sed 's,//*,/,g;s,/*$,,'`
+-target=`(cd $2 > /dev/null && ${PWD_CMD-pwd} || echo $2) 2>/dev/null | sed 's,//*,/,g;s,/*$,,'`
++from=`(cd $1 > /System/Devices/null && ${PWD_CMD-pwd} || echo $1) 2>/System/Devices/null | sed 's,//*,/,g;s,/*$,,'`
++target=`(cd $2 > /System/Devices/null && ${PWD_CMD-pwd} || echo $2) 2>/System/Devices/null | sed 's,//*,/,g;s,/*$,,'`
+ 
+ case $from in /* | "") ;; *) from=`${PWD_CMD-pwd}`/$from ;; esac
+ case $target in /* | "") ;; *) target=`${PWD_CMD-pwd}`/$target ;; esac
+diff -urN uClibc-0.9.27/include/netdb.h uClibc-0.9.27-STEP/include/netdb.h
+--- uClibc-0.9.27/include/netdb.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/netdb.h	2005-08-27 05:20:05.798740080 +1200
+@@ -43,12 +43,12 @@
+ #include <bits/netdb.h>
+ 
+ /* Absolute file name for network data base files.  */
+-#define	_PATH_HEQUIV		"/etc/hosts.equiv"
+-#define	_PATH_HOSTS		"/etc/hosts"
+-#define	_PATH_NETWORKS		"/etc/networks"
+-#define	_PATH_NSSWITCH_CONF	"/etc/nsswitch.conf"
+-#define	_PATH_PROTOCOLS		"/etc/protocols"
+-#define	_PATH_SERVICES		"/etc/services"
++#define	_PATH_HEQUIV		"/bootstrap/System/Settings/hosts.equiv"
++#define	_PATH_HOSTS		"/bootstrap/System/Settings/hosts"
++#define	_PATH_NETWORKS		"/bootstrap/System/Settings/networks"
++#define	_PATH_NSSWITCH_CONF	"/bootstrap/System/Settings/nsswitch.conf"
++#define	_PATH_PROTOCOLS		"/bootstrap/System/Settings/protocols"
++#define	_PATH_SERVICES		"/bootstrap/System/Settings/services"
+ 
+ 
+ __BEGIN_DECLS
+diff -urN uClibc-0.9.27/include/paths.h uClibc-0.9.27-STEP/include/paths.h
+--- uClibc-0.9.27/include/paths.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/paths.h	2005-08-27 05:26:01.275699368 +1200
+@@ -33,46 +33,46 @@
+ #define	_PATHS_H_
+ 
+ /* Default search path. */
+-#define	_PATH_DEFPATH	"/usr/bin:/bin"
++#define	_PATH_DEFPATH	"/bootstrap/System/Tools:/bootstrap/System/AdminTools:/bootstrap/System/Library/Tools"
+ /* All standard utilities path. */
+ #define	_PATH_STDPATH \
+-	"/usr/bin:/bin:/usr/sbin:/sbin"
++	"/bootstrap/System/Tools:/bootstrap/System/AdminTools:/bootstrap/System/Library/Tools"
+ 
+-#define	_PATH_BSHELL	"/bin/sh"
+-#define	_PATH_CONSOLE	"/dev/console"
+-#define	_PATH_CSHELL	"/bin/csh"
+-#define	_PATH_DEVDB	"/var/run/dev.db"
+-#define	_PATH_DEVNULL	"/dev/null"
+-#define	_PATH_DRUM	"/dev/drum"
+-#define	_PATH_KLOG	"/proc/kmsg"
+-#define	_PATH_KMEM	"/dev/kmem"
+-#define	_PATH_LASTLOG	"/var/log/lastlog"
+-#define	_PATH_MAILDIR	"/var/mail"
+-#define	_PATH_MAN	"/usr/share/man"
+-#define	_PATH_MEM	"/dev/mem"
+-#define	_PATH_MNTTAB	"/etc/fstab"
+-#define	_PATH_MOUNTED	"/etc/mtab"
+-#define	_PATH_NOLOGIN	"/etc/nologin"
+-#define	_PATH_PRESERVE	"/var/lib"
+-#define	_PATH_RWHODIR	"/var/spool/rwho"
+-#define	_PATH_SENDMAIL	"/usr/sbin/sendmail"
+-#define	_PATH_SHELLS	"/etc/shells"
+-#define	_PATH_TTY	"/dev/tty"
+-#define	_PATH_UNIX	"/boot/vmlinux"
+-#define	_PATH_UTMP	"/var/run/utmp"
+-#define	_PATH_VI	"/usr/bin/vi"
+-#define	_PATH_WTMP	"/var/log/wtmp"
+-#define	_PATH_LOCALE	"/usr/lib/locale"
+-#define	_PATH_LASTLOG	"/var/log/lastlog"
+-#define	_PATH_SHADOW	"/etc/shadow"
+-#define	_PATH_PASSWD	"/etc/passwd"
+-#define	_PATH_GROUP	"/etc/group"
++#define	_PATH_BSHELL	"/System/Tools/sh"
++#define	_PATH_CONSOLE	"/System/Devices/console"
++#define	_PATH_CSHELL	"/bootstrap/System/Tools/csh"
++#define	_PATH_DEVDB	"/bootstrap/System/ApplicationData/RuntimeData/dev.db"
++#define	_PATH_DEVNULL	"/System/Devices/null"
++#define	_PATH_DRUM	"/System/Devices/drum"
++#define	_PATH_KLOG	"/bootstrap/System/Processes/kmsg"
++#define	_PATH_KMEM	"/System/Devices/kmem"
++#define	_PATH_LASTLOG	"/bootstrap/System/Logs/lastlog"
++#define	_PATH_MAILDIR	"/bootstrap/System/Mail/"
++#define	_PATH_MAN	"/bootstrap/System/Documentation/man"
++#define	_PATH_MEM	"/System/Devices/mem"
++#define	_PATH_MNTTAB	"/bootstrap/System/Settings/fstab"
++#define	_PATH_MOUNTED	"/bootstrap/System/Settings/mtab"
++#define	_PATH_NOLOGIN	"/bootstrap/System/Settings/nologin"
++#define	_PATH_PRESERVE	"/bootstrap/System/ApplicationData/lib"
++#define	_PATH_RWHODIR	"/bootstrap/System/ApplicationData/rwho"
++#define	_PATH_SENDMAIL	"/bootstrap/System/AdminTools/sendmail"
++#define	_PATH_SHELLS	"/bootstrap/System/Settings/shells"
++#define	_PATH_TTY	"/System/Devices/tty"
++#define	_PATH_UNIX	"/bootstrap/System/Boot/vmlinux"
++#define	_PATH_UTMP	"/bootstrap/System/ApplicationData/RuntimeData/utmp"
++#define	_PATH_VI	"/bootstrap/System/Tools/vi"
++#define	_PATH_WTMP	"/bootstrap/System/Logs/wtmp"
++#define	_PATH_LOCALE	"/bootstrap/System/Library/Share/locale"
++#define	_PATH_LASTLOG	"/bootstrap/System/Logs/lastlog"
++#define	_PATH_SHADOW	"/bootstrap/System/Settings/shadow"
++#define	_PATH_PASSWD	"/bootstrap/System/Settings/passwd"
++#define	_PATH_GROUP	"/bootstrap/System/Settings/group"
+ 
+ /* Provide trailing slash, since mostly used for building pathnames. */
+-#define	_PATH_DEV	"/dev/"
+-#define	_PATH_TMP	"/tmp/"
+-#define	_PATH_VARDB	"/var/lib/misc/"
+-#define	_PATH_VARRUN	"/var/run/"
+-#define	_PATH_VARTMP	"/var/tmp/"
++#define	_PATH_DEV	"/System/Devices/"
++#define	_PATH_TMP	"/bootstrap/System/TemporaryFiles/"
++#define	_PATH_VARDB	"/bootstrap/System/ApplicationData/Databases/"
++#define	_PATH_VARRUN	"/bootstrap/System/ApplicationData/RutimeData/"
++#define	_PATH_VARTMP	"/bootstrap/System/ApplicationData/TemporaryFiles/"
+ 
+ #endif /* !_PATHS_H_ */
+diff -urN uClibc-0.9.27/include/resolv.h uClibc-0.9.27-STEP/include/resolv.h
+--- uClibc-0.9.27/include/resolv.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/resolv.h	2005-08-27 05:20:05.823736280 +1200
+@@ -82,7 +82,7 @@
+  */
+ 
+ #ifndef _PATH_RESCONF
+-#define _PATH_RESCONF        "/etc/resolv.conf"
++#define _PATH_RESCONF        "/bootstrap/System/Settings/resolv.conf"
+ #endif
+ 
+ typedef enum { res_goahead, res_nextns, res_modified, res_done, res_error }
+diff -urN uClibc-0.9.27/include/rpc/rpc.h uClibc-0.9.27-STEP/include/rpc/rpc.h
+--- uClibc-0.9.27/include/rpc/rpc.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/rpc/rpc.h	2005-08-27 05:20:05.842733392 +1200
+@@ -77,8 +77,8 @@
+  * OF UNIX BASED ON NFSSRC.  These systems will already have the structures
+  * defined by <rpc/netdb.h> included in <netdb.h>.
+  */
+-/* routines for parsing /etc/rpc */
+-#include <rpc/netdb.h>		/* structures and routines to parse /etc/rpc */
++/* routines for parsing /bootstrap/System/Settings/rpc */
++#include <rpc/netdb.h>		/* structures and routines to parse /bootstrap/System/Settings/rpc */
+ 
+ __BEGIN_DECLS
+ 
+diff -urN uClibc-0.9.27/include/stdio.h uClibc-0.9.27-STEP/include/stdio.h
+--- uClibc-0.9.27/include/stdio.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/stdio.h	2005-08-27 05:20:26.309621952 +1200
+@@ -115,7 +115,7 @@
+ 
+ #if defined __USE_SVID || defined __USE_XOPEN
+ /* Default path prefix for `tempnam' and `tmpnam'.  */
+-# define P_tmpdir	"/tmp"
++# define P_tmpdir	"/bootstrap/System/TemporaryFiles"
+ #endif
+ 
+ 
+@@ -184,7 +184,7 @@
+    as follows: First the environment variable "TMPDIR" is checked.
+    If it contains the name of a writable directory, that directory is used.
+    If not and if DIR is not NULL, that value is checked.  If that fails,
+-   P_tmpdir is tried and finally "/tmp".  The storage for the filename
++   P_tmpdir is tried and finally "/bootstrap/System/TemporaryFiles".  The storage for the filename
+    is allocated by `malloc'.  */
+ extern char *tempnam (__const char *__dir, __const char *__pfx)
+      __THROW __attribute_malloc__;
+diff -urN uClibc-0.9.27/include/sys/mtio.h uClibc-0.9.27-STEP/include/sys/mtio.h
+--- uClibc-0.9.27/include/sys/mtio.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/sys/mtio.h	2005-08-27 05:20:02.198287432 +1200
+@@ -271,7 +271,7 @@
+ 
+ /* Specify default tape device.  */
+ #ifndef DEFTAPE
+-# define DEFTAPE	"/dev/tape"
++# define DEFTAPE	"/System/Devices/tape"
+ #endif
+ 
+ #endif /* mtio.h */
+diff -urN uClibc-0.9.27/include/sys/syslog.h uClibc-0.9.27-STEP/include/sys/syslog.h
+--- uClibc-0.9.27/include/sys/syslog.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/sys/syslog.h	2005-08-27 05:20:02.202286824 +1200
+@@ -37,7 +37,7 @@
+ #include <stdarg.h>
+ 
+ 
+-#define	_PATH_LOG	"/dev/log"
++#define	_PATH_LOG	"/System/Devices/log"
+ 
+ /*
+  * priorities/facilities are encoded into a single 32-bit quantity, where the
+diff -urN uClibc-0.9.27/include/sysexits.h uClibc-0.9.27-STEP/include/sysexits.h
+--- uClibc-0.9.27/include/sysexits.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/sysexits.h	2005-08-27 05:20:05.826735824 +1200
+@@ -71,7 +71,7 @@
+  *		fork", "cannot create pipe", or the like.  It includes
+  *		things like getuid returning a user that does not
+  *		exist in the passwd file.
+- *	EX_OSFILE -- Some system file (e.g., /etc/passwd, /etc/utmp,
++ *	EX_OSFILE -- Some system file (e.g., /bootstrap/System/Settings/passwd, /bootstrap/System/Settings/utmp,
+  *		etc.) does not exist, cannot be opened, or has some
+  *		sort of error (e.g., syntax error).
+  *	EX_CANTCREAT -- A (user specified) output file cannot be
+diff -urN uClibc-0.9.27/include/ttyent.h uClibc-0.9.27-STEP/include/ttyent.h
+--- uClibc-0.9.27/include/ttyent.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/ttyent.h	2005-08-27 05:20:05.829735368 +1200
+@@ -34,7 +34,7 @@
+ 
+ #include <features.h>
+ 
+-#define	_PATH_TTYS	"/etc/ttys"
++#define	_PATH_TTYS	"/bootstrap/System/Settings/ttys"
+ 
+ #define	_TTYS_OFF	"off"
+ #define	_TTYS_ON	"on"
+diff -urN uClibc-0.9.27/include/unistd.h uClibc-0.9.27-STEP/include/unistd.h
+--- uClibc-0.9.27/include/unistd.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/unistd.h	2005-08-27 05:20:05.836734304 +1200
+@@ -746,7 +746,7 @@
+ extern int acct (__const char *__name) __THROW;
+ 
+ 
+-/* Successive calls return the shells listed in `/etc/shells'.  */
++/* Successive calls return the shells listed in `/bootstrap/System/Settings/shells'.  */
+ extern char *getusershell (void) __THROW;
+ extern void endusershell (void) __THROW; /* Discard cached info.  */
+ extern void setusershell (void) __THROW; /* Rewind and re-read the file.  */
+@@ -754,7 +754,7 @@
+ 
+ /* Put the program in the background, and dissociate from the controlling
+    terminal.  If NOCHDIR is zero, do `chdir ("/")'.  If NOCLOSE is zero,
+-   redirects stdin, stdout, and stderr to /dev/null.  */
++   redirects stdin, stdout, and stderr to /System/Devices/null.  */
+ extern int daemon (int __nochdir, int __noclose) __THROW;
+ #endif /* Use BSD || X/Open.  */
+ 
+@@ -765,7 +765,7 @@
+ extern int chroot (__const char *__path) __THROW;
+ 
+ /* Prompt with PROMPT and read a string from the terminal without echoing.
+-   Uses /dev/tty if possible; otherwise stderr and stdin.  */
++   Uses /System/Devices/tty if possible; otherwise stderr and stdin.  */
+ extern char *getpass (__const char *__prompt) __THROW;
+ #endif /* Use BSD || X/Open.  */
+ 
+diff -urN uClibc-0.9.27/include/wordexp.h uClibc-0.9.27-STEP/include/wordexp.h
+--- uClibc-0.9.27/include/wordexp.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/include/wordexp.h	2005-08-27 05:20:02.194288040 +1200
+@@ -32,7 +32,7 @@
+     WRDE_APPEND = (1 << 1),	/* Append to results of a previous call.  */
+     WRDE_NOCMD = (1 << 2),	/* Don't do command substitution.  */
+     WRDE_REUSE = (1 << 3),	/* Reuse storage in PWORDEXP.  */
+-    WRDE_SHOWERR = (1 << 4),	/* Don't redirect stderr to /dev/null.  */
++    WRDE_SHOWERR = (1 << 4),	/* Don't redirect stderr to /System/Devices/null.  */
+     WRDE_UNDEF = (1 << 5),	/* Error for expanding undefined variables.  */
+     __WRDE_FLAGS = (WRDE_DOOFFS | WRDE_APPEND | WRDE_NOCMD |
+ 		    WRDE_REUSE | WRDE_SHOWERR | WRDE_UNDEF)
+diff -urN uClibc-0.9.27/ldso/README uClibc-0.9.27-STEP/ldso/README
+--- uClibc-0.9.27/ldso/README	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/ldso/README	2005-08-27 05:20:05.879727768 +1200
+@@ -84,7 +84,7 @@
+ 
+ The first problem is easy.  Just move the old, libc5-based libraries
+ to new directories (e.g. /lib/libc5-compat, /usr/lib/libc5-compat,
+-etc.) and add those directories to /etc/ld.so.conf.  Then install the
++etc.) and add those directories to /bootstrap/System/Settings/ld.so.conf.  Then install the
+ new, libc6-based versions in the standard places.
+ 
+ The second problem is more difficult.  Ideally, the dynamic linkers
+@@ -95,13 +95,13 @@
+ simpler approach will be used, at least initially.
+ 
+ Ldconfig has been modified to perform a (currently simple) dependency
+-analysis on libraries and to store an indication in /etc/ld.so.cache
++analysis on libraries and to store an indication in /bootstrap/System/Settings/ld.so.cache
+ of whether a library is for libc5, libc6 or an unknown libc.  The
+ dynamic linkers then only need to make a simple check at run-time to
+ make sure they don't load the wrong version of a library.
+ 
+ The dynamic linker for libc5 provided in this package, has already
+-been modified to use the new information in /etc/ld.so.cache.  For
++been modified to use the new information in /bootstrap/System/Settings/ld.so.cache.  For
+ glibc versions 2.0.1 and earlier, the dynamic linker for libc6 needs
+ the patch contained in glibc.patch.  You should apply the patch and
+ rebuild glibc before using the new ldconfig.
+@@ -215,7 +215,7 @@
+ 
+ Changes in version 1.9.2:
+ 
+-	Removed /usr/local/lib from the default /etc/ld.so.conf
++	Removed /usr/local/lib from the default /bootstrap/System/Settings/ld.so.conf
+ 	for Debian (Bug#8181).
+ 
+ 	Changed ldconfig to be 64-bit clean (H.J. Lu).
+@@ -353,7 +353,7 @@
+ Changes in version 1.8.3:
+ 
+ 	Changed ld-linux.so to process LD_PRELOAD before
+-	/etc/ld.so.preload.
++	/bootstrap/System/Settings/ld.so.preload.
+ 
+ 	Fixed a Debian packaging problem where libdl might not
+ 	be available if other packages were upgraded at the same
+@@ -431,7 +431,7 @@
+ 	dynamically loaded libraries (H.J. Lu, Andreas Schwab).
+ 
+ 	Changed ld-linux.so to preload ELF shared libraries 
+-	listed in /etc/ld.so.preload.  This allows secure 
++	listed in /bootstrap/System/Settings/ld.so.preload.  This allows secure 
+ 	preloads, even for setuid/setgid programs.
+ 
+ 	Changed ld-linux.so to keep ld.so.cache mapped at all
+@@ -516,7 +516,7 @@
+ 	Changed ld.so and ld-linux.so to print the required
+ 	cache version when a mismatch is detected.
+ 
+-	Changed ld-linux.so to not require on /dev/zero (Ralph
++	Changed ld-linux.so to not require on /System/Devices/zero (Ralph
+ 	Loader).
+ 
+ 	Minor m68k cleanups (Andreas Schwab).
+diff -urN uClibc-0.9.27/ldso/ldso/dl-elf.c uClibc-0.9.27-STEP/ldso/ldso/dl-elf.c
+--- uClibc-0.9.27/ldso/ldso/dl-elf.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/ldso/ldso/dl-elf.c	2005-08-27 05:20:02.215284848 +1200
+@@ -596,7 +596,7 @@
+ 				/* I am not quite sure if this is completely
+ 				 * correct to do or not, but the basic way that
+ 				 * we handle bss segments is that we mmap
+-				 * /dev/zero if there are any pages left over
++				 * /System/Devices/zero if there are any pages left over
+ 				 * that are not mapped as part of the file */
+ 
+ 				map_size = (ppnt->p_vaddr + ppnt->p_filesz + ADDR_ALIGN) & PAGE_ALIGN;
+diff -urN uClibc-0.9.27/ldso/libdl/libdl.c uClibc-0.9.27-STEP/ldso/libdl/libdl.c
+--- uClibc-0.9.27/ldso/libdl/libdl.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/ldso/libdl/libdl.c	2005-08-27 05:20:02.221283936 +1200
+@@ -97,7 +97,7 @@
+ static const char *dl_error_names[] = {
+ 	"",
+ 	"File not found",
+-	"Unable to open /dev/zero",
++	"Unable to open /System/Devices/zero",
+ 	"Not an ELF file",
+ #if defined (__i386__)
+ 	"Not i386 binary",
+diff -urN uClibc-0.9.27/ldso/man/dlopen.3 uClibc-0.9.27-STEP/ldso/man/dlopen.3
+--- uClibc-0.9.27/ldso/man/dlopen.3	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/ldso/man/dlopen.3	2005-08-27 05:20:05.883727160 +1200
+@@ -56,7 +56,7 @@
+ A colon-separated list of directories in the user's
+ \fBLD_LIBRARY\fP path environment variable.
+ .PP
+-The list of libraries specified in \fI/etc/ld.so.cache\fP.
++The list of libraries specified in \fI/bootstrap/System/Settings/ld.so.cache\fP.
+ .PP
+ \fI/usr/lib\fP, followed by \fI/lib\fP.
+ .RE
+diff -urN uClibc-0.9.27/ldso/man/ld.so.8 uClibc-0.9.27-STEP/ldso/man/ld.so.8
+--- uClibc-0.9.27/ldso/man/ld.so.8	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/ldso/man/ld.so.8	2005-08-27 05:20:05.892725792 +1200
+@@ -23,7 +23,7 @@
+ is ignored.
+ .IP o
+ From the cache file
+-.BR /etc/ld.so.cache
++.BR /bootstrap/System/Settings/ld.so.cache
+ which contains a compiled list of candidate libraries previously found
+ in the augmented library path.
+ .IP o
+@@ -83,11 +83,11 @@
+ .B /lib/ld-linux.so.*
+ ELF dynamic linker/loader
+ .TP
+-.B /etc/ld.so.cache
++.B /bootstrap/System/Settings/ld.so.cache
+ File containing a compiled list of directories in which to search for
+ libraries and an ordered list of candidate libraries.
+ .TP
+-.B /etc/ld.so.preload
++.B /bootstrap/System/Settings/ld.so.preload
+ File containing a whitespace separated list of ELF shared libraries to
+ be loaded before the program.
+ libraries and an ordered list of candidate libraries.
+diff -urN uClibc-0.9.27/ldso/man/ld.so.texi uClibc-0.9.27-STEP/ldso/man/ld.so.texi
+--- uClibc-0.9.27/ldso/man/ld.so.texi	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/ldso/man/ld.so.texi	2005-08-27 05:20:05.917721992 +1200
+@@ -115,16 +115,16 @@
+ @section Configuration Files
+ 
+ @table @file
+-@item /etc/ld.so.cache
++@item /bootstrap/System/Settings/ld.so.cache
+ A file created by @code{ldconfig} and used to speed linking. It's structure
+ is private to the suite.
+ 
+-@item /etc/ld.so.conf
++@item /bootstrap/System/Settings/ld.so.conf
+ A simple list of directories to scan for libraries, in addition to
+ @file{/usr/lib} and @file{/lib}, which are hardwired. It may contain
+ comments started with a @samp{#}.
+ 
+-@item /etc/ld.so.preload
++@item /bootstrap/System/Settings/ld.so.preload
+ A list of libraries to preload. This allows preloading libraries for
+ setuid/setgid executables securely. It may contain comments. 
+ @end table
+@@ -203,7 +203,7 @@
+ 
+ @item can't map cache file @var{cache-file}
+ @itemx cache file @var{cache-file} @var{blah}
+-The linker cache file (generally @file{/etc/ld.so.cache}) is corrupt or
++The linker cache file (generally @file{/bootstrap/System/Settings/ld.so.cache}) is corrupt or
+ non-existent. These errors can be ignored, and can be prevented by 
+ regenerating the cache file with @code{ldconfig}.
+ @end table
+@@ -251,7 +251,7 @@
+ @code{ld.so} suite itself.
+ 
+ The @file{/lib} and @file{/usr/lib} directories, and any listed in the file 
+-@file{/etc/ld.so.conf} are scanned by default unless @samp{-n} is used.
++@file{/bootstrap/System/Settings/ld.so.conf} are scanned by default unless @samp{-n} is used.
+ Additional directories may be specified on the command line.
+ 
+ It has the following options:
+@@ -276,7 +276,7 @@
+ Set up symbolic links for only libraries presented on the command line.
+ 
+ @item -p
+-Print out the library pathnames in the cache file (@file{/etc/ld.so.cache})
++Print out the library pathnames in the cache file (@file{/bootstrap/System/Settings/ld.so.cache})
+ @end table
+ 
+ @node libdl
+diff -urN uClibc-0.9.27/ldso/man/ldconfig.8 uClibc-0.9.27-STEP/ldso/man/ldconfig.8
+--- uClibc-0.9.27/ldso/man/ldconfig.8	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/ldso/man/ldconfig.8	2005-08-27 05:20:16.880055464 +1200
+@@ -26,7 +26,7 @@
+ .IR ld.so )
+ to the most recent shared libraries found in the directories specified
+ on the command line, in the file
+-.IR /etc/ld.so.conf ,
++.IR /bootstrap/System/Settings/ld.so.conf ,
+ and in the trusted directories
+ .RI ( /usr/lib
+ and
+@@ -44,7 +44,7 @@
+ .PP
+ Some existing libs do not contain enough information to allow the deduction of 
+ their type, therefore the 
+-.IR /etc/ld.so.conf 
++.IR /bootstrap/System/Settings/ld.so.conf 
+ file format allows the specification of an expected type.  This is 
+ .B only
+ used for those ELF libs which we can not work out. The format 
+@@ -62,7 +62,7 @@
+ .B ldconfig
+ should normally be run by the super-user as it may require write 
+ permission on some root owned directories and files.
+-It is normally run automatically at bootup, from /etc/rc, or manually
++It is normally run automatically at bootup, from /bootstrap/System/Settings/rc, or manually
+ whenever new DLL's are installed.
+ .SH OPTIONS
+ .TP
+@@ -90,7 +90,7 @@
+ and
+ .IR /lib )
+ nor those specified in
+-.IR /etc/ld.so.conf .
++.IR /bootstrap/System/Settings/ld.so.conf .
+ Implies
+ .BR \-N .
+ .TP
+@@ -110,13 +110,13 @@
+ Use
+ .B conf
+ instead of
+-.IR /etc/ld.so.conf .
++.IR /bootstrap/System/Settings/ld.so.conf .
+ .TP
+ .B \-C cache
+ Use
+ .B cache
+ instead of
+-.IR /etc/ld.so.cache .
++.IR /bootstrap/System/Settings/ld.so.cache .
+ .TP
+ .B \-r root
+ Change to and use
+@@ -133,11 +133,11 @@
+ the current cache.
+ .SH EXAMPLES
+ In the bootup file
+-.I /etc/rc
++.I /bootstrap/System/Settings/rc
+ having the line
+ .RS
+ 
+-/sbin/ldconfig -v
++/bootstrap/System/AdminTools/ldconfig -v
+ 
+ .RE
+ will set up the correct links for the shared binaries and rebuild
+@@ -146,7 +146,7 @@
+ On the command line
+ .RS
+ 
+-# /sbin/ldconfig -n /lib
++# /bootstrap/System/AdminTools/ldconfig -n /lib
+ 
+ .RE
+ as root after the installation of a new DLL, will properly update the
+@@ -158,14 +158,14 @@
+ .B /lib/ld.so
+ execution time linker/loader
+ .TP 20
+-.B /etc/ld.so.conf
++.B /bootstrap/System/Settings/ld.so.conf
+ File containing a list of colon, space, tab, newline, or comma spearated
+ directories in which to search for libraries.
+ .TP 20
+-.B /etc/ld.so.cache
++.B /bootstrap/System/Settings/ld.so.cache
+ File containing an ordered list of libraries found in the directories
+ specified in
+-.BR /etc/ld.so.conf .
++.BR /bootstrap/System/Settings/ld.so.conf .
+ .TP
+ .B lib*.so.version
+ shared libraries
+diff -urN uClibc-0.9.27/libc/inet/getproto.c uClibc-0.9.27-STEP/libc/inet/getproto.c
+--- uClibc-0.9.27/libc/inet/getproto.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/inet/getproto.c	2005-08-27 05:20:05.957715912 +1200
+@@ -1,5 +1,5 @@
+ /*
+-** protocols.c                           /etc/protocols access functions
++** protocols.c                           /bootstrap/System/Settings/protocols access functions
+ **
+ ** This file is part of the NYS Library.
+ **
+diff -urN uClibc-0.9.27/libc/inet/getservice.c uClibc-0.9.27-STEP/libc/inet/getservice.c
+--- uClibc-0.9.27/libc/inet/getservice.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/inet/getservice.c	2005-08-27 05:20:05.961715304 +1200
+@@ -1,5 +1,5 @@
+ /*
+-** services.c                           /etc/services access functions
++** services.c                           /bootstrap/System/Settings/services access functions
+ **
+ ** This file is part of the NYS Library.
+ **
+diff -urN uClibc-0.9.27/libc/inet/hostid.c uClibc-0.9.27-STEP/libc/inet/hostid.c
+--- uClibc-0.9.27/libc/inet/hostid.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/inet/hostid.c	2005-08-27 05:20:05.967714392 +1200
+@@ -10,7 +10,7 @@
+ #include <unistd.h>
+ 
+ 
+-#define HOSTID "/etc/hostid"
++#define HOSTID "/bootstrap/System/Settings/hostid"
+ 
+ int sethostid(long int new_id)
+ {
+@@ -46,7 +46,7 @@
+ 	 * are not on the internet then we can return 0 which means they should
+ 	 * really set this number via a sethostid() call. If their hostname
+ 	 * returns the loopback number (i.e. if they have put their hostname
+-	 * in the /etc/hosts file with 127.0.0.1) then all such hosts will
++	 * in the /bootstrap/System/Settings/hosts file with 127.0.0.1) then all such hosts will
+ 	 * have a non-unique hostid, but it doesn't matter anyway and
+ 	 * gethostid() will return a non zero number without the need for
+ 	 * setting one anyway.
+diff -urN uClibc-0.9.27/libc/inet/resolv.c uClibc-0.9.27-STEP/libc/inet/resolv.c
+--- uClibc-0.9.27/libc/inet/resolv.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/inet/resolv.c	2005-08-27 05:20:06.116691744 +1200
+@@ -942,8 +942,8 @@
+ 	    return 0;
+ 	}
+ 
+-	if ((fp = fopen("/etc/resolv.conf", "r")) ||
+-			(fp = fopen("/etc/config/resolv.conf", "r")))
++	if ((fp = fopen("/bootstrap/System/Settings/resolv.conf", "r")) ||
++			(fp = fopen("/bootstrap/System/Settings/config/resolv.conf", "r")))
+ 	{
+ 
+ 		while (fgets(szBuffer, sizeof(szBuffer), fp) != NULL) {
+@@ -1371,8 +1371,8 @@
+ 
+ void __open_etc_hosts(FILE **fp)
+ {
+-	if ((*fp = fopen("/etc/hosts", "r")) == NULL) {
+-		*fp = fopen("/etc/config/hosts", "r");
++	if ((*fp = fopen("/bootstrap/System/Settings/hosts", "r")) == NULL) {
++		*fp = fopen("/bootstrap/System/Settings/config/hosts", "r");
+ 	}
+ 	return;
+ }
+@@ -1869,10 +1869,10 @@
+ 	if (!name)
+ 		return EINVAL;
+ 
+-	/* do /etc/hosts first */
++	/* do /bootstrap/System/Settings/hosts first */
+ 	{
+ 		int old_errno = errno;	/* Save the old errno and reset errno */
+-		__set_errno(0);			/* to check for missing /etc/hosts. */
++		__set_errno(0);			/* to check for missing /bootstrap/System/Settings/hosts. */
+ 
+ 		if ((i=__get_hosts_byname_r(name, AF_INET, result_buf,
+ 									buf, buflen, result, h_errnop))==0)
+@@ -1892,7 +1892,7 @@
+ 		__set_errno(old_errno);
+ 	}
+ 
+-	DPRINTF("Nothing found in /etc/hosts\n");
++	DPRINTF("Nothing found in /bootstrap/System/Settings/hosts\n");
+ 
+ 	*h_errnop = NETDB_INTERNAL;
+ 	if (buflen < sizeof(*in))
+@@ -2024,10 +2024,10 @@
+ 	if (!name)
+ 		return EINVAL;
+ 
+-	/* do /etc/hosts first */
++	/* do /bootstrap/System/Settings/hosts first */
+ 	{
+ 		int old_errno = errno;	/* Save the old errno and reset errno */
+-		__set_errno(0);			/* to check for missing /etc/hosts. */
++		__set_errno(0);			/* to check for missing /bootstrap/System/Settings/hosts. */
+ 
+ 		if ((i=__get_hosts_byname_r(name, AF_INET, result_buf,
+ 									buf, buflen, result, h_errnop))==0)
+@@ -2047,7 +2047,7 @@
+ 		__set_errno(old_errno);
+ 	}
+ 
+-	DPRINTF("Nothing found in /etc/hosts\n");
++	DPRINTF("Nothing found in /bootstrap/System/Settings/hosts\n");
+ 
+ 	*h_errnop = NETDB_INTERNAL;
+ 	if (buflen < sizeof(*in))
+@@ -2174,7 +2174,7 @@
+ 			return EINVAL;
+ 	}
+ 
+-	/* do /etc/hosts first */
++	/* do /bootstrap/System/Settings/hosts first */
+ 	if ((i=__get_hosts_byaddr_r(addr, len, type, result_buf,
+ 				  buf, buflen, result, h_errnop))==0)
+ 		return i;
+diff -urN uClibc-0.9.27/libc/inet/rpc/getrpcent.c uClibc-0.9.27-STEP/libc/inet/rpc/getrpcent.c
+--- uClibc-0.9.27/libc/inet/rpc/getrpcent.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/inet/rpc/getrpcent.c	2005-08-27 05:20:05.953716520 +1200
+@@ -60,7 +60,7 @@
+ 
+ static struct rpcent *interpret(const char *val, int len);
+ 
+-static char RPCDB[] = "/etc/rpc";
++static char RPCDB[] = "/bootstrap/System/Settings/rpc";
+ 
+ static struct rpcdata *_rpcdata(void)
+ {
+diff -urN uClibc-0.9.27/libc/misc/internals/__uClibc_main.c uClibc-0.9.27-STEP/libc/misc/internals/__uClibc_main.c
+--- uClibc-0.9.27/libc/misc/internals/__uClibc_main.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/misc/internals/__uClibc_main.c	2005-08-27 05:20:02.228282872 +1200
+@@ -71,10 +71,10 @@
+     /* Check if the specified fd is already open */
+     if (unlikely(__libc_fcntl(fd, F_GETFD)==-1 && *(__errno_location())==EBADF))
+     {
+-	/* The descriptor is probably not open, so try to use /dev/null */
++	/* The descriptor is probably not open, so try to use /System/Devices/null */
+ 	struct stat st;
+ 	int nullfd = __libc_open(_PATH_DEVNULL, mode);
+-	/* /dev/null is major=1 minor=3.  Make absolutely certain
++	/* /System/Devices/null is major=1 minor=3.  Make absolutely certain
+ 	 * that is in fact the device that we have opened and not
+ 	 * some other wierd file... */
+ 	if ( (nullfd!=fd) || fstat(fd, &st) || !S_ISCHR(st.st_mode) ||
+diff -urN uClibc-0.9.27/libc/misc/internals/tempname.c uClibc-0.9.27-STEP/libc/misc/internals/tempname.c
+--- uClibc-0.9.27/libc/misc/internals/tempname.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/misc/internals/tempname.c	2005-08-27 05:20:26.319620432 +1200
+@@ -50,7 +50,7 @@
+ 
+ /* Path search algorithm, for tmpnam, tmpfile, etc.  If DIR is
+    non-null and exists, uses it; otherwise uses the first of $TMPDIR,
+-   P_tmpdir, /tmp that exists.  Copies into TMPL a template suitable
++   P_tmpdir, /bootstrap/System/TemporaryFiles that exists.  Copies into TMPL a template suitable
+    for use with mk[s]temp.  Will fail (-1) if DIR is non-null and
+    doesn't exist, none of the searched dirs exists, or there's not
+    enough space in TMPL. */
+@@ -89,8 +89,8 @@
+     {
+ 	if (direxists (P_tmpdir))
+ 	    dir = P_tmpdir;
+-	else if (strcmp (P_tmpdir, "/tmp") != 0 && direxists ("/tmp"))
+-	    dir = "/tmp";
++	else if (strcmp (P_tmpdir, "/bootstrap/System/TemporaryFiles") != 0 && direxists ("/bootstrap/System/TemporaryFiles"))
++	    dir = "/bootstrap/System/TemporaryFiles";
+ 	else
+ 	{
+ 	    __set_errno (ENOENT);
+@@ -121,9 +121,9 @@
+ {
+     int fd;
+     unsigned int result = -1;
+-    fd = open("/dev/urandom", O_RDONLY);
++    fd = open("/System/Devices/urandom", O_RDONLY);
+     if (fd < 0) {
+-	fd = open("/dev/random", O_RDONLY | O_NONBLOCK);
++	fd = open("/System/Devices/random", O_RDONLY | O_NONBLOCK);
+     }
+     if (fd >= 0) {
+ 	result = read(fd, buf, len);
+diff -urN uClibc-0.9.27/libc/misc/regex/regex.c uClibc-0.9.27-STEP/libc/misc/regex/regex.c
+--- uClibc-0.9.27/libc/misc/regex/regex.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/misc/regex/regex.c	2005-08-27 05:19:58.803803472 +1200
+@@ -207,7 +207,7 @@
+ 
+    "... Some ctype macros are valid only for character codes that
+    isascii says are ASCII (SGI's IRIX-4.0.5 is one such system --when
+-   using /bin/cc or gcc but without giving an ansi option).  So, all
++   using /bootstrap/System/Tools/cc or gcc but without giving an ansi option).  So, all
+    ctype uses should be through macros like ISPRINT...  If
+    STDC_HEADERS is defined, then autoconf has verified that the ctype
+    macros don't need to be guarded with references to isascii. ...
+diff -urN uClibc-0.9.27/libc/misc/statfs/internal_statvfs.c uClibc-0.9.27-STEP/libc/misc/statfs/internal_statvfs.c
+--- uClibc-0.9.27/libc/misc/statfs/internal_statvfs.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/misc/statfs/internal_statvfs.c	2005-08-27 05:20:13.480572264 +1200
+@@ -46,8 +46,8 @@
+   /* XXX I have no idea how to compute f_favail.  Any idea???  */
+   buf->f_favail = buf->f_ffree;
+ 
+-  /* Determining the flags is tricky.  We have to read /proc/mounts or
+-     the /etc/mtab file and search for the entry which matches the given
++  /* Determining the flags is tricky.  We have to read /bootstrap/System/Processes/mounts or
++     the /bootstrap/System/Settings/mtab file and search for the entry which matches the given
+      file.  The way we can test for matching filesystem is using the
+      device number.  */
+   buf->f_flag = 0;
+@@ -57,7 +57,7 @@
+       struct mntent mntbuf;
+       FILE *mtab;
+ 
+-      mtab = setmntent ("/proc/mounts", "r");
++      mtab = setmntent ("/bootstrap/System/Processes/mounts", "r");
+       if (mtab == NULL)
+ 	mtab = setmntent (_PATH_MOUNTED, "r");
+ 
+diff -urN uClibc-0.9.27/libc/misc/time/time.c uClibc-0.9.27-STEP/libc/misc/time/time.c
+--- uClibc-0.9.27/libc/misc/time/time.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/misc/time/time.c	2005-08-27 05:20:06.159685208 +1200
+@@ -58,12 +58,12 @@
+  * probably change once Erik gets the new config system in place.
+  *
+  * Defining __TIME_TZ_FILE causes tzset() to attempt to read the TZ value
+- * from the file /etc/TZ if the TZ env variable isn't set.  The file contents
++ * from the file /bootstrap/System/Settings/TZ if the TZ env variable isn't set.  The file contents
+  * must be the intended value of TZ, followed by a newline.  No other chars,
+  * spacing, etc is allowed.  As an example, an easy way for me to init
+- * /etc/TZ appropriately would be:    echo CST6CDT > /etc/TZ
++ * /bootstrap/System/Settings/TZ appropriately would be:    echo CST6CDT > /bootstrap/System/Settings/TZ
+  *
+- * Defining __TIME_TZ_FILE_ONCE will cause all further accesses of /etc/TZ
++ * Defining __TIME_TZ_FILE_ONCE will cause all further accesses of /bootstrap/System/Settings/TZ
+  * to be skipped once a legal value has been read.
+  *
+  * Defining __TIME_TZ_OPT_SPEED will cause a tzset() to keep a copy of the
+diff -urN uClibc-0.9.27/libc/misc/wordexp/wordexp.c uClibc-0.9.27-STEP/libc/misc/wordexp/wordexp.c
+--- uClibc-0.9.27/libc/misc/wordexp/wordexp.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/misc/wordexp/wordexp.c	2005-08-27 05:20:02.248279832 +1200
+@@ -759,7 +759,7 @@
+ 	dup2(fildes[1], 1);
+ 	close(fildes[1]);
+ 
+-	/* Redirect stderr to /dev/null if we have to.  */
++	/* Redirect stderr to /System/Devices/null if we have to.  */
+ 	if (showerr == 0) {
+ 		int fd;
+ 
+diff -urN uClibc-0.9.27/libc/stdio/ctermid.c uClibc-0.9.27-STEP/libc/stdio/ctermid.c
+--- uClibc-0.9.27/libc/stdio/ctermid.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdio/ctermid.c	2005-08-27 05:20:02.256278616 +1200
+@@ -12,7 +12,7 @@
+ 	static char sbuf[L_ctermid];
+ 
+ #ifdef __BCC__
+-	/* Currently elks doesn't support /dev/tty. */
++	/* Currently elks doesn't support /System/Devices/tty. */
+ 	if (!s) {
+ 		s = sbuf;
+ 	}
+@@ -20,7 +20,7 @@
+ 
+ 	return s;
+ #else
+-	/* glibc always returns /dev/tty for linux. */
+-	return strcpy((s ? s : sbuf), "/dev/tty");
++	/* glibc always returns /System/Devices/tty for linux. */
++	return strcpy((s ? s : sbuf), "/System/Devices/tty");
+ #endif
+ }
+diff -urN uClibc-0.9.27/libc/stdio/popen.c uClibc-0.9.27-STEP/libc/stdio/popen.c
+--- uClibc-0.9.27/libc/stdio/popen.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdio/popen.c	2005-08-27 05:19:58.807802864 +1200
+@@ -103,7 +103,7 @@
+ 			close(po->f->__filedes);
+ 		}
+ 
+-		execl("/bin/sh", "sh", "-c", command, (char *)0);
++		execl("/System/Tools/sh", "sh", "-c", command, (char *)0);
+ 
+ 		/* SUSv3 mandates an exit code of 127 for the child if the
+ 		 * command interpreter can not be invoked. */
+diff -urN uClibc-0.9.27/libc/stdio/tempnam.c uClibc-0.9.27-STEP/libc/stdio/tempnam.c
+--- uClibc-0.9.27/libc/stdio/tempnam.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdio/tempnam.c	2005-08-27 05:20:26.322619976 +1200
+@@ -25,7 +25,7 @@
+    as follows: First the environment variable "TMPDIR" is checked.
+    If it contains the name of a writable directory, that directory is used.
+    If not and if DIR is not NULL, that value is checked.  If that fails,
+-   P_tmpdir is tried and finally "/tmp".  The storage for the filename
++   P_tmpdir is tried and finally "/bootstrap/System/TemporaryFiles".  The storage for the filename
+    is allocated by `malloc'.  */
+ char *
+ tempnam (const char *dir, const char *pfx)
+diff -urN uClibc-0.9.27/libc/stdlib/bsd_getpt.c uClibc-0.9.27-STEP/libc/stdlib/bsd_getpt.c
+--- uClibc-0.9.27/libc/stdlib/bsd_getpt.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdlib/bsd_getpt.c	2005-08-27 05:20:02.259278160 +1200
+@@ -24,7 +24,7 @@
+ 
+ 
+ /* Prefix for master pseudo terminal nodes.  */
+-#define _PATH_PTY "/dev/pty"
++#define _PATH_PTY "/System/Devices/pty"
+ 
+ 
+ /* Letters indicating a series of pseudo terminals.  */
+diff -urN uClibc-0.9.27/libc/stdlib/getpt.c uClibc-0.9.27-STEP/libc/stdlib/getpt.c
+--- uClibc-0.9.27/libc/stdlib/getpt.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdlib/getpt.c	2005-08-27 05:20:02.268276792 +1200
+@@ -64,8 +64,8 @@
+ 	  struct statfs fsbuf;
+ 	  static int devpts_mounted;
+ 
+-	  /* Check that the /dev/pts filesystem is mounted
+-	     or if /dev is a devfs filesystem (this implies /dev/pts).  */
++	  /* Check that the /System/Devices/pts filesystem is mounted
++	     or if /dev is a devfs filesystem (this implies /System/Devices/pts).  */
+ 	  if (devpts_mounted
+ 	      || (statfs (_PATH_DEVPTS, &fsbuf) == 0
+ 		  && fsbuf.f_type == DEVPTS_SUPER_MAGIC)
+@@ -77,7 +77,7 @@
+ 	      return fd;
+ 	    }
+ 
+-	  /* If /dev/pts is not mounted then the UNIX98 pseudo terminals
++	  /* If /System/Devices/pts is not mounted then the UNIX98 pseudo terminals
+              are not usable.  */
+ 	  close (fd);
+ #if !defined __UNIX98PTY_ONLY__
+diff -urN uClibc-0.9.27/libc/stdlib/malloc-simple/alloc.c uClibc-0.9.27-STEP/libc/stdlib/malloc-simple/alloc.c
+--- uClibc-0.9.27/libc/stdlib/malloc-simple/alloc.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdlib/malloc-simple/alloc.c	2005-08-27 05:20:02.279275120 +1200
+@@ -62,7 +62,7 @@
+ 	}
+ 	result=malloc(size);
+ #if 0
+-	/* Standard unix mmap using /dev/zero clears memory so calloc
++	/* Standard unix mmap using /System/Devices/zero clears memory so calloc
+ 	 * doesn't need to actually zero anything....
+ 	 */
+ 	if (result != NULL) {
+diff -urN uClibc-0.9.27/libc/stdlib/malloc-standard/calloc.c uClibc-0.9.27-STEP/libc/stdlib/malloc-standard/calloc.c
+--- uClibc-0.9.27/libc/stdlib/malloc-standard/calloc.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdlib/malloc-standard/calloc.c	2005-08-27 05:20:02.282274664 +1200
+@@ -77,7 +77,7 @@
+ #if 0
+ 	else
+ 	{
+-	/* Standard unix mmap using /dev/zero clears memory so calloc
++	/* Standard unix mmap using /System/Devices/zero clears memory so calloc
+ 	 * doesn't need to actually zero anything....
+ 	 */
+ 	    d = (size_t*)mem;
+diff -urN uClibc-0.9.27/libc/stdlib/ptsname.c uClibc-0.9.27-STEP/libc/stdlib/ptsname.c
+--- uClibc-0.9.27/libc/stdlib/ptsname.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdlib/ptsname.c	2005-08-27 05:20:02.275275728 +1200
+@@ -57,7 +57,7 @@
+ #endif
+ 
+ /* Directory where we can find the slave pty nodes.  */
+-#define _PATH_DEVPTS "/dev/pts/"
++#define _PATH_DEVPTS "/System/Devices/pts/"
+ 
+ /* Store at most BUFLEN characters of the pathname of the slave pseudo
+    terminal associated with the master FD is open on in BUF.
+@@ -105,7 +105,7 @@
+       strcat (buf, p);
+       /* Note: Don't bother with stat on the slave name and checking the
+ 	 driver's major device number - the ioctl above succeeded so
+-	 we know the fd was a Unix'98 master and the /dev/pts/ prefix
++	 we know the fd was a Unix'98 master and the /System/Devices/pts/ prefix
+ 	 is set by definition.  If the name isn't really a slave PTY,
+ 	 the system is misconfigured anyway - something else will fail
+ 	 later.
+diff -urN uClibc-0.9.27/libc/stdlib/pty-private.h uClibc-0.9.27-STEP/libc/stdlib/pty-private.h
+--- uClibc-0.9.27/libc/stdlib/pty-private.h	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdlib/pty-private.h	2005-08-27 05:20:16.882055160 +1200
+@@ -28,7 +28,7 @@
+ #define PTY_FILENO 3
+ 
+ /* Path to the helper program that implements `grantpt' in user space.  */
+-#define _PATH_PT_CHOWN "/sbin/pt_chown"
++#define _PATH_PT_CHOWN "/bootstrap/System/AdminTools/pt_chown"
+ 
+ /* Exit codes for the helper program.  */
+ enum  /* failure modes */
+diff -urN uClibc-0.9.27/libc/stdlib/system.c uClibc-0.9.27-STEP/libc/stdlib/system.c
+--- uClibc-0.9.27/libc/stdlib/system.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/stdlib/system.c	2005-08-27 05:19:58.810802408 +1200
+@@ -33,7 +33,7 @@
+ 		signal(SIGINT, SIG_DFL);
+ 		signal(SIGCHLD, SIG_DFL);
+ 
+-		execl("/bin/sh", "sh", "-c", command, (char *) 0);
++		execl("/System/Tools/sh", "sh", "-c", command, (char *) 0);
+ 		_exit(127);
+ 	}
+ 	/* Signals are not absolutly guarenteed with vfork */
+diff -urN uClibc-0.9.27/libc/sysdeps/linux/arm/ioperm.c uClibc-0.9.27-STEP/libc/sysdeps/linux/arm/ioperm.c
+--- uClibc-0.9.27/libc/sysdeps/linux/arm/ioperm.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/sysdeps/linux/arm/ioperm.c	2005-08-27 05:20:13.491570592 +1200
+@@ -19,7 +19,7 @@
+    02111-1307 USA.  */
+ 
+ /* I/O port access on the ARM is something of a fiction.  What we do is to
+-   map an appropriate area of /dev/mem into user space so that a program
++   map an appropriate area of /System/Devices/mem into user space so that a program
+    can blast away at the hardware in such a way as to generate I/O cycles
+    on the bus.  To insulate user code from dependencies on particular
+    hardware we don't allow calls to inb() and friends to be inlined, but
+@@ -49,8 +49,8 @@
+ 
+ #include <linux/version.h>
+ 
+-#define PATH_ARM_SYSTYPE	"/etc/arm_systype"
+-#define PATH_CPUINFO		"/proc/cpuinfo"
++#define PATH_ARM_SYSTYPE	"/bootstrap/System/Settings/arm_systype"
++#define PATH_CPUINFO		"/bootstrap/System/Processes/cpuinfo"
+ 
+ #define MAX_PORT	0x10000
+ 
+@@ -92,7 +92,7 @@
+  *      unsupported system and the values encode, in order,
+  *      "<io_base>,<port_shift>".
+  *
+- * 3. Lookup the "system type" field in /proc/cpuinfo.  Again, if it
++ * 3. Lookup the "system type" field in /bootstrap/System/Processes/cpuinfo.  Again, if it
+  *    matches an entry in the platform[] table, use the corresponding
+  *    values.
+  *
+@@ -147,7 +147,7 @@
+ 	fclose (fp);
+ 
+ 	if (n == EOF) {
+-	    /* this can happen if the format of /proc/cpuinfo changes...  */
++	    /* this can happen if the format of /bootstrap/System/Processes/cpuinfo changes...  */
+ 	    fprintf (stderr, "ioperm: Unable to determine system type.\n"
+ 		     "\t(May need " PATH_ARM_SYSTYPE " symlink?)\n");
+ 	    __set_errno (ENODEV);
+@@ -185,7 +185,7 @@
+ 	if (! io.base) {
+ 	    int fd;
+ 
+-	    fd = open ("/dev/mem", O_RDWR);
++	    fd = open ("/System/Devices/mem", O_RDWR);
+ 	    if (fd < 0)
+ 		return -1;
+ 
+diff -urN uClibc-0.9.27/libc/sysdeps/linux/common/getcwd.c uClibc-0.9.27-STEP/libc/sysdeps/linux/common/getcwd.c
+--- uClibc-0.9.27/libc/sysdeps/linux/common/getcwd.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/sysdeps/linux/common/getcwd.c	2005-08-27 05:20:13.494570136 +1200
+@@ -17,7 +17,7 @@
+ 
+ /* If the syscall is not present, we have to walk up the
+  * directory tree till we hit the root.  Now we _could_
+- * use /proc/self/cwd if /proc is mounted... That approach
++ * use /bootstrap/System/Processes/self/cwd if /proc is mounted... That approach
+  * is left an an exercise for the reader... */
+ 
+ 
+diff -urN uClibc-0.9.27/libc/sysdeps/linux/common/ssp.c uClibc-0.9.27-STEP/libc/sysdeps/linux/common/ssp.c
+--- uClibc-0.9.27/libc/sysdeps/linux/common/ssp.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/sysdeps/linux/common/ssp.c	2005-08-27 05:20:02.296272536 +1200
+@@ -75,9 +75,9 @@
+ 		int fd;
+ 
+ #ifdef HAVE_DEV_ERANDOM
+-		if ((fd = open("/dev/erandom", O_RDONLY)) == (-1))
++		if ((fd = open("/System/Devices/erandom", O_RDONLY)) == (-1))
+ #endif
+-			fd = open("/dev/urandom", O_RDONLY);
++			fd = open("/System/Devices/urandom", O_RDONLY);
+ 		if (fd != (-1)) {
+ 			size = read(fd, (char *) &__guard, sizeof(__guard));
+ 			close(fd);
+diff -urN uClibc-0.9.27/libc/termios/ttyname.c uClibc-0.9.27-STEP/libc/termios/ttyname.c
+--- uClibc-0.9.27/libc/termios/ttyname.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/termios/ttyname.c	2005-08-27 05:20:13.498569528 +1200
+@@ -15,7 +15,7 @@
+  * directories looking for a match.  Yes this is lame.  But it should
+  * work, should be small, and will return names that match what is on
+  * disk.  Another approach we could use would be to use the info in
+- * /proc/self/fd, but that is even more lame since it requires /proc */
++ * /bootstrap/System/Processes/self/fd, but that is even more lame since it requires /proc */
+ 
+ /* SUSv3 mandates TTY_NAME_MAX as 9.  This is obviously insufficient.
+  * However, there is no need to waste space and support non-standard
+@@ -35,11 +35,11 @@
+ 
+ static const char dirlist[] =
+ /*   12345670123 */
+-"\010/dev/vc/\0"	/* Try /dev/vc first (be devfs compatible) */
+-"\011/dev/tts/\0"	/* and /dev/tts next (be devfs compatible) */
+-"\011/dev/pty/\0"	/* and /dev/pty next (be devfs compatible) */
+-"\011/dev/pts/\0"	/* and try /dev/pts next */
+-"\005/dev/\0";		/* and try walking through /dev last */
++"\010/System/Devices/vc/\0"	/* Try /System/Devices/vc first (be devfs compatible) */
++"\011/System/Devices/tts/\0"	/* and /System/Devices/tts next (be devfs compatible) */
++"\011/System/Devices/pty/\0"	/* and /System/Devices/pty next (be devfs compatible) */
++"\011/System/Devices/pts/\0"	/* and try /System/Devices/pts next */
++"\005/System/Devices/\0";		/* and try walking through /dev last */
+ 
+ int ttyname_r(int fd, char *ubuf, size_t ubuflen)
+ {
+diff -urN uClibc-0.9.27/libc/unistd/confstr.c uClibc-0.9.27-STEP/libc/unistd/confstr.c
+--- uClibc-0.9.27/libc/unistd/confstr.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/unistd/confstr.c	2005-08-27 05:19:58.995774288 +1200
+@@ -21,7 +21,7 @@
+ #include <unistd.h>
+ #include <string.h>
+ 
+-#define CS_PATH "/bin:/usr/bin"
++#define CS_PATH "/bin:/bootstrap/System/Tools"
+ 
+ /* If BUF is not NULL and LEN > 0, fill in at most LEN - 1 bytes
+    of BUF with the value corresponding to NAME and zero-terminate BUF.
+diff -urN uClibc-0.9.27/libc/unistd/exec.c uClibc-0.9.27-STEP/libc/unistd/exec.c
+--- uClibc-0.9.27/libc/unistd/exec.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/unistd/exec.c	2005-08-27 05:19:59.003773072 +1200
+@@ -212,8 +212,8 @@
+ 
+ /* Use a default path that matches glibc behavior, since SUSv3 says
+  * this is implementation-defined.  The default is current working dir,
+- * /bin, and then /usr/bin. */
+-static const char default_path[] = ":/bin:/usr/bin";
++ * /bin, and then /bootstrap/System/Tools. */
++static const char default_path[] = ":/bin:/bootstrap/System/Tools";
+ 
+ int execvp(const char *path, char *const argv[])
+ {
+@@ -246,7 +246,7 @@
+ 			nargv[0] = argv[0];
+ 			nargv[1] = (char *)path;
+ 			memcpy(nargv+2, argv+1, n*sizeof(char *));
+-			execve("/bin/sh", nargv, __environ);
++			execve("/System/Tools/sh", nargv, __environ);
+ 			EXEC_FREE(nargv, size2);
+ 		}
+ 	} else {
+diff -urN uClibc-0.9.27/libc/unistd/getpass.c uClibc-0.9.27-STEP/libc/unistd/getpass.c
+--- uClibc-0.9.27/libc/unistd/getpass.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/unistd/getpass.c	2005-08-27 05:20:02.316269496 +1200
+@@ -45,7 +45,7 @@
+   /* Try to write to and read from the terminal if we can.
+      If we can't open the terminal, use stderr and stdin.  */
+ 
+-  in = fopen ("/dev/tty", "r+");
++  in = fopen ("/System/Devices/tty", "r+");
+   if (in == NULL)
+     {
+       in = stdin;
+diff -urN uClibc-0.9.27/libc/unistd/usershell.c uClibc-0.9.27-STEP/libc/unistd/usershell.c
+--- uClibc-0.9.27/libc/unistd/usershell.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/libc/unistd/usershell.c	2005-08-27 05:20:06.167683992 +1200
+@@ -43,7 +43,7 @@
+ 
+ /*
+  * Local shells should NOT be added here.  They should be added in
+- * /etc/shells.
++ * /bootstrap/System/Settings/shells.
+  */
+ 
+ static const char * const validsh[] = { _PATH_BSHELL, _PATH_CSHELL, NULL };
+diff -urN uClibc-0.9.27/test/Rules.mak uClibc-0.9.27-STEP/test/Rules.mak
+--- uClibc-0.9.27/test/Rules.mak	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/test/Rules.mak	2005-08-27 05:20:02.319269040 +1200
+@@ -58,7 +58,7 @@
+ LSFLAGS = -l
+ 
+ # A nifty macro to make testing gcc features easier
+-check_gcc=$(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null > /dev/null 2>&1; \
++check_gcc=$(shell if $(CC) $(1) -S -o /System/Devices/null -xc /System/Devices/null > /System/Devices/null 2>&1; \
+ 	then echo "$(1)"; else echo "$(2)"; fi)
+ 
+ # use '-Os' optimization if available, else use -O2, allow Config to override
+diff -urN uClibc-0.9.27/test/math/Makefile uClibc-0.9.27-STEP/test/math/Makefile
+--- uClibc-0.9.27/test/math/Makefile	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/test/math/Makefile	2005-08-27 05:20:02.322268584 +1200
+@@ -22,7 +22,7 @@
+ include $(TESTDIR)/Rules.mak
+ CFLAGS+=-D_GNU_SOURCE -DNO_LONG_DOUBLE
+ EXTRA_LIBS=-lm
+-PERL=/usr/bin/perl
++PERL=/bootstrap/System/Tools/perl
+ 
+ TARGETS:=
+ libm-tests=libm-test.c
+@@ -97,7 +97,7 @@
+ ulps-file = $(firstword $(wildcard $(config-sysdirs:%=$(..)%/libm-test-ulps)))
+ 
+ libm-test.c: $(ulps-file) libm-test.inc gen-libm-test.pl
+-	$(PERL) ./gen-libm-test.pl -u $< ./libm-test.inc -o "." 2>&1 > /dev/null
++	$(PERL) ./gen-libm-test.pl -u $< ./libm-test.inc -o "." 2>&1 > /System/Devices/null
+ 
+ clean:
+ 	$(RM) *.[oa] *~ core $(TARGETS) $(generated) rint_glibc.out rint.out
+diff -urN uClibc-0.9.27/test/math/gen-libm-test.pl uClibc-0.9.27-STEP/test/math/gen-libm-test.pl
+--- uClibc-0.9.27/test/math/gen-libm-test.pl	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/test/math/gen-libm-test.pl	2005-08-27 05:19:58.527845424 +1200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -w
++#!/bootstrap/System/Tools/perl -w
+ # Copyright (C) 1999 Free Software Foundation, Inc.
+ # This file is part of the GNU C Library.
+ # Contributed by Andreas Jaeger <aj@suse.de>, 1999.
+diff -urN uClibc-0.9.27/test/misc/dirent.c uClibc-0.9.27-STEP/test/misc/dirent.c
+--- uClibc-0.9.27/test/misc/dirent.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/test/misc/dirent.c	2005-08-27 05:20:26.324619672 +1200
+@@ -8,7 +8,7 @@
+ 
+     DIR *dirh;
+     struct dirent *dirp;
+-    static char mydir[20] = "/tmp";
++    static char mydir[20] = "/bootstrap/System/TemporaryFiles";
+ 
+     if ((dirh = opendir(mydir)) == NULL) {
+ 	perror("opendir");
+diff -urN uClibc-0.9.27/test/stdlib/ptytest.c uClibc-0.9.27-STEP/test/stdlib/ptytest.c
+--- uClibc-0.9.27/test/stdlib/ptytest.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/test/stdlib/ptytest.c	2005-08-27 05:20:02.325268128 +1200
+@@ -10,7 +10,7 @@
+     int fd;
+     char *cp;
+ 
+-    fd=open("/dev/ptmx",O_NOCTTY|O_RDWR);
++    fd=open("/System/Devices/ptmx",O_NOCTTY|O_RDWR);
+     cp=ptsname(fd);
+     if (cp==NULL)
+ 	return EXIT_FAILURE;
+diff -urN uClibc-0.9.27/test/unistd/vfork.c uClibc-0.9.27-STEP/test/unistd/vfork.c
+--- uClibc-0.9.27/test/unistd/vfork.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/test/unistd/vfork.c	2005-08-27 05:19:58.817801344 +1200
+@@ -33,7 +33,7 @@
+ 	pid_t pid;
+ 	int status, wpid;
+ 	char *argv[] = {
+-		"/bin/ls",
++		"/bootstrap/System/Tools/ls",
+ 		"-laF",
+ 		NULL,
+ 	};
+diff -urN uClibc-0.9.27/utils/Makefile uClibc-0.9.27-STEP/utils/Makefile
+--- uClibc-0.9.27/utils/Makefile	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/utils/Makefile	2005-08-27 05:19:59.006772616 +1200
+@@ -95,10 +95,10 @@
+ ifeq ($(strip $(HAVE_SHARED)),y)
+ 	$(INSTALL) -d $(PREFIX)$(RUNTIME_PREFIX)sbin
+ 	$(INSTALL) -d $(PREFIX)$(RUNTIME_PREFIX)usr/bin
+-	$(INSTALL) -m 755 ldd $(PREFIX)$(RUNTIME_PREFIX)usr/bin/ldd
++	$(INSTALL) -m 755 ldd $(PREFIX)$(RUNTIME_PREFIX)usr/bootstrap/System/Tools/ldd
+ 	$(INSTALL) -m 755 ldconfig $(PREFIX)$(RUNTIME_PREFIX)sbin/ldconfig;
+-	#$(INSTALL) -m 755 readelf $(PREFIX)$(RUNTIME_PREFIX)usr/bin/readelf
++	#$(INSTALL) -m 755 readelf $(PREFIX)$(RUNTIME_PREFIX)usr/bootstrap/System/Tools/readelf
+ endif
+ ifeq ($(strip $(UCLIBC_HAS_LOCALE)),y)
+-	$(INSTALL) -m 755 iconv $(PREFIX)$(RUNTIME_PREFIX)usr/bin/iconv
++	$(INSTALL) -m 755 iconv $(PREFIX)$(RUNTIME_PREFIX)usr/bootstrap/System/Tools/iconv
+ endif
+diff -urN uClibc-0.9.27/utils/ldconfig.c uClibc-0.9.27-STEP/utils/ldconfig.c
+--- uClibc-0.9.27/utils/ldconfig.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/utils/ldconfig.c	2005-08-27 05:20:06.180682016 +1200
+@@ -12,8 +12,8 @@
+  *        -X: don't update the library links
+  *        -l: library mode, manually link libraries
+  *        -p: print the current library cache
+- *        -f conf: use conf instead of /etc/ld.so.conf
+- *        -C cache: use cache instead of /etc/ld.so.cache
++ *        -f conf: use conf instead of /bootstrap/System/Settings/ld.so.conf
++ *        -C cache: use cache instead of /bootstrap/System/Settings/ld.so.cache
+  *        -r root: first, do a chroot to the indicated directory
+  *        dir ...: directories to process
+  *        lib ...: libraries to link
+diff -urN uClibc-0.9.27/utils/ldd.c uClibc-0.9.27-STEP/utils/ldd.c
+--- uClibc-0.9.27/utils/ldd.c	2005-01-12 20:59:21.000000000 +1300
++++ uClibc-0.9.27-STEP/utils/ldd.c	2005-08-27 05:26:47.913609328 +1200
+@@ -672,8 +672,8 @@
+ 			pid_t pid;
+ 			int status;
+ 			static const char * const environment[] = {
+-				"PATH=/usr/bin:/bin:/usr/sbin:/sbin",
+-				"SHELL=/bin/sh",
++				"PATH=/bootstrap/System/Tools:/bootstrap/System/AdminTools:/bootstrap/System/Library/Tools",
++				"SHELL=/System/Tools/sh",
+ 				"LD_TRACE_LOADED_OBJECTS=1",
+ 				NULL
+ 			};

@@ -1,0 +1,55 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!-- glibc-2.7 lock -->
+	<amin:command name='remove'>
+		<amin:param name='target'>ld</amin:param>
+		<amin:shell name='dir'>/adistrobc-bootstrap/i686-pc-linux-gnu/bin/</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>ld</amin:param>
+		<amin:shell name='dir'>/adistrobc-bootstrap/bin/</amin:shell>
+	</amin:command>
+	<amin:command name='move'>
+		<amin:param name="source">ld-new</amin:param>
+		<amin:param name="target">ld</amin:param>
+ 		<amin:shell name='dir'>/adistrobc-bootstrap/bin/</amin:shell>
+	</amin:command>
+	<amin:command name="ln">
+		<amin:param name="source">ld</amin:param>
+		<amin:param name="target">../i686-pc-linux-gnu/bin/ld</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name="dir">/adistrobc-bootstrap/bin/</amin:shell>
+	</amin:command>
+	<amin:command name='gcc_dumpspecs'>
+		<amin:param name='specsfile'>/adistrobc-bootstrap/lib/gcc/i686-pc-linux-gnu/4.2.2/specs</amin:param>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+        <amin:command name="search_replace">
+                <amin:param name="target">/adistrobc-bootstrap/lib/gcc/i686-pc-linux-gnu/4.2.2/specs</amin:param>
+                <amin:flag name="find">/lib/ld-linux.so.2</amin:flag>
+                <amin:flag name="replace">/adistrobc-bootstrap/lib/ld-linux.so.2</amin:flag>
+                <amin:shell name="dir">/</amin:shell>
+        </amin:command>
+
+	<!--remove gcc and binutils and glibc build dirs-->
+		
+	<amin:command name='remove'>
+		<amin:param name='target'>gcc-build gcc-4.2.2</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>glibc-2.7 glibc-build</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>binutils-2.17  binutils-build</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>linux-2.6.26</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+</amin:profile>

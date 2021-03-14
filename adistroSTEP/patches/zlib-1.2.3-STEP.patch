@@ -1,0 +1,220 @@
+diff -urN zlib-1.2.3/Makefile zlib-1.2.3-STEP/Makefile
+--- zlib-1.2.3/Makefile	2005-07-18 14:25:21.000000000 +1200
++++ zlib-1.2.3-STEP/Makefile	2006-04-26 04:25:36.722757512 +1200
+@@ -36,7 +36,7 @@
+ AR=ar rc
+ RANLIB=ranlib
+ TAR=tar
+-SHELL=/bin/sh
++SHELL=/System/Tools/sh
+ EXE=
+ 
+ prefix = /usr/local
+@@ -69,7 +69,7 @@
+ 
+ libz.a: $(OBJS) $(OBJA)
+ 	$(AR) $@ $(OBJS) $(OBJA)
+-	-@ ($(RANLIB) $@ || true) >/dev/null 2>&1
++	-@ ($(RANLIB) $@ || true) >/System/Devices/null 2>&1
+ 
+ match.o: match.S
+ 	$(CPP) match.S > _match.s
+@@ -98,12 +98,12 @@
+ 	chmod 644 $(includedir)/zlib.h $(includedir)/zconf.h
+ 	cp $(LIBS) $(libdir)
+ 	cd $(libdir); chmod 755 $(LIBS)
+-	-@(cd $(libdir); $(RANLIB) libz.a || true) >/dev/null 2>&1
++	-@(cd $(libdir); $(RANLIB) libz.a || true) >/System/Devices/null 2>&1
+ 	cd $(libdir); if test -f $(SHAREDLIBV); then \
+ 	  rm -f $(SHAREDLIB) $(SHAREDLIBM); \
+ 	  ln -s $(SHAREDLIBV) $(SHAREDLIB); \
+ 	  ln -s $(SHAREDLIBV) $(SHAREDLIBM); \
+-	  (ldconfig || true)  >/dev/null 2>&1; \
++	  (ldconfig || true)  >/System/Devices/null 2>&1; \
+ 	fi
+ 	cp zlib.3 $(man3dir)
+ 	chmod 644 $(man3dir)/zlib.3
+diff -urN zlib-1.2.3/Makefile.in zlib-1.2.3-STEP/Makefile.in
+--- zlib-1.2.3/Makefile.in	2005-07-18 14:25:21.000000000 +1200
++++ zlib-1.2.3-STEP/Makefile.in	2006-04-26 04:25:36.724757208 +1200
+@@ -36,7 +36,7 @@
+ AR=ar rc
+ RANLIB=ranlib
+ TAR=tar
+-SHELL=/bin/sh
++SHELL=/System/Tools/sh
+ EXE=
+ 
+ prefix = /usr/local
+@@ -69,7 +69,7 @@
+ 
+ libz.a: $(OBJS) $(OBJA)
+ 	$(AR) $@ $(OBJS) $(OBJA)
+-	-@ ($(RANLIB) $@ || true) >/dev/null 2>&1
++	-@ ($(RANLIB) $@ || true) >/System/Devices/null 2>&1
+ 
+ match.o: match.S
+ 	$(CPP) match.S > _match.s
+@@ -98,12 +98,12 @@
+ 	chmod 644 $(includedir)/zlib.h $(includedir)/zconf.h
+ 	cp $(LIBS) $(libdir)
+ 	cd $(libdir); chmod 755 $(LIBS)
+-	-@(cd $(libdir); $(RANLIB) libz.a || true) >/dev/null 2>&1
++	-@(cd $(libdir); $(RANLIB) libz.a || true) >/System/Devices/null 2>&1
+ 	cd $(libdir); if test -f $(SHAREDLIBV); then \
+ 	  rm -f $(SHAREDLIB) $(SHAREDLIBM); \
+ 	  ln -s $(SHAREDLIBV) $(SHAREDLIB); \
+ 	  ln -s $(SHAREDLIBV) $(SHAREDLIBM); \
+-	  (ldconfig || true)  >/dev/null 2>&1; \
++	  (ldconfig || true)  >/System/Devices/null 2>&1; \
+ 	fi
+ 	cp zlib.3 $(man3dir)
+ 	chmod 644 $(man3dir)/zlib.3
+diff -urN zlib-1.2.3/README zlib-1.2.3-STEP/README
+--- zlib-1.2.3/README	2005-07-18 14:25:07.000000000 +1200
++++ zlib-1.2.3-STEP/README	2006-04-26 04:25:36.729756448 +1200
+@@ -71,7 +71,7 @@
+ - On Digital Unix 4.0D (formely OSF/1) on AlphaServer, the cc option -std1 is
+   necessary to get gzprintf working correctly. This is done by configure.
+ 
+-- zlib doesn't work on HP-UX 9.05 with some versions of /bin/cc. It works with
++- zlib doesn't work on HP-UX 9.05 with some versions of /System/Tools/cc. It works with
+   other compilers. Use "make test" to check your compiler.
+ 
+ - gzdopen is not supported on RISCOS, BEOS and by some Mac compilers.
+diff -urN zlib-1.2.3/configure zlib-1.2.3-STEP/configure
+--- zlib-1.2.3/configure	2005-07-12 08:11:57.000000000 +1200
++++ zlib-1.2.3-STEP/configure	2006-04-26 04:25:12.537434240 +1200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/System/Tools/sh
+ # configure script for zlib. This script is needed only if
+ # you wish to build a shared library and your system supports them,
+ # of if you need special compiler, flags or install directory.
+@@ -71,11 +71,11 @@
+   *gcc*) gcc=1;;
+ esac
+ 
+-if test "$gcc" -eq 1 && ($cc -c $cflags $test.c) 2>/dev/null; then
++if test "$gcc" -eq 1 && ($cc -c $cflags $test.c) 2>/System/Devices/null; then
+   CC="$cc"
+   SFLAGS=${CFLAGS-"-fPIC -O3"}
+   CFLAGS="$cflags"
+-  case `(uname -s || echo unknown) 2>/dev/null` in
++  case `(uname -s || echo unknown) 2>/System/Devices/null` in
+   Linux | linux | GNU | GNU/*) LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1"};;
+   CYGWIN* | Cygwin* | cygwin* | OS/2* )
+              EXE='.exe';;
+@@ -84,7 +84,7 @@
+                  LDSHARED=${LDSHARED-"$cc -shared -Wl,-hlibz.so.1"};;
+   HP-UX*)
+          LDSHARED=${LDSHARED-"$cc -shared $SFLAGS"}
+-         case `(uname -m || echo unknown) 2>/dev/null` in
++         case `(uname -m || echo unknown) 2>/System/Devices/null` in
+          ia64)
+                  shared_ext='.so'
+                  SHAREDLIB='libz.so';;
+@@ -102,12 +102,12 @@
+ else
+   # find system name and corresponding cc options
+   CC=${CC-cc}
+-  case `(uname -sr || echo unknown) 2>/dev/null` in
++  case `(uname -sr || echo unknown) 2>/System/Devices/null` in
+   HP-UX*)    SFLAGS=${CFLAGS-"-O +z"}
+              CFLAGS=${CFLAGS-"-O"}
+ #            LDSHARED=${LDSHARED-"ld -b +vnocompatwarnings"}
+              LDSHARED=${LDSHARED-"ld -b"}
+-         case `(uname -m || echo unknown) 2>/dev/null` in
++         case `(uname -m || echo unknown) 2>/System/Devices/null` in
+          ia64)
+              shared_ext='.so'
+              SHAREDLIB='libz.so';;
+diff -urN zlib-1.2.3/contrib/dotzlib/DotZLib.build zlib-1.2.3-STEP/contrib/dotzlib/DotZLib.build
+--- zlib-1.2.3/contrib/dotzlib/DotZLib.build	2004-09-19 10:19:30.000000000 +1200
++++ zlib-1.2.3-STEP/contrib/dotzlib/DotZLib.build	2006-04-26 04:26:12.931252984 +1200
+@@ -2,7 +2,7 @@
+ <project name="DotZLib" default="build" basedir="./DotZLib">
+ 	<description>A .Net wrapper library around ZLib1.dll</description>
+ 
+-	<property name="nunit.location" value="c:/program files/NUnit V2.1/bin" />
++	<property name="nunit.location" value="c:/program files/NUnit V2.1/System/Tools" />
+ 	<property name="build.root" value="bin" />
+ 	
+ 	<property name="debug" value="true" />
+diff -urN zlib-1.2.3/contrib/dotzlib/readme.txt zlib-1.2.3-STEP/contrib/dotzlib/readme.txt
+--- zlib-1.2.3/contrib/dotzlib/readme.txt	2004-09-19 11:32:36.000000000 +1200
++++ zlib-1.2.3-STEP/contrib/dotzlib/readme.txt	2006-04-26 04:26:19.516251912 +1200
+@@ -26,7 +26,7 @@
+ 
+ 1. Using Visual Studio.Net 2003:
+    Open DotZLib.sln in VS.Net and build from there. Output file (DotZLib.dll)
+-   will be found ./DotZLib/bin/release or ./DotZLib/bin/debug, depending on 
++   will be found ./DotZLib/System/Tools/release or ./DotZLib/System/Tools/debug, depending on 
+    you are building the release or debug version of the library. Check 
+    DotZLib/UnitTests.cs for instructions on how to include unit tests in the
+    build.
+@@ -38,8 +38,8 @@
+    debug={true|false} to toggle between release/debug builds (default=true).
+    nunit={true|false} to include or esclude unit tests (default=true).
+    Also the target clean will remove binaries.
+-   Output file (DotZLib.dll) will be found in either ./DotZLib/bin/release 
+-   or ./DotZLib/bin/debug, depending on whether you are building the release 
++   Output file (DotZLib.dll) will be found in either ./DotZLib/System/Tools/release 
++   or ./DotZLib/System/Tools/debug, depending on whether you are building the release 
+    or debug version of the library.
+ 
+    Examples: 
+diff -urN zlib-1.2.3/contrib/masmx64/gvmat64.asm zlib-1.2.3-STEP/contrib/masmx64/gvmat64.asm
+--- zlib-1.2.3/contrib/masmx64/gvmat64.asm	2005-07-12 15:17:06.000000000 +1200
++++ zlib-1.2.3-STEP/contrib/masmx64/gvmat64.asm	2006-04-26 04:26:39.758174672 +1200
+@@ -29,7 +29,7 @@
+ ;   ml64.exe is given with Visual Studio 2005 and Windows 2003 server DDK
+ ;
+ ;   (you can get Windows 2003 server DDK with ml64 and cl for AMD64 from
+-;      http://www.microsoft.com/whdc/devtools/ddk/default.mspx for low price)
++;      http://www.microsoft.com/whdc/System/Devicestools/ddk/default.mspx for low price)
+ ;
+ 
+ 
+diff -urN zlib-1.2.3/contrib/masmx64/inffasx64.asm zlib-1.2.3-STEP/contrib/masmx64/inffasx64.asm
+--- zlib-1.2.3/contrib/masmx64/inffasx64.asm	2005-02-07 01:05:36.000000000 +1300
++++ zlib-1.2.3-STEP/contrib/masmx64/inffasx64.asm	2006-04-26 04:26:39.770172848 +1200
+@@ -12,7 +12,7 @@
+ ;   ml64.exe is given with Visual Studio 2005, Windows 2003 server DDK
+ ;
+ ;   (you can get Windows 2003 server DDK with ml64 and cl.exe for AMD64 from 
+-;      http://www.microsoft.com/whdc/devtools/ddk/default.mspx for low price)
++;      http://www.microsoft.com/whdc/System/Devicestools/ddk/default.mspx for low price)
+ ;
+ 
+ .code
+diff -urN zlib-1.2.3/contrib/masmx64/readme.txt zlib-1.2.3-STEP/contrib/masmx64/readme.txt
+--- zlib-1.2.3/contrib/masmx64/readme.txt	2005-02-07 01:39:10.000000000 +1300
++++ zlib-1.2.3-STEP/contrib/masmx64/readme.txt	2006-04-26 04:26:39.772172544 +1200
+@@ -25,4 +25,4 @@
+ ml64.exe is given with Visual Studio 2005, Windows 2003 server DDK
+ 
+ You can get Windows 2003 server DDK with ml64 and cl for AMD64 from 
+-  http://www.microsoft.com/whdc/devtools/ddk/default.mspx for low price)
++  http://www.microsoft.com/whdc/System/Devicestools/ddk/default.mspx for low price)
+diff -urN zlib-1.2.3/contrib/minizip/Makefile zlib-1.2.3-STEP/contrib/minizip/Makefile
+--- zlib-1.2.3/contrib/minizip/Makefile	2005-07-13 06:08:40.000000000 +1200
++++ zlib-1.2.3-STEP/contrib/minizip/Makefile	2006-04-26 04:26:51.644367696 +1200
+@@ -22,4 +22,4 @@
+ 	./miniunz test.zip
+ 
+ clean:
+-	/bin/rm -f *.o *~ minizip miniunz
++	/System/Tools/rm -f *.o *~ minizip miniunz
+diff -urN zlib-1.2.3/old/os2/Makefile.os2 zlib-1.2.3-STEP/old/os2/Makefile.os2
+--- zlib-1.2.3/old/os2/Makefile.os2	1998-03-01 22:00:20.000000000 +1300
++++ zlib-1.2.3-STEP/old/os2/Makefile.os2	2006-04-26 04:27:46.612011344 +1200
+@@ -69,7 +69,7 @@
+ 
+ $(ZLIB): $(OBJS)
+ 	$(AR) $@ $(OBJS)
+-	-@ ($(RANLIB) $@ || true) >/dev/null 2>&1
++	-@ ($(RANLIB) $@ || true) >/System/Devices/null 2>&1
+ 
+ $(SHAREDLIB): $(OBJS) os2/z.def
+ 	$(LDSHARED) -o $@ $^

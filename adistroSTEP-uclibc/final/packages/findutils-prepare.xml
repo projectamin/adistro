@@ -1,0 +1,26 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Findutils-->
+
+<!--retrieving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://freshmeat.net/redir/findutils/15023/url_tgz/findutils-4.2.20.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/findutils-4.2.20.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/findutils-4.2.20-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/findutils-4.2.20-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/findutils-4.2.20.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>../../packages/findutils-4.2.20-STEP.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/findutils-4.2.20</amin:shell>
+        </amin:command>
+</amin:profile>

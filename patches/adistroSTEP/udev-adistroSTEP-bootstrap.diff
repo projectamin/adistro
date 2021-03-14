@@ -1,0 +1,148 @@
+diff -urN udev-058/ccdv.c udev-058-adistroSTEP/ccdv.c
+--- udev-058/ccdv.c	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/ccdv.c	2005-05-28 15:24:08.411541936 +1200
+@@ -328,7 +328,7 @@
+ 	}
+ 
+ 	(void) close(0);
+-	devnull = open("/dev/null", O_RDWR, 00666);
++	devnull = open("/System/Devices/null", O_RDWR, 00666);
+ 	if ((devnull != 0) && (dup2(devnull, 0) == 0))
+ 		close(devnull);
+ 
+diff -urN udev-058/etc/udev/udev.conf.in udev-058-adistroSTEP/etc/udev/udev.conf.in
+--- udev-058/etc/udev/udev.conf.in	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/etc/udev/udev.conf.in	2005-05-28 15:37:49.271752216 +1200
+@@ -2,13 +2,13 @@
+ #
+ 
+ # Where in the filesystem to place the device nodes
+-udev_root="@udevdir@"
++udev_root="/System/Devices"
+ 
+ # The name and location of the udev database.
+-udev_db="@udevdir@/.udevdb"
++udev_db="/System/Devices/.udevdb"
+ 
+ # The name and location of the udev rules file(s).
+-udev_rules="@configdir@/rules.d"
++udev_rules="/bootstrap/System/Settings/udev/rules.d"
+ 
+ # The syslog(3) priority: "err", "info", or the numerical value.
+ udev_log="err"
+diff -urN udev-058/etc/udev/udev.rules udev-058-adistroSTEP/etc/udev/udev.rules
+--- udev-058/etc/udev/udev.rules	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/etc/udev/udev.rules	2005-05-28 15:45:01.173093232 +1200
+@@ -5,11 +5,11 @@
+ #
+ 
+ # if this is a ide cdrom, name it the default name, and create a symlink to cdrom
+-BUS="ide", KERNEL="*[!0-9]", PROGRAM="/bin/cat /proc/ide/%k/media", RESULT="cdrom", NAME="%k", SYMLINK="cdrom"
++BUS="ide", KERNEL="*[!0-9]", PROGRAM="/bootstrap/System/Tools/cat /System/Processes/ide/%k/media", RESULT="cdrom", NAME="%k", SYMLINK="cdrom"
+ 
+ # create a symlink named after the device map name
+ # note devmap_name comes with extras/multipath
+-KERNEL="dm-[0-9]*", PROGRAM="/sbin/devmap_name %M %m", NAME="%k", SYMLINK="%c"
++KERNEL="dm-[0-9]*", PROGRAM="/System/Tools/devmap_name %M %m", NAME="%k", SYMLINK="%c"
+ 
+ # DRI devices always go into a subdirectory (as per the LSB spec)
+ KERNEL="card*", NAME="dri/card%n"
+diff -urN udev-058/libsysfs/sysfs/libsysfs.h udev-058-adistroSTEP/libsysfs/sysfs/libsysfs.h
+--- udev-058/libsysfs/sysfs/libsysfs.h	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/libsysfs/sysfs/libsysfs.h	2005-05-28 15:34:54.296352520 +1200
+@@ -44,7 +44,7 @@
+ #define SYSFS_BUS_ID_SIZE	32
+ 
+ /* mount path for sysfs, can be overridden by exporting SYSFS_PATH */
+-#define SYSFS_MNT_PATH		"/sys"
++#define SYSFS_MNT_PATH		"/System/SystemInfo"
+ 
+ enum sysfs_attribute_method {
+ 	SYSFS_METHOD_SHOW =	0x01,	/* attr can be read by user */
+diff -urN udev-058/udev.c udev-058-adistroSTEP/udev.c
+--- udev-058/udev.c	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/udev.c	2005-05-28 15:05:02.007821792 +1200
+@@ -66,7 +66,7 @@
+ 	if (!getenv("UDEVD_EVENT"))
+ 		return 0;
+ 
+-	fd = open("/proc/sys/kernel/hotplug", O_RDONLY);
++	fd = open("/System/Processes/sys/kernel/hotplug", O_RDONLY);
+ 	if (fd < 0)
+ 		return 0;
+ 
+diff -urN udev-058/udevd.c udev-058-adistroSTEP/udevd.c
+--- udev-058/udevd.c	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/udevd.c	2005-05-28 15:24:52.569828856 +1200
+@@ -671,7 +671,7 @@
+ 	setpriority(PRIO_PROCESS, 0, UDEVD_PRIORITY);
+ 
+ 	/* Set fds to dev/null */
+-	fd = open( "/dev/null", O_RDWR );
++	fd = open( "/System/Devices/null", O_RDWR );
+ 	if (fd >= 0)  {
+ 		dup2(fd, 0);
+ 		dup2(fd, 1);
+@@ -679,7 +679,7 @@
+ 		if (fd > 2)
+ 			close(fd);
+ 	} else
+-		err("error opening /dev/null %s", strerror(errno));
++		err("error opening /System/Devices/null %s", strerror(errno));
+ 
+ 	/* setup signal handler pipe */
+ 	retval = pipe(pipefds);
+diff -urN udev-058/udev.h udev-058-adistroSTEP/udev.h
+--- udev-058/udev.h	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/udev.h	2005-05-28 15:06:28.506671968 +1200
+@@ -39,10 +39,10 @@
+ #define SEQNUM_SIZE			32
+ #define VALUE_SIZE			128
+ 
+-#define DEVD_DIR			"/etc/dev.d"
++#define DEVD_DIR			"/bootstrap/System/Settings/udev/dev.d"
+ #define DEVD_SUFFIX			".dev"
+ 
+-#define HOTPLUGD_DIR			"/etc/hotplug.d"
++#define HOTPLUGD_DIR			"/bootstrap/System/Settings/udev/hotplug.d"
+ #define HOTPLUG_SUFFIX			".hotplug"
+ 
+ #define DEFAULT_PARTITIONS_COUNT	15
+diff -urN udev-058/udev_libc_wrapper.c udev-058-adistroSTEP/udev_libc_wrapper.c
+--- udev-058/udev_libc_wrapper.c	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/udev_libc_wrapper.c	2005-05-28 15:23:06.093015792 +1200
+@@ -125,8 +125,8 @@
+ 
+ #else /* __OWN_USERDB_PARSER__ */
+ 
+-#define PASSWD_FILE		"/etc/passwd"
+-#define GROUP_FILE		"/etc/group"
++#define PASSWD_FILE		"/bootstrap/System/Settings/passwd"
++#define GROUP_FILE		"/bootstrap/System/Settings/group"
+ 
+ /* return the id of a passwd style line, selected by the users name */
+ static unsigned long get_id_by_name(const char *uname, const char *dbfile)
+diff -urN udev-058/udev_rules.c udev-058-adistroSTEP/udev_rules.c
+--- udev-058/udev_rules.c	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/udev_rules.c	2005-05-28 15:25:25.667797200 +1200
+@@ -412,7 +412,7 @@
+ 	switch(pid) {
+ 	case 0:
+ 		/* child dup2 write side of pipe to STDOUT */
+-		devnull = open("/dev/null", O_RDWR);
++		devnull = open("/System/Devices/null", O_RDWR);
+ 		if (devnull >= 0) {
+ 			dup2(devnull, STDIN_FILENO);
+ 			dup2(devnull, STDERR_FILENO);
+diff -urN udev-058/udev_utils.c udev-058-adistroSTEP/udev_utils.c
+--- udev-058/udev_utils.c	2005-05-21 08:18:28.000000000 +1200
++++ udev-058-adistroSTEP/udev_utils.c	2005-05-28 15:33:41.574407936 +1200
+@@ -365,7 +365,7 @@
+ 	switch (pid) {
+ 	case 0:
+ 		/* child */
+-		devnull = open("/dev/null", O_RDWR);
++		devnull = open("/System/Devices/null", O_RDWR);
+ 		if (devnull >= 0) {
+ 			dup2(devnull, STDIN_FILENO);
+ 			dup2(devnull, STDOUT_FILENO);

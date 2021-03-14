@@ -1,0 +1,8 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--linux-libc-headers-->
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/linux-libc-headers-2.6.12.0.tar.bz2</amin:param>
+        </amin:command>
+</amin:profile>

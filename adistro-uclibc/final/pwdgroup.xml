@@ -1,0 +1,68 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--create passwd/group files-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='textdump'>
+                <amin:param name='target'>passwd</amin:param>
+                <amin:param name='content'>
+		root:x:0:0:root:/root:/bin/bash
+		</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+
+	<amin:command name='textdump'>
+                <amin:param name='target'>group</amin:param>
+                <amin:param name='content'>
+root:x:0:
+bin:x:1:
+sys:x:2:
+kmem:x:3:
+tty:x:4:
+tape:x:5:
+daemon:x:6:
+floppy:x:7:
+disk:x:8:
+lp:x:9:
+dialout:x:10:
+audio:x:11:
+video:x:12:
+utmp:x:13:
+usb:x:14:
+
+		</amin:param>
+                <amin:shell name='dir'>/etc</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name="system_command">
+		<amin:param name='basename'>touch</amin:param>
+		<amin:param>/var/run/utmp</amin:param>
+		<amin:param>/var/log/btmp</amin:param>
+		<amin:param>/var/log/lastlog</amin:param>
+		<amin:param>/var/log/wtmp</amin:param>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name="system_command">
+		<amin:param name='basename'>chgrp</amin:param>
+		<amin:param>utmp /var/run/utmp /var/log/lastlog</amin:param>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name="system_command">
+		<amin:param name='basename'>chmod</amin:param>
+		<amin:param>664</amin:param>
+		<amin:param>/var/run/utmp /var/log/lastlog</amin:param>
+		 <amin:shell name='dir'>/</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+</amin:chroot>
+
+</amin:profile>

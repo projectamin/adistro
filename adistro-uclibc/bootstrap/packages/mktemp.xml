@@ -1,0 +1,41 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--mktemp-->
+
+<!--retreiving package-->
+
+
+	<amin:download>
+		<amin:param name='uri'>ftp://ftp.mktemp.org/pub/mktemp/mktemp-1.5.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/mktemp-1.5.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/mktemp-1.5.tar.gz</amin:param>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:flag>prefix=/bootstrap</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/mktemp-1.5</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/mktemp-1.5</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/mktemp-1.5</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>mktemp-1.5</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build</amin:shell>
+	</amin:command>
+
+</amin:profile>

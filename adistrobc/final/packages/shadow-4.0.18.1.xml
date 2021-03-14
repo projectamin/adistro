@@ -1,0 +1,70 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/shadow-4.0.18.1.tar.gz</amin:param>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:shell name='dir'>/src/shadow-4.0.18.1</amin:shell>
+		<amin:flag>libdir=/lib
+			   sysconfdir=/etc
+			   enable-shared
+			   without-selinux</amin:flag>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/src/shadow-4.0.18.1</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/src/shadow-4.0.18.1</amin:shell>
+		<amin:shell name='env'>PATH=/usr/bin:/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='copy'>
+		<amin:param name='source'>limits login.access</amin:param>
+		<amin:param name='target'>/etc</amin:param>
+		<amin:shell name='dir'>/src/shadow-4.0.18.1/etc</amin:shell>
+	</amin:command>
+	<amin:command name='copy'>
+		<amin:param name='source'>login.defs</amin:param>
+		<amin:param name='target'>/etc/login.defs</amin:param>
+		<amin:shell name='dir'>/src/shadow-4.0.18.1/etc</amin:shell>
+	</amin:command>
+	<amin:command name='move'>
+		<amin:param name='source'>libshadow.*a</amin:param>
+		<amin:param name='target'>/usr/lib</amin:param>
+		<amin:shell name='dir'>/lib</amin:shell>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>libshadow.so.0</amin:param>
+		<amin:param name='target'>libshadow.so</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/lib</amin:shell>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>../../lib/libshadow.so</amin:param>
+		<amin:param name='target'>libshadow.so</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/usr/lib</amin:shell>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>vipw</amin:param>
+		<amin:param name='target'>vigr</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>vipw.8</amin:param>
+		<amin:param name='target'>vigr.8</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/usr/share/man/man8</amin:shell>
+	</amin:command>	
+	<amin:command name='remove'>
+		<amin:param name='target'>shadow-4.0.18.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

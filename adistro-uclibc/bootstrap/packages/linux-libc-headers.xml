@@ -1,0 +1,42 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--linux-libc-headers-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.26.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/linux-2.6.26.tar.bz2</amin:param>
+	</amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/linux-2.6.26.tar.bz2</amin:param>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>mrproper</amin:param>
+		<amin:shell name="dir">/opt/adistro-uclibc/build/linux-2.6.26/</amin:shell>
+	</amin:command>
+        <amin:command name='make'>
+                <amin:param>headers_install</amin:param>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/linux-2.6.26/</amin:shell>
+        </amin:command>
+        <amin:command name='make'>
+                <amin:param>headers_check</amin:param>
+                <amin:shell name="dir">/opt/adistro-uclibc/build/linux-2.6.26/</amin:shell>
+        </amin:command>
+        <amin:command name='copy'>
+                <amin:flag>Rv</amin:flag>
+                <amin:param name="source">/opt/adistro-uclibc/build/linux-2.6.26/usr/include/*</amin:param>
+                <amin:param name="target">/adistro-uclibc-bootstrap/include/</amin:param>
+        </amin:command>
+
+<!--no furthur voodoo required here -->
+
+	<amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+		<amin:param name='target'>linux-2.6.26</amin:param>
+		<amin:shell name="dir">/opt/adistro-uclibc/build</amin:shell>
+	</amin:command>
+	
+</amin:profile>

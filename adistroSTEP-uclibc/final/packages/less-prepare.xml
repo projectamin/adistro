@@ -1,0 +1,27 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Less-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/less/less-381.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/less-381.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/less-381-STEP.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/less-381-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/less-381.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/less-381-STEP.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/less-381</amin:shell>
+        </amin:command>
+</amin:profile>

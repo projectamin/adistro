@@ -1,0 +1,30 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+        <amin:command name='textdump'>
+                <amin:param name='target'>passwd</amin:param>
+                <amin:param name='content'>root:x:0:0:root:/root:/bin/bash
+					   bin:x:1:1:root:/bin:/bin/sh
+					   daemon:x:1:4:daemon:/usr/sbin:/bin/sh
+		</amin:param>
+                <amin:shell name='dir'>/opt/adistrobc/etc</amin:shell>
+        </amin:command>
+	<amin:command name='textdump'>
+                <amin:param name='target'>group</amin:param>
+                <amin:param name='content'>root:x:0:
+					   bin:x:1:
+					   sys:x:2:
+					   adm:x:3:
+					   daemon:x:4:
+					   mail:x:5:
+					   news:x:6:
+					   uucp:x:7:
+					   kmem:x:8:
+					   tty:x:9:
+					   tape:x:10:
+					   floppy:x:11:
+					   disk:x:12:
+					   lp:x:13:
+					   dialout:x:14:
+					   audio:x:15:</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/etc</amin:shell>
+        </amin:command>
+</amin:profile>

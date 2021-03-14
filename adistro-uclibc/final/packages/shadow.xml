@@ -1,0 +1,51 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--shadow-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/shadow-4.0.3.tar.gz</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/packages/shadow-4.0.3-adistro-uclibc.patch</amin:flag>
+                <amin:shell name="dir">/build/shadow-4.0.3</amin:shell>
+		 <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+		<amin:flag>
+		prefix=/usr
+		enable-shared
+		sysconfdir=/etc
+		without-selinux
+		</amin:flag>
+                <amin:shell name='dir'>/build/shadow-4.0.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/shadow-4.0.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/shadow-4.0.3</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">shadow-4.0.3</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

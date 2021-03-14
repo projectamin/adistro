@@ -1,0 +1,74 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--UClibc-->
+<amin:chroot dir='/opt/adistro-uclibc'>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/build</amin:param>
+		<amin:param name='archive'>/packages/uClibc-0.9.29.tar.bz2</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name="patch">
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/packages/uClibc-0.9.29-adistro-config-3.patch</amin:flag>
+		<amin:shell name="dir">/build/uClibc-0.9.29</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='system_command'>
+		<amin:param name='basename'>install</amin:param>
+		<amin:param>-m444 /packages/uClibc-locale-030818.tgz extra/locale/</amin:param>
+		<amin:shell name="dir">/build/uClibc-0.9.29</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/build/uClibc-0.9.29</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os -fgnu89-inline</amin:shell>
+	</amin:command>
+        <amin:command name='make'>
+		<amin:param>headers</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.29</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+                <amin:shell name='env'>CFLAGS=-Os -fgnu89-inline</amin:shell>
+        </amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/build/uClibc-0.9.29</amin:shell>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+<!--        <amin:command name='make'>
+                <amin:param>install-headers</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.29</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>-->
+        <amin:command name='make'>
+                <amin:param>-C utils</amin:param>
+                <amin:shell name='dir'>/build/uClibc-0.9.29</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+		<amin:shell name='env'>CFLAGS=-Os</amin:shell>
+		<amin:shell name='env'>CC="gcc -Wl,--dynamic-linker,/lib/ld-uClibc.so.0 /lib/libc.so.0"</amin:shell>
+        </amin:command>
+	<amin:command name='system_command'>
+		<amin:param name='basename'>install</amin:param>
+		<amin:flag>v</amin:flag>
+		<amin:param>utils/iconv /usr/bin/</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+        <amin:command name='system_command'>
+                <amin:param name='basename'>install</amin:param>
+                <amin:flag>v</amin:flag>
+                <amin:param>utils/ldd /usr/bin/</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+        <amin:command name='system_command'>
+                <amin:param name='basename'>install</amin:param>
+                <amin:flag>v</amin:flag>
+                <amin:param>utils/ldconfig /sbin/</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>uClibc-0.9.29</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/build/</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

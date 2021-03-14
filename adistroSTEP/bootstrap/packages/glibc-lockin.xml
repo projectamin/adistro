@@ -1,0 +1,87 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!-- glibc-lockin -->
+
+        <amin:command name='copy'>
+                <amin:param name='source'>specs</amin:param>
+		<amin:param name='target'>/bootstrap/System/Applications/GCC-4.1.1/lib/gcc/i686-pc-linux-gnu/4.1.1/</amin:param>
+                <amin:shell name='dir'>/opt/adistro/packages/</amin:shell>
+        </amin:command>
+
+	<amin:command name='make'>
+		<amin:param>-C ld install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/binutils-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools:/Local/AdminTools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/bootstrap/System/Applications/GCC-4.1.1/lib/:/bootstrap/System/Library/Libraries/Glibc-2.4/lib</amin:shell>
+	</amin:command>
+
+	<amin:command name='search_replace'>
+		<amin:param name='target'>specs</amin:param>
+		<amin:flag name='find'>/lib/ld-linux.so.2</amin:flag>
+		<amin:flag name='replace'>/bootstrap/System/Library/Libraries/Glibc-2.4/lib/ld-adistro.so.2</amin:flag>
+		<amin:shell name='dir'>/bootstrap/System/Applications/GCC-4.1.1/lib/gcc/i686-pc-linux-gnu/4.1.1/</amin:shell>
+	</amin:command>
+
+<!-- end of cond arch -->
+	
+	<amin:command name='remove'>
+		<amin:param name='target'>binutils-2.17</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>binutils-build</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>/bootstrap/System/Applications/GCC-4.1.1/lib/gcc/*/*/include/pthread.h</amin:param>
+		<amin:flag>rf</amin:flag>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>/bootstrap/System/Applications/GCC-4.1.1/lib/gcc/*/*/include/bits/sigthread.h</amin:param>
+		<amin:flag>rf</amin:flag>
+	</amin:command>
+
+	<!--remove GCC and binutils and glibc build dirs-->
+		
+	<amin:command name='remove'>
+		<amin:param name='target'>GCC-build</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>GCC-4.1.1</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>binutils-2.17</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>binutils-build</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>glibc-2.4</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>glibc-build</amin:param>
+                <amin:flag>rf</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+        </amin:command>
+
+</amin:profile>

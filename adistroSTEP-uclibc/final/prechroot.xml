@@ -1,0 +1,117 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Setting up initial chroot bindings from host-->
+
+        <amin:command name='mkdir'>
+                <amin:flag>p</amin:flag>
+                <amin:param name='target'>System</amin:param>
+                <amin:shell name='dir'>/opt/adistro</amin:shell>
+        </amin:command>
+
+        <amin:command name='mkdir'>
+                <amin:flag>p</amin:flag>
+                <amin:param name='target'>Devices</amin:param>
+                <amin:shell name='dir'>/opt/adistro/System</amin:shell>
+        </amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>SystemInfo</amin:param>
+		<amin:shell name='dir'>/opt/adistro/System/</amin:shell>
+	</amin:command>
+
+        <amin:command name='mkdir'>
+                <amin:flag>p</amin:flag>
+                <amin:param name='target'>Processes</amin:param>
+                <amin:shell name='dir'>/opt/adistro/System/</amin:shell>
+        </amin:command>
+
+<!--Mount Proc-->
+
+        <amin:command name='mount'>
+                <amin:flag name='type'>proc</amin:flag>
+                <amin:param name='device'>proc</amin:param>
+                <amin:param name='target'>/opt/adistro/System/Processes/</amin:param>
+        </amin:command>
+
+<!--Mount SysFS-->
+
+        <amin:command name='mount'>
+                <amin:flag name='type'>sysfs</amin:flag>
+                <amin:param name='device'>sysfs</amin:param>
+                <amin:param name='target'>/opt/adistro/System/SystemInfo</amin:param>
+        </amin:command>
+
+<!--Creating a few more bindings before directory structure is created in chroot-->
+
+        <amin:command name='mount'>
+		<amin:flag>f</amin:flag>
+                <amin:flag name='type'>ramfs</amin:flag>
+                <amin:param name='device'>ramfs</amin:param>
+                <amin:param name='target'>/opt/adistro/System/Devices/</amin:param>
+	        </amin:command>
+
+        <amin:command name='mount'>
+                <amin:flag>f</amin:flag>
+                <amin:flag name='type'>tmpfs</amin:flag>
+                <amin:param name='device'>tmpfs</amin:param>
+                <amin:param name='target'>/opt/adistro/System/Devices/shm</amin:param>
+        </amin:command>
+
+        <amin:command name='mount'>
+                <amin:flag>f</amin:flag>
+		<amin:flag name="type">devpts</amin:flag>
+                <amin:param>-o gid=4,mode=620</amin:param>
+		<amin:param name="device">devpts</amin:param>
+                <amin:param name='target'>/opt/adistro/System/Devices/pts</amin:param>
+        </amin:command>
+	
+	
+	<!-- this installs amin and base perl stuff to allow amin to work in chroot -->
+	<!-- A temp /etc is created to allow the host perl to find modules -->
+	
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/opt/adistro/usr</amin:param>
+	</amin:command>
+	
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/opt/adistro/usr/lib</amin:param>
+	</amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/opt/adistro/usr/lib/perl5</amin:param>
+        </amin:command>
+
+        <!-- gentoo <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/opt/adistro/usr/lib/perl5/site_perl</amin:param>
+        </amin:command>-->
+	
+	<!-- gentoo <amin:command name='copy'>
+		<amin:flag>av</amin:flag>
+		<amin:param name='source'>/usr/lib/perl5/site_perl/5.8.8/*</amin:param>
+		<amin:param name='target'>/opt/adistro/usr/lib/perl5/site_perl/</amin:param>
+	</amin:command>-->
+
+        <amin:command name='copy'>
+                <amin:flag>av</amin:flag>
+                <amin:param name='source'>/usr/local/share/perl/5.8.8/*</amin:param>
+                <amin:param name='target'>/opt/adistro/usr/lib/perl5/</amin:param>
+        </amin:command>
+	
+	<!-- gentoo <amin:command name='copy'>
+		<amin:flag>av</amin:flag>
+		<amin:param name='source'>/usr/lib/perl5/5.8.8/*</amin:param>
+		<amin:param name='target'>/opt/adistro/usr/lib/perl5/site_perl/</amin:param>
+	</amin:command>-->
+
+	<amin:command name='copy'>
+                <amin:flag>av</amin:flag>
+                <amin:param name='source'>/usr/lib/perl/5.8.8/*</amin:param>
+                <amin:param name='target'>/opt/adistro/usr/lib/perl5/site_perl/</amin:param>
+        </amin:command>
+
+</amin:profile>

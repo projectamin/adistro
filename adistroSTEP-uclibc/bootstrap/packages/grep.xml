@@ -1,0 +1,85 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Grep-->
+
+<!--retreiving package-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/grep/grep-2.5.1.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/grep-2.5.1.tar.bz2</amin:param>
+	</amin:download>
+	
+	<amin:download>
+		<amin:param name='alt'>http://adistroSTEP.st8vrt.com/patches/grep-2.5.1-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/grep-2.5.1-STEP.patch</amin:param>
+        </amin:download>	
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/grep-2.5.1.tar.bz2</amin:param>
+	</amin:command>
+	
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name='input'>/opt/adistro/packages/grep-2.5.1-STEP.patch</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/grep-2.5.1</amin:shell>
+        </amin:command>	
+
+	<amin:command name='configure'>
+		<amin:flag>
+		prefix=/bootstrap/System/Applications/Grep-2.5.1/ 
+		disable-perl-regexp
+		with-included-regex
+	        </amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/grep-2.5.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/grep-2.5.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/grep-2.5.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<!--<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>-->
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>grep-2.5.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Grep-2.5.1/bin/egrep</amin:param>
+		<amin:param name='target'>egrep</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Grep-2.5.1/bin/fgrep</amin:param>
+		<amin:param name='target'>fgrep</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Grep-2.5.1/bin/grep</amin:param>
+		<amin:param name='target'>grep</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='search_replace'>
+                <amin:param name='target'>fgrep</amin:param>
+		<amin:param name='find'>/bin/sh</amin:param>
+		<amin:param name='find'>/bootstrap/System/Tools/sh</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Applications/Grep-2.5.1/bin/</amin:shell>
+        </amin:command>	
+
+</amin:profile>

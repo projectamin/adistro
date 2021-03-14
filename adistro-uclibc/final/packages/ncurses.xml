@@ -1,0 +1,81 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--ncurses-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/ncurses-5.6.tar.gz</amin:param>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='configure'>
+                <amin:flag>
+		prefix=/usr
+                with-shared
+		without-debug
+                </amin:flag>
+                <amin:shell name='dir'>/build/ncurses-5.6</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+                <amin:shell name='dir'>/build/ncurses-5.6</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='make'>
+		<amin:param>install</amin:param>
+                <amin:shell name='dir'>/build/ncurses-5.6</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='system_command'>
+		<amin:param name='basename'>chmod</amin:param>
+		<amin:param>755 /usr/lib/libform.so.5.6 /usr/lib/libmenu.so.5.6 /usr/lib/libncurses.so.5.6 /usr/lib/libpanel.so.5.6</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='system_command'>
+		<amin:param name='basename'>chmod</amin:param>
+		<amin:param>644 /usr/lib/libncurses++.a</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='move'>
+		<amin:param name='source'>/usr/lib/libncurses.so.5*</amin:param>
+		<amin:param name='target'>/lib</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>/lib/libncurses.so.5</amin:param>
+		<amin:param name='target'>/usr/lib/libncurses.so</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>/usr/lib/libncurses.so</amin:param>
+		<amin:param name='target'>/usr/lib/libcurses.so</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+
+
+        <amin:command name='remove'>
+		<amin:flag>rf</amin:flag>
+                <amin:param name="target">ncurses-5.6</amin:param>
+                <amin:shell name='dir'>/build</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

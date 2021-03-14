@@ -1,0 +1,82 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Diffutils-->
+
+<!--retrieving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://freshmeat.net/redir/diffutils/1891/url_tgz/diffutils-2.8.1.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/diffutils-2.8.1.tar.gz</amin:param>
+	</amin:download>
+	
+	<amin:download>
+		<amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/diffutils-2.8.1-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/diffutils-2.8.1-STEP.patch</amin:param>
+	</amin:download>	
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/diffutils-2.8.1.tar.gz</amin:param>
+	</amin:command>
+
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:param name='input'>../../packages/diffutils-2.8.1-STEP.patch</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/diffutils-2.8.1</amin:shell>
+	</amin:command>	
+
+	<amin:command name='configure'>
+		<amin:shell name='dir'>/opt/adistro/build/diffutils-2.8.1</amin:shell>
+		<amin:flag>
+		prefix=/bootstrap/System/Applications/Diffutils-2.8.1
+		</amin:flag>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/diffutils-2.8.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/diffutils-2.8.1</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/bootstrap/System/Library/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name='env'>LDFLAGS=-lrc</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>diffutils-2.8.1</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Diffutils-2.8.1/bin/cmp</amin:param>
+		<amin:param name='target'>cmp</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Diffutils-2.8.1/bin/diff</amin:param>
+		<amin:param name='target'>diff</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Diffutils-2.8.1/bin/diff3</amin:param>
+		<amin:param name='target'>diff3</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Applications/Diffutils-2.8.1/bin/sdiff</amin:param>
+		<amin:param name='target'>sdiff</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>	
+</amin:profile>

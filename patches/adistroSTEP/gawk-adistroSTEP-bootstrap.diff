@@ -1,0 +1,275 @@
+diff -urN gawk-3.1.4/builtin.c gawk-3.1.4-adistroSTEP/builtin.c
+--- gawk-3.1.4/builtin.c	2004-07-13 19:55:28.000000000 +1200
++++ gawk-3.1.4-adistroSTEP/builtin.c	2005-06-13 18:28:23.000000000 +1200
+@@ -174,18 +174,18 @@
+ /* stdfile --- return fp for a standard file */
+ 
+ /*
+- * This function allows `fflush("/dev/stdout")' to work.
++ * This function allows `fflush("/System/Devices/stdout")' to work.
+  * The other files will be available via getredirect().
+- * /dev/stdin is not included, since fflush is only for output.
++ * /System/Devices/stdin is not included, since fflush is only for output.
+  */
+ 
+ static FILE *
+ stdfile(const char *name, size_t len)
+ {
+ 	if (len == 11) {
+-		if (STREQN(name, "/dev/stderr", 11))
++		if (STREQN(name, "/System/Devices/stderr", 11))
+ 			return stderr;
+-		else if (STREQN(name, "/dev/stdout", 11))
++		else if (STREQN(name, "/System/Devices/stdout", 11))
+ 			return stdout;
+ 	}
+ 
+diff -urN gawk-3.1.4/io.c gawk-3.1.4-adistroSTEP/io.c
+--- gawk-3.1.4/io.c	2004-07-29 01:41:56.000000000 +1200
++++ gawk-3.1.4-adistroSTEP/io.c	2005-06-13 18:26:18.000000000 +1200
+@@ -1246,7 +1246,7 @@
+ }
+ #endif /* HAVE_SOCKETS */
+ 
+-/* devopen --- handle /dev/std{in,out,err}, /dev/fd/N, regular files */
++/* devopen --- handle /System/Devices/std{in,out,err}, /System/Devices/fd/N, regular files */
+ 
+ /*
+  * This separate version is still needed for output, since file and pipe
+@@ -1284,7 +1284,7 @@
+ 		return openfd;
+ 	}
+ 
+-	if (STREQN(name, "/dev/", 5)) {
++	if (STREQN(name, "/System/Devices/", 5)) {
+ 		cp = (char *) name + 5;
+ 
+ 		if (STREQ(cp, "stdin") && (flag & O_ACCMODE) == O_RDONLY)
+@@ -1465,7 +1465,7 @@
+ #define getpgrp_arg() getpid()
+ #endif
+ 
+-/* pidopen --- "open" /dev/pid, /dev/ppid, and /dev/pgrpid */
++/* pidopen --- "open" /System/Devices/pid, /System/Devices/ppid, and /System/Devices/pgrpid */
+ 
+ static int
+ pidopen(IOBUF *iop, const char *name, const char *mode ATTRIBUTE_UNUSED)
+@@ -1488,10 +1488,10 @@
+ 	return 0;
+ }
+ 
+-/* useropen --- "open" /dev/user */
++/* useropen --- "open" /System/Devices/user */
+ 
+ /*
+- * /dev/user creates a record as follows:
++ * /System/Devices/user creates a record as follows:
+  *	$1 = getuid()
+  *	$2 = geteuid()
+  *	$3 = getgid()
+@@ -1506,7 +1506,7 @@
+ 	char tbuf[BUFSIZ], *cp;
+ 	int i;
+ 
+-	warning(_("use `PROCINFO[...]' instead of `/dev/user'"));
++	warning(_("use `PROCINFO[...]' instead of `/System/Devices/user'"));
+ 
+ 	sprintf(tbuf, "%d %d %d %d", (int) getuid(), (int) geteuid(), (int) getgid(), (int) getegid());
+ 
+@@ -1540,15 +1540,15 @@
+ 		int (*fp) P((IOBUF *, const char *, const char *));
+ 		IOBUF iob;
+ 	} table[] = {
+-		{ "/dev/fd/",		8,	specfdopen },
+-		{ "/dev/stdin",		10,	specfdopen },
+-		{ "/dev/stdout",	11,	specfdopen },
+-		{ "/dev/stderr",	11,	specfdopen },
++		{ "/System/Devices/fd/",		8,	specfdopen },
++		{ "/System/Devices/stdin",		10,	specfdopen },
++		{ "/System/Devices/stdout",	11,	specfdopen },
++		{ "/System/Devices/stderr",	11,	specfdopen },
+ 		{ "/inet/",		6,	specfdopen },
+-		{ "/dev/pid",		8,	pidopen },
+-		{ "/dev/ppid",		9,	pidopen },
+-		{ "/dev/pgrpid",	11,	pidopen },
+-		{ "/dev/user",		9,	useropen },
++		{ "/System/Devices/pid",		8,	pidopen },
++		{ "/System/Devices/ppid",		9,	pidopen },
++		{ "/System/Devices/pgrpid",	11,	pidopen },
++		{ "/System/Devices/user",		9,	useropen },
+ 	};
+ 	int devcount = sizeof(table) / sizeof(table[0]);
+ 
+@@ -1558,7 +1558,7 @@
+ 		openfd = fileno(stdin);
+ 	else if (do_traditional)
+ 		goto strictopen;
+-	else if (STREQN(name, "/dev/", 5) || STREQN(name, "/inet/", 6)) {
++	else if (STREQN(name, "/System/Devices/", 5) || STREQN(name, "/inet/", 6)) {
+ 		int i;
+ 
+ 		for (i = 0; i < devcount; i++) {
+@@ -1678,11 +1678,11 @@
+ 		if (! initialized) {
+ 			initialized = TRUE;
+ #ifdef HAVE_GRANTPT
+-			have_dev_ptmx = (stat("/dev/ptmx", &statb) >= 0);
++			have_dev_ptmx = (stat("/System/Devices/ptmx", &statb) >= 0);
+ #endif
+ 			c = 'p';
+ 			do {
+-				sprintf(slavenam, "/dev/pty%c0", c);
++				sprintf(slavenam, "/System/Devices/pty%c0", c);
+ 				if (stat(slavenam, &statb) >= 0) {
+ 					first_pty_letter = c;
+ 					break;
+@@ -1694,7 +1694,7 @@
+ 
+ #ifdef HAVE_GRANTPT
+ 		if (have_dev_ptmx) {
+-			master = open("/dev/ptmx", O_RDWR);
++			master = open("/System/Devices/ptmx", O_RDWR);
+ 			if (master >= 0) {
+ 				char *tem;
+ 
+@@ -1712,7 +1712,7 @@
+ 
+ 		if (first_pty_letter) {
+ 			/*
+-			 * Assume /dev/ptyXNN and /dev/ttyXN naming system.
++			 * Assume /System/Devices/ptyXNN and /System/Devices/ttyXN naming system.
+ 			 * The FIRST_PTY_LETTER gives the first X to try. We try in the 
+ 			 * sequence FIRST_PTY_LETTER, .., 'z', 'a', .., FIRST_PTY_LETTER.
+ 			 * Is this worthwhile, or just over-zealous?
+@@ -1721,14 +1721,14 @@
+ 			do {
+ 				int i;
+ 				for (i = 0; i < 16; i++) {
+-					sprintf(slavenam, "/dev/pty%c%x", c, i);
++					sprintf(slavenam, "/System/Devices/pty%c%x", c, i);
+ 					if (stat(slavenam, &statb) < 0) {
+ 						no_ptys = TRUE;	/* bypass all this next time */
+ 						goto use_pipes;
+ 					}
+ 
+ 					if ((master = open(slavenam, O_RDWR)) >= 0) {
+-						slavenam[sizeof("/dev/") - 1] = 't';
++						slavenam[sizeof("/System/Devices/") - 1] = 't';
+ 						if (access(slavenam, R_OK | W_OK) == 0)
+ 							goto got_the_pty;
+ 						close(master);
+diff -urN gawk-3.1.4/main.c gawk-3.1.4-adistroSTEP/main.c
+--- gawk-3.1.4/main.c	2004-07-29 01:42:19.000000000 +1200
++++ gawk-3.1.4-adistroSTEP/main.c	2005-06-09 22:38:20.000000000 +1200
+@@ -1058,7 +1058,7 @@
+ 	exit(0);
+ }
+ 
+-/* init_fds --- check for 0, 1, 2, open on /dev/null if possible */
++/* init_fds --- check for 0, 1, 2, open on /System/Devices/null if possible */
+ 
+ static void
+ init_fds()
+@@ -1074,12 +1074,12 @@
+ 			if (do_lint)
+ 				lintwarn(_("no pre-opened fd %d"), fd);
+ #endif
+-			newfd = devopen("/dev/null", "r+");
++			newfd = devopen("/System/Devices/null", "r+");
+ 			/* turn off some compiler warnings "set but not used" */
+ 			newfd += 0;
+ #ifdef MAKE_A_HEROIC_EFFORT
+ 			if (do_lint && newfd < 0)
+-				lintwarn(_("could not pre-open /dev/null for fd %d"), fd);
++				lintwarn(_("could not pre-open /System/Devices/null for fd %d"), fd);
+ #endif
+ 		}
+ 	}
+diff -urN gawk-3.1.4/pc/gawkmisc.pc gawk-3.1.4-adistroSTEP/pc/gawkmisc.pc
+--- gawk-3.1.4/pc/gawkmisc.pc	2003-10-27 02:58:29.000000000 +1300
++++ gawk-3.1.4-adistroSTEP/pc/gawkmisc.pc	2005-06-13 23:35:46.000000000 +1200
+@@ -129,7 +129,7 @@
+ 	/* do not use open(name, flag) here !!! */
+ 	return -1;
+ #else
+-	if (strcmp(name, "/dev/null") == 0)
++	if (strcmp(name, "/System/Devices/null") == 0)
+ 		return open("NUL", flag);
+ 	/* FIXME: */
+ 	/* else if (strcmp(name, "/dev/tty") == 0)
+diff -urN gawk-3.1.4/random.c gawk-3.1.4-adistroSTEP/random.c
+--- gawk-3.1.4/random.c	2002-11-01 22:06:39.000000000 +1300
++++ gawk-3.1.4-adistroSTEP/random.c	2005-06-13 18:21:45.000000000 +1200
+@@ -326,7 +326,7 @@
+ 
+ 	done = 0;
+ #ifdef O_RDONLY
+-	fd = open("/dev/urandom", O_RDONLY, 0);
++	fd = open("/System/Devices/urandom", O_RDONLY, 0);
+ 	if (fd >= 0) {
+ 		if (read(fd, (void *) state, len) == (ssize_t) len)
+ 			done = 1;
+diff -urN gawk-3.1.4/vms/vms_misc.c gawk-3.1.4-adistroSTEP/vms/vms_misc.c
+--- gawk-3.1.4/vms/vms_misc.c	2003-02-04 23:35:40.000000000 +1300
++++ gawk-3.1.4-adistroSTEP/vms/vms_misc.c	2005-06-13 18:30:29.000000000 +1200
+@@ -112,12 +112,12 @@
+ {
+     int result;
+ 
+-    if (STREQN(name, "/dev/", 5)) {
++    if (STREQN(name, "/System/Devices/", 5)) {
+ 	/* (this used to be handled in vms_devopen(), but that is only
+ 	   called when opening files for output; we want it for input too) */
+-	if (strcmp(name + 5, "null") == 0)	/* /dev/null -> NL: */
++	if (strcmp(name + 5, "null") == 0)	/* /System/Devices/null -> NL: */
+ 	    name = "NL:";
+-	else if (strcmp(name + 5, "tty") == 0)	/* /dev/tty -> TT: */
++	else if (strcmp(name + 5, "tty") == 0)	/* /System/Devices/tty -> TT: */
+ 	    name = "TT:";
+     }
+ 
+@@ -271,7 +271,7 @@
+  *	VMS_fstat() and VMS_stat() were static in cccp.c but need to be
+  *	accessible to the whole program here.  Also, the special handling
+  *	for the null device has been introduced for gawk's benefit, to
+- *	prevent --lint mode from giving spurious warnings about /dev/null
++ *	prevent --lint mode from giving spurious warnings about /System/Devices/null
+  *	being empty if it's used as an input file.
+  */
+ 
+@@ -314,7 +314,7 @@
+       /* No fclose(fp) here; that would close(fd) as well.  */
+     }
+ 
+-  if (result == 0		/* GAWK addition; fixup /dev/null flags */
++  if (result == 0		/* GAWK addition; fixup /System/Devices/null flags */
+       && (statbuf->st_mode & S_IFREG)
+       && STREQ(statbuf->st_dev, "_NLA0:"))
+     {
+@@ -361,7 +361,7 @@
+ 	}
+     }
+ 
+-  if (result == 0		/* GAWK addition; fixup /dev/null flags */
++  if (result == 0		/* GAWK addition; fixup /System/Devices/null flags */
+       && (statbuf->st_mode & S_IFREG)
+       && STREQ(statbuf->st_dev, "_NLA0:"))
+     {
+diff -urN gawk-3.1.4/ylwrap gawk-3.1.4-adistroSTEP/ylwrap
+--- gawk-3.1.4/ylwrap	2004-06-22 01:38:34.000000000 +1200
++++ gawk-3.1.4-adistroSTEP/ylwrap	2005-06-11 10:00:43.000000000 +1200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /System/Tools/sh
+ # ylwrap - wrapper for lex/yacc invocations.
+ 
+ scriptversion=2003-11-18.20
+@@ -100,7 +100,7 @@
+ # FIXME: add hostname here for parallel makes that run commands on
+ # other machines.  But that might take us over the 14-char limit.
+ dirname=ylwrap$$
+-trap "cd `pwd`; rm -rf $dirname > /dev/null 2>&1" 1 2 3 15
++trap "cd `pwd`; rm -rf $dirname > /System/Devices/null 2>&1" 1 2 3 15
+ mkdir $dirname || exit 1
+ 
+ cd $dirname

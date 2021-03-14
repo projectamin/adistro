@@ -1,0 +1,232 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--Glibc-->
+
+<!--retreiving package-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/glibc/glibc-2.4.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/glibc-2.4.tar.bz2</amin:param>
+	</amin:download>
+        <amin:download>
+		<amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/glibc-2.4-bootstrap-STEP.patch</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/glibc-2.4-bootstrap-STEP.patch</amin:param>
+        </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/glibc-2.4.tar.bz2</amin:param>
+	</amin:command>
+
+	<amin:command name='patch'>
+		<amin:flag>Np1</amin:flag>
+		<amin:param name='input'>../../packages/glibc-2.4-bootstrap-STEP.patch</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/glibc-2.4</amin:shell>
+	</amin:command>
+        	
+	<amin:command name='mkdir'>
+		<amin:param name='target'>glibc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+       
+	<amin:command name='configure'>
+		<amin:param name='config'>../glibc-2.4/configure</amin:param>
+		<amin:flag>
+		 disable-profile 
+		 enable-add-ons
+		 enable-kernel=2.6.0 
+		 with-tls 
+		 with-headers=/bootstrap/System/Library/Headers/
+		 with-binutils=/bootstrap/System/Applications/Binutils-2.17/
+		 without-gd
+		 without-cvs
+		 with-__thread
+		 cache-file=/bootstrap/System/Devices/null
+		 prefix=/bootstrap/System/Library/Libraries/Glibc-2.4/
+		 sysconfdir=/bootstrap/System/Settings/
+		 includedir=/bootstrap/System/Library/Headers/
+		</amin:flag>
+		<amin:shell name="dir">/opt/adistro/build/glibc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/System/AdminTools:/Local/Tools:/Local/AdminTools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/bootstrap/System/Applications/GCC-4.1.1/lib/</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro/build/glibc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/System/AdminTools:/Local/Tools:/Local/AdminTools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/bootstrap/System/Applications/GCC-4.1.1/lib/</amin:shell>
+	</amin:command>
+
+        <amin:command name='system_command'>
+                <amin:param name='basename'>touch</amin:param>
+                <amin:param>/bootstrap/System/Settings/ld.so.conf</amin:param>
+        </amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/glibc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/System/AdminTools:/Local/Tools:/Local/AdminTools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/bootstrap/System/Applications/GCC-4.1.1/lib/</amin:shell>
+	</amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/catchsegv</amin:param>
+                <amin:param name='target'>catchsegv</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/getconf</amin:param>
+                <amin:param name='target'>getconf</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/iconv</amin:param>
+                <amin:param name='target'>iconv</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/lddlibc4</amin:param>
+                <amin:param name='target'>lddlibc4</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/localedef</amin:param>
+                <amin:param name='target'>localedef</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/pcprofiledump</amin:param>
+                <amin:param name='target'>pcprofiledump</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/sprof</amin:param>
+                <amin:param name='target'>sprof</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/xtrace</amin:param>
+                <amin:param name='target'>xtrace</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/gencat</amin:param>
+                <amin:param name='target'>gencat</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/getent</amin:param>
+                <amin:param name='target'>getent</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/ldd</amin:param>
+                <amin:param name='target'>ldd</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/locale</amin:param>
+                <amin:param name='target'>locale</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/mtrace</amin:param>
+                <amin:param name='target'>mtrace</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/rpcgen</amin:param>
+                <amin:param name='target'>rpcgen</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Libraries/Glibc-2.4/bin/tzselect</amin:param>
+                <amin:param name='target'>tzselect</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/iconvconfig</amin:param>
+		<amin:param name='target'>iconvconfig</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/ldconfig</amin:param>
+		<amin:param name='target'>ldconfig</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/nscd</amin:param>
+		<amin:param name='target'>nscd</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/nscd_nischeck</amin:param>
+		<amin:param name='target'>nscd_nischeck</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/rpcinfo</amin:param>
+		<amin:param name='target'>rpcinfo</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/sln</amin:param>
+		<amin:param name='target'>sln</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>	
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/zdump</amin:param>
+		<amin:param name='target'>zdump</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+	
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>../Libraries/Glibc-2.4/sbin/zic</amin:param>
+		<amin:param name='target'>zic</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Tools/</amin:shell>
+        </amin:command>
+</amin:profile>

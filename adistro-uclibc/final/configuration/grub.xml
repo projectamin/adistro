@@ -1,0 +1,27 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--grub-->
+
+<amin:chroot dir='/opt/adistro'>
+
+        <amin:command name='textdump'>
+		<amin:param name='content'>
+# Begin /boot/grub/menu.lst
+# By default boot the first menu entry.
+default 0
+# Allow 30 seconds before booting the default.
+timeout 30
+# Use prettier colors.
+color green/black light-green/black
+# The first entry is for Adistro.
+title Adistro-uClibc-concept-v0.1
+root (hd0,1)
+kernel /boot/adistro-2.6.12-rc6-love1 root=/dev/md0 vga=791 
+		</amin:param>
+                <amin:shell name='target'>/boot/grub/menu.lst</amin:shell>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

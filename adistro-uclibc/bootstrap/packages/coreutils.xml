@@ -1,0 +1,60 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--coreutils-->
+
+<!--retreiving packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/coreutils/coreutils-6.9.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/coreutils-6.9.tar.bz2</amin:param>
+	</amin:download>
+
+        <!--<amin:download>
+                <amin:param name='uri'>http://mirror.vtx.ch/patches/downloads/coreutils/coreutils-6.9-uname_PIC-1.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/coreutils-6.9-uname_PIC-1.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://mirror.vtx.ch/patches/downloads/coreutils/coreutils-6.9-suppress_uptime_kill_su-1.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/coreutils-6.9-suppress_uptime_kill_su-1.patch</amin:param>
+        </amin:download>-->
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro-uclibc/build</amin:param>
+		<amin:param name='archive'>/opt/adistro-uclibc/packages/coreutils-6.9.tar.bz2</amin:param>
+	</amin:command>
+
+        <!--<amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>/opt/adistro-uclibc/packages/coreutils-6.9-suppress_uptime_kill_su-1.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/coreutils-6.9</amin:shell>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>/opt/adistro-uclibc/packages/coreutils-6.9-uname_PIC-1.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro-uclibc/build/coreutils-6.9</amin:shell>
+        </amin:command>-->
+
+	<amin:command name='configure'>
+		<amin:flag>prefix=/bootstrap</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/coreutils-6.9</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/coreutils-6.9</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build/coreutils-6.9</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+	
+	<amin:command name='remove'>
+		<amin:param name='target'>coreutils-6.9</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro-uclibc/build</amin:shell>
+	</amin:command>
+</amin:profile>

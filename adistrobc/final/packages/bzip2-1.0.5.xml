@@ -1,0 +1,24 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Bzip2-1.0.5-->
+
+<amin:chroot dir='/opt/adistrobc'>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/src</amin:param>
+		<amin:param name='archive'>/packages/bzip2-1.0.5.tar.gz</amin:param>
+		<amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>PREFIX=/usr install</amin:param>
+		<amin:shell name='dir'>/src/bzip2-1.0.5</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>bzip2-1.0.5</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/src/</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/usr/bin:/sbin:/usr/sbin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+</amin:chroot>
+</amin:profile>

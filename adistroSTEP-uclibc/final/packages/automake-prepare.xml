@@ -1,0 +1,28 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--automake-->
+
+<!--retreiving packages-->
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/automake/automake-1.9.6.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/automake-1.9.6.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://adistroSTEP.st8vrt.com/patches/automake-1.9.6-STEP.patch</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/automake-1.9.6-STEP.patch</amin:param>
+        </amin:download>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/opt/adistro/build</amin:param>
+                <amin:param name='archive'>/opt/adistro/packages/automake-1.9.6.tar.gz</amin:param>
+        </amin:command>
+
+        <amin:command name='patch'>
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name='input'>../../packages/automake-1.9.6-STEP.patch</amin:flag>
+                <amin:shell name='dir'>/opt/adistro/build/automake-1.9.6</amin:shell>
+        </amin:command>
+
+</amin:profile>

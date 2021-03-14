@@ -1,0 +1,16 @@
+diff -urN sed-4.0.9/sed/compile.c sed-4.0.9-adistroSTEP/sed/compile.c
+--- sed-4.0.9/sed/compile.c	2004-01-08 02:35:49.000000000 +1300
++++ sed-4.0.9-adistroSTEP/sed/compile.c	2005-05-17 14:32:49.499478096 +1200
+@@ -102,9 +102,9 @@
+ 
+ FILE *my_stdin, *my_stdout, *my_stderr;
+ struct special_files special_files[] = {
+-  { "/dev/stdin", &my_stdin },
+-  { "/dev/stdout", &my_stdout },
+-  { "/dev/stderr", &my_stderr },
++  { "/System/Devices/stdin", &my_stdin },
++  { "/System/Devices/stdout", &my_stdout },
++  { "/System/Devices/stderr", &my_stderr },
+   { NULL, NULL }
+ };
+ 

@@ -1,0 +1,224 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.zlib.net/zlib-1.2.3.tar.gz</amin:param>
+		<amin:param name='alt'>http://www.gzip.org/zlib/zlib-1.2.3.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/zlib-1.2.3.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://projectamin.org/svnweb/adistro/checkout/adistro-uclibc/patches/uClibc-0.9.29-adistro-config-3.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/uClibc-0.9.29-adistro-config-3.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://projectamin.org/svnweb/adistro/checkout/adistro-uclibc/patches/busybox-1.8.2-adistro-phase2.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/busybox-1.8.2-adistro-phase2.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://projectamin.org/svnweb/adistro/checkout/adistro-uclibc/patches/shadow-4.0.3-adistro-uclibc.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/shadow-4.0.3-adistro-uclibc.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://nixos.org/tarballs/file-4.13.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/file-4.13.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.mirrors.wiretapped.net/security/host-security/shadow/old/shadow-4.0.3.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/shadow-4.0.3.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.scratchbox.org/download/files/sbox-files/strace-4.5.15.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/strace-4.5.15.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://mirrors.kernel.org/gnu/grep/grep-2.5.3.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/grep-2.5.3.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/gnu/inetutils/inetutils-1.5.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/inetutils-1.5.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.gnu.org/pub/gnu/bison/bison-2.3.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/bison-2.3.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.swishy.is-a-geek.net/zmalloc-for-swishy.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/zmalloc-for-swishy.tar.gz</amin:param>
+        </amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/findutils/findutils-4.2.31.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/findutils-4.2.31.tar.gz</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.nano-editor.org/dist/v2.0/nano-2.0.7.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/nano-2.0.7.tar.gz</amin:param>
+        </amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>http://www.greenwoodsoftware.com/less/less-394.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/less-394.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/groff/groff-1.19.2.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/groff-1.19.2.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/inetutils/inetutils-1.5.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/inetutils-1.5.tar.gz</amin:param>
+	</amin:download>	
+	
+	<amin:download>
+		<amin:param name='uri'>http://devresources.linux-foundation.org/dev/iproute2/download/iproute2-2.6.23.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/iproute2-2.6.23.tar.bz2</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://bugs.gentoo.org/attachment.cgi?id=107507</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/iproute2-remove-ipv6.patch</amin:param>
+        </amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>http://www.cpan.org/src/perl-5.10.0.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/perl-5.10.0.tar.gz</amin:param>
+	</amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.gnu.org/gnu/autoconf/autoconf-2.61.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/autoconf-2.61.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.openssl.org/source/openssl-0.9.8g.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/openssl-0.9.8g.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.gnu.org/gnu/make/make-3.81.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/make-3.81.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://alpha.gnu.org/gnu/grub/grub-1.96.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/grub-1.96.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.oberhumer.com/opensource/lzo/download/lzo-2.02.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/lzo-2.02.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.gnu.org/gnu/libtool/libtool-1.5.8.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/libtool-1.5.8.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.gnu.org/pub/gnu/automake/automake-1.10.1.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/automake-1.10.1.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-4.7p1.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/openssh-4.7p1.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://ftp.kernel.org/pub/linux/kernel/people/rusty/modules/module-init-tools-3.2.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/module-init-tools-3.2.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://sethwklein.net/projects/iana-etc/downloads/iana-etc-2.20.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/iana-etc-2.20.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://procps.sourceforge.net/procps-3.2.7.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/procps-3.2.7.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://optusnet.dl.sourceforge.net/sourceforge/psmisc/psmisc-22.6.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/psmisc-22.6.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://optusnet.dl.sourceforge.net/sourceforge/metalog/metalog-0.8.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/metalog-0.8.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.lighttpd.net/download/lighttpd-1.4.18.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/lighttpd-1.4.18.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.lighttpd.net/download/lighttpd-1.4.x_mod_fastcgi_overrun.patch</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/lighttpd-1.4.x_mod_fastcgi_overrun.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://ftp.gnu.org/gnu/tar/tar-1.19.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/tar-1.19.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>ftp://oss.sgi.com/projects/xfs/download/cmd_tars/xfsprogs_2.9.6-1.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/xfsprogs-2.9.6-1.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://jfs.sourceforge.net/project/pub/jfsutils-1.1.12.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/jfsutils-1.1.12.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://subversion.tigris.org/downloads/subversion-1.4.6.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/subversion-1.4.6.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.reverse.net/pub/apache/apr/apr-0.9.17.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/apr-0.9.17.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.reverse.net/pub/apache/apr/apr-util-0.9.15.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/apr-util-0.9.15.tar.gz</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://easynews.dl.sourceforge.net/sourceforge/pcre/pcre-5.0.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/pcre-5.0.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name='uri'>http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.24.tar.gz</amin:param>
+                <amin:param name='file'>/opt/adistro-uclibc/packages/linux-2.6.24.tar.gz</amin:param>
+        </amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>ftp://ftp.mktemp.org/pub/mktemp/mktemp-1.5.tar.gz</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/mktemp-1.5.tar.gz</amin:param>
+	</amin:download>
+
+	<amin:download>
+		<amin:param name='uri'>http://valgrind.org/downloads/valgrind-3.3.0.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro-uclibc/packages/valgrind-3.3.0.tar.bz2</amin:param>
+	</amin:download>
+
+</amin:profile>

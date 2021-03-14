@@ -1,0 +1,14 @@
+diff -urN m4-1.4/Makefile.in m4-1.4-adistroSTEP/Makefile.in
+--- m4-1.4/Makefile.in	1994-11-06 12:19:53.000000000 +1300
++++ m4-1.4-adistroSTEP/Makefile.in	2005-02-01 12:53:01.564194888 +1300
+@@ -40,8 +40,8 @@
+ 
+ prefix = @prefix@
+ exec_prefix = @exec_prefix@
+-bindir = $(exec_prefix)/bin
+-infodir = $(prefix)/info
++bindir = $(exec_prefix)/System/Tools
++infodir = $(prefix)/System/Documentation/info
+ 
+ MDEFINES = CC='$(CC)' CFLAGS='$(CFLAGS)' LDFLAGS='$(LDFLAGS)' LIBS='$(LIBS)' \
+ prefix='$(prefix)' exec_prefix='$(exec_prefix)' \

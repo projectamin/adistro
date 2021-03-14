@@ -1,0 +1,96 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gcc-->
+
+<!--grabbing packages-->
+
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/gcc/gcc-4.1.1/gcc-core-4.1.1.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistro/packages/gcc-core-4.1.1.tar.bz2</amin:param>
+	</amin:download>
+	
+<!-- no patches in inital build phase -->
+        
+
+<!--running install-->
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/gcc-core-4.1.1.tar.bz2</amin:param>
+	</amin:command>
+
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build</amin:shell>
+	</amin:command>
+
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-4.1.1/configure</amin:param>
+		<amin:flag>
+			with-local-prefix=/bootstrap/System/Applications/GCC-4.1.1/ 
+			prefix=/bootstrap/System/Applications/GCC-4.1.1/ 
+			disable-nls  
+			enable-languages=c
+			enable-shared
+			includedir=/bootstrap/System/Library/Headers/
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/lib:/usr/lib</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>BOOT_LDFLAGS=-static bootstrap</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/lib:/usr/lib</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/gcc-build</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/System/AdminTools:/Local/Tools</amin:shell>
+		<amin:shell name="env">LD_LIBRARY_PATH=/bootstrap/System/Applications/Binutils-2.17/lib:/lib:/usr/lib</amin:shell>
+	</amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/cpp</amin:param>
+                <amin:param name='target'>cpp</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/gcc</amin:param>
+                <amin:param name='target'>gcc</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/gcc</amin:param>
+                <amin:param name='target'>cc</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/gccbug</amin:param>
+                <amin:param name='target'>gccbug</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/gcov</amin:param>
+                <amin:param name='target'>gcov</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/i686-pc-linux-gnu-gcc</amin:param>
+                <amin:param name='target'>i686-pc-linux-gnu-gcc</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+        <amin:command name='link'>
+                <amin:flag>sf</amin:flag>
+                <amin:param name='source'>../Applications/GCC-4.1.1/bin/i686-pc-linux-gnu-gcc-4.1.1</amin:param>
+                <amin:param name='target'>i686-pc-linux-gnu-gcc-4.1.1</amin:param>
+                <amin:shell name='dir'>/bootstrap/System/Tools/</amin:shell>
+        </amin:command>
+</amin:profile>

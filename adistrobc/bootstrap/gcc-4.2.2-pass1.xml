@@ -1,0 +1,42 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Gcc-4.2.2-->
+	<amin:download>
+		<amin:param name='uri'>http://ftp.gnu.org/gnu/gcc/gcc-4.2.2/gcc-4.2.2.tar.bz2</amin:param>
+		<amin:param name='alt'>http://oss.redundant.com/pub/gnu/gcc/gcc-4.2.2/gcc-4.2.2.tar.bz2</amin:param>
+		<amin:param name='alt'>http://mirror.telentente.com/pub/gnu/gcc/gcc-4.2.2/gcc-4.2.2.tar.bz2</amin:param>
+		<amin:param name='file'>/opt/adistrobc/packages/gcc-4.2.2.tar.bz2</amin:param>
+	</amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistrobc/src</amin:param>
+		<amin:param name='archive'>/opt/adistrobc/packages/gcc-4.2.2.tar.bz2</amin:param>
+	</amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>gcc-build</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:param name='config'>../gcc-4.2.2/configure</amin:param>
+		<amin:flag>
+			with-local-prefix=/adistrobc-bootstrap 
+			prefix=/adistrobc-bootstrap 
+			disable-nls 
+			enable-shared 
+			enable-languages=c
+		</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/gcc-build</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>bootstrap</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/src/gcc-build</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/src/gcc-build</amin:shell>
+	</amin:command>
+	<amin:command name='link'>
+		<amin:param name='source'>gcc</amin:param>
+                <amin:param name='target'>/adistrobc-bootstrap/bin/cc</amin:param>
+                <amin:flag>sf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+</amin:profile>

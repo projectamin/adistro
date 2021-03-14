@@ -1,0 +1,33 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Patch-2.5.4-->
+	<amin:download>
+		<amin:param name="uri">http://www.netsw.org/system/tools/fileutils/diff/patch-2.5.4.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.gnu.org/gnu/patch/patch-2.5.4.tar.gz</amin:param>
+		<amin:param name="alt">http://ftp.teledanmark.no/pub/gnu/patch-2.5.4.tar.gz</amin:param>
+		<amin:param name="file">/opt/adistrobc/packages/patch-2.5.4.tar.gz</amin:param>
+	</amin:download>
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistrobc/src</amin:param>
+		<amin:param name='archive'>/opt/adistrobc/packages/patch-2.5.4.tar.gz</amin:param>
+	</amin:command>
+	<amin:command name='configure'>
+		<amin:shell name='dir'>/opt/adistrobc/src/patch-2.5.4</amin:shell>
+		<amin:shell name='env'>CPPFLAGS=-D_GNU_SOURCE</amin:shell>
+		<amin:flag>prefix=/adistrobc-bootstrap</amin:flag>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:shell name='dir'>/opt/adistrobc/src/patch-2.5.4</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='make'>
+		<amin:param>install</amin:param>
+		<amin:shell name='dir'>/opt/adistrobc/src/patch-2.5.4</amin:shell>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/usr/bin:/bin:/sbin:/usr/sbin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>patch-2.5.4</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistrobc/src/</amin:shell>
+	</amin:command>
+</amin:profile>

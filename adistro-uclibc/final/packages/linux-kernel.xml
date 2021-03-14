@@ -1,0 +1,40 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--Linux Kernel-->
+
+	<!-- so fresh and so clean ....just what every new package wants ;-) -->
+
+<!--retrieving -->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='unpack'>
+                <amin:param name='target'>/build</amin:param>
+                <amin:param name='archive'>/packages/linux-2.6.24.tar.gz</amin:param>
+		<amin:shell name='env'>PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+	<amin:command name='copy'>
+		<amin:flag>a</amin:flag>
+                <amin:param name='source'>linux-2.6.24</amin:param>
+                <amin:param name='target'>/usr/src/</amin:param>
+		<amin:shell name='dir'>/build/</amin:shell>
+                <amin:shell name='env'>PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+	<amin:command name='link'>
+		<amin:flag>sf</amin:flag>
+		<amin:param name='source'>linux-2.6.24</amin:param>
+		<amin:param name='target'>linux</amin:param>
+		<amin:shell name='dir'>/usr/src/</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+	</amin:command>
+
+        <amin:command name='make'>
+                <amin:param>mrproper</amin:param>
+                <amin:shell name='dir'>/usr/src/linux</amin:shell>
+                <amin:shell name='env'>PATH=/bin:/usr/bin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+
+</amin:profile>

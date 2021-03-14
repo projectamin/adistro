@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!--setup the bootstrap env-->
+        <amin:command name='mkdir'>
+                <amin:param name='target'>adistro</amin:param>
+                <amin:shell name='dir'>/opt/</amin:shell>
+                <amin:flag>p</amin:flag>
+        </amin:command>
+	<amin:command name='mkdir'>
+		<amin:param name='target'>packages bootstrap build</amin:param>
+                <amin:shell name='dir'>/opt/adistro/</amin:shell>
+		<amin:flag>p</amin:flag>
+	</amin:command>
+        <amin:command name="link">
+                <amin:param name="source">/opt/adistro/bootstrap</amin:param>
+                <amin:param name="target">/</amin:param>
+                <amin:flag>sf</amin:flag>
+        </amin:command>
+	
+	<!-- adding in a /System directory to provide support for patch to write to /System/TemporaryFiles to keep compat with new FSH in chroot -->
+	
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/System</amin:param>
+	</amin:command>
+
+        <amin:command name='mkdir'>
+                <amin:flag>p</amin:flag>
+                <amin:param name='target'>/Local</amin:param>
+        </amin:command>
+	
+	<amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+		<amin:param name='target'>/System/TemporaryFiles</amin:param>
+        </amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/System/SystemFS</amin:param>
+        </amin:command>
+
+        <amin:command name='mkdir'>
+		<amin:flag>p</amin:flag>
+                <amin:param name='target'>/System/Processes</amin:param>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>s</amin:flag>
+                <amin:param name='source'>/bin</amin:param>
+                <amin:param name='target'>/System/Tools</amin:param>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>s</amin:flag>
+                <amin:param name='source'>/sbin</amin:param>
+                <amin:param name='target'>/System/AdminTools</amin:param>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>s</amin:flag>
+                <amin:param name='source'>/usr/sbin</amin:param>
+                <amin:param name='target'>/Local/AdminTools</amin:param>
+        </amin:command>
+
+        <amin:command name='link'>
+                <amin:flag>s</amin:flag>
+                <amin:param name='source'>/usr/bin</amin:param>
+                <amin:param name='target'>/Local/Tools</amin:param>
+        </amin:command>
+
+        <amin:command name='link'>
+		<amin:flag>s</amin:flag>
+		<amin:param name='source'>/dev</amin:param>
+		<amin:param name='target'>/System/Devices</amin:param>
+        </amin:command>
+
+<!--Mount Proc-->
+
+        <amin:command name='mount'>
+                <amin:flag name='type'>proc</amin:flag>
+                <amin:param name='device'>proc</amin:param>
+                <amin:param name='target'>/System/Processes</amin:param>
+        </amin:command>
+
+<!--Mount SysFS-->
+
+        <amin:command name='mount'>
+                <amin:flag name='type'>sysfs</amin:flag>
+                <amin:param name='device'>sysfs</amin:param>
+                <amin:param name='target'>/System/SystemFS</amin:param>
+        </amin:command>
+
+</amin:profile>

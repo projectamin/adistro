@@ -1,0 +1,42 @@
+diff -urN perl-5.8.5/Policy_sh.SH perl-5.8.5-adistroSTEP/Policy_sh.SH
+--- perl-5.8.5/Policy_sh.SH	2003-08-02 00:23:23.000000000 +1200
++++ perl-5.8.5-adistroSTEP/Policy_sh.SH	2005-02-03 18:28:28.134525872 +1300
+@@ -140,7 +140,7 @@
+     case "$var" in
+ 
+     # Directories for the core perl components
+-    bin)	dflt=$prefix/bin ;;
++    bin)	dflt=$prefix/System/Tools ;;
+     # The scriptdir test is more complex, but this is probably usually ok.
+     scriptdir)
+ 	if $test -d $prefix/script; then
+@@ -151,14 +151,14 @@
+ 	;;
+     privlib)
+ 	case "$prefix" in
+-	*perl*)	dflt=$prefix/lib/$version ;;
+-	*)	dflt=$prefix/lib/$package/$version ;;
++	*perl*)	dflt=$prefix/System/Library/Libraries/$version ;;
++	*)	dflt=$prefix/System/Library/Libraries/$package/$version ;;
+ 	esac
+ 	;;
+     archlib)	dflt="$privlib/$archname" ;;
+ 
+-    man1dir)	dflt="$prefix/man/man1" ;;
+-    man3dir)	dflt="$prefix/man/man3" ;;
++    man1dir)	dflt="$prefix/System/Documentation/man/man1" ;;
++    man3dir)	dflt="$prefix/System/Documentation/man/man3" ;;
+     # Can we assume all sed's have greedy matching?
+     man1ext)	dflt=`echo $man1dir | sed -e 's!.*man!!' -e 's!^\.!!'` ;;
+     man3ext)	dflt=`echo $man3dir | sed -e 's!.*man!!' -e 's!^\.!!'` ;;
+@@ -178,8 +178,8 @@
+ 	;;
+     sitelib)
+ 	case "$siteprefix" in
+-	*perl*)	dflt=$prefix/lib/site_perl/$version ;;
+-	*)	dflt=$prefix/lib/$package/site_perl/$version ;;
++	*perl*)	dflt=$prefix/System/Library/Libraries/site_perl/$version ;;
++	*)	dflt=$prefix/System/Library/Libraries/$package/site_perl/$version ;;
+ 	esac
+ 	;;
+     sitearch)	dflt="$sitelib/$archname" ;;

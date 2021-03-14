@@ -1,0 +1,387 @@
+diff -urN util-linux-2.12i/mount/fstab.c util-linux-2.12i-adistroSTEP/mount/fstab.c
+--- util-linux-2.12i/mount/fstab.c	2004-11-05 08:25:17.000000000 +1300
++++ util-linux-2.12i-adistroSTEP/mount/fstab.c	2005-05-23 14:08:45.327137728 +1200
+@@ -18,7 +18,7 @@
+ 
+ #define streq(s, t)	(strcmp ((s), (t)) == 0)
+ 
+-#define PROC_MOUNTS		"/proc/mounts"
++#define PROC_MOUNTS		"/System/Processes/mounts"
+ 
+ 
+ /* Information about mtab. ------------------------------------*/
+@@ -55,9 +55,9 @@
+ mtab_is_writable() {
+ 	static int ret = -1;
+ 
+-	/* Should we write to /etc/mtab upon an update?
+-	   Probably not if it is a symlink to /proc/mounts, since that
+-	   would create a file /proc/mounts in case the proc filesystem
++	/* Should we write to /System/Settings/mtab upon an update?
++	   Probably not if it is a symlink to /System/Processes/mounts, since that
++	   would create a file /System/Processes/mounts in case the proc filesystem
+ 	   is not mounted. */
+ 	if (mtab_is_a_symlink())
+ 		return 0;
+@@ -140,7 +140,7 @@
+ }
+ 
+ /*
+- * Read /etc/mtab.  If that fails, try /proc/mounts.
++ * Read /System/Settings/mtab.  If that fails, try /System/Processes/mounts.
+  * This produces a linked list. The list head mounttable is a dummy.
+  * Return 0 on success.
+  */
+@@ -413,13 +413,13 @@
+ 
+ /* Create the lock file.
+    The lock file will be removed if we catch a signal or when we exit. */
+-/* The old code here used flock on a lock file /etc/mtab~ and deleted
++/* The old code here used flock on a lock file /System/Settings/mtab~ and deleted
+    this lock file afterwards. However, as rgooch remarks, that has a
+    race: a second mount may be waiting on the lock and proceed as
+    soon as the lock file is deleted by the first mount, and immediately
+-   afterwards a third mount comes, creates a new /etc/mtab~, applies
++   afterwards a third mount comes, creates a new /System/Settings/mtab~, applies
+    flock to that, and also proceeds, so that the second and third mount
+-   now both are scribbling in /etc/mtab.
++   now both are scribbling in /System/Settings/mtab.
+    The new code uses a link() instead of a creat(), where we proceed
+    only if it was us that created the lock, and hence we always have
+    to delete the lock afterwards. Now the use of flock() is in principle
+@@ -529,7 +529,7 @@
+ 			}
+ 			alarm(0);
+ 			/* Limit the number of iterations - maybe there
+-			   still is some old /etc/mtab~ */
++			   still is some old /System/Settings/mtab~ */
+ 			if (tries++ > 3) {
+ 				if (tries > 5)
+ 					die (EX_FILEIO, _("Cannot create link %s\n"
+diff -urN util-linux-2.12i/mount/lomount.c util-linux-2.12i-adistroSTEP/mount/lomount.c
+--- util-linux-2.12i/mount/lomount.c	2004-09-23 06:26:02.000000000 +1200
++++ util-linux-2.12i-adistroSTEP/mount/lomount.c	2005-05-23 13:58:53.814061384 +1200
+@@ -157,9 +157,9 @@
+ find_unused_loop_device (void) {
+ 	/* Just creating a device, say in /tmp, is probably a bad idea -
+ 	   people might have problems with backup or so.
+-	   So, we just try /dev/loop[0-7]. */
++	   So, we just try /System/Devices/loop[0-7]. */
+ 	char dev[20];
+-	char *loop_formats[] = { "/dev/loop%d", "/dev/loop/%d" };
++	char *loop_formats[] = { "/System/Devices/loop%d", "/System/Devices/loop/%d" };
+ 	int i, j, fd, somedev = 0, someloop = 0;
+ 	struct stat statbuf;
+ 	struct loop_info loopinfo;
+@@ -186,7 +186,7 @@
+ 	}
+ 
+ 	if (!somedev)
+-		error(_("mount: could not find any device /dev/loop#"));
++		error(_("mount: could not find any device /System/Devices/loop#"));
+ 	else if (!someloop) {
+ 		error(_(
+ 		    "mount: Could not find any loop device. Maybe this kernel "
+diff -urN util-linux-2.12i/mount/mntent.c util-linux-2.12i-adistroSTEP/mount/mntent.c
+--- util-linux-2.12i/mount/mntent.c	2004-10-14 09:57:34.000000000 +1300
++++ util-linux-2.12i-adistroSTEP/mount/mntent.c	2005-05-23 14:05:13.245379056 +1200
+@@ -87,10 +87,10 @@
+ 
+ /*
+  * fstat'ing the file and allocating a buffer holding all of it
+- * may be a bad idea: if the file is /proc/mounts, the stat
++ * may be a bad idea: if the file is /System/Processes/mounts, the stat
+  * returns 0.
+  * (On the other hand, mangling and unmangling is meaningless
+- *  for /proc/mounts.)
++ *  for /System/Processes/mounts.)
+  */
+ 
+ mntFILE *
+diff -urN util-linux-2.12i/mount/mount.c util-linux-2.12i-adistroSTEP/mount/mount.c
+--- util-linux-2.12i/mount/mount.c	2004-10-14 09:54:39.000000000 +1300
++++ util-linux-2.12i-adistroSTEP/mount/mount.c	2005-05-23 14:08:04.185392224 +1200
+@@ -49,7 +49,7 @@
+ /* True if we are allowed to call /sbin/mount.${FSTYPE} */
+ static int external_allowed = 1;
+ 
+-/* Don't write a entry in /etc/mtab (-n).  */
++/* Don't write a entry in /System/Devices/mtab (-n).  */
+ static int nomtab = 0;
+ 
+ /* True for explicit readonly (-r).  */
+@@ -512,7 +512,7 @@
+ 	 in a high security environment, but may be useful to give
+ 	 people at the console the possibility of mounting a floppy. */
+       if (*flags & MS_OWNER) {
+-	  if (!strncmp(spec, "/dev/", 5)) {
++	  if (!strncmp(spec, "/System/Devices/", 5)) {
+ 	      struct stat sb;
+ 
+ 	      if (!stat(spec, &sb)) {
+@@ -548,8 +548,8 @@
+   unsigned long long offset;
+ 
+   /*
+-   * In the case of a loop mount, either type is of the form lo@/dev/loop5
+-   * or the option "-o loop=/dev/loop5" or just "-o loop" is given, or
++   * In the case of a loop mount, either type is of the form lo@/System/Devices/loop5
++   * or the option "-o loop=/System/Devices/loop5" or just "-o loop" is given, or
+    * mount just has to figure things out for itself from the fact that
+    * spec is not a block device. We do not test for a block device
+    * immediately: maybe later other types of mountable objects will occur.
+@@ -618,7 +618,7 @@
+ 	mnt.mnt_passno = pass;
+       
+ 	/* We get chatty now rather than after the update to mtab since the
+-	   mount succeeded, even if the write to /etc/mtab should fail.  */
++	   mount succeeded, even if the write to /System/Devices/mtab should fail.  */
+ 	if (verbose)
+ 		print_one (&mnt);
+ 
+@@ -883,9 +883,9 @@
+     case EBUSY:
+       if (flags & MS_REMOUNT) {
+ 	error (_("mount: %s is busy"), node);
+-      } else if (!strcmp(types, "proc") && !strcmp(node, "/proc")) {
+-	/* heuristic: if /proc/version exists, then probably proc is mounted */
+-	if (stat ("/proc/version", &statbuf))   /* proc mounted? */
++      } else if (!strcmp(types, "proc") && !strcmp(node, "/System/Processes")) {
++	/* heuristic: if /System/Processes/version exists, then probably proc is mounted */
++	if (stat ("/System/Processes/version", &statbuf))   /* proc mounted? */
+ 	   error (_("mount: %s is busy"), node);   /* no */
+ 	else if (!mount_all || verbose)            /* yes, don't mention it */
+ 	   error (_("mount: proc already mounted"));
+@@ -946,9 +946,9 @@
+ 	  close(fd);
+ 	  }
+ #if 0
+-	  /* 0xf for SCSI, 0x3f for IDE. One might check /proc/partitions
++	  /* 0xf for SCSI, 0x3f for IDE. One might check /System/Processes/partitions
+ 	     to see whether this thing really is partitioned.
+-	     Do not suggest partitions for /dev/fd0. */
++	     Do not suggest partitions for /System/Devices/fd0. */
+ 	  if (!warned && (statbuf.st_rdev & 0xf) == 0) {
+ 	    warned++;
+ 	    error ("       (could this be the whole disk device\n"
+@@ -1383,8 +1383,8 @@
+ 	  "       mount -l                 : idem, including volume labels\n"
+ 	  "So far the informational part. Next the mounting.\n"
+ 	  "The command is `mount [-t fstype] something somewhere'.\n"
+-	  "Details found in /etc/fstab may be omitted.\n"
+-	  "       mount -a [-t|-O] ...     : mount all stuff from /etc/fstab\n"
++	  "Details found in /System/Devices/fstab may be omitted.\n"
++	  "       mount -a [-t|-O] ...     : mount all stuff from /System/Devices/fstab\n"
+ 	  "       mount device             : mount device at the known place\n"
+ 	  "       mount directory          : mount known device here\n"
+ 	  "       mount -t type dev dir    : ordinary mount command\n"
+@@ -1394,7 +1394,7 @@
+ 	  "       mount --bind olddir newdir\n"
+ 	  "or move a subtree:\n"
+ 	  "       mount --move olddir newdir\n"
+-	  "A device can be given by name, say /dev/hda1 or /dev/cdrom,\n"
++	  "A device can be given by name, say /System/Devices/hda1 or /System/Devices/cdrom,\n"
+ 	  "or by label, using  -L label  or by uuid, using  -U uuid .\n"
+ 	  "Other options: [-nfFrsvw] [-o options] [-p passwdfd].\n"
+ 	  "For many more details, say  man 8 mount .\n"
+@@ -1426,9 +1426,9 @@
+ 	umask(033);
+ 
+ 	/* People report that a mount called from init without console
+-	   writes error messages to /etc/mtab
++	   writes error messages to /System/Devices/mtab
+ 	   Let us try to avoid getting fd's 0,1,2 */
+-	while((fd = open("/dev/null", O_RDWR)) == 0 || fd == 1 || fd == 2) ;
++	while((fd = open("/System/Devices/null", O_RDWR)) == 0 || fd == 1 || fd == 2) ;
+ 	if (fd > 2)
+ 		close(fd);
+ 
+@@ -1462,7 +1462,7 @@
+ 		case 'L':
+ 			volumelabel = optarg;
+ 			break;
+-		case 'n':		/* do not write /etc/mtab */
++		case 'n':		/* do not write /System/Devices/mtab */
+ 			++nomtab;
+ 			break;
+ 		case 'o':		/* specify mount options */
+@@ -1611,7 +1611,7 @@
+ 			if ((mc = getfsspec (spec)) == NULL &&
+ 			    (mc = getfsfile (spec)) == NULL &&
+ 			    /* Try noncanonical name in fstab
+-			       perhaps /dev/cdrom or /dos is a symlink */
++			       perhaps /System/Devices/cdrom or /dos is a symlink */
+ 			    (mc = getfsspec (*argv)) == NULL &&
+ 			    (mc = getfsfile (*argv)) == NULL &&
+ 			    /* Try mtab - maybe this was a remount */
+diff -urN util-linux-2.12i/mount/sundries.c util-linux-2.12i-adistroSTEP/mount/sundries.c
+--- util-linux-2.12i/mount/sundries.c	2004-10-14 10:15:39.000000000 +1300
++++ util-linux-2.12i-adistroSTEP/mount/sundries.c	2005-05-23 14:03:43.569011936 +1200
+@@ -268,8 +268,8 @@
+ 
+ /* Make a canonical pathname from PATH.  Returns a freshly malloced string.
+    It is up the *caller* to ensure that the PATH is sensible.  i.e.
+-   canonicalize ("/dev/fd0/.") returns "/dev/fd0" even though ``/dev/fd0/.''
+-   is not a legal pathname for ``/dev/fd0''.  Anything we cannot parse
++   canonicalize ("/System/Devices/fd0/.") returns "/System/Devices/fd0" even though ``/System/Devices/fd0/.''
++   is not a legal pathname for ``/System/Devices/fd0''.  Anything we cannot parse
+    we return unmodified.   */
+ char *
+ canonicalize (const char *path) {
+diff -urN util-linux-2.12i/mount/swapon.c util-linux-2.12i-adistroSTEP/mount/swapon.c
+--- util-linux-2.12i/mount/swapon.c	2004-10-13 05:04:20.000000000 +1300
++++ util-linux-2.12i-adistroSTEP/mount/swapon.c	2005-05-23 14:06:43.808611352 +1200
+@@ -27,8 +27,8 @@
+ 
+ #define streq(s, t)	(strcmp ((s), (t)) == 0)
+ 
+-#define	_PATH_FSTAB     "/etc/fstab"
+-#define PROC_SWAPS      "/proc/swaps"
++#define	_PATH_FSTAB     "/System/Settings/fstab"
++#define PROC_SWAPS      "/System/Processes/swaps"
+ 
+ #define SWAPON_NEEDS_TWO_ARGS
+ 
+@@ -102,7 +102,7 @@
+ 
+ 
+ /*
+- * contents of /proc/swaps
++ * contents of /System/Processes/swaps
+  */
+ static int numSwaps;
+ static char **swapFiles;	/* array of swap file and partition names */
+@@ -381,9 +381,9 @@
+ 
+ 	if (all) {
+ 		/*
+-		 * In case /proc/swaps exists, unmount stuff listed there.
++		 * In case /System/Processes/swaps exists, unmount stuff listed there.
+ 		 * We are quiet but report errors in status.
+-		 * Errors might mean that /proc/swaps
++		 * Errors might mean that /System/Processes/swaps
+ 		 * exists as ordinary file, not in procfs.
+ 		 * do_swapoff() exits immediately on EPERM.
+ 		 */
+@@ -392,7 +392,7 @@
+ 			status |= do_swapoff(swapFiles[i], QUIET);
+ 
+ 		/*
+-		 * Unmount stuff mentioned in /etc/fstab.
++		 * Unmount stuff mentioned in /System/Settings/fstab.
+ 		 * Probably it was unmounted already, so errors are not bad.
+ 		 * Doing swapoff -a twice should not give error messages.
+ 		 */
+diff -urN util-linux-2.12i/mount/umount.c util-linux-2.12i-adistroSTEP/mount/umount.c
+--- util-linux-2.12i/mount/umount.c	2004-09-28 23:56:31.000000000 +1200
++++ util-linux-2.12i-adistroSTEP/mount/umount.c	2005-05-23 14:07:16.235681688 +1200
+@@ -22,7 +22,7 @@
+  * 981222: aeb - If mount point or special file occurs several times
+  *               in mtab, try them all, with last one tried first
+  *             - Differentiate "user" and "users" key words in fstab
+- * 001202: aeb - remove at most one line from /etc/mtab
++ * 001202: aeb - remove at most one line from /System/Settings/mtab
+  * 010716: Michael K. Johnson <johnsonm@redhat.com: -a -O
+  * 010914: Jamie Strandboge - use tcp if that was used for mount
+  * 011005: hch - add lazy umount support
+@@ -100,7 +100,7 @@
+ /* When umount fails, attempt a read-only remount (-r). */
+ int remount = 0;
+ 
+-/* Don't write a entry in /etc/mtab (-n).  */
++/* Don't write a entry in /System/Settings/mtab (-n).  */
+ int nomtab = 0;
+ 
+ /* Call losetup -d for each unmounted loop device. */
+@@ -116,7 +116,7 @@
+ /* unimplemented so far */
+ static int
+ check_special_umountprog() {
+-	/* find type from command line or /etc/mtab;
++	/* find type from command line or /System/Settings/mtab;
+ 	   stat /sbin/umount.%s
+ 	   if it exists, use it */
+ }
+@@ -226,8 +226,8 @@
+     case EIO:
+       error (_("umount: %s: can't write superblock"), dev); break;
+     case EBUSY:
+-     /* Let us hope fstab has a line "proc /proc ..."
+-	and not "none /proc ..."*/
++     /* Let us hope fstab has a line "proc /System/Processes ..."
++	and not "none /System/Processes ..."*/
+       error (_("umount: %s: device is busy"), dev); break;
+     case ENOENT:
+       error (_("umount: %s: not found"), dev); break;
+@@ -396,8 +396,8 @@
+  *
+  * Why this loop?
+  * 1. People who boot a system with a bad fstab root entry
+- *    will get an incorrect "/dev/foo on /" in mtab.
+- *    If later /dev/foo is actually mounted elsewhere,
++ *    will get an incorrect "/System/Devices/foo on /" in mtab.
++ *    If later /System/Devices/foo is actually mounted elsewhere,
+  *    it will occur twice in mtab.
+  * 2. With overmounting one can get the situation that
+  *    the same filename is used as mount point twice.
+@@ -539,9 +539,9 @@
+ 			    file);
+ 
+ 		/* If fstab contains the two lines
+-		   /dev/sda1 /mnt/zip auto user,noauto  0 0
+-		   /dev/sda4 /mnt/zip auto user,noauto  0 0
+-		   then "mount /dev/sda4" followed by "umount /mnt/zip"
++		   /System/Devices/sda1 /mnt/zip auto user,noauto  0 0
++		   /System/Devices/sda4 /mnt/zip auto user,noauto  0 0
++		   then "mount /System/Devices/sda4" followed by "umount /mnt/zip"
+ 		   used to fail. So, we must not look for file, but for
+ 		   the pair (spec,file) in fstab. */
+ 		fs = getfsspecfile(mc->m.mnt_fsname, mc->m.mnt_dir);
+@@ -634,7 +634,7 @@
+ 		case 'l':		/* lazy umount */
+ 			++lazy;
+ 			break;
+-		case 'n':		/* do not write in /etc/mtab */
++		case 'n':		/* do not write in /System/Settings/mtab */
+ 			++nomtab;
+ 			break;
+ 		case 'O':		/* specify file system options */
+diff -urN util-linux-2.12i/text-utils/more.c util-linux-2.12i-adistroSTEP/text-utils/more.c
+--- util-linux-2.12i/text-utils/more.c	2004-03-05 06:16:12.000000000 +1300
++++ util-linux-2.12i-adistroSTEP/text-utils/more.c	2005-05-23 14:10:43.160224376 +1200
+@@ -33,7 +33,7 @@
+ 	1999-05-09 aeb - applied a RedHat patch (setjmp->sigsetjmp); without it
+ 	a second ^Z would fail.
+ 	1999-05-09 aeb - undone Kars' work, so that more works without
+-	libcurses (and hence can be in /bin with libcurses being in /usr/lib
++	libcurses (and hence can be in /System/Tools with libcurses being in /usr/lib
+ 	which may not be mounted). However, when termcap is not present curses
+ 	can still be used.
+ */
+@@ -1408,7 +1408,7 @@
+ "/<regular expression>   Search for kth occurrence of regular expression [1]\n"
+ "n                       Search for kth occurrence of last r.e [1]\n"
+ "!<cmd> or :!<cmd>       Execute <cmd> in a subshell\n"
+-"v                       Start up /usr/bin/vi at current line\n"
++"v                       Start up /usr/System/Tools/vi at current line\n"
+ "ctrl-L                  Redraw screen\n"
+ ":n                      Go to kth next file [1]\n"
+ ":p                      Go to kth previous file [1]\n"
+@@ -1705,7 +1705,7 @@
+ 	if (id == 0) {
+ 	    if (!isatty(0)) {
+ 		close(0);
+-		open("/dev/tty", 0);
++		open("/System/Devices/tty", 0);
+ 	    }
+ 
+ 	    va_start(argp, cmd);
+@@ -1914,7 +1914,7 @@
+ 
+ 	}
+ 	if ((shell = getenv("SHELL")) == NULL)
+-	    shell = "/bin/sh";
++	    shell = "/System/Tools/sh";
+     }
+     no_intty = tcgetattr(fileno(stdin), &otty);
+     tcgetattr(fileno(stderr), &otty);

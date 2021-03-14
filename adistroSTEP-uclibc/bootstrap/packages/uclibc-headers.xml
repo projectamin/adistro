@@ -1,0 +1,79 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--UClibc-Headers-->
+
+        <amin:download>
+                <amin:param name='uri'>http://www.uclibc.org/downloads/uClibc-0.9.27.tar.bz2</amin:param>
+                <amin:param name='file'>/opt/adistro/packages/uClibc-0.9.27.tar.bz2</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/uClibc-0.9.27-STEP-bootstrap.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/uClibc-0.9.27-STEP-bootstrap-config.patch</amin:param>
+        </amin:download>
+
+        <amin:download>
+                <amin:param name="uri">http://adistroSTEP.st8vrt.com/patches/uClibc-0.9.27-STEP-bootstrap-config.patch</amin:param>
+                <amin:param name="file">/opt/adistro/packages/uClibc-0.9.27-STEP-bootstrap-config.patch</amin:param>
+        </amin:download>
+
+	<amin:command name='unpack'>
+		<amin:param name='target'>/opt/adistro/build</amin:param>
+		<amin:param name='archive'>/opt/adistro/packages/uClibc-0.9.27.tar.bz2</amin:param>
+	</amin:command>
+
+        <amin:command name="patch">
+                <amin:flag>Np1</amin:flag>
+                <amin:flag name="input">/opt/adistro/packages/uClibc-0.9.27-STEP-bootstrap.patch</amin:flag>
+                <amin:shell name="dir">/opt/adistro/build/uClibc-0.9.27</amin:shell>
+        </amin:command>
+
+	<amin:command name="patch">
+		<amin:flag>Np1</amin:flag>
+		<amin:flag name="input">/opt/adistro/packages/uClibc-0.9.27-STEP-bootstrap-config.patch</amin:flag>
+		<amin:shell name="dir">/opt/adistro/build/uClibc-0.9.27</amin:shell>
+	</amin:command>
+
+	<amin:command name='make'>
+		<amin:param>headers</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/uClibc-0.9.27</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+	</amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>include/asm</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>include/asm-generic</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+        </amin:command>
+
+        <amin:command name='remove'>
+                <amin:param name='target'>include/linux</amin:param>
+                <amin:shell name='dir'>/opt/adistro/build/uClibc-0.9.27</amin:shell>
+                <amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+        </amin:command>
+
+	<amin:command name='make'>
+		<amin:param>install_dev</amin:param>
+		<amin:shell name='dir'>/opt/adistro/build/uClibc-0.9.27</amin:shell>
+		<amin:shell name="env">PATH=/bootstrap/System/Tools:/System/Tools:/Local/Tools</amin:shell>
+	</amin:command>
+
+	<amin:command name='copy'>
+		<amin:flag>av</amin:flag>
+		<amin:param name='source'>/bootstrap/System/Library/Libraries/uClibc-0.9.27/include/*</amin:param>
+		<amin:param name='target'>include/</amin:param>
+		<amin:shell name='dir'>/bootstrap/System/Library/Headers/</amin:shell>
+	</amin:command>
+
+	<amin:command name='remove'>
+		<amin:param name='target'>uClibc-0.9.27</amin:param>
+		<amin:flag>rf</amin:flag>
+		<amin:shell name='dir'>/opt/adistro/build/</amin:shell>
+	</amin:command>
+</amin:profile>

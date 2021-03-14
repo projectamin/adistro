@@ -1,0 +1,25 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--fstab-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='textdump'>
+		<amin:param name='content'>
+# Begin /etc/fstab
+# file system  mount-point  fs-type  options         dump  fsck-order
+/dev/xxx      /            fff      defaults        1     1
+/dev/yyy      swap         swap     pri=1           0     0
+proc          /proc        proc     defaults        0     0
+sysfs         /sys         sysfs    defaults        0     0
+devpts        /dev/pts     devpts   gid=4,mode=620  0     0
+shm           /dev/shm     tmpfs    defaults        0     0
+# End /etc/fstab
+		</amin:param>
+                <amin:param name='target'>/etc/fstab</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

@@ -1,0 +1,22 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+
+<!--hosts-->
+
+<amin:chroot dir='/opt/adistro-uclibc'>
+
+        <amin:command name='textdump'>
+		<amin:param name='content'>
+# Begin /etc/hosts (network card version)
+
+127.0.0.1 localhost
+192.168.*.* machine.domain.com machine
+
+# End /etc/hosts (network card version)
+		</amin:param>
+                <amin:param name='target'>/etc/hosts</amin:param>
+		<amin:shell name='dir'>/</amin:shell>
+                <amin:shell name="env">PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+</amin:profile>

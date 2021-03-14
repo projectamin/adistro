@@ -1,0 +1,43 @@
+<amin:profile xmlns:amin='http://projectamin.org/ns/'>
+<!-- glibc-2.7 lock -->
+
+<amin:chroot dir='/opt/adistrobc'>
+	<amin:command name='remove'>
+		<amin:param name='target'>ld</amin:param>
+		<amin:shell name='dir'>/adistrobc-bootstrap/i686-pc-linux-gnu/bin/</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/sbin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='remove'>
+		<amin:param name='target'>ld</amin:param>
+		<amin:shell name='dir'>/adistrobc-bootstrap/bin/</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/sbin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='move'>
+		<amin:param name="source">ld-new</amin:param>
+		<amin:param name="target">ld</amin:param>
+ 		<amin:shell name='dir'>/adistrobc-bootstrap/bin/</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/sbin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name="ln">
+		<amin:param name="source">ld</amin:param>
+		<amin:param name="target">../i686-pc-linux-gnu/bin/ld</amin:param>
+		<amin:flag>sf</amin:flag>
+		<amin:shell name="dir">/adistrobc-bootstrap/bin/</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/sbin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+	</amin:command>
+	<amin:command name='gcc_dumpspecs'>
+		<amin:param name='specsfile'>/adistrobc-bootstrap/lib/gcc/i686-pc-linux-gnu/4.2.2/specs</amin:param>
+		<amin:shell name='env'>PATH=/adistrobc-bootstrap/bin:/bin:/usr/bin</amin:shell>
+	</amin:command>
+<!-- Not actually required, leaving here in case something wierd happens for the interim-->
+        <amin:command name="search_replace">
+                <amin:param name="target">/adistrobc-bootstrap/lib/gcc/i686-pc-linux-gnu/4.2.2/specs</amin:param>
+                <amin:flag name="find">/adistrobc-bootstrap/lib/ld-linux.so.2</amin:flag>
+                <amin:flag name="replace">/lib/ld-linux.so.2</amin:flag>
+                <amin:shell name="dir">/</amin:shell>
+		<amin:shell name='env'>PATH=/bin:/sbin:/usr/bin:/adistrobc-bootstrap/bin</amin:shell>
+        </amin:command>
+
+</amin:chroot>
+		
+</amin:profile>

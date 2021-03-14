@@ -1,0 +1,12 @@
+diff -Naur gcc-4.2.2/gcc/Makefile.in gcc-4.2.2-adistro/gcc/Makefile.in
+--- gcc-4.2.2/gcc/Makefile.in	2007-09-02 03:28:30.000000000 +1200
++++ gcc-4.2.2-adistro/gcc/Makefile.in	2007-11-12 09:38:12.000000000 +1300
+@@ -397,7 +397,7 @@
+ # Default native SYSTEM_HEADER_DIR, to be overridden by targets.
+ NATIVE_SYSTEM_HEADER_DIR = /usr/include
+ # Default cross SYSTEM_HEADER_DIR, to be overridden by targets.
+-CROSS_SYSTEM_HEADER_DIR = @CROSS_SYSTEM_HEADER_DIR@
++CROSS_SYSTEM_HEADER_DIR = /bootstrap/include
+ 
+ # autoconf sets SYSTEM_HEADER_DIR to one of the above.
+ # Purge it of unneccessary internal relative paths
